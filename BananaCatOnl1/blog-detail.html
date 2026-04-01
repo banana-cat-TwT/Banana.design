@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Roguelike游戏开发实战：随机地图生成算法</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>我的作品集</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="blog-detail">
+            <div class="blog-detail-header">
+                <div class="blog-meta-top">
+                    <span class="blog-tag">技术分享</span>
+                </div>
+                <h1>Unity Roguelike游戏开发实战：随机地图生成算法</h1>
+                <div class="blog-meta">
+                    <span class="blog-author">Portfolio</span>
+                    <span class="blog-date">2026年3月30日</span>
+                    <span class="blog-views">128 阅读</span>
+                </div>
+            </div>
+            
+            <div class="blog-detail-content">
+                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=game%20development%20sword%20in%20dungeon%2C%20fantasy%20style&image_size=landscape_16_9" alt="Unity Roguelike游戏开发">
+                
+                <div class="blog-body">
+                    <h2>引言</h2>
+                    <p>Roguelike游戏的核心魅力在于每次游戏都是全新的体验。本文将分享我在开发《星际探险家》时实现的随机地图生成系统。</p>
+                    
+                    <h2>算法设计</h2>
+                    <p>我采用了房间-走廊的方式生成地图：首先生成随机分布的房间，然后用走廊连接它们。</p>
+                    
+                    <h3>代码实现</h3>
+                    <pre class="code-block">
+public class MapGenerator : MonoBehaviour 
+{
+    public int roomCount = 10;
+    
+    public void GenerateMap() 
+    {
+        // 生成房间
+        List<Room> rooms = GenerateRooms();
+        
+        // 连接房间
+        ConnectRooms(rooms);
+        
+        // 生成走廊
+        GenerateCorridors(rooms);
+    }
+}
+                    </pre>
+                    
+                    <h2>总结</h2>
+                    <p>随机地图生成需要平衡随机性和可玩性。通过调整房间大小、数量和连接方式，可以创建出既多样化又有趣的游戏体验。</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>Portfolio</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: contact@portfolio.dev</p>
+                <p>所在地: 中国上海</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#">微信</a>
+                    <a href="#">微博</a>
+                    <a href="#">GitHub</a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 我的作品集</p>
+    </footer>
+</body>
+</html>

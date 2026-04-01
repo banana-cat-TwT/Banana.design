@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>打砖块游戏</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        .game-container {
+            position: relative;
+        }
+        canvas {
+            background: #333;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .score {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            color: #333;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .lives {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            color: #333;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        .controls {
+            margin-top: 20px;
+            text-align: center;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 0 5px;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #764ba2;
+        }
+        .instructions {
+            margin-top: 20px;
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>打砖块游戏</h1>
+    <div class="game-container">
+        <div class="lives">生命: <span id="lives">3</span></div>
+        <div class="score">得分: <span id="score">0</span></div>
+        <canvas id="gameCanvas" width="600" height="400"></canvas>
+    </div>
+    <div class="controls">
+        <button onclick="startGame()">开始游戏</button>
+        <button onclick="pauseGame()">暂停</button>
+        <button onclick="resetGame()">重新开始</button>
+    </div>
+    <div class="instructions">
+        <p>使用鼠标移动控制 paddle</p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const livesElement = document.getElementById('lives');
+
+        let paddle = {
+            x: canvas.width / 2 - 50,
+            y: canvas.height - 30,
+            width: 100,
+            height: 10,
+            speed: 8
+        };
+
+        let ball = {
+            x: canvas.width / 2,
+            y: canvas.height - 40,
+            radius: 8,
+            dx: 4,
+            dy: -4
+        };
+
+        let bricks = [];
+        let score = 0;
+        let lives = 3;
+        let gameInterval;
+        let isGameOver = false;
+        let isPaused = false;
+
+        const brickRowCount = 5;
+        const brickColumnCount = 9;
+        const brickWidth = 60;
+        const brickHeight = 20;
+        const brickPadding = 10;
+        const brickOffsetTop = 60;
+        const brickOffsetLeft = 30;
+
+        function initBricks() {
+            bricks = [];
+            for (let c = 0; c < brickColumnCount; c++) {
+                bricks[c] = [];
+                for (let r = 0; r < brickRowCount; r++) {
+                    bricks[c][r] = {
+                        x: c * (brickWidth + brickPadding) + brickOffsetLeft,
+                        y: r * (brickHeight + brickPadding) + brickOffsetTop,
+                        status: 1
+                    };
+                }
+            }
+        }
+
+        function initGame() {
+            paddle.x = canvas.width / 2 - 50;
+            ball.x = canvas.width / 2;
+            ball.y = canvas.height - 40;
+            ball.dx = 4;
+            ball.dy = -4;
+            score = 0;
+            lives = 3;
+            scoreElement.textContent = score;
+            livesElement.textContent = lives;
+            isGameOver = false;
+            isPaused = false;
+            initBricks();
+        }
+
+        function drawPaddle() {
+            ctx.fillStyle = '#667eea';
+            ctx.fillRect(paddle.x, paddle.y, paddle.width, paddle.height);
+        }
+
+        function drawBall() {
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.fillStyle = '#FF5722';
+            ctx.fill();
+            ctx.closePath();
+        }
+
+        function drawBricks() {
+            for (let c = 0; c < brickColumnCount; c++) {
+                for (let r = 0; r < brickRowCount; r++) {
+                    if (bricks[c][r].status === 1) {
+                        const brickX = c * (brickWidth + brickPadding) + brickOffsetLeft;
+                        const brickY = r * (brickHeight + brickPadding) + brickOffsetTop;
+                        ctx.fillStyle = '#4CAF50';
+                        ctx.fillRect(brickX, brickY, brickWidth, brickHeight);
+                    }
+                }
+            }
+        }
+
+        function collisionDetection() {
+            for (let c = 0; c < brickColumnCount; c++) {
+                for (let r = 0; r < brickRowCount; r++) {
+                    const brick = bricks[c][r];
+                    if (brick.status === 1) {
+                        if (ball.x > brick.x && ball.x < brick.x + brickWidth && 
+                            ball.y > brick.y && ball.y < brick.y + brickHeight) {
+                            ball.dy = -ball.dy;
+                            brick.status = 0;
+                            score++;
+                            scoreElement.textContent = score;
+                            
+                            // 检查是否所有砖块都被消除
+                            if (score === brickRowCount * brickColumnCount) {
+                                alert('恭喜你赢了！得分: ' + score);
+                                resetGame();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        function update() {
+            if (isPaused || isGameOver) return;
+            
+            // 移动球
+            ball.x += ball.dx;
+            ball.y += ball.dy;
+            
+            // 边界碰撞检测
+            if (ball.x + ball.radius > canvas.width || ball.x - ball.radius < 0) {
+                ball.dx = -ball.dx;
+            }
+            if (ball.y - ball.radius < 0) {
+                ball.dy = -ball.dy;
+            }
+            
+            // 球与 paddle 碰撞检测
+            if (ball.y + ball.radius > paddle.y && 
+                ball.x > paddle.x && 
+                ball.x < paddle.x + paddle.width) {
+                ball.dy = -ball.dy;
+            }
+            
+            // 球掉落检测
+            if (ball.y + ball.radius > canvas.height) {
+                lives--;
+                livesElement.textContent = lives;
+                if (lives === 0) {
+                    gameOver();
+                } else {
+                    ball.x = canvas.width / 2;
+                    ball.y = canvas.height - 40;
+                    ball.dx = 4;
+                    ball.dy = -4;
+                }
+            }
+            
+            // 砖块碰撞检测
+            collisionDetection();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBricks();
+            drawBall();
+            drawPaddle();
+        }
+
+        function gameOver() {
+            isGameOver = true;
+            clearInterval(gameInterval);
+            alert('游戏结束！得分: ' + score);
+        }
+
+        function startGame() {
+            if (!isGameOver && !isPaused) return;
+            
+            if (isGameOver) {
+                initGame();
+            }
+            
+            isPaused = false;
+            gameInterval = setInterval(() => {
+                update();
+                draw();
+            }, 1000 / 60);
+        }
+
+        function pauseGame() {
+            isPaused = !isPaused;
+        }
+
+        function resetGame() {
+            clearInterval(gameInterval);
+            initGame();
+            draw();
+        }
+
+        // 鼠标控制 paddle
+        document.addEventListener('mousemove', (e) => {
+            const relativeX = e.clientX - canvas.offsetLeft;
+            if (relativeX > 0 && relativeX < canvas.width) {
+                paddle.x = relativeX - paddle.width / 2;
+            }
+        });
+
+        // 初始化游戏
+        initGame();
+        draw();
+    </script>
+</body>
+</html>
