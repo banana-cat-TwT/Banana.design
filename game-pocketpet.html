@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>口袋崽崽 - 游戏详情 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 游戏详情页样式 */
+        body {
+            background: linear-gradient(to bottom, #FFF4E6, #FFD6BA);
+        }
+        
+        .game-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .game-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .game-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #FF7FA3;
+            text-shadow: 0 0 10px rgba(255, 127, 163, 0.3);
+        }
+        
+        .game-detail-subtitle {
+            font-size: 1.2rem;
+            color: #6B4F45;
+            margin-bottom: 2rem;
+        }
+        
+        .game-detail-cover {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 2px solid #B88A68;
+        }
+        
+        .game-detail-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 3rem;
+        }
+        
+        .game-detail-main {
+            background: #FFF4E6;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 2px solid #B88A68;
+            color: #6B4F45;
+        }
+        
+        .game-detail-sidebar {
+            background: #FFF4E6;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 2px solid #B88A68;
+            color: #6B4F45;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #FF7FA3;
+        }
+        
+        .section-content {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .game-features {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .game-features li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .game-features li::before {
+            content: "•";
+            color: #FF7FA3;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        
+        .gallery-container {
+            margin-top: 2rem;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 2px solid #B88A68;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #7ED9B6, #7EC8FF);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #7ED9B6;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, #7EC8FF, #7ED9B6);
+            box-shadow: 0 10px 25px rgba(126, 217, 182, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .game-detail-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-detail-cover {
+                height: 250px;
+            }
+            
+            .game-detail-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 前景灰烬特效 -->
+    <div class="ash-container" id="ashContainer"></div>
+    
+    <!-- 跟随导航 -->
+    <nav class="side-nav" id="sideNav">
+        <button class="nav-toggle-btn" id="navToggleBtn">
+            <span class="toggle-icon"></span>
+        </button>
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">小游戏</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="game-detail-container">
+            <div class="game-detail-header">
+                <h1 class="game-detail-title">口袋崽崽</h1>
+                <p class="game-detail-subtitle">以日常陪伴为核心的养成模拟游戏</p>
+                <img src="images/KOUDAIZAIZAI.png" alt="口袋崽崽游戏封面" class="game-detail-cover">
+            </div>
+            
+            <div class="game-detail-content">
+                <div class="game-detail-main">
+                    <h2 class="section-title">游戏简介</h2>
+                    <div class="section-content">
+                        <p>《口袋崽崽》是一款以日常陪伴为核心的养成模拟游戏，玩家可以领养可爱的虚拟宠物，通过喂食、清洁、玩耍等互动来照顾它们，看着它们成长。游戏采用可爱的卡通风格，包含多种宠物类型和丰富的互动内容，为玩家带来温馨的游戏体验。</p>
+                        <p>游戏特色包括：多种可爱宠物、日常互动系统、成长系统、装扮系统、社交功能等。</p>
+                    </div>
+                    
+                    <h2 class="section-title">制作思路</h2>
+                    <div class="section-content">
+                        <p>制作思路源于对虚拟宠物游戏的热爱，我们希望创建一款能够给玩家带来情感陪伴的游戏。通过精心设计的宠物形象和互动系统，让玩家能够在忙碌的生活中感受到一份温暖。</p>
+                        <p>技术实现方面，我们使用HTML5 Canvas进行游戏渲染，JavaScript实现游戏逻辑，CSS3实现视觉效果和动画。游戏采用模块化设计，将宠物系统、互动系统、成长系统等功能分离，提高代码的可维护性。</p>
+                        <p>开发过程中，我们重点关注了游戏的用户体验和情感连接，通过精心设计的宠物表情和互动反馈，让玩家能够与虚拟宠物建立情感纽带。</p>
+                    </div>
+                    
+                    <h2 class="section-title">团队制作花絮</h2>
+                    <div class="section-content">
+                        <p>《口袋崽崽》是由我们三人团队在课余时间开发的，整个开发过程充满了温馨和创意。从最初的概念设计到最终的游戏上线，我们经历了多次迭代和改进。</p>
+                        <p>开发初期，我们花费了大量时间设计宠物形象和互动系统，最终确定了可爱的卡通风格。在实现过程中，我们遇到了宠物AI、成长系统等技术挑战，但通过团队协作和不断学习，最终成功解决了这些问题。</p>
+                        <p>测试阶段是最有趣的部分，我们邀请了许多朋友参与测试，收集他们的反馈并不断优化游戏体验。看到玩家们与虚拟宠物建立情感连接的样子，我们感到非常满足。</p>
+                    </div>
+                    
+                    <div class="gallery-container">
+                        <h3>花絮照片</h3>
+                        <div class="gallery-grid">
+                            <div class="gallery-item">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=game%20development%20team%20working%20on%20cute%20pet%20game%2C%20colorful%20environment&image_size=square" alt="团队工作照">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=pet%20game%20design%20sketch%2C%20cute%20character%20concepts&image_size=square" alt="设计草图">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=game%20testing%20session%2C%20people%20playing%20pet%20raising%20game&image_size=square" alt="测试场景">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=game%20development%20milestone%2C%20team%20celebration%20with%20cute%20pet%20game&image_size=square" alt="里程碑庆祝">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <a href="index.html#games" class="btn-back">返回游戏列表</a>
+                        <a href="#" class="btn-back" style="background: linear-gradient(135deg, #7ED9B6, #7EC8FF); border: 2px solid #7ED9B6;">百度网盘下载</a>
+                    </div>
+                </div>
+                
+                <div class="game-detail-sidebar">
+                    <h3>游戏信息</h3>
+                    <ul class="game-features">
+                        <li>开发时间：2026年1月</li>
+                        <li>开发工具：HTML5, CSS3, JavaScript</li>
+                        <li>游戏类型：休闲 / 养成</li>
+                        <li>平台：Web / 移动端</li>
+                        <li>团队成员：3人</li>
+                    </ul>
+                    
+                    <h3>技术栈</h3>
+                    <ul class="game-features">
+                        <li>前端：HTML5 Canvas, CSS3, JavaScript</li>
+                        <li>游戏引擎：自定义</li>
+                        <li>美术：Photoshop, Illustrator</li>
+                        <li>音效：Audacity</li>
+                    </ul>
+                    
+                    <h3>游戏特色</h3>
+                    <ul class="game-features">
+                        <li>多种可爱宠物</li>
+                        <li>日常互动系统</li>
+                        <li>成长系统</li>
+                        <li>装扮系统</li>
+                        <li>社交功能</li>
+                        <li>成就系统</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: contact@bananacatonl1.dev</p>
+                <p>所在地: 中国上海</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 我的作品集</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

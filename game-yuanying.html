@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>渊影 - 游戏详情 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 游戏详情页样式 */
+        body {
+            background: linear-gradient(to bottom, #2F1B25, #6B3E26);
+        }
+        
+        .game-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .game-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .game-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #FF6B00;
+            text-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
+        }
+        
+        .game-detail-subtitle {
+            font-size: 1.2rem;
+            color: #FFD700;
+            margin-bottom: 2rem;
+        }
+        
+        .game-detail-cover {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #FF6B00;
+        }
+        
+        .game-detail-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 3rem;
+        }
+        
+        .game-detail-main {
+            background: linear-gradient(to bottom, #2F1B25, #4A2A35);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #FF6B00;
+            color: #FFD700;
+        }
+        
+        .game-detail-sidebar {
+            background: linear-gradient(to bottom, #2F1B25, #4A2A35);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #FF6B00;
+            color: #FFD700;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #FF6B00;
+            border-bottom: 2px solid #FF6B00;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-content {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .game-features {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .game-features li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .game-features li::before {
+            content: "🎃";
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        
+        .gallery-container {
+            margin-top: 2rem;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 2px solid #FF69B4;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .gallery-item {
+            height: 200px;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #FF6B00, #FF8C42);
+            color: #2F1B25;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #FF6B00;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: #FF6B00;
+            color: #2F1B25;
+            box-shadow: 0 10px 25px rgba(255, 107, 0, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .game-detail-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-detail-cover {
+                height: 250px;
+            }
+            
+            .game-detail-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 前景灰烬特效 -->
+    <div class="ash-container" id="ashContainer"></div>
+    
+    <!-- 跟随导航 -->
+    <nav class="side-nav" id="sideNav">
+        <button class="nav-toggle-btn" id="navToggleBtn">
+            <span class="toggle-icon"></span>
+        </button>
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">小游戏</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="game-detail-container">
+            <div class="game-detail-header">
+                <h1 class="game-detail-title">渊影</h1>
+                <p class="game-detail-subtitle">主角变成小狗布偶掉入2d王国的冒险</p>
+                
+                <!-- 游戏PV视频 -->
+                <div class="game-pv-container" style="margin-top: 2rem;">
+                    <h3 style="color: #FF69B4; margin-bottom: 1rem;">游戏PV</h3>
+                    <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); border: 2px solid #FF69B4;">
+                        <video 
+                            controls 
+                            autoplay 
+                            muted 
+                            loop 
+                            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover;"
+                            poster="images/YUANYING.png">
+                            <source src="videos/yuanying_pv.mp4" type="video/mp4">
+                            <source src="videos/yuanying_pv.webm" type="video/webm">
+                            您的浏览器不支持视频播放。
+                        </video>
+                    </div>
+                    <p style="color: #888; font-size: 0.9rem; margin-top: 0.5rem; text-align: center;">渊影游戏宣传视频</p>
+                </div>
+            </div>
+            
+            <div class="game-detail-content">
+                <div class="game-detail-main">
+                    <h2 class="section-title">游戏简介</h2>
+                    <div class="section-content">
+                        <p>《渊影》是一款独特的2D与3D结合的冒险游戏，主角变成小狗布偶掉入2d王国，与它的影子一同踏上寻找出口的冒险旅程。通过2d影子吃钥匙点亮3d世界回家的路。</p>
+                    </div>
+                    
+                    <h2 class="section-title">制作思路</h2>
+                    <div class="section-content">
+                        <p>制作思路源于对2D和3D游戏机制结合的探索，我们希望通过影子与实体的互动创造独特的游戏体验。游戏的核心机制是利用2D影子来影响3D世界，玩家需要通过控制影子来解决谜题和前进。</p>
+                        <p>技术实现方面，我们使用Unity引擎进行游戏开发，利用其强大的渲染能力和物理系统实现2D与3D的无缝结合。游戏采用模块化设计，将影子系统、谜题机制等功能分离，提高代码的可维护性。</p>
+                        <p>开发过程中，我们重点关注了游戏的视觉设计和谜题设计，通过精心设计的关卡和视觉效果，确保游戏的可玩性和趣味性，在这18天不到的比赛时间里我们3个人熬了好几个通宵给渊影迭代了好几次，一开始关卡设计得很困难极限，测试人员的通关时长基本都在30分钟到40分钟左右，后面为了游戏可玩性我们把各类阈值降低了hhh</p>
+                    </div>
+                    
+                    <h2 class="section-title">游戏特色</h2>
+                    <div class="section-content">
+                        <p>《渊影》的最大特色是其独特的2D与3D结合的游戏机制，玩家需要同时考虑2D影子和3D实体的互动。游戏中的谜题设计巧妙，需要玩家发挥创造力和逻辑思维来解决。</p>
+                        <p>游戏的视觉风格采用了奇幻可爱的设计，以小狗布偶为主角，形象可爱讨喜，适合各个年龄段的玩家。同时，游戏的音效和音乐也经过精心设计，为玩家创造沉浸式的游戏体验。</p>
+                    </div>
+                    
+
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <a href="index.html#games" class="btn-back" style="background: linear-gradient(135deg, #FF69B4, #FFB6C1); color: white;">返回游戏列表</a>
+                        <a href="https://www.taptap.cn/app/726855" target="_blank" class="btn-back" style="background: linear-gradient(135deg, #FF69B4, #FFB6C1); color: white;">游戏链接</a>
+                    </div>
+                </div>
+                
+                <div class="game-detail-sidebar">
+                    <h3>游戏信息</h3>
+                    <ul class="game-features">
+                        <li>开发时间：2024年10月</li>
+                        <li>开发工具：Unity</li>
+                        <li>游戏类型：冒险 / 解谜</li>
+                        <li>平台：PC</li>
+                        <li>开发团队：3人</li>
+                    </ul>
+                    
+                    <h3>技术栈</h3>
+                    <ul class="game-features">
+                        <li>游戏引擎：Unity</li>
+                        <li>编程语言：C#</li>
+                        <li>美术：Photoshop，3ds Max，Blender，Substance Painter,Unity</li>
+                        <li>音效：未知</li>
+                    </ul>
+                    
+                    <h3>游戏特色</h3>
+                    <ul class="game-features">
+                        <li>2D与3D结合的游戏机制</li>
+                        <li>独特的影子互动系统</li>
+                        <li>精心设计的谜题</li>
+                        <li>可爱的小狗布偶主角</li>
+                        <li>奇幻的游戏世界</li>
+                        <li>沉浸式的游戏体验</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: 19859256157@163.com</p>
+                <p>所在地: 广东深圳</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 我的作品集</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

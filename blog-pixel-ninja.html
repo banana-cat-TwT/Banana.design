@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《像素忍者》开发日志：从概念到上线的30天 - 巴拿拿猫的个人网站</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+            color: #f0f0f0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-top: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .blog-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            color: #aaa;
+        }
+
+        .blog-content {
+            background: #1a1a1a;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .blog-content p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .blog-content h2 {
+            margin: 2rem 0 1rem;
+            color: #fff;
+        }
+
+        .blog-content h3 {
+            margin: 1.5rem 0 1rem;
+            color: #ddd;
+        }
+
+        .timeline {
+            margin: 2rem 0;
+            padding-left: 2rem;
+            border-left: 2px solid #667eea;
+        }
+
+        .timeline-item {
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -2.5rem;
+            top: 0.5rem;
+            width: 1rem;
+            height: 1rem;
+            border-radius: 50%;
+            background: #667eea;
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .blog-content {
+                padding: 2rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>《像素忍者》开发日志：从概念到上线的30天</h1>
+            <div class="blog-meta">
+                <span>2026年3月28日</span>
+                <span>96 阅读</span>
+            </div>
+        </div>
+
+        <div class="blog-content">
+            <p>《像素忍者》是一款像素风格的横版动作游戏，我在30天内完成了从概念设计到Steam上线的全过程。本文将记录这段开发旅程，分享我在开发过程中遇到的挑战和解决方案。</p>
+
+            <h2>开发时间线</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">第1-3天：概念设计</div>
+                    <p>确定游戏核心玩法：横版平台动作，结合忍者元素，包含跳跃、攻击、闪避等基本操作。设计游戏世界观和角色设定，确定像素艺术风格。</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">第4-10天：原型开发</div>
+                    <p>使用Unity引擎创建游戏原型，实现基本移动和战斗系统。设计并实现第一个关卡，测试游戏手感和难度曲线。</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">第11-15天：美术资源制作</div>
+                    <p>制作游戏角色、敌人、场景等美术资源。使用Aseprite绘制像素艺术，确保风格统一。</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">第16-20天：关卡设计</div>
+                    <p>设计并实现20个关卡，每个关卡都有独特的挑战和敌人配置。确保关卡难度逐渐增加，保持玩家的游戏体验。</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">第21-25天：音效和音乐</div>
+                    <p>为游戏添加音效和背景音乐，增强游戏氛围。使用FMOD音频引擎实现动态音效系统。</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">第26-28天：测试和优化</div>
+                    <p>进行游戏测试，修复bug，优化性能。确保游戏在不同设备上都能流畅运行。</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-date">第29-30天：发布准备</div>
+                    <p>准备Steam商店页面，编写游戏描述和更新日志。提交游戏到Steam，等待审核。</p>
+                </div>
+            </div>
+
+            <h2>开发挑战与解决方案</h2>
+            <h3>1. 像素艺术制作</h3>
+            <p><strong>挑战：</strong>作为一名程序员，我没有专业的美术背景，制作高质量的像素艺术对我来说是一个挑战。</p>
+            <p><strong>解决方案：</strong>我花了大量时间学习像素艺术的基本技巧，参考了许多优秀的像素艺术作品。使用Aseprite等专业工具，通过反复练习和调整，最终制作出了符合游戏风格的美术资源。</p>
+
+            <h3>2. 游戏平衡性</h3>
+            <p><strong>挑战：</strong>设计一个既具有挑战性又不会让玩家感到沮丧的游戏难度曲线。</p>
+            <p><strong>解决方案：</strong>通过反复测试和调整，我设计了一个逐渐增加难度的关卡系统。每个关卡都有明确的学习目标，玩家可以通过练习掌握新的技巧和策略。</p>
+
+            <h3>3. 性能优化</h3>
+            <p><strong>挑战：</strong>确保游戏在低配置设备上也能流畅运行。</p>
+            <p><strong>解决方案：</strong>使用对象池技术减少内存分配，优化精灵渲染，实现帧率自适应。通过这些优化，游戏在各种设备上都能保持60fps的流畅运行。</p>
+
+            <h2>上线后的反馈</h2>
+            <p>游戏上线后，我收到了许多玩家的反馈。玩家们对游戏的像素艺术风格和流畅的操作手感给予了积极评价，同时也提出了一些改进建议。我根据这些反馈，不断更新和改进游戏，添加了新的关卡和功能。</p>
+
+            <h2>总结</h2>
+            <p>30天的开发旅程充满了挑战和乐趣。通过这个项目，我不仅提升了自己的编程和美术技能，也学会了如何管理一个完整的游戏开发项目。《像素忍者》的成功上线让我更加坚定了继续游戏开发的信心，我期待着未来能够开发出更多优秀的游戏作品。</p>
+        </div>
+
+        <a href="index.html#blog" class="back-button">返回开发日志</a>
+    </div>
+</body>
+</html>

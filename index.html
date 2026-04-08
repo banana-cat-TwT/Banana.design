@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>巴拿拿猫的小窝</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary-red: #D32F2F;
+            --dark-bg: #121212;
+            --text-light: #F5F5F5;
+            --text-dark: #333333;
+            --font-serif: 'Noto Serif SC', 'SimSun', serif;
+            --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        /* Loading Screen */
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark-bg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.8s ease;
+        }
+
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(211, 47, 47, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary-red);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 20px;
+        }
+
+        .loading-text {
+            font-family: var(--font-serif);
+            letter-spacing: 4px;
+            color: var(--primary-red);
+            font-size: 1.2rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Video Splash Screen */
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+            background-color: #000;
+            transition: opacity 1.5s ease, visibility 1.5s;
+        }
+
+        #splash-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Controls */
+        .controls-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1010;
+        }
+
+        .btn {
+            pointer-events: auto;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .btn:hover {
+            background: rgba(211, 47, 47, 0.8);
+            border-color: var(--primary-red);
+        }
+
+        #skip-btn {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            letter-spacing: 2px;
+        }
+
+        #mute-btn {
+            position: absolute;
+            bottom: 40px;
+            right: 30px;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mute-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        #progress-bar {
+            height: 100%;
+            width: 0%;
+            background: var(--primary-red);
+            transition: width 0.1s linear;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            #skip-btn {
+                top: 20px;
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 前景灰烬特效 -->
+    <div class="ash-container" id="ashContainer"></div>
+    
+    <!-- Loading Screen -->
+    <div id="loading-screen">
+        <div class="loader"></div>
+        <div class="loading-text">载入中</div>
+    </div>
+
+    <!-- Splash Screen (Video) -->
+    <div id="splash-screen">
+        <video id="splash-video" muted playsinline>
+            <source src="videos/Video Project 1.mp4" type="video/mp4">
+            您的浏览器不支持 HTML5 视频。
+        </video>
+        
+        <div class="controls-container">
+            <button id="skip-btn" class="btn">跳过动画</button>
+            
+            <button id="mute-btn" class="btn">
+                <svg class="mute-icon" id="icon-muted" viewBox="0 0 24 24" style="display: block;">
+                    <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>
+                </svg>
+                <svg class="mute-icon" id="icon-unmuted" viewBox="0 0 24 24" style="display: none;">
+                    <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>
+                </svg>
+            </button>
+            
+            <div class="progress-container">
+                <div id="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 跟随导航 -->
+    <nav class="side-nav" id="sideNav">
+        <button class="nav-toggle-btn" id="navToggleBtn">
+            <span class="toggle-icon"></span>
+        </button>
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="#hero" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="#items" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">道具展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="#games" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">游戏展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="#blog" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <div class="time-display">
+            <div class="time">
+                <span id="hour">00</span><span class="colon">:</span><span id="minute">00</span>
+            </div>
+            <div class="date" id="date-en">Monday, January 1</div>
+            <div class="date-cn" id="date-cn">星期一</div>
+        </div>
+        <h1>巴拿拿猫的小窝</h1>
+        <nav>
+            <ul>
+                <li><a href="#works">作品展示</a></li>
+                <li><a href="#characters">角色展示</a></li>
+                <li><a href="#items">道具展示</a></li>
+                <li><a href="#games">小游戏</a></li>
+                <li><a href="#blog">开发日志</a></li>
+                <li><a href="#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="hero">
+            <div class="hero-animation">
+                <!-- 动态背景切换容器 -->
+                <div class="background-slider" id="backgroundSlider">
+                    <div class="background-slide active" style="background-image: url('images/12345.jpg');"></div>
+                    <div class="background-slide" style="background-image: url('images/123456.jpg');"></div>
+                    <div class="background-slide" style="background-image: url('images/1234567.jpg');"></div>
+                    <div class="background-slide" style="background-image: url('images/12345678.jpg');"></div>
+                    <div class="background-slide" style="background-image: url('images/123456789.jpg');"></div>
+                </div>
+                <div class="parallax-container">
+                    <div class="parallax-layer layer-1" data-speed="0.2"></div>
+                    <div class="parallax-layer layer-2" data-speed="0.5"></div>
+                    <div class="parallax-layer layer-3" data-speed="0.8"></div>
+                </div>
+                <div class="animation-overlay"></div>
+                <div class="particle-container" id="particleContainer"></div>
+                <div class="geometric-shapes">
+                    <div class="shape shape-1"></div>
+                    <div class="shape shape-2"></div>
+                    <div class="shape shape-3"></div>
+                    <div class="shape shape-4"></div>
+                </div>
+                <div class="hero-content">
+                    <div class="hero-logo">
+                        <div class="logo-circle"></div>
+                        <div class="logo-text">
+                            <span class="wave-letter" style="--i: 0">P</span>
+                            <span class="wave-letter" style="--i: 1">o</span>
+                            <span class="wave-letter" style="--i: 2">r</span>
+                            <span class="wave-letter" style="--i: 3">t</span>
+                            <span class="wave-letter" style="--i: 4">f</span>
+                            <span class="wave-letter" style="--i: 5">o</span>
+                            <span class="wave-letter" style="--i: 6">l</span>
+                            <span class="wave-letter" style="--i: 7">i</span>
+                            <span class="wave-letter" style="--i: 8">o</span>
+                        </div>
+                    </div>
+                    <h1 class="hero-title">创意无限</h1>
+                    <p class="hero-subtitle">探索我本科四年的创作旅程</p>
+                    <p class="hero-description">不只是代码，更是创意与热爱的结晶</p>
+                    <div class="hero-buttons">
+                        <a href="#works" class="btn-primary">查看作品</a>
+                        <a href="#about" class="btn-secondary">了解更多</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="works" class="parallax-section">
+            <div class="parallax-bg" data-speed="0.3" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20abstract%20background%2C%20subtle%20gradient%2C%20modern%20design%2C%20neutral%20tones&image_size=landscape_16_9');"></div>
+            <div class="works-content">
+                <h2 class="elastic-element">作品展示</h2>
+                <p class="works-description elastic-element">日常创作总览</p>
+                <div class="works-category elastic-element">
+                    <button class="category-btn active">全部</button>
+                    <button class="category-btn">游戏开发</button>
+                    <button class="category-btn">角色设计</button>
+                    <button class="category-btn">道具设计</button>
+                    <button class="category-btn">其他创作</button>
+                </div>
+                <div class="works-slider-wrapper elastic-element">
+                    <button class="works-slider-btn prev-btn" onclick="slideWorks(-1)">←</button>
+                    <div class="works-container" id="worksContainer">
+                        <div class="work-card elastic-element" onclick="openWorkDetail(1)" data-category="游戏开发">
+                            <div class="work-images">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=space%20exploration%20game%20scene%2C%20futuristic%20spaceship%2C%20distant%20galaxy&image_size=square" alt="星际探险家">
+                            </div>
+                            <div class="work-info">
+                                <h3>星际探险家</h3>
+                                <p>一款融合Roguelike元素的太空探索游戏，玩家需要在随机生成的星系中生存并建立基地</p>
+                                <div class="work-tags">
+                                    <span class="tag">游戏开发</span>
+                                    <span class="tag">热门</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="work-card elastic-element" onclick="openWorkDetail(2)" data-category="游戏开发">
+                            <div class="work-images">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=pixel%20art%20ninja%20game%20scene%2C%20retro%20style%2C%202D%20platformer&image_size=square" alt="像素忍者">
+                            </div>
+                            <div class="work-info">
+                                <h3>像素忍者</h3>
+                                <p>复古像素风格的横版动作游戏，包含20个精心设计的关卡</p>
+                                <div class="work-tags">
+                                    <span class="tag">游戏开发</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="work-card elastic-element" onclick="openWorkDetail(3)" data-category="其他创作">
+                            <div class="work-images">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=smart%20home%20app%20UI%20design%2C%20mobile%20interface%2C%20clean%20modern&image_size=square" alt="智能家居App">
+                            </div>
+                            <div class="work-info">
+                                <h3>智能家居App</h3>
+                                <p>为IoT设备设计的移动端控制界面，注重简洁直观的用户体验</p>
+                                <div class="work-tags">
+                                    <span class="tag">UI设计</span>
+                                    <span class="tag">热门</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="work-card elastic-element" onclick="openWorkDetail(4)" data-category="其他创作">
+                            <div class="work-images">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=city%20sunrise%20animation%2C%20blender%20render%2C%20time%20lapse&image_size=square" alt="城市日出">
+                            </div>
+                            <div class="work-info">
+                                <h3>城市日出</h3>
+                                <p>使用Blender制作的30秒城市日出延时动画</p>
+                                <div class="work-tags">
+                                    <span class="tag">动画制作</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="works-slider-btn next-btn" onclick="slideWorks(1)">→</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="characters" class="parallax-section">
+            <div class="parallax-bg" data-speed="0.2" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20abstract%20background%2C%20subtle%20gradient%2C%20modern%20design%2C%20neutral%20tones&image_size=landscape_16_9');"></div>
+            <div class="characters-container">
+                <h2 class="elastic-element">角色展示</h2>
+                <p class="characters-description elastic-element">鼠标悬停查看角色详情，点击卡片翻转</p>
+                <div class="character-gallery">
+                    <div class="character-card character-card-lulu elastic-element">
+                        <div class="character-front">
+                            <img src="images/chahuixinshi2.png" alt="下午茶系列角色">
+                        </div>
+                        <div class="character-back">
+                            <h3>玫露露</h3>
+                            <h4>LULU</h4>
+                            <p>穿梭茶会花园间传递甜意的信使少女</p>
+                            <div class="character-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">攻击</span>
+                                    <span class="attr-value">85</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">防御</span>
+                                    <span class="attr-value">70</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">生命</span>
+                                    <span class="attr-value">75</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">速度</span>
+                                    <span class="attr-value">60</span>
+                                </div>
+                            </div>
+                            <div class="character-info">
+                                <span class="rarity">SSR</span>
+                                <span class="type">战士</span>
+                                <span class="element">科幻</span>
+                                <span class="number">NO.001</span>
+                            </div>
+                            <button class="character-detail-btn" onclick="openCharacterDetail(1)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="character-card character-card-moya elastic-element">
+                        <div class="character-front">
+                            <img src="images/moya2.png" alt="民族风学者">
+                        </div>
+                        <div class="character-back">
+                            <h3>墨芽</h3>
+                            <h4>MOYA</h4>
+                            <p>一位热爱记录与探索的少年学者。</p>
+                            <div class="character-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">攻击</span>
+                                    <span class="attr-value">65</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">防御</span>
+                                    <span class="attr-value">45</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">生命</span>
+                                    <span class="attr-value">55</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">速度</span>
+                                    <span class="attr-value">80</span>
+                                </div>
+                            </div>
+                            <div class="character-info">
+                                <span class="rarity">SR</span>
+                                <span class="type">学者</span>
+                                <span class="element">民族风</span>
+                                <span class="number">NO.010</span>
+                            </div>
+                            <button class="character-detail-btn" onclick="openCharacterDetail(3)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="character-card character-card-lingchuan elastic-element">
+                        <div class="character-front">
+                            <img src="images/lingchuan.png" alt="凌川">
+                        </div>
+                        <div class="character-back">
+                            <h3>凌川</h3>
+                            <h4>LingChuan</h4>
+                            <p>行走江湖的年轻剑客，性情沉静，剑意凌厉</p>
+                            <div class="character-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">攻击</span>
+                                    <span class="attr-value">65</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">防御</span>
+                                    <span class="attr-value">45</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">生命</span>
+                                    <span class="attr-value">55</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">速度</span>
+                                    <span class="attr-value">80</span>
+                                </div>
+                            </div>
+                            <div class="character-info">
+                                <span class="rarity">SR</span>
+                                <span class="type">剑客</span>
+                                <span class="element">风</span>
+                                <span class="number">NO.002</span>
+                            </div>
+                            <button class="character-detail-btn" onclick="openCharacterDetail(2)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="character-card character-card-qiyao elastic-element">
+                        <div class="character-front">
+                            <img src="images/QIYAO.png" alt="绮瑶">
+                        </div>
+                        <div class="character-back">
+                            <h3>绮瑶</h3>
+                            <h4>QIYAO</h4>
+                            <p>气质温婉的古风少女，衣袂轻扬如云霞，举止端雅从容。</p>
+                            <div class="character-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">攻击</span>
+                                    <span class="attr-value">95</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">防御</span>
+                                    <span class="attr-value">60</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">生命</span>
+                                    <span class="attr-value">65</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">速度</span>
+                                    <span class="attr-value">95</span>
+                                </div>
+                            </div>
+                            <div class="character-info">
+                                <span class="rarity">UR</span>
+                                <span class="type">忍者</span>
+                                <span class="element">赛博</span>
+                                <span class="number">NO.003</span>
+                            </div>
+                            <button class="character-detail-btn" onclick="openCharacterDetail(11)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="character-card character-card-ersalong elastic-element">
+                        <div class="character-front">
+                            <img src="images/ESALONG.png" alt="厄萨隆">
+                        </div>
+                        <div class="character-back">
+                            <h3>厄萨隆</h3>
+                            <h4>ESALONG</h4>
+                            <p>深渊中苏醒的古老主宰，是战场尽头最令人畏惧的存在。</p>
+                            <div class="character-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">攻击</span>
+                                    <span class="attr-value">80</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">防御</span>
+                                    <span class="attr-value">50</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">生命</span>
+                                    <span class="attr-value">60</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">速度</span>
+                                    <span class="attr-value">85</span>
+                                </div>
+                            </div>
+                            <div class="character-info">
+                                <span class="rarity">SSR</span>
+                                <span class="type">主宰</span>
+                                <span class="element">深渊</span>
+                                <span class="number">NO.004</span>
+                            </div>
+                            <button class="character-detail-btn" onclick="openCharacterDetail(4)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="character-card character-card-glomu elastic-element">
+                        <div class="character-front">
+                            <img src="images/GELUOMU2.png" alt="格洛姆">
+                        </div>
+                        <div class="character-back">
+                            <h3>格洛姆</h3>
+                            <h4>GELUOMU</h4>
+                            <p>久经战阵的矮人战士，身披厚甲、手执战斧，以沉默与力量守护同伴。</p>
+                            <div class="character-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">攻击</span>
+                                    <span class="attr-value">98</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">防御</span>
+                                    <span class="attr-value">40</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">生命</span>
+                                    <span class="attr-value">50</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">速度</span>
+                                    <span class="attr-value">70</span>
+                                </div>
+                            </div>
+                            <div class="character-info">
+                                <span class="rarity">UR</span>
+                                <span class="type">战士</span>
+                                <span class="element">力量</span>
+                                <span class="number">NO.005</span>
+                            </div>
+                            <button class="character-detail-btn" onclick="openCharacterDetail(5)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="character-card character-card-eric elastic-element">
+                        <div class="character-front">
+                            <img src="images/AILIKE.png" alt="埃里克">
+                        </div>
+                        <div class="character-back">
+                            <h3>埃里克</h3>
+                            <h4>AILIKE</h4>
+                            <p>两国领土战争的雇佣兵，常年在秩序相对混乱的西部沙漠地区游荡。</p>
+                            <div class="character-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">攻击</span>
+                                    <span class="attr-value">90</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">防御</span>
+                                    <span class="attr-value">45</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">生命</span>
+                                    <span class="attr-value">55</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">速度</span>
+                                    <span class="attr-value">92</span>
+                                </div>
+                            </div>
+                            <div class="character-info">
+                                <span class="rarity">SSR</span>
+                                <span class="type">刺客</span>
+                                <span class="element">暗影</span>
+                                <span class="number">NO.006</span>
+                            </div>
+                            <button class="character-detail-btn" onclick="openCharacterDetail(6)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="character-card character-card-pitiya elastic-element">
+                        <div class="character-front">
+                            <img src="images/PITIYA.png" alt="皮提亚">
+                        </div>
+                        <div class="character-back">
+                            <h3>皮提亚</h3>
+                            <h4>PITIYA</h4>
+                            <p>中东地区萨满部落的祭司，负责预测未来、解读神谕等工作。</p>
+                            <div class="character-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">攻击</span>
+                                    <span class="attr-value">75</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">防御</span>
+                                    <span class="attr-value">95</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">生命</span>
+                                    <span class="attr-value">90</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">速度</span>
+                                    <span class="attr-value">50</span>
+                                </div>
+                            </div>
+                            <div class="character-info">
+                                <span class="rarity">UR</span>
+                                <span class="type">祭司</span>
+                                <span class="element">神谕</span>
+                                <span class="number">NO.007</span>
+                            </div>
+                            <button class="character-detail-btn" onclick="openCharacterDetail(7)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="character-card character-card-kubaji elastic-element">
+                        <div class="character-front">
+                            <img src="images/KUBAJI2.png" alt="库巴姬">
+                        </div>
+                        <div class="character-back">
+                            <h3>库巴姬</h3>
+                            <h4>KUBAJI</h4>
+                            <p>魔王血裔的支配者，以烈焰统御黑曜王城。</p>
+                            <div class="character-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">攻击</span>
+                                    <span class="attr-value">92</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">防御</span>
+                                    <span class="attr-value">80</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">生命</span>
+                                    <span class="attr-value">85</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">速度</span>
+                                    <span class="attr-value">65</span>
+                                </div>
+                            </div>
+                            <div class="character-info">
+                                <span class="rarity">UR</span>
+                                <span class="type">战士</span>
+                                <span class="element">龙族</span>
+                                <span class="number">NO.008</span>
+                            </div>
+                            <button class="character-detail-btn" onclick="openCharacterDetail(8)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="character-card character-card-leon elastic-element">
+                        <div class="character-front">
+                            <img src="images\LAIANG.png" alt="莱昂">
+                        </div>
+                        <div class="character-back">
+                            <h3>莱昂</h3>
+                            <h4>LEON</h4>
+                            <p>行走于废墟战场的孤锋战士，面对失序与烈火，他始终以钢铁意志守住最后的防线。</p>
+                            <div class="character-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">攻击</span>
+                                    <span class="attr-value">88</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">防御</span>
+                                    <span class="attr-value">55</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">生命</span>
+                                    <span class="attr-value">60</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">速度</span>
+                                    <span class="attr-value">75</span>
+                                </div>
+                            </div>
+                            <div class="character-info">
+                                <span class="rarity">SSR</span>
+                                <span class="type">战士</span>
+                                <span class="element">火</span>
+                                <span class="number">NO.009</span>
+                            </div>
+                            <button class="character-detail-btn" onclick="openCharacterDetail(9)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="character-card character-card-new elastic-element">
+                        <div class="character-front">
+                            <img src="images/HELUOSI2.png" alt="赫洛斯">
+                        </div>
+                        <div class="character-back">
+                            <h3>赫洛斯</h3>
+                            <h4>HELUOSI</h4>
+                            <p>斯巴达战火中锤炼而成的勇士，以赤红战袍与钢铁意志背负城邦荣耀。</p>
+                            <div class="character-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">攻击力</span>
+                                    <span class="attr-value">85</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">防御力</span>
+                                    <span class="attr-value">60</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">生命值</span>
+                                    <span class="attr-value">70</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">速度</span>
+                                    <span class="attr-value">75</span>
+                                </div>
+                            </div>
+                            <div class="character-info">
+                                <span class="number">NO.010</span>
+                                <span class="rarity">SSR</span>
+                                <span class="type">战士</span>
+                                <span class="element">光明</span>
+                            </div>
+                            <button class="character-detail-btn" onclick="openCharacterDetail(10)">查看详情</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="items" class="parallax-section">
+            <div class="parallax-bg" data-speed="0.2" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20abstract%20background%2C%20subtle%20gradient%2C%20modern%20design%2C%20neutral%20tones&image_size=landscape_16_9');"></div>
+            <div class="items-container">
+                <h2 class="elastic-element">道具展示</h2>
+                <p class="items-description elastic-element">探索我设计的各种道具和武器</p>
+                <div class="items-gallery">
+                    <div class="item-card elastic-element">
+                        <div class="item-front">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=magical%20sword%20fantasy%20weapon%2C%20glowing%20blade%2C%20ornate%20design&image_size=square" alt="魔法剑">
+                        </div>
+                        <div class="item-back">
+                            <h3>魔法剑</h3>
+                            <h4>MAGIC SWORD</h4>
+                            <p>一把蕴含强大魔法力量的剑，能够释放元素攻击</p>
+                            <div class="item-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">攻击力</span>
+                                    <span class="attr-value">+50</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">魔法值</span>
+                                    <span class="attr-value">+20</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">稀有度</span>
+                                    <span class="attr-value">SSR</span>
+                                </div>
+                            </div>
+                            <div class="item-info">
+                                <span class="number">NO.001</span>
+                                <span class="rarity">SSR</span>
+                                <span class="type">武器</span>
+                                <span class="element">魔法</span>
+                            </div>
+                            <button class="item-detail-btn" onclick="openItemDetail(1)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="item-card elastic-element">
+                        <div class="item-front">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=magical%20shield%20fantasy%20defense%2C%20glowing%20runestones%2C%20ornate%20design&image_size=square" alt="魔法 shield">
+                        </div>
+                        <div class="item-back">
+                            <h3>魔法盾</h3>
+                            <h4>MAGIC SHIELD</h4>
+                            <p>能够吸收魔法攻击的盾牌，提供强大的防御能力</p>
+                            <div class="item-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">防御力</span>
+                                    <span class="attr-value">+40</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">魔法抗性</span>
+                                    <span class="attr-value">+30</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">稀有度</span>
+                                    <span class="attr-value">SR</span>
+                                </div>
+                            </div>
+                            <div class="item-info">
+                                <span class="rarity">SR</span>
+                                <span class="type">防具</span>
+                                <span class="element">魔法</span>
+                                <span class="number">NO.002</span>
+                            </div>
+                            <button class="item-detail-btn" onclick="openItemDetail(2)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="item-card elastic-element">
+                        <div class="item-front">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=health%20potion%20fantasy%20item%2C%20red%20liquid%2C%20magical%20glow&image_size=square" alt="生命药水">
+                        </div>
+                        <div class="item-back">
+                            <h3>生命药水</h3>
+                            <h4>HEALTH POTION</h4>
+                            <p>能够瞬间恢复大量生命值的神奇药水</p>
+                            <div class="item-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">生命值</span>
+                                    <span class="attr-value">+200</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">使用次数</span>
+                                    <span class="attr-value">1</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">稀有度</span>
+                                    <span class="attr-value">R</span>
+                                </div>
+                            </div>
+                            <div class="item-info">
+                                <span class="rarity">R</span>
+                                <span class="type">消耗品</span>
+                                <span class="element">生命</span>
+                                <span class="number">NO.003</span>
+                            </div>
+                            <button class="item-detail-btn" onclick="openItemDetail(3)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="item-card elastic-element">
+                        <div class="item-front">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=magic%20scroll%20fantasy%20item%2C%20ancient%20paper%2C%20glowing%20runes&image_size=square" alt="魔法卷轴">
+                        </div>
+                        <div class="item-back">
+                            <h3>魔法卷轴</h3>
+                            <h4>MAGIC SCROLL</h4>
+                            <p>记载着强大魔法咒语的古老卷轴</p>
+                            <div class="item-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">魔法伤害</span>
+                                    <span class="attr-value">+100</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">使用次数</span>
+                                    <span class="attr-value">1</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">稀有度</span>
+                                    <span class="attr-value">SR</span>
+                                </div>
+                            </div>
+                            <div class="item-info">
+                                <span class="rarity">SR</span>
+                                <span class="type">消耗品</span>
+                                <span class="element">魔法</span>
+                                <span class="number">NO.004</span>
+                            </div>
+                            <button class="item-detail-btn" onclick="openItemDetail(4)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="item-card elastic-element">
+                        <div class="item-front">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=enchanted%20ring%20fantasy%20jewelry%2C%20glowing%20gems%2C%20ornate%20design&image_size=square" alt="魔法戒指">
+                        </div>
+                        <div class="item-back">
+                            <h3>魔法戒指</h3>
+                            <h4>ENCHANTED RING</h4>
+                            <p>能够增强魔法能力的神奇戒指</p>
+                            <div class="item-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">魔法值</span>
+                                    <span class="attr-value">+30</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">魔法回复</span>
+                                    <span class="attr-value">+10</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">稀有度</span>
+                                    <span class="attr-value">SSR</span>
+                                </div>
+                            </div>
+                            <div class="item-info">
+                                <span class="rarity">SSR</span>
+                                <span class="type">饰品</span>
+                                <span class="element">魔法</span>
+                                <span class="number">NO.005</span>
+                            </div>
+                            <button class="item-detail-btn" onclick="openItemDetail(5)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="item-card elastic-element">
+                        <div class="item-front">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=enchanted%20armor%20fantasy%20defense%2C%20glowing%20runes%2C%20ornate%20design&image_size=square" alt="魔法 armor">
+                        </div>
+                        <div class="item-back">
+                            <h3>魔法 armor</h3>
+                            <h4>ENCHANTED ARMOR</h4>
+                            <p>能够提供强大防御能力的魔法 armor</p>
+                            <div class="item-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">防御力</span>
+                                    <span class="attr-value">+50</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">魔法抗性</span>
+                                    <span class="attr-value">+25</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">稀有度</span>
+                                    <span class="attr-value">SSR</span>
+                                </div>
+                            </div>
+                            <div class="item-info">
+                                <span class="number">NO.006</span>
+                                <span class="rarity">SSR</span>
+                                <span class="type">防具</span>
+                                <span class="element">魔法</span>
+                            </div>
+                            <button class="item-detail-btn" onclick="openItemDetail(6)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="item-card elastic-element">
+                        <div class="item-front">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=magical%20boots%20fantasy%20footwear%2C%20glowing%20gems%2C%20ornate%20design&image_size=square" alt="魔法靴子">
+                        </div>
+                        <div class="item-back">
+                            <h3>魔法靴子</h3>
+                            <h4>MAGIC BOOTS</h4>
+                            <p>能够提升移动速度的魔法靴子</p>
+                            <div class="item-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">速度</span>
+                                    <span class="attr-value">+30</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">敏捷</span>
+                                    <span class="attr-value">+20</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">稀有度</span>
+                                    <span class="attr-value">SR</span>
+                                </div>
+                            </div>
+                            <div class="item-info">
+                                <span class="number">NO.007</span>
+                                <span class="rarity">SR</span>
+                                <span class="type">防具</span>
+                                <span class="element">魔法</span>
+                            </div>
+                            <button class="item-detail-btn" onclick="openItemDetail(7)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="item-card elastic-element">
+                        <div class="item-front">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=magical%20amulet%20fantasy%20jewelry%2C%20glowing%20gems%2C%20ornate%20design&image_size=square" alt="魔法护身符">
+                        </div>
+                        <div class="item-back">
+                            <h3>魔法护身符</h3>
+                            <h4>MAGIC AMULET</h4>
+                            <p>能够提供额外魔法保护的护身符</p>
+                            <div class="item-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">魔法抗性</span>
+                                    <span class="attr-value">+35</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">生命值</span>
+                                    <span class="attr-value">+100</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">稀有度</span>
+                                    <span class="attr-value">SSR</span>
+                                </div>
+                            </div>
+                            <div class="item-info">
+                                <span class="number">NO.008</span>
+                                <span class="rarity">SSR</span>
+                                <span class="type">饰品</span>
+                                <span class="element">魔法</span>
+                            </div>
+                            <button class="item-detail-btn" onclick="openItemDetail(8)">查看详情</button>
+                        </div>
+                    </div>
+                    <div class="item-card elastic-element">
+                        <div class="item-front">
+                            <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=magic%20potion%20fantasy%20item%2C%20blue%20liquid%2C%20magical%20glow&image_size=square" alt="魔法药水">
+                        </div>
+                        <div class="item-back">
+                            <h3>魔法药水</h3>
+                            <h4>MAGIC POTION</h4>
+                            <p>能够瞬间恢复大量魔法值的神奇药水</p>
+                            <div class="item-attributes">
+                                <div class="attribute">
+                                    <span class="attr-name">魔法值</span>
+                                    <span class="attr-value">+150</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">使用次数</span>
+                                    <span class="attr-value">1</span>
+                                </div>
+                                <div class="attribute">
+                                    <span class="attr-name">稀有度</span>
+                                    <span class="attr-value">R</span>
+                                </div>
+                            </div>
+                            <div class="item-info">
+                                <span class="number">NO.009</span>
+                                <span class="rarity">R</span>
+                                <span class="type">消耗品</span>
+                                <span class="element">魔法</span>
+                            </div>
+                            <button class="item-detail-btn" onclick="openItemDetail(9)">查看详情</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="games" class="parallax-section">
+            <div class="parallax-bg" data-speed="0.25" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20abstract%20background%2C%20subtle%20gradient%2C%20modern%20design%2C%20neutral%20tones&image_size=landscape_16_9');"></div>
+            <h2 class="elastic-element">小游戏</h2>
+            <p class="games-description elastic-element">目前展示的都是课余时间制作的小游戏！欢迎大家玩看看~</p>
+            <div class="games-container">
+                <div class="game-item elastic-element">
+                    <img src="images/DIANLULIANJIE.png" alt="电路链接" class="game-img">
+                    <h3>电路链接</h3>
+                    <p>城市即将迎来永夜，玩家需要在限时时间内为所有写字楼供电。玩家可以通过商店购买相应板块、解锁科技、政策树、控制时间变化等通关游戏，玩家可以用关卡内剩余的税收来在关外升级自己的技术或者支持某项决议，游玩过程中需要注意昼夜更替和气候变化带来的影响。</p>
+                    <a href="game-snake.html" class="game-link">查看详情</a>
+                    <img src="https://api.dicebear.com/8.x/bottts-neutral/svg?seed=circuit" alt="电路角色" class="game-character">
+                </div>
+                <div class="game-item elastic-element">
+                    <img src="images/DIYUJIUDIAN.png" alt="地狱酒店" class="game-img">
+                    <h3>地狱酒店</h3>
+                    <p>扮演橡胶员工在充满超自然房客的地底酒店求生，用滑稽的操控方式，通过清洁血肉污渍、服务超自然房客等方式获取资金。物理引擎驱动的肢体互动与突如其来的死亡威胁，让每次服务都变成尖叫与爆笑交织的生存挑战。</p>
+                    <a href="game-hellhotel.html" class="game-link">查看详情</a>
+                    <img src="https://api.dicebear.com/8.x/bottts-neutral/svg?seed=hotel" alt="地狱酒店角色" class="game-character">
+                </div>
+                <div class="game-item elastic-element">
+                    <img src="images/KOUDAIZAIZAI.png" alt="口袋崽崽" class="game-img">
+                    <h3>口袋崽崽</h3>
+                    <p>自己开发的一款以日常陪伴为核心的养成模拟游戏</p>
+                    <a href="game-pocketpet.html" class="game-link">查看详情</a>
+                    <img src="https://api.dicebear.com/8.x/bottts-neutral/svg?seed=pet" alt="口袋崽崽角色" class="game-character">
+                </div>
+                <div class="game-item elastic-element">
+                    <img src="images\Eons_3.png" alt="Eons" class="game-img">
+                    <h3>Eons</h3>
+                    <p>玩家需要在关卡中获取有限的端点，利用两种端点不同的作用并结合关卡中的不用机关，让射线无限的延伸下去。将射线的延伸视为无限向前的时间，通过玩家的操作促成每一个时间阶段的发展，让无限的时间有意义。将每一个关卡赋予一个历史发展阶段，让整个关卡流程的视觉效果成为一本史书，一个在无限时间流逝中发展的有限的成就。</p>
+                    <a href="game-eons.html" class="game-link">查看详情</a>
+                    <img src="https://api.dicebear.com/8.x/bottts-neutral/svg?seed=eons" alt="Eons角色" class="game-character">
+                </div>
+                <div class="game-item elastic-element">
+                    <img src="images\YUANYING.png" alt="渊影" class="game-img">
+                    <h3>渊影</h3>
+                    <p>主角变成小狗布偶掉入2d王国，与它的影子一同踏上寻找出口的冒险旅程。通过2d影子吃钥匙点亮3d世界回家的路。</p>
+                    <a href="game-yuanying.html" class="game-link">查看详情</a>
+                    <img src="https://api.dicebear.com/8.x/bottts-neutral/svg?seed=shadow" alt="渊影角色" class="game-character">
+                </div>
+                <div class="game-item elastic-element">
+                    <img src="images/LANG3.png" alt="戴面具的狼" class="game-img">
+                    <h3>戴面具的狼</h3>
+                    <p>食草教称霸了世界，狼被兔子屠戮殆尽。玩家在兔子邪教文艺馆醒来，但这座文艺馆被有识之士做了手脚，只要戴上面具、找好角度，就能解开十几年前兔子邪教称霸世界的真相。这里是没有恶狼、兔子互帮互助的国度，你拿到了兔子面具，就说明已经受到了我们的保护。通过鼠标右键来戴上你的兔子面具吧，从兔子的视角去观察，你能得到更有用的信息。</p>
+                    <a href="game-wolfmask.html" class="game-link">查看详情</a>
+                    <img src="https://api.dicebear.com/8.x/bottts-neutral/svg?seed=wolf" alt="戴面具的狼角色" class="game-character">
+                </div>
+                <div class="game-item elastic-element">
+                    <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=racing%20game%20speed%20action&image_size=landscape_4_3" alt="赛车游戏" class="game-img">
+                    <h3>赛车游戏</h3>
+                    <p>一款速度与激情的赛车游戏，玩家可以驾驶各种高性能赛车在赛道上竞速</p>
+                    <a href="#" class="game-link">查看详情</a>
+                    <img src="https://api.dicebear.com/8.x/bottts-neutral/svg?seed=racing" alt="赛车游戏角色" class="game-character">
+                </div>
+                <div class="game-item elastic-element">
+                    <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=strategy%20game%20tactical%20battle&image_size=landscape_4_3" alt="策略游戏" class="game-img">
+                    <h3>策略游戏</h3>
+                    <p>一款需要深思熟虑的策略游戏，玩家需要制定各种战术来取得胜利</p>
+                    <a href="#" class="game-link">查看详情</a>
+                    <img src="https://api.dicebear.com/8.x/bottts-neutral/svg?seed=strategy" alt="策略游戏角色" class="game-character">
+                </div>
+                <div class="game-item elastic-element">
+                    <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=platformer%20game%20side%20scroller&image_size=landscape_4_3" alt="平台游戏" class="game-img">
+                    <h3>极简跑酷</h3>
+                    <p>一款极简风格的跑酷游戏，玩家需要通过跳跃和滑行来避开障碍物，挑战高分</p>
+                    <a href="game-platform.html" class="game-link">查看详情</a>
+                    <img src="https://api.dicebear.com/8.x/bottts-neutral/svg?seed=platform" alt="极简跑酷角色" class="game-character">
+                </div>
+            </div>
+        </section>
+
+        <section id="blog" class="parallax-section">
+            <div class="parallax-bg" data-speed="0.2" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20abstract%20background%2C%20subtle%20gradient%2C%20modern%20design%2C%20neutral%20tones&image_size=landscape_16_9');"></div>
+            <div class="blog-content">
+                <h2 class="elastic-element">开发日志</h2>
+                <p class="blog-description elastic-element">分享开发心得、技术文章和创作故事</p>
+                <div class="blog-categories elastic-element" style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem;">
+                    <button class="category-btn" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">UE</button>
+                    <button class="category-btn" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">Unity</button>
+                    <button class="category-btn" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">其他引擎</button>
+                    <button class="category-btn" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">3D软件</button>
+                </div>
+                <style>
+                    .category-btn:hover {
+                        background: rgba(255, 255, 255, 0.2);
+                        transform: translateY(-2px);
+                        box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
+                    }
+                </style>
+                <div class="blog-container">
+                    <div class="blog-card elastic-element">
+                        <div class="blog-image">
+                            <div class="blog-image-placeholder">
+                                <div class="placeholder-dots">•••</div>
+                            </div>
+                        </div>
+                        <div class="blog-meta">
+                            <span class="blog-date">2026年3月30日</span>
+                            <span class="blog-views">128 阅读</span>
+                        </div>
+                        <h3>Unity Roguelike游戏开发实战：随机地图生成算法</h3>
+                        <p>深入探讨如何使用BSP算法和房间连接技术创建随机生成的游戏地图，包括代码实现和性能优化。</p>
+                        <a href="blog-unity-roguelike.html" class="read-more">阅读全文 →</a>
+                    </div>
+                    <div class="blog-card elastic-element">
+                        <div class="blog-image">
+                            <div class="blog-image-placeholder">
+                                <div class="placeholder-dots">•••</div>
+                            </div>
+                        </div>
+                        <div class="blog-meta">
+                            <span class="blog-date">2026年3月28日</span>
+                            <span class="blog-views">96 阅读</span>
+                        </div>
+                        <h3>《像素忍者》开发日志：从概念到上线的30天</h3>
+                        <p>记录一款像素风格横版动作游戏的完整开发过程，从初期概念设计到最终上线Steam的全过程。</p>
+                        <a href="blog-pixel-ninja.html" class="read-more">阅读全文 →</a>
+                    </div>
+                    <div class="blog-card elastic-element">
+                        <div class="blog-image">
+                            <div class="blog-image-placeholder">
+                                <div class="placeholder-dots">•••</div>
+                            </div>
+                        </div>
+                        <div class="blog-meta">
+                            <span class="blog-date">2026年3月25日</span>
+                            <span class="blog-views">164 阅读</span>
+                        </div>
+                        <h3>智能家居 App UI 设计：如何平衡功能与简洁</h3>
+                        <p>分享如何设计一个既功能丰富又界面简洁的智能家居控制应用，包括用户体验设计和界面优化技巧。</p>
+                        <a href="blog-smart-home.html" class="read-more">阅读全文 →</a>
+                    </div>
+                    <div class="blog-card elastic-element">
+                        <div class="blog-image">
+                            <div class="blog-image-placeholder">
+                                <div class="placeholder-dots">•••</div>
+                            </div>
+                        </div>
+                        <div class="blog-meta">
+                            <span class="blog-date">2026年3月20日</span>
+                            <span class="blog-views">89 阅读</span>
+                        </div>
+                        <h3>Unity Roguelike游戏开发实战：随机地图生成算法</h3>
+                        <p>深入探讨如何使用BSP算法和房间连接技术创建随机生成的游戏地图，包括代码实现和性能优化。</p>
+                        <a href="blog-unity-roguelike.html" class="read-more">阅读全文 →</a>
+                    </div>
+                    <div class="blog-card elastic-element">
+                        <div class="blog-image">
+                            <div class="blog-image-placeholder">
+                                <div class="placeholder-dots">•••</div>
+                            </div>
+                        </div>
+                        <div class="blog-meta">
+                            <span class="blog-date">2026年3月18日</span>
+                            <span class="blog-views">112 阅读</span>
+                        </div>
+                        <h3>《像素忍者》开发日志：从概念到上线的30天</h3>
+                        <p>记录一款像素风格横版动作游戏的完整开发过程，从初期概念设计到最终上线Steam的全过程。</p>
+                        <a href="blog-pixel-ninja.html" class="read-more">阅读全文 →</a>
+                    </div>
+                    <div class="blog-card elastic-element">
+                        <div class="blog-image">
+                            <div class="blog-image-placeholder">
+                                <div class="placeholder-dots">•••</div>
+                            </div>
+                        </div>
+                        <div class="blog-meta">
+                            <span class="blog-date">2026年3月15日</span>
+                            <span class="blog-views">145 阅读</span>
+                        </div>
+                        <h3>智能家居 App UI 设计：如何平衡功能与简洁</h3>
+                        <p>分享如何设计一个既功能丰富又界面简洁的智能家居控制应用，包括用户体验设计和界面优化技巧。</p>
+                        <a href="blog-smart-home.html" class="read-more">阅读全文 →</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="parallax-section">
+            <div class="parallax-bg" data-speed="0.25" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20abstract%20background%2C%20subtle%20gradient%2C%20modern%20design%2C%20neutral%20tones&image_size=landscape_16_9');"></div>
+            <h2 class="elastic-element">关于我</h2>
+            <p class="elastic-element">我是一名热爱创作的开发者，专注于前端开发和游戏制作。这个网站展示了我的部分作品和小游戏，希望你喜欢！</p>
+            
+            <div class="about-sections">
+                <div class="about-section elastic-element">
+                    <h3>实习经历</h3>
+                    <div class="experience-item elastic-element" onclick="openAboutDetail(1)">
+                        <div class="experience-header">
+                            <h4>前端开发实习生</h4>
+                            <span class="experience-date">2025年7月 - 2025年9月</span>
+                        </div>
+                        <p class="experience-company">科技有限公司</p>
+                        <p class="experience-description">负责公司官网和内部系统的前端开发，使用React、Vue等框架，参与了多个项目的开发和维护。</p>
+                    </div>
+                    <div class="experience-item elastic-element" onclick="openAboutDetail(2)">
+                        <div class="experience-header">
+                            <h4>游戏开发实习生</h4>
+                            <span class="experience-date">2024年7月 - 2024年9月</span>
+                        </div>
+                        <p class="experience-company">游戏工作室</p>
+                        <p class="experience-description">参与了一款休闲游戏的开发，负责游戏逻辑和UI界面的实现，使用Unity引擎和C#语言。</p>
+                    </div>
+                </div>
+                
+                <div class="about-section elastic-element">
+                    <h3>项目经历</h3>
+                    <div class="experience-item elastic-element" onclick="openAboutDetail(3)">
+                        <div class="experience-header">
+                            <h4>个人作品集网站</h4>
+                            <span class="experience-date">2026年1月 - 2026年3月</span>
+                        </div>
+                        <p class="experience-description">使用HTML、CSS、JavaScript开发的个人作品集网站，展示了我的作品、小游戏和开发日志。</p>
+                    </div>
+                    <div class="experience-item elastic-element" onclick="openAboutDetail(4)">
+                        <div class="experience-header">
+                            <h4>像素忍者游戏</h4>
+                            <span class="experience-date">2025年10月 - 2025年11月</span>
+                        </div>
+                        <p class="experience-description">使用Unity引擎开发的像素风格横版动作游戏，包含20个关卡和多种敌人类型。</p>
+                    </div>
+                    <div class="experience-item elastic-element" onclick="openAboutDetail(5)">
+                        <div class="experience-header">
+                            <h4>智能家居App UI设计</h4>
+                            <span class="experience-date">2025年8月 - 2025年9月</span>
+                        </div>
+                        <p class="experience-description">为智能家居系统设计的移动应用界面，注重用户体验和功能完整性。</p>
+                    </div>
+                </div>
+                
+                <div class="about-section elastic-element">
+                    <h3>教育经历</h3>
+                    <div class="experience-item elastic-element" onclick="openAboutDetail(6)">
+                        <div class="experience-header">
+                            <h4>计算机科学与技术</h4>
+                            <span class="experience-date">2022年9月 - 2026年6月</span>
+                        </div>
+                        <p class="experience-company">大学</p>
+                        <p class="experience-description">主修课程：数据结构、算法设计、计算机网络、操作系统、数据库原理、软件工程等。</p>
+                        <div class="thesis-info elastic-element" onclick="openAboutDetail(7)">
+                            <h5>毕业论文</h5>
+                            <p>《基于深度学习的游戏AI行为规划研究》</p>
+                            <p class="thesis-description">研究了如何使用深度学习技术改进游戏中AI角色的行为决策，提高游戏的可玩性和挑战性。通过实验验证了方法的有效性，取得了良好的研究成果。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="about-section elastic-element">
+                    <h3>校园经历</h3>
+                    <div class="experience-item elastic-element" onclick="openAboutDetail(8)">
+                        <div class="experience-header">
+                            <h4>计算机协会会长</h4>
+                            <span class="experience-date">2024年9月 - 2025年6月</span>
+                        </div>
+                        <p class="experience-description">组织了多次技术讲座和编程竞赛，提高了协会成员的技术水平和团队协作能力。</p>
+                    </div>
+                    <div class="experience-item elastic-element" onclick="openAboutDetail(9)">
+                        <div class="experience-header">
+                            <h4>校运动会志愿者</h4>
+                            <span class="experience-date">2023年10月</span>
+                        </div>
+                        <p class="experience-description">参与了校运动会的组织和服务工作，负责运动员的签到和赛程安排。</p>
+                    </div>
+                </div>
+                
+                <div class="about-section elastic-element">
+                    <h3>兴趣爱好</h3>
+                    <div class="hobby-item elastic-element" onclick="openAboutDetail(10)">
+                        <h4>游戏开发</h4>
+                        <p>利用课余时间开发小型游戏，学习游戏引擎和游戏设计原理。</p>
+                    </div>
+                    <div class="hobby-item elastic-element" onclick="openAboutDetail(11)">
+                        <h4>前端开发</h4>
+                        <p>学习最新的前端技术和框架，开发个人项目和网站。</p>
+                    </div>
+                    <div class="hobby-item elastic-element" onclick="openAboutDetail(12)">
+                        <h4>阅读</h4>
+                        <p>喜欢阅读技术书籍和科幻小说，不断扩展自己的知识领域。</p>
+                    </div>
+                    <div class="hobby-item elastic-element" onclick="openAboutDetail(13)">
+                        <h4>运动</h4>
+                        <p>定期进行篮球、跑步等运动，保持身体健康。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- 留言板板块 -->
+        <section id="message-board" class="parallax-section">
+            <div class="parallax-bg" data-speed="0.2" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20abstract%20background%2C%20subtle%20gradient%2C%20modern%20design%2C%20neutral%20tones&image_size=landscape_16_9');"></div>
+            <h2 class="elastic-element">留言板</h2>
+            <p class="elastic-element">留下你的想法和建议，该板块采用匿名制度哦~</p>
+            
+            <div class="message-board-content">
+                <div class="message-form elastic-element">
+                    <h3>写下你的留言</h3>
+                    <form id="messageForm">
+                        <div class="form-group">
+                            <label for="name">姓名</label>
+                            <input type="text" id="name" name="name" required placeholder="请输入你的姓名">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">留言内容</label>
+                            <textarea id="message" name="message" required placeholder="请输入你的留言" rows="5"></textarea>
+                        </div>
+                        <button type="submit" class="submit-btn">提交留言</button>
+                    </form>
+                </div>
+                
+                <div class="messages-list elastic-element">
+                    <h3>留言列表</h3>
+                    <div id="messagesContainer">
+                        <!-- 留言将通过JavaScript动态添加 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: contact@bananacatonl1.dev</p>
+                <p>所在地: 中国上海</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 我的作品集</p>
+    </footer>
+
+    <!-- 作品详情模态框 -->
+    <div id="workDetailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeWorkDetail()">← 返回</button>
+                <div class="work-tags">
+                    <span class="tag">游戏开发</span>
+                    <span class="tag">2024</span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="work-info">
+                    <h2 id="workTitle">星际探险家</h2>
+                    <p id="workDescription">一款融合Roguelike元素的太空探索游戏，玩家需要在随机生成的星系中生存并建立基地</p>
+                    <img id="workImage" src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=space%20exploration%20game%20cockpit%20view%2C%20futuristic%20UI%2C%20space%20scenery&image_size=landscape_16_9" alt="作品图片">
+                    <div class="tech-tags">
+                        <span class="tech-tag">Unity</span>
+                        <span class="tech-tag">C#</span>
+                        <span class="tech-tag">Blender</span>
+                    </div>
+                </div>
+                <div class="work-details">
+                    <div class="detail-section">
+                        <h3>作品信息</h3>
+                        <div class="info-item">
+                            <span class="info-label">浏览次数</span>
+                            <span class="info-value">0</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">分类</span>
+                            <span class="info-value">游戏开发</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">游戏开发</span>
+                            <span class="info-value"></span>
+                        </div>
+                    </div>
+                    <div class="detail-section">
+                        <h3>相关联系</h3>
+                        <p>如果对这个作品感兴趣，欢迎联系我了解更多细节</p>
+                        <button class="contact-btn">联系我</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 角色详情模态框 -->
+    <div id="characterDetailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeCharacterDetail()">← 返回</button>
+                <div class="character-tags">
+                    <span class="tag">角色</span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="character-info">
+                    <h2 id="characterTitle">星际战士</h2>
+                    <h3 id="characterSubtitle">STAR WARRIOR</h3>
+                    <p id="characterDescription">来自遥远星系的勇敢战士，经历过无数星际战争的洗礼，拥有超凡的战斗技巧和坚定的意志。</p>
+                    <img id="characterImage" src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=fantasy%20space%20warrior%2C%20armored%2C%20heroic%20pose&image_size=portrait_4_3" alt="角色图片">
+                    <div class="character-attributes-modal">
+                        <div class="attribute">
+                            <span class="attr-name">攻击</span>
+                            <span class="attr-value">85</span>
+                        </div>
+                        <div class="attribute">
+                            <span class="attr-name">防御</span>
+                            <span class="attr-value">70</span>
+                        </div>
+                        <div class="attribute">
+                            <span class="attr-name">生命</span>
+                            <span class="attr-value">75</span>
+                        </div>
+                        <div class="attribute">
+                            <span class="attr-name">速度</span>
+                            <span class="attr-value">60</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="character-details">
+                    <div class="detail-section">
+                        <h3>角色信息</h3>
+                        <div class="info-item">
+                            <span class="info-label">稀有度</span>
+                            <span id="characterRarity" class="info-value">SSR</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">类型</span>
+                            <span id="characterType" class="info-value">战士</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">元素</span>
+                            <span id="characterElement" class="info-value">科幻</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">编号</span>
+                            <span id="characterNumber" class="info-value">NO.001</span>
+                        </div>
+                    </div>
+                    <div class="detail-section">
+                        <h3>背景故事</h3>
+                        <p id="characterBackstory">星际战士来自遥远的星系，经历了无数的星际战争。他拥有超凡的战斗技巧和坚定的意志，是星系中最强大的战士之一。他的使命是保护星系的和平，消灭所有威胁。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 关于我详情模态框 -->
+    <div id="aboutDetailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeAboutDetail()">← 返回</button>
+                <div class="about-tags">
+                    <span class="tag">个人信息</span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="about-info">
+                    <h2 id="aboutTitle">实习经历</h2>
+                    <h3 id="aboutSubtitle">前端开发实习生</h3>
+                    <p id="aboutDate">2025年7月 - 2025年9月</p>
+                    <p id="aboutCompany">科技有限公司</p>
+                    <p id="aboutDescription">负责公司官网和内部系统的前端开发，使用React、Vue等框架，参与了多个项目的开发和维护。</p>
+                </div>
+                <div class="about-details">
+                    <div class="detail-section">
+                        <h3>详细信息</h3>
+                        <div id="aboutDetailsContent">
+                            <!-- 详细内容将通过JavaScript动态添加 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="itemDetailModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-btn" onclick="closeItemDetail()">← 返回</button>
+                <div class="item-tags">
+                    <span class="tag">道具详情</span>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="item-info">
+                    <h2 id="itemTitle">魔法剑</h2>
+                    <h3 id="itemSubtitle">MAGIC SWORD</h3>
+                    <p id="itemDescription">一把蕴含强大魔法力量的剑，能够释放元素攻击</p>
+                    <div class="item-image-container">
+                        <img id="itemImage" src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=magical%20sword%20fantasy%20weapon%2C%20glowing%20blade%2C%20ornate%20design&image_size=square" alt="道具图片">
+                    </div>
+                    <div class="item-attributes-modal">
+                        <div class="attribute">
+                            <span class="attr-name">攻击力</span>
+                            <span class="attr-value">50</span>
+                        </div>
+                        <div class="attribute">
+                            <span class="attr-name">魔法值</span>
+                            <span class="attr-value">20</span>
+                        </div>
+                    </div>
+                    <div class="item-details">
+                        <div class="detail-item">
+                            <span class="detail-label">稀有度</span>
+                            <span id="itemRarity">SSR</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">类型</span>
+                            <span id="itemType">武器</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">元素</span>
+                            <span id="itemElement">魔法</span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">编号</span>
+                            <span id="itemNumber">NO.001</span>
+                        </div>
+                    </div>
+                    <div class="item-backstory">
+                        <h3>背景故事</h3>
+                        <p id="itemBackstory">这把魔法剑由古代魔法师打造，剑身蕴含着强大的魔法力量。当持有者挥动它时，能够释放出元素攻击，对敌人造成巨大伤害。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const video = document.getElementById('splash-video');
+            const splashScreen = document.getElementById('splash-screen');
+            const loadingScreen = document.getElementById('loading-screen');
+            const skipBtn = document.getElementById('skip-btn');
+            const muteBtn = document.getElementById('mute-btn');
+            const progressBar = document.getElementById('progress-bar');
+            const iconMuted = document.getElementById('icon-muted');
+            const iconUnmuted = document.getElementById('icon-unmuted');
+
+            // Remove loading screen when video is ready to play
+            video.addEventListener('canplaythrough', () => {
+                loadingScreen.style.opacity = '0';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    // Attempt to play video
+                    video.play().catch(e => {
+                        console.log("Auto-play prevented by browser:", e);
+                        // If autoplay fails, we might want to show a play button, 
+                        // but for now we just let the user skip or interact
+                    });
+                }, 800);
+            });
+
+            // Fallback if video takes too long to load
+            setTimeout(() => {
+                if (loadingScreen.style.display !== 'none') {
+                    loadingScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        loadingScreen.style.display = 'none';
+                        video.play().catch(e => console.log(e));
+                    }, 800);
+                }
+            }, 3000);
+
+            // Update progress bar
+            video.addEventListener('timeupdate', () => {
+                if (video.duration) {
+                    const progress = (video.currentTime / video.duration) * 100;
+                    progressBar.style.width = progress + '%';
+                }
+            });
+
+            // Transition to main content
+            const showMainContent = () => {
+                splashScreen.style.opacity = '0';
+                splashScreen.style.visibility = 'hidden';
+                
+                // Pause video to save resources
+                setTimeout(() => {
+                    video.pause();
+                }, 1500);
+            };
+
+            // Video ended event
+            video.addEventListener('ended', showMainContent);
+
+            // Skip button click
+            skipBtn.addEventListener('click', showMainContent);
+
+            // Mute toggle
+            muteBtn.addEventListener('click', () => {
+                video.muted = !video.muted;
+                if (video.muted) {
+                    iconMuted.style.display = 'block';
+                    iconUnmuted.style.display = 'none';
+                } else {
+                    iconMuted.style.display = 'none';
+                    iconUnmuted.style.display = 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

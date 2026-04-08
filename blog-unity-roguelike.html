@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unity Roguelike游戏开发实战：随机地图生成算法 - 巴拿拿猫的个人网站</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: #0a0a0a;
+            color: #f0f0f0;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding-top: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        .blog-meta {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            color: #aaa;
+        }
+
+        .blog-content {
+            background: #1a1a1a;
+            padding: 3rem;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .blog-content p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .blog-content h2 {
+            margin: 2rem 0 1rem;
+            color: #fff;
+        }
+
+        .blog-content h3 {
+            margin: 1.5rem 0 1rem;
+            color: #ddd;
+        }
+
+        .code-block {
+            background: #2a2a2a;
+            padding: 1.5rem;
+            border-radius: 4px;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+        }
+
+        .code-block pre {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: #f0f0f0;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .blog-content {
+                padding: 2rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Unity Roguelike游戏开发实战：随机地图生成算法</h1>
+            <div class="blog-meta">
+                <span>2026年3月30日</span>
+                <span>128 阅读</span>
+            </div>
+        </div>
+
+        <div class="blog-content">
+            <p>在Roguelike游戏中，随机地图生成是一个核心特性，它能为玩家提供无限的游戏体验。本文将深入探讨如何使用BSP（Binary Space Partitioning）算法和房间连接技术创建随机生成的游戏地图，包括代码实现和性能优化。</p>
+
+            <h2>BSP算法原理</h2>
+            <p>BSP算法是一种空间划分算法，它通过递归地将空间分割为更小的子空间来创建地图。具体步骤如下：</p>
+            <ol>
+                <li>从一个初始的大空间开始</li>
+                <li>随机选择一个方向（水平或垂直）</li>
+                <li>在随机位置分割空间</li>
+                <li>对每个子空间重复上述过程，直到达到最小空间大小</li>
+            </ol>
+
+            <h3>代码实现</h3>
+            <div class="code-block">
+                <pre>
+public class BSPGenerator {
+    public class Node {
+        public RectInt rect;
+        public Node left;
+        public Node right;
+        public bool isLeaf;
+    }
+
+    public static Node Generate(int width, int height, int minSize) {
+        Node root = new Node {
+            rect = new RectInt(0, 0, width, height),
+            isLeaf = true
+        };
+
+        SplitNode(root, minSize);
+        return root;
+    }
+
+    private static void SplitNode(Node node, int minSize) {
+        if (!node.isLeaf) return;
+
+        // 决定分割方向
+        bool splitHorizontal = Random.value > 0.5f;
+        if (node.rect.width > node.rect.height && node.rect.width / node.rect.height > 1.25f) {
+            splitHorizontal = false;
+        } else if (node.rect.height > node.rect.width && node.rect.height / node.rect.width > 1.25f) {
+            splitHorizontal = true;
+        }
+
+        int max = splitHorizontal ? node.rect.height - minSize : node.rect.width - minSize;
+        if (max <= minSize) return;
+
+        int splitPos = Random.Range(minSize, max);
+        if (splitHorizontal) {
+            node.left = new Node {
+                rect = new RectInt(node.rect.x, node.rect.y, node.rect.width, splitPos),
+                isLeaf = true
+            };
+            node.right = new Node {
+                rect = new RectInt(node.rect.x, node.rect.y + splitPos, node.rect.width, node.rect.height - splitPos),
+                isLeaf = true
+            };
+        } else {
+            node.left = new Node {
+                rect = new RectInt(node.rect.x, node.rect.y, splitPos, node.rect.height),
+                isLeaf = true
+            };
+            node.right = new Node {
+                rect = new RectInt(node.rect.x + splitPos, node.rect.y, node.rect.width - splitPos, node.rect.height),
+                isLeaf = true
+            };
+        }
+
+        node.isLeaf = false;
+        SplitNode(node.left, minSize);
+        SplitNode(node.right, minSize);
+    }
+}
+                </pre>
+            </div>
+
+            <h2>房间连接技术</h2>
+            <p>生成BSP树后，我们需要为每个叶子节点创建房间，并连接相邻的房间。具体步骤如下：</p>
+            <ol>
+                <li>为每个叶子节点创建一个随机大小的房间</li>
+                <li>遍历BSP树，连接相邻的房间</li>
+                <li>创建走廊连接这些房间</li>
+            </ol>
+
+            <h3>代码实现</h3>
+            <div class="code-block">
+                <pre>
+public class RoomGenerator {
+    public static List&lt;RectInt&gt; GenerateRooms(Node root) {
+        List&lt;RectInt&gt; rooms = new List&lt;RectInt&gt;();
+        CollectRooms(root, rooms);
+        return rooms;
+    }
+
+    private static void CollectRooms(Node node, List&lt;RectInt&gt; rooms) {
+        if (node.isLeaf) {
+            // 创建随机大小的房间
+            int roomWidth = Random.Range(4, node.rect.width - 1);
+            int roomHeight = Random.Range(4, node.rect.height - 1);
+            int roomX = node.rect.x + Random.Range(1, node.rect.width - roomWidth);
+            int roomY = node.rect.y + Random.Range(1, node.rect.height - roomHeight);
+            rooms.Add(new RectInt(roomX, roomY, roomWidth, roomHeight));
+        } else {
+            CollectRooms(node.left, rooms);
+            CollectRooms(node.right, rooms);
+        }
+    }
+
+    public static void ConnectRooms(List&lt;RectInt&gt; rooms) {
+        // 连接相邻的房间
+        for (int i = 0; i < rooms.Count - 1; i++) {
+            ConnectTwoRooms(rooms[i], rooms[i + 1]);
+        }
+    }
+
+    private static void ConnectTwoRooms(RectInt room1, RectInt room2) {
+        // 创建走廊连接两个房间
+        int x1 = room1.x + room1.width / 2;
+        int y1 = room1.y + room1.height / 2;
+        int x2 = room2.x + room2.width / 2;
+        int y2 = room2.y + room2.height / 2;
+
+        // 水平走廊
+        int minX = Mathf.Min(x1, x2);
+        int maxX = Mathf.Max(x1, x2);
+        int y = y1;
+        for (int x = minX; x <= maxX; x++) {
+            // 在(x, y)处创建走廊
+        }
+
+        // 垂直走廊
+        int minY = Mathf.Min(y1, y2);
+        int maxY = Mathf.Max(y1, y2);
+        int x = x2;
+        for (int yCorridor = minY; yCorridor <= maxY; yCorridor++) {
+            // 在(x, yCorridor)处创建走廊
+        }
+    }
+}
+                </pre>
+            </div>
+
+            <h2>性能优化</h2>
+            <p>随机地图生成可能会消耗大量计算资源，特别是在生成大型地图时。以下是一些性能优化技巧：</p>
+            <ul>
+                <li><strong>限制递归深度</strong>：避免过深的递归，设置最大分割次数</li>
+                <li><strong>使用对象池</strong>：重用节点和房间对象，减少内存分配</li>
+                <li><strong>并行计算</strong>：在支持的平台上使用多线程生成地图</li>
+                <li><strong>缓存结果</strong>：缓存常见大小的地图，避免重复计算</li>
+            </ul>
+
+            <h2>结论</h2>
+            <p>通过BSP算法和房间连接技术，我们可以创建出多样化的随机地图，为Roguelike游戏提供无限的可玩性。结合性能优化技巧，即使在复杂的游戏场景中，也能实现流畅的地图生成体验。</p>
+            <p>希望本文对你的游戏开发有所帮助！如果你有任何问题或建议，欢迎在评论区留言。</p>
+        </div>
+
+        <a href="index.html#blog" class="back-button">返回开发日志</a>
+    </div>
+</body>
+</html>
