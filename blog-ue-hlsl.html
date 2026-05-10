@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UE5 HLSL着色器开发实验 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 博客详情页样式 */
+        body {
+            background: #121212;
+            color: #e0e0e0;
+        }
+        
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #f0f0f0;
+            text-shadow: 0 0 10px rgba(139, 92, 255, 0.5);
+        }
+        
+        .blog-detail-meta {
+            font-size: 1rem;
+            color: #9e9e9e;
+            margin-bottom: 2rem;
+        }
+        
+        .blog-content {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #333;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #8B5CFF;
+            border-bottom: 2px solid #8B5CFF;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-content {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .video-container {
+            margin: 2rem 0;
+            background: #252525;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .video-caption {
+            padding: 1rem;
+            text-align: center;
+            color: #9e9e9e;
+            font-size: 0.9rem;
+        }
+        
+        .highlight-box {
+            background: rgba(139, 92, 255, 0.1);
+            border-left: 4px solid #8B5CFF;
+            padding: 18px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .highlight-box strong {
+            color: #8B5CFF;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #8B5CFF;
+            color: #f0f0f0;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #8B5CFF;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: #9E7CFF;
+            color: #f0f0f0;
+            box-shadow: 0 10px 25px rgba(139, 92, 255, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .blog-detail-container {
+                padding: 1rem;
+            }
+            
+            .blog-detail-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景灰烬效果 -->
+    <div class="ash-container" id="ashContainer"></div>
+    
+    <!-- 跟随导航 -->
+    <nav class="side-nav" id="sideNav">
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#items" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">道具展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">小游戏</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#items">道具展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">UE5 HLSL着色器开发实验</h1>
+                <div class="blog-detail-meta">
+                    <span>发布日期：2026年5月4日</span> | 
+                    <span>阅读次数：0</span> | 
+                    <span>分类：UE5 / 着色器</span>
+                </div>
+            </div>
+            
+            <div class="blog-content">
+                <h2 class="section-title">项目介绍</h2>
+                <div class="section-content">
+                    <p>本项目记录了我在 Unreal Engine 5 中学习和实践 HLSL（High-Level Shading Language）着色器语言的过程。通过一系列实验，深入理解了 UE 材质系统中的自定义 HLSL 节点使用方法，掌握了着色器开发的核心技术。</p>
+                    
+                    <div class="highlight-box">
+                        <strong>引擎版本</strong>: Unreal Engine 5<br>
+                        <strong>核心技术</strong>: HLSL自定义节点、材质函数、着色器编译
+                    </div>
+                </div>
+                
+                <h2 class="section-title">HLSL基础学习</h2>
+                <div class="section-content">
+                    <h3>1. 着色器基本概念</h3>
+                    <p>学习了着色器的基本结构，包括顶点着色器（Vertex Shader）和像素着色器（Pixel Shader）的作用和工作原理。理解了着色器在渲染管线中的位置和作用。</p>
+                    
+                    <h3>2. HLSL语法基础</h3>
+                    <p>掌握了 HLSL 的基本语法，包括数据类型、变量声明、函数定义、流程控制等。学习了如何在 UE 材质编辑器中使用自定义 HLSL 节点。</p>
+                    
+                    <h3>3. 着色器语义</h3>
+                    <p>理解了输入输出语义的概念，学习了如何正确地传递顶点数据和纹理坐标。</p>
+                </div>
+                
+                <h2 class="section-title">实验项目</h2>
+                <div class="section-content">
+                    <h3>1. HLSL基础实验</h3>
+                    <p>创建了基础的 HLSL 自定义节点，实现简单的颜色变换和纹理操作效果，验证了 HLSL 在 UE 材质中的基本使用方法。</p>
+                    
+                    <h3>2. FXS_HLSL0 进阶实验</h3>
+                    <p>进行了进阶 HLSL 实验，探索更复杂的着色器逻辑和视觉效果组合，包括自定义光照模型和特殊效果。</p>
+                    
+                    <h3>3. 菲涅尔函数实现</h3>
+                    <p>实现了菲涅尔效应（Fresnel Effect），模拟光线在物体表面的反射特性，增强材质的真实感。</p>
+                </div>
+                
+                <h2 class="section-title">技术要点</h2>
+                <div class="section-content">
+                    <ul>
+                        <li><strong>自定义节点创建</strong>: 在 UE 材质编辑器中创建 HLSL 自定义节点的方法</li>
+                        <li><strong>参数传递</strong>: 如何正确传递材质参数到 HLSL 代码中</li>
+                        <li><strong>纹理采样</strong>: 在 HLSL 中正确采样纹理的方法</li>
+                        <li><strong>性能优化</strong>: 编写高效 HLSL 代码的技巧</li>
+                    </ul>
+                </div>
+                
+                <h2 class="section-title">开发心得</h2>
+                <div class="section-content">
+                    <p>通过这次 HLSL 着色器开发实验，我深刻体会到：</p>
+                    <ul>
+                        <li><strong>HLSL是高级渲染的基础</strong>: 掌握 HLSL 对于实现复杂视觉效果至关重要</li>
+                        <li><strong>UE的材质系统很强大</strong>: UE 的可视化材质编辑器大大降低了入门门槛</li>
+                        <li><strong>实践是最好的学习方式</strong>: 通过实际项目练习才能真正掌握着色器开发</li>
+                    </ul>
+                </div>
+                
+                <a href="index.html#blog" class="btn-back">返回开发日志</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: 19859256157@163.com</p>
+                <p>所在地: 福建厦门</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

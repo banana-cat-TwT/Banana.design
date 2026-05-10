@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音乐类3D游戏开发日志 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 博客详情页样式 */
+        body {
+            background: #121212;
+            color: #e0e0e0;
+        }
+        
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #f0f0f0;
+            text-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+        }
+        
+        .blog-detail-meta {
+            font-size: 1rem;
+            color: #9e9e9e;
+            margin-bottom: 2rem;
+        }
+        
+        .blog-content {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #333;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #F44336;
+            border-bottom: 2px solid #F44336;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-content {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .yaogun-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-item {
+            background: #252525;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-item h4 {
+            margin-top: 0;
+            color: #f0f0f0;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-item p {
+            color: #9e9e9e;
+            font-size: 0.9rem;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #F44336;
+            color: #f0f0f0;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #F44336;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: #EF5350;
+            color: #f0f0f0;
+            box-shadow: 0 10px 25px rgba(244, 67, 54, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .blog-detail-container {
+                padding: 1rem;
+            }
+            
+            .blog-detail-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景灰烬效果 -->
+    <div class="ash-container" id="ashContainer"></div>
+    
+    <!-- 跟随导航 -->
+    <nav class="side-nav" id="sideNav">
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#items" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">道具展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">小游戏</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#items">道具展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">音乐类3D游戏开发日志</h1>
+                <div class="blog-detail-meta">
+                    <span>发布日期：2024年11月18日</span> | 
+                    <span>阅读次数：0</span> | 
+                    <span>分类：Unity</span>
+                </div>
+            </div>
+            
+            <div class="blog-content">
+                <h2 class="section-title">项目介绍</h2>
+                <div class="section-content">
+                    <p>yaogun项目是一个基于Unity引擎开发的音乐节奏游戏项目。该项目旨在探索音乐与游戏的结合，通过节奏点击和音乐可视化来创造沉浸式的游戏体验。</p>
+                    <p>通过这个项目，我深入学习了音乐游戏的设计原理、节奏检测算法以及音乐可视化技术，为后续的游戏开发项目打下了坚实的基础。</p>
+                </div>
+                
+                <h2 class="section-title">技术栈</h2>
+                <div class="section-content">
+                    <ul>
+                        <li>Unity 引擎</li>
+                        <li>C# 编程语言</li>
+                        <li>音频处理</li>
+                        <li>节奏检测</li>
+                        <li>音乐可视化</li>
+                    </ul>
+                </div>
+                
+                <h2 class="section-title">开发内容</h2>
+                <div class="section-content">
+                    <h3>1. 音乐系统</h3>
+                    <p>实现了完整的音乐系统，包括：</p>
+                    <ul>
+                        <li>音频加载与播放</li>
+                        <li>节奏检测</li>
+                        <li>音乐分析</li>
+                        <li>音效系统</li>
+                    </ul>
+                    
+                    <h3>2. 游戏玩法</h3>
+                    <p>开发了节奏游戏玩法：</p>
+                    <ul>
+                        <li>节奏点击机制</li>
+                        <li>分数系统</li>
+                        <li>难度调整</li>
+                        <li>连击系统</li>
+                    </ul>
+                    
+                    <h3>3. 视觉效果</h3>
+                    <p>实现了音乐可视化效果：</p>
+                    <ul>
+                        <li>音频频谱分析</li>
+                        <li>粒子效果</li>
+                        <li>灯光效果</li>
+                        <li>场景互动</li>
+                    </ul>
+                </div>
+                
+                <h2 class="section-title">核心功能</h2>
+                <div class="yaogun-features">
+                    <div class="feature-item">
+                        <h4>节奏检测</h4>
+                        <p>实现了节奏检测算法，能够准确识别音乐的节拍和节奏点，为游戏玩法提供基础。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>音乐可视化</h4>
+                        <p>开发了音乐可视化系统，包括音频频谱分析、粒子效果和灯光效果，增强游戏的视觉体验。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>节奏点击</h4>
+                        <p>实现了节奏点击玩法，玩家需要在正确的时机点击屏幕，跟随音乐的节奏。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>分数系统</h4>
+                        <p>开发了完整的分数系统，包括连击奖励、准确率评分等，增加游戏的挑战性和可玩性。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>难度调整</h4>
+                        <p>实现了难度调整系统，根据玩家的表现自动调整游戏难度，确保游戏的挑战性和趣味性。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>音效系统</h4>
+                        <p>开发了音效系统，包括点击音效、连击音效等，增强游戏的听觉体验。</p>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">技术挑战</h2>
+                <div class="section-content">
+                    <ul>
+                        <li><strong>节奏检测</strong>：开发准确的节奏检测算法，确保游戏玩法与音乐节奏同步</li>
+                        <li><strong>音频处理</strong>：处理音频数据，实现实时的音乐分析和可视化</li>
+                        <li><strong>性能优化</strong>：确保音乐可视化效果在实时应用中的性能表现</li>
+                        <li><strong>游戏平衡</strong>：设计平衡的游戏难度和分数系统，确保游戏的趣味性</li>
+                        <li><strong>用户体验</strong>：创造流畅的游戏体验，包括视觉和听觉反馈</li>
+                    </ul>
+                </div>
+                
+                <h2 class="section-title">开发心得</h2>
+                <div class="section-content">
+                    <p>通过yaogun项目的开发，我深刻体会到：</p>
+                    <ul>
+                        <li>音乐游戏是一种独特的游戏类型，需要音乐与游戏玩法的完美结合</li>
+                        <li>节奏检测是音乐游戏的核心技术，需要准确的算法支持</li>
+                        <li>音乐可视化可以大大增强游戏的视觉体验，提升玩家的沉浸感</li>
+                        <li>游戏平衡对于音乐游戏尤为重要，需要考虑不同玩家的技能水平</li>
+                        <li>性能优化是实现实时音乐可视化的关键因素</li>
+                    </ul>
+                    <p>这个项目不仅提升了我对音乐游戏开发的理解，也为我后续的游戏开发工作提供了宝贵的经验和技术积累，使得我能够在未来的项目中更好地实现音乐与游戏的结合。</p>
+                </div>
+                
+                <a href="index.html#blog" class="btn-back">返回开发日志</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: 19859256157@163.com</p>
+                <p>所在地: 福建厦门</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

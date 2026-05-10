@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>极简跑酷 - Minimal Runner</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .game-container {
+            position: relative;
+            width: 100%;
+            max-width: 900px;
+            padding: 20px;
+        }
+        
+        .game-title {
+            text-align: center;
+            color: #fff;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            text-shadow: 0 0 20px rgba(233, 69, 96, 0.5);
+        }
+        
+        canvas {
+            display: block;
+            width: 100%;
+            max-width: 800px;
+            height: 400px;
+            margin: 0 auto;
+            background: #0a0a0a;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .control-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+        
+        .key {
+            background: linear-gradient(145deg, #e94560, #c73e54);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+            transition: transform 0.1s, box-shadow 0.1s;
+            min-width: 80px;
+            text-align: center;
+        }
+        
+        .key:active {
+            transform: translateY(2px);
+            box-shadow: 0 2px 8px rgba(233, 69, 96, 0.3);
+        }
+        
+        .key.mouse {
+            background: linear-gradient(145deg, #533483, #7b2cbf);
+            box-shadow: 0 4px 15px rgba(123, 44, 191, 0.4);
+        }
+        
+        .key.mouse:active {
+            box-shadow: 0 2px 8px rgba(123, 44, 191, 0.3);
+        }
+        
+        .score-board {
+            position: absolute;
+            top: 40px;
+            right: 60px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        
+        .score-value {
+            color: #e94560;
+            font-size: 1.5rem;
+        }
+        
+        .overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #fff;
+            z-index: 10;
+        }
+        
+        .overlay h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 30px rgba(233, 69, 96, 0.8);
+        }
+        
+        .overlay p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+        
+        .start-btn {
+            background: linear-gradient(145deg, #e94560, #c73e54);
+            color: #fff;
+            border: none;
+            padding: 18px 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.5);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(233, 69, 96, 0.6);
+        }
+        
+        .leaderboard {
+            position: absolute;
+            top: 100px;
+            right: 60px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 12px;
+            color: #fff;
+            min-width: 180px;
+            display: none;
+        }
+        
+        .leaderboard h3 {
+            font-size: 1rem;
+            margin-bottom: 15px;
+            color: #e94560;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        
+        .leaderboard-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+        }
+        
+        .leaderboard-item:last-child {
+            border-bottom: none;
+        }
+        
+        .rank {
+            color: #ffd700;
+            font-weight: 700;
+        }
+        
+        .difficulty-indicator {
+            position: absolute;
+            top: 40px;
+            left: 60px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 10px 20px;
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.9rem;
+        }
+        
+        .speed-bar {
+            width: 100px;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 3px;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .speed-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #e94560, #ffd700);
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <h1 class="game-title">极简跑酷</h1>
+        
+        <div class="difficulty-indicator">
+            <div>SPEED</div>
+            <div class="speed-bar">
+                <div class="speed-fill" id="speedFill"></div>
+            </div>
+        </div>
+        
+        <div class="score-board">
+            SCORE: <span class="score-value" id="score">0</span>
+        </div>
+        
+        <div class="leaderboard" id="leaderboard">
+            <h3>排行榜</h3>
+            <div id="leaderboardList"></div>
+        </div>
+        
+        <canvas id="gameCanvas" width="800" height="400"></canvas>
+        
+        <div class="overlay" id="startScreen">
+            <h2>READY?</h2>
+            <p>点击屏幕或按空格键跳跃<br>按 ↓ 键滑行</p>
+            <button class="start-btn" onclick="startGame()">开始游戏</button>
+        </div>
+        
+        <div class="overlay hidden" id="gameOverScreen">
+            <h2>GAME OVER</h2>
+            <p>最终得分: <span id="finalScore">0</span></p>
+            <button class="start-btn" onclick="restartGame()">再来一局</button>
+        </div>
+        
+        <div class="controls">
+            <div class="control-btn">
+                <div class="key">SPACE / ↑</div>
+                <span>跳跃</span>
+            </div>
+            <div class="control-btn">
+                <div class="key">↓</div>
+                <span>滑行</span>
+            </div>
+            <div class="control-btn">
+                <div class="key mouse">CLICK</div>
+                <span>跳跃</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const finalScoreElement = document.getElementById('finalScore');
+        const startScreen = document.getElementById('startScreen');
+        const gameOverScreen = document.getElementById('gameOverScreen');
+        const leaderboard = document.getElementById('leaderboard');
+        const leaderboardList = document.getElementById('leaderboardList');
+        const speedFill = document.getElementById('speedFill');
+
+        // 游戏状态
+        let gameRunning = false;
+        let score = 0;
+        let gameSpeed = 3;
+        let frameCount = 0;
+        let lastTime = 0;
+
+        // 地面高度
+        const GROUND_Y = 320;
+
+        // 玩家对象
+        const player = {
+            x: 100,
+            y: GROUND_Y - 50,
+            width: 40,
+            height: 50,
+            velocityY: 0,
+            isJumping: false,
+            isSliding: false,
+            slideTimer: 0,
+            color: '#e94560',
+            trail: []
+        };
+
+        // 障碍物数组
+        let obstacles = [];
+
+        // 粒子效果
+        let particles = [];
+
+        // 背景装饰
+        let bgElements = [];
+
+        // 初始化背景元素
+        function initBgElements() {
+            bgElements = [];
+            for (let i = 0; i < 20; i++) {
+                bgElements.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * (GROUND_Y - 100),
+                    size: Math.random() * 3 + 1,
+                    speed: Math.random() * 0.5 + 0.1,
+                    alpha: Math.random() * 0.5 + 0.1
+                });
+            }
+        }
+
+        // 创建障碍物
+        function createObstacle() {
+            const types = ['high', 'low', 'double'];
+            const type = types[Math.floor(Math.random() * types.length)];
+            
+            let obstacle = {
+                x: canvas.width,
+                type: type,
+                passed: false
+            };
+            
+            switch(type) {
+                case 'high':
+                    obstacle.y = GROUND_Y - 70;
+                    obstacle.width = 30;
+                    obstacle.height = 70;
+                    obstacle.color = '#533483';
+                    break;
+                case 'low':
+                    obstacle.y = GROUND_Y - 25;
+                    obstacle.width = 40;
+                    obstacle.height = 25;
+                    obstacle.color = '#0f3460';
+                    break;
+                case 'double':
+                    obstacle.y = GROUND_Y - 50;
+                    obstacle.width = 35;
+                    obstacle.height = 50;
+                    obstacle.color = '#e94560';
+                    break;
+            }
+            
+            obstacles.push(obstacle);
+        }
+
+        // 创建粒子
+        function createParticles(x, y, color, count = 5) {
+            for (let i = 0; i < count; i++) {
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8,
+                    size: Math.random() * 4 + 2,
+                    color: color,
+                    life: 1
+                });
+            }
+        }
+
+        // 更新游戏
+        function update(deltaTime) {
+            if (!gameRunning) return;
+
+            frameCount++;
+            
+            // 增加游戏速度和得分
+            if (frameCount % 800 === 0) {
+                gameSpeed = Math.min(gameSpeed + 0.3, 10);
+            }
+            score += Math.floor(gameSpeed * 0.1);
+            scoreElement.textContent = score;
+            
+            // 更新速度条
+            const speedPercent = (gameSpeed - 3) / 7 * 100;
+            speedFill.style.width = Math.max(0, speedPercent) + '%';
+
+            // 玩家物理
+            if (player.isJumping) {
+                player.velocityY += 0.7;
+                player.y += player.velocityY;
+                
+                if (player.y >= GROUND_Y - player.height) {
+                    player.y = GROUND_Y - player.height;
+                    player.velocityY = 0;
+                    player.isJumping = false;
+                    createParticles(player.x + player.width/2, player.y + player.height, '#e94560', 8);
+                }
+            }
+
+            // 滑行状态
+            if (player.isSliding) {
+                player.slideTimer--;
+                player.height = 25;
+                player.y = GROUND_Y - 25;
+                
+                if (player.slideTimer <= 0) {
+                    player.isSliding = false;
+                    player.height = 50;
+                    player.y = GROUND_Y - 50;
+                }
+            }
+
+            // 玩家轨迹
+            player.trail.push({x: player.x, y: player.y + player.height/2});
+            if (player.trail.length > 10) player.trail.shift();
+
+            // 生成障碍物
+            const spawnRate = Math.max(120 - Math.floor(gameSpeed * 5), 60);
+            if (frameCount % spawnRate === 0) {
+                createObstacle();
+            }
+
+            // 更新障碍物
+            for (let i = obstacles.length - 1; i >= 0; i--) {
+                let obs = obstacles[i];
+                obs.x -= gameSpeed;
+
+                // 碰撞检测
+                if (!obs.passed &&
+                    player.x < obs.x + obs.width &&
+                    player.x + player.width > obs.x &&
+                    player.y < obs.y + obs.height &&
+                    player.y + player.height > obs.y) {
+                    gameOver();
+                    return;
+                }
+
+                // 计分
+                if (!obs.passed && obs.x + obs.width < player.x) {
+                    obs.passed = true;
+                    score += 50;
+                }
+
+                // 移除屏幕外障碍物
+                if (obs.x + obs.width < 0) {
+                    obstacles.splice(i, 1);
+                }
+            }
+
+            // 更新粒子
+            for (let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.vy += 0.3;
+                p.life -= 0.02;
+                
+                if (p.life <= 0) {
+                    particles.splice(i, 1);
+                }
+            }
+
+            // 更新背景元素
+            bgElements.forEach(bg => {
+                bg.x -= bg.speed;
+                if (bg.x < 0) bg.x = canvas.width;
+            });
+        }
+
+        // 绘制游戏
+        function draw() {
+            // 清空画布
+            ctx.fillStyle = '#0a0a0a';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // 绘制背景元素
+            bgElements.forEach(bg => {
+                ctx.fillStyle = `rgba(255, 255, 255, ${bg.alpha})`;
+                ctx.fillRect(bg.x, bg.y, bg.size, bg.size);
+            });
+
+            // 绘制地面网格
+            ctx.strokeStyle = '#1a1a2e';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < canvas.width; i += 40) {
+                let offset = (frameCount * gameSpeed) % 40;
+                ctx.beginPath();
+                ctx.moveTo(i - offset, GROUND_Y);
+                ctx.lineTo(i - offset - 20, canvas.height);
+                ctx.stroke();
+            }
+
+            // 绘制地面
+            ctx.fillStyle = '#16213e';
+            ctx.fillRect(0, GROUND_Y, canvas.width, canvas.height - GROUND_Y);
+            
+            // 地面线条
+            ctx.strokeStyle = '#e94560';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, GROUND_Y);
+            ctx.lineTo(canvas.width, GROUND_Y);
+            ctx.stroke();
+
+            // 绘制玩家轨迹
+            if (player.trail.length > 1) {
+                ctx.strokeStyle = 'rgba(233, 69, 96, 0.3)';
+                ctx.lineWidth = 4;
+                ctx.beginPath();
+                ctx.moveTo(player.trail[0].x, player.trail[0].y);
+                for (let i = 1; i < player.trail.length; i++) {
+                    ctx.lineTo(player.trail[i].x, player.trail[i].y);
+                }
+                ctx.stroke();
+            }
+
+            // 绘制玩家
+            ctx.fillStyle = player.color;
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+            
+            // 玩家高光
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.fillRect(player.x + 5, player.y + 5, player.width - 10, 8);
+
+            // 绘制障碍物
+            obstacles.forEach(obs => {
+                // 阴影
+                ctx.fillStyle = 'rgba(0, 0, 0, 0.3)';
+                ctx.fillRect(obs.x + 5, obs.y + 5, obs.width, obs.height);
+                
+                // 主体
+                ctx.fillStyle = obs.color;
+                ctx.fillRect(obs.x, obs.y, obs.width, obs.height);
+                
+                // 边框
+                ctx.strokeStyle = '#fff';
+                ctx.lineWidth = 2;
+                ctx.strokeRect(obs.x, obs.y, obs.width, obs.height);
+                
+                // 内部装饰
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+                ctx.fillRect(obs.x + 5, obs.y + 5, obs.width - 10, obs.height - 10);
+            });
+
+            // 绘制粒子
+            particles.forEach(p => {
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = p.life;
+                ctx.fillRect(p.x, p.y, p.size, p.size);
+                ctx.globalAlpha = 1;
+            });
+        }
+
+        // 游戏循环
+        function gameLoop(currentTime) {
+            const deltaTime = currentTime - lastTime;
+            lastTime = currentTime;
+
+            update(deltaTime);
+            draw();
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        // 跳跃
+        function jump() {
+            if (!gameRunning || player.isJumping || player.isSliding) return;
+            player.velocityY = -16;
+            player.isJumping = true;
+            createParticles(player.x + player.width/2, player.y + player.height, '#e94560', 5);
+        }
+
+        // 滑行
+        function slide() {
+            if (!gameRunning || player.isJumping || player.isSliding) return;
+            player.isSliding = true;
+            player.slideTimer = 45;
+            createParticles(player.x + player.width/2, player.y + player.height, '#533483', 5);
+        }
+
+        // 开始游戏
+        function startGame() {
+            gameRunning = true;
+            score = 0;
+            gameSpeed = 3;
+            frameCount = 0;
+            obstacles = [];
+            particles = [];
+            player.y = GROUND_Y - 50;
+            player.height = 50;
+            player.isJumping = false;
+            player.isSliding = false;
+            player.velocityY = 0;
+            player.trail = [];
+            
+            initBgElements();
+            startScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            leaderboard.style.display = 'none';
+            
+            scoreElement.textContent = '0';
+            speedFill.style.width = '0%';
+        }
+
+        // 游戏结束
+        function gameOver() {
+            gameRunning = false;
+            finalScoreElement.textContent = score;
+            gameOverScreen.classList.remove('hidden');
+            
+            // 保存分数
+            saveScore(score);
+            
+            // 显示排行榜
+            showLeaderboard();
+        }
+
+        // 重新开始
+        function restartGame() {
+            startGame();
+        }
+
+        // 保存分数到本地存储
+        function saveScore(newScore) {
+            let scores = JSON.parse(localStorage.getItem('runnerScores') || '[]');
+            scores.push({
+                score: newScore,
+                date: new Date().toLocaleDateString()
+            });
+            scores.sort((a, b) => b.score - a.score);
+            scores = scores.slice(0, 5);
+            localStorage.setItem('runnerScores', JSON.stringify(scores));
+        }
+
+        // 显示排行榜
+        function showLeaderboard() {
+            let scores = JSON.parse(localStorage.getItem('runnerScores') || '[]');
+            leaderboardList.innerHTML = '';
+            
+            if (scores.length === 0) {
+                leaderboardList.innerHTML = '<div class="leaderboard-item"><span>暂无记录</span></div>';
+            } else {
+                scores.forEach((record, index) => {
+                    const item = document.createElement('div');
+                    item.className = 'leaderboard-item';
+                    item.innerHTML = `
+                        <span class="rank">#${index + 1}</span>
+                        <span>${record.score}</span>
+                    `;
+                    leaderboardList.appendChild(item);
+                });
+            }
+            
+            leaderboard.style.display = 'block';
+        }
+
+        // 键盘控制
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.code === 'ArrowUp') {
+                e.preventDefault();
+                jump();
+            } else if (e.code === 'ArrowDown') {
+                e.preventDefault();
+                slide();
+            }
+        });
+
+        // 鼠标/触摸控制
+        canvas.addEventListener('mousedown', jump);
+        canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            jump();
+        });
+
+        // 初始化
+        initBgElements();
+        requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>

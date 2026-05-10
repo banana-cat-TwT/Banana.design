@@ -1,0 +1,311 @@
+﻿﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D game2.0项目开发日志 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 博客详情页样式 */
+        body {
+            background: #121212;
+            color: #e0e0e0;
+        }
+        
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #f0f0f0;
+            text-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
+        }
+        
+        .blog-detail-meta {
+            font-size: 1rem;
+            color: #9e9e9e;
+            margin-bottom: 2rem;
+        }
+        
+        .blog-content {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #333;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #9C27B0;
+            border-bottom: 2px solid #9C27B0;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-content {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-item {
+            background: #252525;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-item h4 {
+            margin-top: 0;
+            color: #f0f0f0;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-item p {
+            color: #9e9e9e;
+            font-size: 0.9rem;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #9C27B0;
+            color: #f0f0f0;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #9C27B0;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: #BA68C8;
+            color: #f0f0f0;
+            box-shadow: 0 10px 25px rgba(156, 39, 176, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .blog-detail-container {
+                padding: 1rem;
+            }
+            
+            .blog-detail-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 前景灰烬特效 -->
+    <div class="ash-container" id="ashContainer"></div>
+    
+    <!-- 跟随导航 -->
+    <nav class="side-nav" id="sideNav">
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#items" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">道具展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">小游戏</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#items">道具展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">3D game2.0项目开发日志</h1>
+                <div class="blog-detail-meta">
+                    <span>发布日期：2026年3月23日</span> | 
+                    <span>阅读次数：0</span> | 
+                    <span>分类：Unity</span>
+                </div>
+            </div>
+            
+            <div class="blog-content">
+                <h2 class="section-title">项目概述</h2>
+                <div class="section-content">
+                    <p>3D game2.0是一个基于Unity引擎开发的3D游戏项目，包含了丰富的3D资源、高级材质系统和游戏功能。项目使用了大量Kitbash3D模型和纹理资源，实现了多种高级材质效果，如水地、玻璃效果等，展示了Unity在3D游戏开发中的强大能力。</p>
+                    <p>项目特点包括精美的3D模型、精细的物理材质、高级的Shader效果、流畅的游戏控制以及丰富的视觉效果，是一个综合的3D游戏开发项目。</p>
+                </div>
+                
+                <h2 class="section-title">技术栈</h2>
+                <div class="section-content">
+                    <ul>
+                        <li>Unity 2023.1.0f1</li>
+                        <li>Universal Render Pipeline (URP)</li>
+                        <li>ShaderGraph</li>
+                        <li>C#</li>
+                        <li>Kitbash3D模型</li>
+                        <li>Visual Effect Graph</li>
+                    </ul>
+                </div>
+                
+                <h2 class="section-title">核心内容</h2>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <h4>3D资源管理</h4>
+                        <p>项目使用了大量Kitbash3D模型，包括建筑、场景道具和环境等多种风格的模型，通过合理的资源管理方式组织这些模型。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>材质系统</h4>
+                        <p>实现了多种高级材质效果，如水地材质、金属材质、布料材质等，通过ShaderGraph创建了自定义着色器，如玻璃效果和水地效果。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>游戏控制</h4>
+                        <p>实现了相机控制器和角色控制器，提供流畅的游戏控制体验，支持基本的移动、旋转等操作。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>视觉效果</h4>
+                        <p>使用Visual Effect Graph创建了多种视觉效果，如烟雾、火焰等，增强了游戏的视觉冲击力。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>场景设计</h4>
+                        <p>创建了基础场景，包含了各种3D模型和材质，构建了完整的游戏环境。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>性能优化</h4>
+                        <p>通过合理的资源管理和设置，优化了游戏性能，确保在不同设备上都能流畅运行。</p>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">技术实现</h2>
+                <div class="section-content">
+                    <h3>1. 3D资源管理</h3>
+                    <p>项目使用了大量Kitbash3D模型，这些模型被组织在不同的文件夹中，便于管理和使用。模型包括建筑物模型、场景道具、环境结构等，为游戏提供了丰富的视觉元素。</p>
+                    
+                    <h3>2. 材质系统</h3>
+                    <p>使用ShaderGraph创建了多种自定义材质，包括：</p>
+                    <ul>
+                        <li><strong>水地材质</strong>：模拟了水的质感和反光效果</li>
+                        <li><strong>玻璃效果</strong>：实现了模型的玻璃透明效果</li>
+                        <li><strong>金属材质</strong>：模拟了金属的高光和反射效果</li>
+                        <li><strong>布料材质</strong>：模拟了布料的质感和褶皱</li>
+                    </ul>
+                    
+                    <h3>3. 游戏控制</h3>
+                    <p>实现了相机控制器和角色控制器，使用C#脚本处理玩家输入，提供流畅的游戏控制体验。相机控制器支持视角的旋转和移动，角色控制器支持角色的移动和跳跃等操作。</p>
+                    
+                    <h3>4. 视觉效果</h3>
+                    <p>使用Visual Effect Graph创建了多种视觉效果，如烟雾、火焰等。这些效果通过粒子系统实现，增强了游戏的视觉冲击力和氛围感。</p>
+                </div>
+                
+                <h2 class="section-title">开发心得</h2>
+                <div class="section-content">
+                    <p>通过3D game2.0项目的开发，我深刻体会到：</p>
+                    <ul>
+                        <li><strong>资源管理的重要性</strong>：对于包含大量3D模型和纹理的项目，合理的资源管理至关重要</li>
+                        <li><strong>材质系统的影响力</strong>：好的材质可以极大地提升游戏的视觉效果，ShaderGraph是实现高质量材质的强大工具</li>
+                        <li><strong>性能优化的必要性</strong>：在追求视觉效果的同时，需要注意性能优化，确保游戏在不同设备上都能流畅运行</li>
+                        <li><strong>模块化设计</strong>：将游戏系统分解为多个模块，如资源管理、材质系统、控制系统等，便于管理和扩展</li>
+                        <li><strong>学习资源的利用</strong>：Kitbash3D等第三方资源可以极大地加快游戏开发过程</li>
+                    </ul>
+                    <p>3D game2.0项目展示了Unity在3D游戏开发中的强大能力，也为我积累了丰富的开发经验。未来计划进一步完善游戏玩法，添加更多内容，打造一个更加完整的3D游戏体验。</p>
+                </div>
+                
+                <a href="index.html#blog" class="btn-back">返回开发日志</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: 19859256157@163.com</p>
+                <p>所在地: 广东深圳</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

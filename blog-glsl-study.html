@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GLSLshader研究日志 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 博客详情页样式 */
+        body {
+            background: linear-gradient(135deg, #3e7563 0%, #7ccace 50%, #1e3d47 100%);
+            color: #e6fff5;
+        }
+        
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #a0f0f0;
+            text-shadow: 0 0 15px rgba(135, 183, 199, 0.705);
+        }
+        
+        .blog-detail-meta {
+            font-size: 1rem;
+            color: #F6F3EE;
+            opacity: 0.8;
+            margin-bottom: 2rem;
+        }
+        
+        .blog-content {
+            background: rgba(43, 68, 75, 0.85);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(28, 33, 34, 0.3);
+            border: 1px solid rgba(78, 144, 167, 0.3);
+        }
+        
+        .section-container {
+            background: rgba(30, 61, 71, 0.6);
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(123, 180, 199, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2), inset 0 0 20px rgba(123, 180, 199, 0.05);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.2rem;
+            color: #7bb4c7;
+            padding-bottom: 0.5rem;
+            text-align: center;
+        }
+        
+        .section-content {
+            line-height: 1.6;
+            color: #F6F3EE;
+        }
+        
+        .section-content p {
+            text-indent: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-content ul {
+            list-style: none;
+            padding-left: 1rem;
+        }
+        
+        .section-content li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .section-content li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #FFA05A;
+        }
+        
+        .code-block {
+            background: rgba(91, 161, 184, 0.575);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            border-left: 4px solid #72b0c5;
+        }
+        
+        .code-block pre {
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #F6F3EE;
+        }
+        
+        .file-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .file-item {
+            background: rgba(104, 178, 202, 0.404);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(118, 180, 201, 0.3);
+        }
+        
+        .file-item h4 {
+            margin-top: 0;
+            color: #8cc2d4;
+            margin-bottom: 0.5rem;
+        }
+        
+        .file-item p {
+            color: #F6F3EE;
+            opacity: 0.8;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #86cbe2;
+            color: #F6F3EE;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #a0e7ff;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: #FF6535;
+            color: #F6F3EE;
+            border-color: #FF6535;
+            box-shadow: 0 10px 25px rgba(255, 101, 53, 0.4);
+        }
+        
+        .video-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .video-item {
+            background: rgba(129, 160, 170, 0.1);
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(129, 160, 170, 0.3);
+        }
+        
+        .video-item h4 {
+            margin-top: 0;
+            color: #8ec7da;
+            margin-bottom: 0.5rem;
+        }
+        
+        .video-item p {
+            color: #e0f8ff;
+            opacity: 0.8;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .video-item video {
+            width: 100%;
+            height: auto;
+            min-height: 300px;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(129, 160, 170, 0.3);
+        }
+        
+        @media (max-width: 768px) {
+            .blog-detail-container {
+                padding: 1rem;
+            }
+            
+            .blog-detail-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景灰烬效果 -->
+    <div class="ash-container" id="ashContainer"></div>
+    
+    <!-- 跟随导航 -->
+    <nav class="side-nav" id="sideNav">
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#items" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">道具展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">小游戏</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#items">道具展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">GLSLshader研究日志</h1>
+                <div class="blog-detail-meta">
+                    <span>发布日期：2026年4月2日</span> | 
+                    <span>分类：技术开发</span>
+                </div>
+            </div>
+            
+            <div class="blog-content">
+                <div class="section-container">
+                    <h2 class="section-title">项目介绍</h2>
+                    <div class="section-content">
+                        <p>本项目记录了我在GLSL shader研究方面的探索和实践，包括各种视觉效果的实现，如动画图案、光线追踪、分形效果等。通过这些实验，我深入理解了GPU编程的基本原理，掌握了shader的编写技巧和优化方法。</p>
+                    </div>
+                </div>
+                
+                <div class="section-container">
+                    <h2 class="section-title">技术栈</h2>
+                    <div class="section-content">
+                        <ul>
+                            <li>GLSL (OpenGL Shading Language)</li>
+                            <li>HLSL (High-Level Shading Language)</li>
+                            <li>WebGL</li>
+                            <li>GPU编程</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="section-container">
+                    <h2 class="section-title">研究内容</h2>
+                    <div class="section-content">
+                        <h3>1. 动画图案效果</h3>
+                        <p>通过GLSL实现了多种动画图案效果，包括：</p>
+                        <ul>
+                            <li>圆形网格动画</li>
+                            <li>随机效果动画</li>
+                            <li>多边形图案动画</li>
+                            <li>色彩渐变动画</li>
+                        </ul>
+                        
+                        <h3>2. 光线追踪算法</h3>
+                        <p>实现了一个基于GLSL的简单光线追踪算法，用于球体的渲染，包括：</p>
+                        <ul>
+                            <li>光线与球体的相交检测</li>
+                            <li>法线计算</li>
+                            <li>漫反射和镜面反射效果</li>
+                        </ul>
+                        
+                        <h3>3. 分形效果</h3>
+                        <p>通过循环和迭代实现了分形图案效果，包括：</p>
+                        <ul>
+                            <li>自相似图案</li>
+                            <li>色彩融合效果</li>
+                            <li>动态变化的分形结构</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section-container">
+                    <h2 class="section-title">视频展示</h2>
+                    <div class="section-content">
+                        <div class="video-gallery">
+                            <div class="video-item">
+                                <h4>红色渐变</h4>
+                                <p>GLSL颜色渐变动画</p>
+                                <video controls style="width: 100%; height: auto; min-height: 300px; border-radius: 8px;">
+                                    <source src="videos/glsl/屏幕录制 2026-05-06 153244.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                            <div class="video-item">
+                                <h4>分形图案</h4>
+                                <p>GLSL网格分形效果</p>
+                                <video controls style="width: 100%; height: auto; min-height: 300px; border-radius: 8px;">
+                                    <source src="videos/glsl/屏幕录制 2026-05-06 153525.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                            <div class="video-item">
+                                <h4>条纹波浪</h4>
+                                <p>GLSL动态条纹效果</p>
+                                <video controls style="width: 100%; height: auto; min-height: 300px; border-radius: 8px;">
+                                    <source src="videos/glsl/屏幕录制 2026-05-06 153738.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                            <div class="video-item">
+                                <h4>颜色渐变</h4>
+                                <p>GLSL颜色滚动渐变效果</p>
+                                <video controls style="width: 100%; height: auto; min-height: 300px; border-radius: 8px;">
+                                    <source src="G:/my glsl/颜色滚动.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                            <div class="video-item">
+                                <h4>2D球体渲染</h4>
+                                <p>GLSL平面球体效果</p>
+                                <video controls style="width: 100%; height: auto; min-height: 300px; border-radius: 8px;">
+                                    <source src="G:/my glsl/平面圆球.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                            <div class="video-item">
+                                <h4>网格点阵</h4>
+                                <p>GLSL平铺圆点图案</p>
+                                <video controls style="width: 100%; height: auto; min-height: 300px; border-radius: 8px;">
+                                    <source src="G:/my glsl/平铺圆点.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                            <div class="video-item">
+                                <h4>颜色脉冲</h4>
+                                <p>GLSL颜色跳变效果</p>
+                                <video controls style="width: 100%; height: auto; min-height: 300px; border-radius: 8px;">
+                                    <source src="G:/my glsl/颜色跳变.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="section-container">
+                    <h2 class="section-title">技术收获</h2>
+                    <div class="section-content">
+                        <ul>
+                            <li>GPU编程思维：从CPU编程向GPU编程的思维方式转变</li>
+                            <li>性能优化：确保shader在不同设备上的流畅运行</li>
+                            <li>数学知识：运用三角函数、向量运算等数学知识创建复杂效果</li>
+                            <li>调试挑战：shader调试比传统代码更具挑战性</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <div class="section-container">
+                    <h2 class="section-title">开发心得</h2>
+                    <div class="section-content">
+                        <p>通过GLSL shader的研究，我深刻体会到：</p>
+                        <ul>
+                            <li>GPU编程是实现高性能视觉效果的关键，能够大大提升图形渲染的效率</li>
+                            <li>Shader编程需要扎实的数学基础，特别是线性代数和三角函数</li>
+                            <li>实验和调试是掌握shader编程的重要方法，通过不断尝试不同的算法和参数可以创造出独特的视觉效果</li>
+                            <li>Shader可以应用在游戏开发、数据可视化、艺术创作等多个领域，具有广阔的应用前景</li>
+                        </ul>
+                        <p>这些GLSL研究成果为我后续的游戏开发和视觉效果创作提供了重要的技术基础，也让我对图形编程有了更深入的理解。</p>
+                    </div>
+                </div>
+                
+                <a href="index.html#blog" class="btn-back">返回开发日志</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: 19859256157@163.com</p>
+                <p>所在地:广东深圳</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

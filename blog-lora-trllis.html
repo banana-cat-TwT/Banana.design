@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lora 与 Trellis 三维大模型集成开发日志 - 巴拿拿猫的小窝</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary-color: #457B9D;
+            --dark-bg: #121212;
+            --text-light: #F5F5F5;
+            --text-dark: #333333;
+            --font-serif: 'Noto Serif SC', 'SimSun', serif;
+            --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            font-family: var(--font-sans);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            cursor: none;
+        }
+
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .blog-header {
+            margin-bottom: 40px;
+        }
+
+        .blog-title {
+            font-size: 2.5rem;
+            font-family: var(--font-serif);
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #999;
+        }
+
+        .blog-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        .blog-section {
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .blog-content h2 {
+            font-family: var(--font-serif);
+            color: var(--primary-color);
+            margin-top: 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 10px;
+        }
+
+        .blog-content h3 {
+            font-family: var(--font-serif);
+            color: #fff;
+            margin-top: 20px;
+            margin-bottom: 15px;
+        }
+
+        .blog-content p {
+            margin-bottom: 20px;
+        }
+
+        .blog-content ul {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .blog-content li {
+            margin-bottom: 10px;
+        }
+
+        .blog-content ol {
+            margin-bottom: 20px;
+            padding-left: 20px;
+        }
+
+        .blog-content ol li {
+            margin-bottom: 15px;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .back-link:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="blog-detail-container">
+        <div class="blog-header">
+            <h1 class="blog-title">Lora 与 Trellis 三维大模型集成开发日志</h1>
+            <div class="blog-meta">
+                <span>2026年4月14日</span>
+                <span>阅读: 0</span>
+                <span>分类: 其他引擎</span>
+            </div>
+        </div>
+
+        <div class="blog-content">
+            <p>2026年4月14日，我开始了一个新的项目：将 Lora 与 Trellis 三维大模型结合，实现两个大模型的连接，用于训练生成三维模型。目前项目还处于测试阶段，正在不断优化和改进中。</p>
+
+            <div class="blog-section">
+                <h2>项目背景</h2>
+                <p>随着人工智能技术的发展，大模型在各个领域的应用越来越广泛。在三维建模领域，如何利用大模型来辅助生成高质量的三维模型成为了一个重要的研究方向。在使用 Trellis 三维大模型之前，我曾经使用过 Triposr 作为基础大模型进行研究。然而，通过在网上搜索资料并对比两者的性能和效果，发现 Trellis 在三维模型生成质量和效率方面表现更优，因此最终选择了 Trellis 作为主要的三维大模型。本项目旨在通过将 Lora 与 Trellis 三维大模型结合，探索大模型在三维建模中的应用潜力。</p>
+                <p>在实际项目中，使用 AI 生成三维模型可以有效减少人力成本。虽然生成的模型 UV 贴图质量不如人意，但在某种意义上仍然可以使用。对于一些复杂的组合类型模型，可能需要手动调整，但总体来说，使用 AI 生成三维模型可以大幅减少 0.5 天到 1 天的工作量。这对于提升项目效率具有重要意义。</p>
+            </div>
+
+            <div class="blog-section">
+                <h2>项目目标</h2>
+                <ul>
+                    <li>搭建 Lora 环境，构建基础框架</li>
+                    <li>集成 Trellis 三维大模型</li>
+                    <li>实现两个大模型的连接和协同工作</li>
+                    <li>训练模型生成高质量的三维模型</li>
+                    <li>优化模型性能和生成质量</li>
+                </ul>
+            </div>
+
+            <div class="blog-section">
+                <h2>开发过程</h2>
+                <h3>1. 环境搭建</h3>
+                <p>首先，我在训练环境中部署了 Lora 框架，构建了基础的开发环境。这包括安装必要的依赖、配置网络环境、设置认证令牌等。</p>
+
+                <h3>2. Trellis 三维大模型集成</h3>
+                <p>接下来，我集成了 Trellis 三维大模型，实现了与 Lora 的连接。这涉及到模型的加载、API 的调用、数据格式的转换等工作。</p>
+
+                <h3>3. 数据标注工作</h3>
+                <p>在模型训练之前，我进行了大量的数据标注工作。这是一个非常重要的环节，因为高质量的标注数据直接影响模型的训练效果。</p>
+                <p>为了提高标注效率，我在数据标注过程中借助了一些云平台来获取图片并进行自动化数据标注。由于国内算力平台的API接口默认无法直接读取图片，因此需要借助阿里云、华为云等外部接口来对图片进行分析和标注。这种方式能够大幅提高标注效率，减少人工标注的工作量。</p>
+                <p>标注过程中，我将每一张用于训练的图片制作成详细的CSV描述文档。CSV文件中需要对每张图片进行详细的描述，包括但不限于：</p>
+                <ul>
+                    <li><strong>体型</strong>：描述角色的体型特征，如身高、体型比例等</li>
+                    <li><strong>部件编码</strong>：为每个角色或物品分配唯一的标识编码</li>
+                    <li><strong>性别</strong>：标注角色的性别特征</li>
+                    <li><strong>穿着</strong>：详细描述角色穿着的服饰，包括上衣、裤子、鞋子等</li>
+                    <li><strong>配色</strong>：标注服饰、道具等物品的颜色</li>
+                    <li><strong>发型</strong>：描述角色的发型特征，如长短、颜色、造型等</li>
+                </ul>
+                <p>每张描述都需要尽可能详细，确保大模型能够理解用户想要表达的内容。描述词要能够让模型理解用户在说什么，想要达成什么目标。只有描述得足够详细和准确，模型才能按照用户的需求生成相应的三维模型。</p>
+                <p>按照品类进行划分，每次训练只针对同一风格、同一类型的模型，确保训练的一致性和有效性。</p>
+                <p>标注工作分为两个阶段：</p>
+                <ol>
+                    <li><strong>详细标注阶段</strong>：先进行约 20 组全面、详细的标注，让模型对目标有一个全面的理解。</li>
+                    <li><strong>基础标注阶段</strong>：在详细标注的基础上，进行大量单一的基础标注，强化模型对基本情况的理解。</li>
+                </ol>
+                <p>这种标注方式的思路类似于教育人类的过程——模型不是一下子就能学会的，需要通过循序渐进的方式，先让它理解基本概念，再通过大量学习来巩固和深化理解。只有这样，模型才能真正理解我们的需求，实现我们的目标。</p>
+
+                <h3>4. 模型训练</h3>
+                <p>基于标注好的数据，我开始了模型训练工作。目前，我正在不断地为模型提供同一风格的三维模型样例，让模型学习特定风格的特征和结构。通过分阶段的训练策略，模型的性能正在逐步提升。</p>
+            </div>
+
+            <div class="blog-section">
+                <h2>当前进展</h2>
+                <p>目前，项目还处于测试阶段，正在进行模型的训练和优化。由于三维模型生成的复杂性，目前的生成质量还没有达到理想状态。但是，通过不断地调整训练方案和提供高质量的训练数据，模型的性能正在逐步提升。</p>
+            </div>
+
+            <div class="blog-section">
+                <h2>技术挑战</h2>
+                <ul>
+                    <li>大模型的部署和集成需要大量的计算资源</li>
+                    <li>三维模型数据的处理和转换比较复杂</li>
+                    <li>模型训练需要大量的高质量样例数据</li>
+                    <li>生成的三维模型质量需要不断优化</li>
+                    <li><strong>网络连接问题</strong>：国内算力平台无法直接连接外网，无法直接调用环球等的库内容或花瓣(Hugging Face)等开发平台，甚至自己的GitHub库也无法连接。必须先在本地网络下载所需的资源，然后通过文件传输工具（如WinSCP）上传到算力平台的终端中。问题是不断反复出现的——每当以为所有依赖都配置好的时候，又会发现新的网站无法访问，需要重新下载和上传。这种效率变低的问题一直反复出现，给整个开发过程带来了极大的困扰，给开发进度带来了严重的阻碍。</li>
+                    <li><strong>模型管理环节反复错误返工</strong>：在模型管理测试过程中，遇到了大量的问题需要反复返工。这主要有两个方面的原因：一是由于代码的反复修改和调整，导致出现了一些bug，需要不断排查和修复；二是更根本的原因——大模型和代码库不匹配，代码库落后于模型权重版本。模型权重已经更新到了新版本，但是代码库仍然停留在旧版本，导致两者无法对接，管理过程不断失败。这个库不匹配的问题花费了大量时间才定位到根本原因，然后需要同步更新代码到与模型权重匹配的版本，最终才解决了推理失败的问题。</li>
+                </ul>
+            </div>
+
+            <div class="blog-section">
+                <h2>未来计划</h2>
+                <ul>
+                    <li>继续优化模型训练，提高生成质量</li>
+                    <li>扩展训练数据的多样性，覆盖更多风格和类型的三维模型</li>
+                    <li>开发用户友好的界面，方便用户使用模型生成三维模型</li>
+                    <li>探索模型在不同场景中的应用</li>
+                </ul>
+            </div>
+        </div>
+
+        <a href="index.html#blog" class="back-link">返回开发日志</a>
+    </div>
+
+    <!-- 鼠标跟随特效 -->
+    <div class="custom-cursor"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // 页面加载完成后初始化鼠标跟随特效
+        document.addEventListener('DOMContentLoaded', function() {
+            initCustomCursor();
+        });
+    </script>
+</body>
+</html>

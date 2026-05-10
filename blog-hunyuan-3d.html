@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>混元3D管线探索 - ComfyUI初步尝试 - 香蕉猫的小窝</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary: #34a9af;
+            --secondary: #CCE198;
+            --accent: #4F867D;
+            --highlight: #e26d8c;
+            --highlight-bright: #ff83b9;
+            --highlight-glow: rgba(232, 58, 157, 0.3);
+            --dark-bg: #1a3235;
+            --dark-bg-deep: #0f1928;
+            --light-bg: #B8D4A8;
+            --light-bg-soft: #D4E8CC;
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--dark-bg) 0%, var(--dark-bg-deep) 100%);
+            background-attachment: fixed;
+            color: var(--light-bg-soft);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            cursor: none;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: -10%;
+            width: 120%;
+            height: 100%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(232, 125, 58, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(125, 175, 52, 0.08) 0%, transparent 40%),
+                        radial-gradient(ellipse at 50% 50%, rgba(232, 125, 58, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(180deg, transparent 0%, rgba(232, 125, 58, 0.03) 20%, transparent 40%),
+                linear-gradient(0deg, transparent 0%, rgba(125, 175, 52, 0.03) 20%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .blog-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .blog-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--highlight);
+            letter-spacing: 2px;
+        }
+
+        .blog-subtitle {
+            font-size: 1.2rem;
+            color: #CAE6BD;
+            margin-bottom: 20px;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #CAE6BD;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .blog-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #CAE6BD;
+        }
+
+        .blog-section {
+            background: rgba(26, 50, 53, 0.6);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(180, 220, 170, 0.2);
+        }
+
+        .blog-section h3 {
+            color: var(--highlight);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .blog-section h4 {
+            color: var(--secondary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .screenshot-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .screenshot-item {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(180, 220, 170, 0.2);
+        }
+
+        .screenshot-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .screenshot-caption {
+            padding: 10px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #CAE6BD;
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: linear-gradient(145deg, var(--highlight), #c73e54);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(226, 109, 140, 0.4);
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            background-image: url('images/guangb.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .highlight-box {
+            background: rgba(226, 109, 140, 0.1);
+            border-left: 4px solid var(--highlight);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .highlight-box strong {
+            color: var(--highlight);
+        }
+    </style>
+</head>
+<body>
+    <div class="custom-cursor" id="customCursor"></div>
+    <div class="blog-detail-container">
+
+        <div class="blog-content">
+            <section class="blog-section">
+                <h3>项目概述</h3>
+                <p>这是我使用ComfyUI和混元3D管线进行的初次探索。混元3D是一个基于AI的三维模型生成工具，通过ComfyUI的节点式编辑可以进行各种配置和实验。</p>
+            </section>
+
+            <section class="blog-section">
+                <h3>初始尝试：默认配置测试</h3>
+                <p>最开始我使用的是默认的混元3D管线，从单视图生成开始尝试。</p>
+                
+                <h4>操作步骤</h4>
+                <ul style="padding-left: 20px;">
+                    <li>打开Comfy UI，加载混元3D节点</li>
+                    <li>使用默认节点配置，未做任何修改</li>
+                    <li>输入模型描述文本</li>
+                    <li>运行生成</li>
+                </ul>
+                
+                <div class="screenshot-grid">
+                    <div class="screenshot-item">
+                        <img src="images/hunyuanComfyUI/屏幕截图 2026-05-06 170315.png" alt="初始界面">
+                        <div class="screenshot-caption">混元3D管线初始界面</div>
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="images/hunyuanComfyUI/屏幕截图 2026-05-06 170536.png" alt="单视图生成">
+                        <div class="screenshot-caption">单视图生成效果</div>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>问题发现：</strong>使用默认配置生成的模型效果不理想，呈现出类似"正方形铁块拼接"的效果。虽然能看出大致雏形，但细节粗糙，模型结构不够精细，无法直接使用。
+                </div>
+            </section>
+
+            <section class="blog-section">
+                <h3>多视图与条件合并的尝试</h3>
+                <p>接下来我尝试了条件合并和连接的节点，希望能够通过多视图来获得更好的效果。但是结果发现，多视图生成出来的效果反而不如单视图。</p>
+                
+                <div class="screenshot-grid">
+                    <div class="screenshot-item">
+                        <img src="images/hunyuanComfyUI/屏幕截图 2026-05-07 103548.png" alt="多视图尝试">
+                        <div class="screenshot-caption">多视图与条件合并实验</div>
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="images/hunyuanComfyUI/屏幕截图 2026-05-07 110019.png" alt="节点连接">
+                        <div class="screenshot-caption">复杂的节点连接</div>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>发现：</strong>多视图生成的效果并不如单视图，简单直接的方式反而更好。
+                </div>
+            </section>
+
+            <section class="blog-section">
+                <h3>节点优化与简化</h3>
+                <p>后来我发现一个节点可以添加多个接口，于是我把那些复杂的多余接口和节点都删掉了，把它们做成一个连在一起的简洁流程。</p>
+                
+                <div class="screenshot-grid">
+                    <div class="screenshot-item">
+                        <img src="images/hunyuanComfyUI/屏幕截图 2026-05-07 113508.png" alt="简化节点">
+                        <div class="screenshot-caption">节点简化过程</div>
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="images/hunyuanComfyUI/屏幕截图 2026-05-07 114446.png" alt="最终流程">
+                        <div class="screenshot-caption">最终简化的节点流程</div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="blog-section">
+                <h3>生成结果与发现</h3>
+                <p>总结来说，混元3D管线生成出来的模型还是体素化的效果——就是那种方块拼出来的效果。虽然有基本的雏形，但距离可以使用还有差距。</p>
+                
+                <div class="highlight-box">
+                    <strong>初步结论：</strong>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>单视图生成比多视图更稳定</li>
+                        <li>简洁的节点流程效果更好</li>
+                        <li>当前生成结果是体素化风格</li>
+                        <li>这只是初步尝试，还有很大优化空间</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="blog-section">
+                <h3>后续计划</h3>
+                <p>这次只是初步的探索，之后我还会继续研究混元3D管线，尝试：</p>
+                <ul style="padding-left: 20px;">
+                    <li>调整参数获得更好的效果</li>
+                    <li>尝试不同的提示词组合</li>
+                    <li>探索后处理优化生成结果</li>
+                    <li>结合其他工具进行模型优化</li>
+                </ul>
+            </section>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <button class="back-btn" onclick="history.back()">← 返回</button>
+        </div>
+    </div>
+
+    <script>
+        const cursor = document.getElementById('customCursor');
+        if (cursor) {
+            document.addEventListener('mousemove', function(e) {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+            document.addEventListener('mousedown', function() {
+                cursor.classList.add('clicking');
+            });
+            document.addEventListener('mouseup', function() {
+                cursor.classList.remove('clicking');
+            });
+        }
+    </script>
+</body>
+</html>

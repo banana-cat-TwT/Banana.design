@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>录屏开发日志 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 博客详情页样式 */
+        body {
+            background: #121212;
+            color: #e0e0e0;
+        }
+        
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #f0f0f0;
+            text-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
+        }
+        
+        .blog-detail-meta {
+            font-size: 1rem;
+            color: #9e9e9e;
+            margin-bottom: 2rem;
+        }
+        
+        .blog-content {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #333;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #9C27B0;
+            border-bottom: 2px solid #9C27B0;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-content {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-item {
+            background: #252525;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-item h4 {
+            margin-top: 0;
+            color: #f0f0f0;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-item p {
+            color: #9e9e9e;
+            font-size: 0.9rem;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #9C27B0;
+            color: #f0f0f0;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #9C27B0;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: #BA68C8;
+            color: #f0f0f0;
+            box-shadow: 0 10px 25px rgba(156, 39, 176, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .blog-detail-container {
+                padding: 1rem;
+            }
+            
+            .blog-detail-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 前景灰烬特效 -->
+    <div class="ash-container" id="ashContainer"></div>
+    
+    <!-- 跟随导航 -->
+    <nav class="side-nav" id="sideNav">
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#items" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">道具展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">小游戏</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#items">道具展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">录屏开发日志</h1>
+                <div class="blog-detail-meta">
+                    <span>发布日期：2026年4月23日</span> | 
+                    <span>阅读次数：0</span> | 
+                    <span>分类：其他引擎</span>
+                </div>
+            </div>
+            
+            <div class="blog-content">
+                <h2 class="section-title">项目概述</h2>
+                <div class="section-content">
+                    <p>本项目记录了一系列录屏内容的开发过程，包括云效果、交替时间段着色器、扰动效果和一系列2025年6月2日的开发过程记录。这些录屏内容展示了各种视觉效果的开发过程和技术实现。</p>
+                </div>
+                
+                <h2 class="section-title">技术栈</h2>
+                <div class="section-content">
+                    <p>使用的技术和工具：</p>
+                    <ul>
+                        <li>Unity/UE5 引擎</li>
+                        <li>ShaderGraph (Unity)</li>
+                        <li>Material Editor (UE5)</li>
+                        <li>录屏软件</li>
+                        <li>视频编辑工具</li>
+                    </ul>
+                </div>
+                
+                <h2 class="section-title">开发过程</h2>
+                <div class="section-content">
+                    <h3>1. 云效果</h3>
+                    <p>开发了云效果，通过噪声纹理和shader实现了云朵的动态效果。使用了多层噪声和动画，模拟真实的云层运动。</p>
+
+                    <h3>2. 交替时间段着色器</h3>
+                    <p>开发了交替时间段着色器，通过时间参数控制着色器效果的变化。使用了时间函数和颜色混合，实现了不同时间段的视觉效果。</p>
+
+                    <h3>3. 扰动效果</h3>
+                    <p>开发了扰动效果，通过噪声和位移算法实现了画面的扭曲效果。使用了多层噪声和动画，模拟真实的扰动效果。</p>
+
+                    <h3>4. 2025年6月2日开发过程</h3>
+                    <p>记录了2025年6月2日的开发过程，包括各种视觉效果的开发和测试。使用了录屏软件记录开发过程，为后续的学习和参考提供了资料。</p>
+                </div>
+                
+                <h2 class="section-title">技术难点与解决方案</h2>
+                <div class="section-content">
+                    <p><strong>难点1：云效果的真实感</strong></p>
+                    <p>解决方案：使用多层噪声和动画，模拟真实的云层运动，通过调整噪声参数和动画速度，实现了自然的云效果。</p>
+
+                    <p><strong>难点2：交替时间段着色器的实现</strong></p>
+                    <p>解决方案：使用时间函数和颜色混合，通过控制时间参数，实现了不同时间段的视觉效果，如白天和夜晚的切换。</p>
+
+                    <p><strong>难点3：扰动效果的性能优化</strong></p>
+                    <p>解决方案：使用简化的噪声算法和硬件加速，优化了扰动效果的性能，确保在不同设备上都能流畅运行。</p>
+                </div>
+                
+                <h2 class="section-title">总结与展望</h2>
+                <div class="section-content">
+                    <p>通过本项目，我成功记录了一系列视觉效果的开发过程，掌握了各种着色器和视觉效果的开发技术。这些录屏内容为后续的学习和参考提供了宝贵的资料。</p>
+                    <p>未来计划继续记录更多的开发过程，探索更多的视觉效果和技术实现，为游戏和影视开发提供更多的参考资料。</p>
+                </div>
+                
+                <a href="index.html#blog" class="btn-back">返回开发日志</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: 19859256157@163.com</p>
+                <p>所在地: 广东深圳</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

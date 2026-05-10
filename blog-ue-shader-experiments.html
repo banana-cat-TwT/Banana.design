@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UE5材质实验合集 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 博客详情页样式 */
+        body {
+            background: #121212;
+            color: #e0e0e0;
+        }
+        
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #f0f0f0;
+            text-shadow: 0 0 10px rgba(139, 92, 255, 0.5);
+        }
+        
+        .blog-detail-meta {
+            font-size: 1rem;
+            color: #9e9e9e;
+            margin-bottom: 2rem;
+        }
+        
+        .blog-content {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #333;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #8B5CFF;
+            border-bottom: 2px solid #8B5CFF;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-content {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .material-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .material-card {
+            background: #252525;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid #8B5CFF;
+        }
+        
+        .material-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .material-card h4 {
+            margin-top: 0;
+            color: #f0f0f0;
+            margin-bottom: 0.5rem;
+        }
+        
+        .material-card p {
+            color: #9e9e9e;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .material-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        
+        .tag {
+            display: inline-block;
+            background: rgba(139, 92, 255, 0.2);
+            color: #A78BFA;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 0.75rem;
+        }
+        
+        .tag.tech {
+            background: rgba(0, 212, 170, 0.2);
+            color: #00D4AA;
+        }
+        
+        .tag.effect {
+            background: rgba(255, 107, 107, 0.2);
+            color: #FF6B6B;
+        }
+        
+        .highlight-box {
+            background: rgba(139, 92, 255, 0.1);
+            border-left: 4px solid #8B5CFF;
+            padding: 18px 20px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .highlight-box strong {
+            color: #8B5CFF;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #8B5CFF;
+            color: #f0f0f0;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #8B5CFF;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: #9E7CFF;
+            color: #f0f0f0;
+            box-shadow: 0 10px 25px rgba(139, 92, 255, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .blog-detail-container {
+                padding: 1rem;
+            }
+            
+            .blog-detail-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景灰烬效果 -->
+    <div class="ash-container" id="ashContainer"></div>
+    
+    <!-- 跟随导航 -->
+    <nav class="side-nav" id="sideNav">
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#items" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">道具展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">小游戏</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#items">道具展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">UE5材质实验合集</h1>
+                <div class="blog-detail-meta">
+                    <span>发布日期：2026年5月4日</span> | 
+                    <span>阅读次数：0</span> | 
+                    <span>分类：UE5 / 材质</span>
+                </div>
+            </div>
+            
+            <div class="blog-content">
+                <h2 class="section-title">项目介绍</h2>
+                <div class="section-content">
+                    <p>本项目是在Unreal Engine 5中进行的一系列材质实验合集，旨在探索各种视觉效果的实现方法，包括自定义HLSL着色器、风格化材质、物理效果模拟等。通过这些实验，深入理解了UE材质系统的工作原理和高级渲染技术。</p>
+                    
+                    <div class="highlight-box">
+                        <strong>引擎版本</strong>: Unreal Engine 5<br>
+                        <strong>核心技术</strong>: HLSL自定义节点、材质函数、后处理效果、Niagara特效
+                    </div>
+                </div>
+                
+                <h2 class="section-title">HLSL自定义节点实验</h2>
+                <div class="section-content">
+                    <p>探索HLSL着色器语言在UE材质中的直接应用，通过自定义节点实现复杂的视觉效果。</p>
+                    
+                    <div class="material-grid">
+                        <div class="material-card">
+                            <h4>HLSL基础实验</h4>
+                            <p>学习HLSL着色器的基本语法和结构，实现简单的颜色变换和纹理操作效果。</p>
+                            <div class="material-tags">
+                                <span class="tag tech">HLSL</span>
+                                <span class="tag">着色器基础</span>
+                            </div>
+                        </div>
+                        
+                        <div class="material-card">
+                            <h4>FXS_HLSL0</h4>
+                            <p>进阶HLSL实验，探索更复杂的着色器逻辑和视觉效果组合。</p>
+                            <div class="material-tags">
+                                <span class="tag tech">HLSL</span>
+                                <span class="tag effect">特效着色器</span>
+                            </div>
+                        </div>
+                        
+                        <div class="material-card">
+                            <h4>菲涅尔函数</h4>
+                            <p>实现菲涅尔效应，模拟光线在物体表面的反射特性，增强材质的真实感。</p>
+                            <div class="material-tags">
+                                <span class="tag tech">菲涅尔</span>
+                                <span class="tag">光线反射</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">宝石材质系列</h2>
+                <div class="section-content">
+                    <p>开发多种宝石材质效果，探索高折射率材质的渲染技巧。</p>
+                    
+                    <div class="material-grid">
+                        <div class="material-card">
+                            <h4>翡翠材质</h4>
+                            <p>实现翡翠的绿色发光效果，包含基础颜色、发光贴图、法线贴图等完整PBR流程。</p>
+                            <div class="material-tags">
+                                <span class="tag effect">次表面散射</span>
+                                <span class="tag">PBR材质</span>
+                            </div>
+                        </div>
+                        
+                        <div class="material-card">
+                            <h4>假玻璃材质</h4>
+                            <p>模拟玻璃的透明和折射效果，调整折射率和反射参数实现逼真的玻璃质感。</p>
+                            <div class="material-tags">
+                                <span class="tag effect">透明材质</span>
+                                <span class="tag">折射</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">冰冻效果系列</h2>
+                <div class="section-content">
+                    <p>探索冰冻和解冻的视觉效果，模拟冰的物理特性。</p>
+                    
+                    <div class="material-grid">
+                        <div class="material-card">
+                            <h4>冰冻材质</h4>
+                            <p>实现物体表面结冰的效果，包含冰纹纹理、透明度变化和发光效果。</p>
+                            <div class="material-tags">
+                                <span class="tag effect">冰冻效果</span>
+                                <span class="tag">程序化纹理</span>
+                            </div>
+                        </div>
+                        
+                        <div class="material-card">
+                            <h4>解冻材质</h4>
+                            <p>模拟冰融化的动态效果，配合材质参数动画实现从冰到水的过渡。</p>
+                            <div class="material-tags">
+                                <span class="tag effect">动态材质</span>
+                                <span class="tag">参数动画</span>
+                            </div>
+                        </div>
+                        
+                        <div class="material-card">
+                            <h4>结冰纹理套装</h4>
+                            <p>包含环境遮挡、高度图、法线贴图等完整的结冰纹理资源。</p>
+                            <div class="material-tags">
+                                <span class="tag">纹理资源</span>
+                                <span class="tag">PBR贴图</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">风格化材质</h2>
+                <div class="section-content">
+                    <p>探索非写实风格的材质表现，突破传统PBR的限制。</p>
+                    
+                    <div class="material-grid">
+                        <div class="material-card">
+                            <h4>风格化涂鸦材质</h4>
+                            <p>实现手绘涂鸦风格的视觉效果，包含笔触感和色彩渐变。</p>
+                            <div class="material-tags">
+                                <span class="tag effect">风格化</span>
+                                <span class="tag">手绘风格</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">特效与环境效果</h2>
+                <div class="section-content">
+                    <p>探索粒子系统和环境效果的实现。</p>
+                    
+                    <div class="material-grid">
+                        <div class="material-card">
+                            <h4>海洋泡沫效果</h4>
+                            <p>使用Niagara粒子系统实现海洋泡沫和浪花效果。</p>
+                            <div class="material-tags">
+                                <span class="tag effect">粒子特效</span>
+                                <span class="tag">Niagara</span>
+                            </div>
+                        </div>
+                        
+                        <div class="material-card">
+                            <h4>自定义特效</h4>
+                            <p>探索各种粒子特效的实现，包含发射器配置和材质参数调节。</p>
+                            <div class="material-tags">
+                                <span class="tag effect">粒子效果</span>
+                                <span class="tag">特效系统</span>
+                            </div>
+                        
+                        <div class="material-card">
+                            <h4>后处理效果</h4>
+                            <p>实现自定义后处理材质，调整画面的色彩、对比度和特殊效果。</p>
+                            <div class="material-tags">
+                                <span class="tag effect">后处理</span>
+                                <span class="tag">色彩校正</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">开发心得</h2>
+                <div class="section-content">
+                    <p>通过这些材质实验，我深刻体会到：</p>
+                    <ul>
+                        <li><strong>UE材质系统的强大</strong>：可视化的材质编辑器大大降低了着色器开发的门槛，同时支持HLSL自定义节点满足高级需求</li>
+                        <li><strong>PBR流程的重要性</strong>：完整的PBR工作流能保证材质在不同光照条件下的一致性和真实感</li>
+                        <li><strong>实验精神</strong>：材质开发是一个不断尝试和调整的过程，需要耐心和创造力</li>
+                        <li><strong>性能考量</strong>：复杂材质效果需要平衡视觉质量和渲染性能</li>
+                    </ul>
+                    <p>这些经验将对我未来的游戏开发工作产生积极影响，帮助我创建更加丰富和独特的视觉效果。</p>
+                </div>
+                
+                <a href="index.html#blog" class="btn-back">返回开发日志</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: 19859256157@163.com</p>
+                <p>所在地: 福建厦门</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

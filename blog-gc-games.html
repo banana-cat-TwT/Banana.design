@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GC游戏编辑器开发日志 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 博客详情页样式 */
+        body {
+            background: #121212;
+            color: #e0e0e0;
+        }
+        
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #f0f0f0;
+            text-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
+        }
+        
+        .blog-detail-meta {
+            font-size: 1rem;
+            color: #9e9e9e;
+            margin-bottom: 2rem;
+        }
+        
+        .blog-content {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #333;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #9C27B0;
+            border-bottom: 2px solid #9C27B0;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-content {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .game-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .game-item {
+            background: #252525;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .game-item h3 {
+            margin-top: 0;
+            color: #f0f0f0;
+            margin-bottom: 0.5rem;
+        }
+        
+        .game-item p {
+            color: #9e9e9e;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-item {
+            background: #252525;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-item h4 {
+            margin-top: 0;
+            color: #f0f0f0;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-item p {
+            color: #9e9e9e;
+            font-size: 0.9rem;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #9C27B0;
+            color: #f0f0f0;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #9C27B0;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: #BA68C8;
+            color: #f0f0f0;
+            box-shadow: 0 10px 25px rgba(156, 39, 176, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .blog-detail-container {
+                padding: 1rem;
+            }
+            
+            .blog-detail-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景灰烬效果 -->
+    <div class="ash-container" id="ashContainer"></div>
+    
+    <!-- 跟随导航 -->
+    <nav class="side-nav" id="sideNav">
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#items" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">道具展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">小游戏</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#items">道具展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">GC游戏编辑器开发日志</h1>
+                <div class="blog-detail-meta">
+                    <span>发布日期：2026年4月3日</span> | 
+                    <span>阅读次数：0</span> | 
+                    <span>分类：其他引擎</span>
+                </div>
+            </div>
+            
+            <div class="blog-content">
+                <h2 class="section-title">项目介绍</h2>
+                <div class="section-content">
+                    <p>在大二期间，我使用GC游戏编辑器开发了一系列小游戏，为自己画的QQ角色设计了各种风格的小屋。这些项目是角色雏形的早期版本，展示了我在游戏开发和角色设计方面的早期尝试。通过这些项目，我学习了游戏编辑器的使用、角色设计、场景构建和基本的游戏逻辑实现。</p>
+                </div>
+                
+                <h2 class="section-title">技术栈</h2>
+                <div class="section-content">
+                    <p>使用的技术和工具：</p>
+                    <ul>
+                        <li>GC游戏编辑器</li>
+                        <li>TypeScript</li>
+                        <li>Photoshop (角色和场景设计)</li>
+                        <li>视频处理工具</li>
+                    </ul>
+                </div>
+                
+                <h2 class="section-title">游戏项目介绍</h2>
+                <div class="section-content">
+                    <div class="game-gallery">
+                        <div class="game-item">
+                            <h3>Yuki的小屋</h3>
+                            <p>一个温馨的日式风格空间，包含床、书桌、窗户、台灯、电视等物品，为Yuki角色创建了一个舒适的生活空间。</p>
+                            <p><strong>特点：</strong>详细的家居设计、温馨的色彩搭配、完整的空间布局</p>
+                        </div>
+                        <div class="game-item">
+                            <h3>波西米亚风格空间</h3>
+                            <p>一个自由的波西米亚风格空间，展示了不同的室内设计风格，体现了波西米亚风格的特点。</p>
+                            <p><strong>特点：</strong>波西米亚装饰风格、自由的色彩搭配、随意的物品设计</p>
+                        </div>
+                        <div class="game-item">
+                            <h3>熊猫的房间</h3>
+                            <p>为熊猫角色设计的空间，包含熊猫桌、窗户、台灯、储物柜等家具，展示了熊猫的生活空间。</p>
+                            <p><strong>特点：</strong>熊猫角色设计、日式风格房间、详细的家具和装饰品</p>
+                        </div>
+                        <div class="game-item">
+                            <h3>科研用房</h3>
+                            <p>一个科研主题的空间，展示了不同功能空间的设计，展示了多样化的场景创作能力。</p>
+                            <p><strong>特点：</strong>科研主题、功能化布局、专业的场景设计</p>
+                        </div>
+                        <div class="game-item">
+                            <h3>美式风格空间</h3>
+                            <p>一个充满个性的美式风格空间，包含沙发、电视、台灯、电视等元素，展示了舒适的生活空间。</p>
+                            <p><strong>特点：</strong>美式装饰风格、个性化家具、舒适的空间设计</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">开发过程</h2>
+                <div class="section-content">
+                    <h3>1. 角色设计</h3>
+                    <p>首先设计了多个QQ角色，包括Yuki、熊猫和眼镜男等，为每个角色创建了不同的服装和动作，使其具有独特的个性和风格。</p>
+
+                    <h3>2. 场景构建</h3>
+                    <p>为每个角色设计了适合其个性的空间，包括日式、波西米亚、美式等不同风格，通过GC游戏编辑器构建了完整的场景布局。</p>
+
+                    <h3>3. 物品设计</h3>
+                    <p>设计了各种家具和装饰品，包括床、书桌、台灯、电视、窗户等，为每个空间增添了细节和生活气息。</p>
+
+                    <h3>4. 游戏逻辑实现</h3>
+                    <p>通过TypeScript编写了基本的游戏逻辑，实现了角色的移动、互动和简单的游戏功能，为每个项目添加了互动性。</p>
+
+                    <h3>5. 资源管理</h3>
+                    <p>组织了音频、图像等资源，确保游戏的完整性和流畅性，为每个项目创建了独特的视觉和听觉体验。</p>
+                </div>
+                
+                <h2 class="section-title">项目特点</h2>
+                <div class="section-content">
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <h4>多样化的风格</h4>
+                            <p>展示了日式、波西米亚、美式等多种装饰风格，体现了不同文化背景下的室内设计特点。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>详细的角色设计</h4>
+                            <p>为每个角色创建了独特的外观和个性，包括服装、动作和表情，使角色更加生动。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>丰富的家具和装饰</h4>
+                            <p>设计了各种家具和装饰品，为每个房间增加了细节和生活气息，提高了场景的真实感。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>基本的互动功能</h4>
+                            <p>实现了角色的移动、互动等基本功能，为游戏增添了互动性和趣味性。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">技术难点与解决方案</h2>
+                <div class="section-content">
+                    <p><strong>难点1：场景布局和空间设计</strong></p>
+                    <p>解决方案：参考现实的室内设计案例，学习空间布局原理，通过多次调整和测试，创建了合理的空间布局。</p>
+
+                    <p><strong>难点2：角色动画和互动</strong></p>
+                    <p>解决方案：学习GC游戏编辑器的动画系统，为角色创建了基本的动作和互动逻辑，提高了游戏的趣味性。</p>
+
+                    <p><strong>难点3：资源管理和优化</strong></p>
+                    <p>解决方案：合理组织资源文件，优化图像和音频资源，确保游戏的流畅运行。</p>
+                </div>
+                
+                <h2 class="section-title">总结与展望</h2>
+                <div class="section-content">
+                    <p>通过GC游戏编辑器开发的这些项目，我不仅学习了游戏开发的基本流程，还锻炼了角色设计、场景构建和游戏逻辑实现的能力。这些项目是角色雏形的早期版本，为后续的完善和扩展奠定了基础。</p>
+                    <p>未来计划：</p>
+                    <ul>
+                        <li>完善现有项目，添加更多互动功能和游戏玩法</li>
+                        <li>开发更多风格的空间和角色</li>
+                        <li>学习更高级的游戏开发技术，提高游戏质量</li>
+                        <li>将角色雏形发展成为一个完整的游戏系列</li>
+                    </ul>
+                </div>
+                
+                <a href="index.html#blog" class="btn-back">返回开发日志</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: 19859256157@163.com</p>
+                <p>所在地: 福建厦门</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

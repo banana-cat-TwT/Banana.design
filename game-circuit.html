@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电路链接 - 游戏详情 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 游戏详情页样式 */
+        body {
+            background: linear-gradient(to bottom, #1F2328, #2A2E33);
+        }
+        
+        .game-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .game-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .game-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #D96C2B;
+            text-shadow: 0 0 10px rgba(217, 108, 43, 0.5);
+        }
+        
+        .game-detail-subtitle {
+            font-size: 1.2rem;
+            color: #D9D4CC;
+            margin-bottom: 2rem;
+        }
+        
+        .game-detail-cover {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #4A5560;
+        }
+        
+        .game-detail-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 3rem;
+        }
+        
+        .game-detail-main {
+            background: #1F2328;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 2px solid #4A5560;
+            color: #D9D4CC;
+        }
+        
+        .game-detail-sidebar {
+            background: #1F2328;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 2px solid #4A5560;
+            color: #D9D4CC;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #D96C2B;
+            border-bottom: 2px solid #4A5560;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-content {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .game-features {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .game-features li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .game-features li::before {
+            content: "•";
+            color: #E0A13B;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        
+        .gallery-container {
+            margin-top: 2rem;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+            border: 2px solid #4A5560;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #E0A13B;
+            color: #1F2328;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #4A5560;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(224, 161, 59, 0.4);
+            background: #F5B642;
+        }
+        
+        .btn-back[href="#"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(224, 161, 59, 0.4);
+            background: #F5B642;
+        }
+        
+        @media (max-width: 768px) {
+            .game-detail-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-detail-cover {
+                height: 250px;
+            }
+            
+            .game-detail-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 前景灰烬特效 -->
+    <div class="ash-container" id="ashContainer"></div>
+    
+    <!-- 跟随导航 -->
+    <nav class="side-nav" id="sideNav">
+        <button class="nav-toggle-btn" id="navToggleBtn">
+            <span class="toggle-icon"></span>
+        </button>
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">小游戏</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="game-detail-container">
+            <div class="game-detail-header">
+                <h1 class="game-detail-title">电路链接</h1>
+                <p class="game-detail-subtitle">卡通风模拟经营偏解密游戏</p>
+                
+                <!-- 游戏PV视频 -->
+                <div class="game-pv-container" style="margin-top: 2rem;">
+                    <h3 style="color: #D96C2B; margin-bottom: 1rem; text-align: center;">游戏PV</h3>
+                    <video style="width: 100%; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); border: 2px solid #4A5560;" controls>
+                        <source src="videos/dianlulianjie_pv.mp4" type="video/mp4">
+                    </video>
+                    <p style="color: #D9D4CC; font-size: 0.9rem; margin-top: 0.5rem; text-align: center;">电路链接游戏宣传视频</p>
+                </div>
+            </div>
+            
+            <div class="game-detail-content">
+                <div class="game-detail-main">
+                    <h2 class="section-title">游戏简介</h2>
+                    <div class="section-content">
+                        <p>《电路链接》是一款卡通风模拟经营偏解密游戏，以城市电路的搭建为主。玩家通过电路拼图链接场景中的电源与用电器，在永夜来临之前将所有任务用电器点亮，用电器点亮时会为玩家提供税收，最后剩余的税收可被玩家带到下一个关卡。</p>
+                    </div>
+                    
+                    <h2 class="section-title">制作思路</h2>
+                    <div class="section-content">
+                        <p>项目源于对电路链接机制和解谜玩法的结合，我们希望创造一款既具有教育意义又充满趣味性的游戏。通过卡通风格的画面设计，让玩家在轻松愉快的氛围中学习电路知识，同时体验解谜游戏的乐趣。</p>
+                        <p>技术实现方面，我们使用Unity引擎开发，结合C#编程实现电路链接逻辑。游戏采用模块化设计，将电路系统、拼图系统、任务系统等功能分离，提高代码的可维护性。</p>
+                        <p>开发过程中，我们重点关注了游戏的视觉风格和关卡设计，列举可采用的风格方案，成员一致同意方案后通过搭建白盒确定建筑摆放位置，收集城市建筑参考图，单个工业区/住宅区/商业区为一块拼图，进一步细分店铺类型和区域类型，按照策划的要求，走次时代流程，调整并统一unity游戏整体的美术风格。</p>
+                    </div>
+                    
+                    <h2 class="section-title">游戏特色</h2>
+                    <div class="section-content">
+                        <p>《电路链接》的最大特色是其独特的电路链接机制和卡通风格的视觉设计，玩家需要在永夜来临之前将所有任务用电器点亮。游戏中的电路拼图玩法和税收系统，让每次关卡挑战都变成智力与策略的较量。</p>
+                        <p>游戏的视觉风格采用了卡通风格设计，以城市电路为背景，营造出轻松愉快的氛围。通过写相关的脚本、shader及VFX特效等来丰富游戏画面，为了画面丰富度加上了可融化雪/交互动流/不同表现形式的烟雾/不同种类的液体等效果，并且给一些小物件做动画来增添趣味性。</p>
+                    </div>
+                    
+                    <h2 class="section-title">获得奖项</h2>
+                    <div class="section-content">
+                        <ul class="game-features">
+                            <li>2025星游戏作品大赛决赛优秀奖</li>
+                            <li>2025中国大学生游戏设计大赛金辰奖决赛/最佳技术应用奖</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <a href="index.html#games" class="btn-back">返回游戏列表</a>
+                        <a href="#" class="btn-back" style="background: #E0A13B; border-color: #4A5560; color: #1F2328;">百度网盘下载</a>
+                    </div>
+                </div>
+                
+                <div class="game-detail-sidebar">
+                    <h3>游戏信息</h3>
+                    <ul class="game-features">
+                        <li>游戏名：电路链接</li>
+                        <li>开发引擎：Unity</li>
+                        <li>题材定位：卡通风模拟经营偏解密游戏</li>
+                        <li>关键词：3D，卡通风格，模拟经营，解密，电路链接</li>
+                        <li>目标平台：PC</li>
+                    </ul>
+                    
+                    <h3>技术栈</h3>
+                    <ul class="game-features">
+                        <li>游戏引擎：Unity</li>
+                        <li>编程语言：C#</li>
+                        <li>美术：3ds Max, Blender, Photoshop</li>
+                        <li>特效：Unity Shader, VFX Graph</li>
+                    </ul>
+                    
+                    <h3>游戏特色</h3>
+                    <ul class="game-features">
+                        <li>电路链接玩法</li>
+                        <li>税收系统</li>
+                        <li>卡通风格画面</li>
+                        <li>关卡递进设计</li>
+                        <li>丰富的视觉特效</li>
+                        <li>趣味小物件动画</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: 19859256157@163.com</p>
+                <p>所在地: 广东深圳</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 我的作品集</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>个人网站桌宠系统开发日志 - 巴拿拿猫的小窝</title>
+    <style>
+        /* 全局样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #5B2A35;
+            background: linear-gradient(135deg, #FFE4E6 0%, #FFB6C1 50%, #FFC0CB 100%);
+            min-height: 100vh;
+        }
+        
+        /* 导航栏 */
+        header {
+            background: linear-gradient(135deg, #FF69B4 0%, #FF85C0 100%);
+            color: #fff;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+        }
+        
+        .container {
+            width: 90%;
+            margin: 0 auto;
+            max-width: 1200px;
+        }
+        
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+        
+        .nav-links li {
+            margin-left: 2rem;
+        }
+        
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            padding: 0.5rem;
+            border-radius: 4px;
+        }
+        
+        .nav-links a:hover {
+            color: #FF69B4;
+            background: rgba(255, 255, 255, 0.9);
+        }
+        
+        /* 博客内容 */
+        .blog-detail {
+            padding: 2rem 0;
+        }
+        
+        .blog-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .blog-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #6B3443;
+            text-shadow: 0 2px 4px rgba(255, 182, 193, 0.5);
+        }
+        
+        .blog-meta {
+            color: #8B4557;
+            margin-bottom: 2rem;
+            font-size: 1rem;
+        }
+        
+        .blog-content {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(255, 105, 180, 0.2), inset 0 0 30px rgba(255, 182, 193, 0.1);
+            border: 1px solid rgba(255, 182, 193, 0.3);
+        }
+        
+        .blog-content h2 {
+            margin: 2rem 0 1rem;
+            color: #FF69B4;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #FFB6C1;
+        }
+        
+        .blog-content h3 {
+            margin: 1.5rem 0 1rem;
+            color: #FF85C0;
+        }
+        
+        .blog-content p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+            color: #6B3443;
+        }
+        
+        .blog-content ul {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+            color: #7B3F50;
+        }
+        
+        .blog-content li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        
+        .blog-content li::before {
+            content: '•';
+            position: absolute;
+            left: -1rem;
+            color: #FF69B4;
+        }
+        
+        /* 代码块样式 */
+        .code-block {
+            background: rgba(255, 182, 193, 0.2);
+            padding: 1.5rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1.5rem 0;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid #FF69B4;
+            border: 1px solid rgba(255, 182, 193, 0.3);
+        }
+        
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, #FF69B4 0%, #FF85C0 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(255, 105, 180, 0.3);
+            border: 1px solid rgba(255, 105, 180, 0.4);
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, #FF85C0 0%, #FFA5D0 100%);
+            box-shadow: 0 8px 20px rgba(255, 105, 180, 0.4);
+        }
+        
+        /* 页脚 */
+        footer {
+            background: linear-gradient(135deg, #FF69B4 0%, #FF85C0 100%);
+            color: #fff;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 2rem;
+            box-shadow: 0 -4px 15px rgba(255, 105, 180, 0.3);
+        }
+        
+        /* 响应式设置 */
+        @media (max-width: 768px) {
+            .container {
+                width: 95%;
+            }
+            
+            .blog-title {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">巴拿拿猫的小窝</div>
+                <ul class="nav-links">
+                    <li><a href="index.html">首页</a></li>
+                    <li><a href="#works">作品</a></li>
+                    <li><a href="#characters">角色</a></li>
+                    <li><a href="#games">游戏</a></li>
+                    <li><a href="#blog">开发日志</a></li>
+                    <li><a href="#about">关于我</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container blog-detail">
+        <div class="blog-header">
+            <h1 class="blog-title">个人网站桌宠系统开发日志</h1>
+            <div class="blog-meta">
+                <span>发布日期：2026年4月19日</span> | 
+                <span>阅读次数：0</span>
+            </div>
+        </div>
+        
+        <div class="blog-content">
+            <p>最近，我为个人作品集网站开发了一套完整的桌宠系统，旨在为网站增添互动性和趣味性。这个行为系统包含了多种功能，让网站更加生动活泼。</p>
+            
+            <h2>功能特点</h2>
+            
+            <h3>1. 时间感知系统</h3>
+            <p>桌宠能够根据当前时间调整自己的状态：</p>
+            <ul>
+                <li>早晨（6:00-12:00）：精神饱满，积极互动</li>
+                <li>下午（12:00-18:00）：正常状态，响应互动</li>
+                <li>晚上（18:00-22:00）：略显疲惫，互动频率降低</li>
+                <li>深夜（22:00-6:00）：进入睡眠状态，减少活动</li>
+            </ul>
+            
+            <h3>2. 鼠标互动系统</h3>
+            <p>桌宠能够感知鼠标位置并做出相应反应：</p>
+            <ul>
+                <li>鼠标停留：行为会看向鼠标方向</li>
+                <li>鼠标点击：行为会做出相应的动作和表情</li>
+                <li>拖拽功能：用户可以拖动行为到任意位置</li>
+            </ul>
+            
+            <h3>3. 随机情绪系统</h3>
+            <p>桌宠具有多种情绪状态，会随时间变化：</p>
+            <ul>
+                <li>开心：跳跃、转圈等活泼动作</li>
+                <li>疲惫：打哈欠、揉眼睛等动作</li>
+                <li>无聊：四处张望、发呆等状态</li>
+                <li>兴奋：快速移动、摆动手臂等动作</li>
+            </ul>
+            
+            <h3>4. 页面导航对话</h3>
+            <p>当用户浏览不同页面时，行为会给出相应的对话提示，增加用户体验的趣味性。</p>
+            
+            <h3>5. 睡眠/唤醒控制</h3>
+            <p>桌宠会根据时间自动进入睡眠状态，并在合适的时间醒来。用户也可以通过点击桌宠来唤醒它。</p>
+            
+            <h3>6. 控制按钮系统</h3>
+            <p>桌宠提供了三个控制按钮：</p>
+            <ul>
+                <li>固定位置：将桌宠固定在当前位置</li>
+                <li>跟随滚动：让桌宠跟随页面滚动</li>
+                <li>隐藏：暂时隐藏行为</li>
+            </ul>
+            
+            <h3>7. 好感度系统</h3>
+            <p>通过与行为互动，用户可以提高与行为的好感度。好感度达到一定值后，行为会解锁新的动作和对话。</p>
+            
+            <h3>8. 天气感知</h3>
+            <p>桌宠能够模拟感知天气变化，并做出相应的反应，比如雨天会打伞，晴天会戴太阳帽等。</p>
+            
+            <h3>9. 节日效果</h3>
+            <p>在特定节日（如春节、圣诞节等），行为会穿上节日服装，营造节日氛围。</p>
+            
+            <h2>技术实现</h2>
+            
+            <h3>HTML结构</h3>
+            <div class="code-block">
+&lt;div class="desk-pet" id="deskPet"&gt;
+    &lt;div class="pet-sprite" id="petSprite"&gt;
+        &lt;img src="images/zhuochong/眼镜男-正面idle.png" alt="桌宠" id="petImage"&gt;
+    &lt;/div&gt;
+    &lt;div class="pet-bubble" id="petBubble"&gt;
+        &lt;span class="bubble-text" id="bubbleText"&gt;你好&lt;/span&gt;
+    &lt;/div&gt;
+    &lt;div class="pet-controls" id="petControls"&gt;
+        &lt;button class="control-btn" id="pinBtn" title="固定位置"&gt;📌&lt;/button&gt;
+        &lt;button class="control-btn" id="followBtn" title="跟随滚动"&gt;🔄&lt;/button&gt;
+        &lt;button class="control-btn" id="hideBtn" title="隐藏"&gt;🙈&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/div&gt;
+            </div>
+            
+            <h3>CSS样式</h3>
+            <p>使用CSS实现桌宠的动画效果和样式，包括悬浮、点击、移动等状态的视觉反馈。</p>
+            
+            <h3>JavaScript功能</h3>
+            <p>通过JavaScript实现桌宠的各种互动功能，包括：</p>
+            <ul>
+                <li>时间判断和状态切换</li>
+                <li>鼠标事件监听和处理</li>
+                <li>随机情绪生成</li>
+                <li>页面导航检测</li>
+                <li>好感度系统</li>
+                <li>天气和节日特性</li>
+            </ul>
+            
+            <h2>开发心得</h2>
+            <p>开发行为系统的过程中，我学习了很多关于前端互动和动画的知识。通过这个项目，我不仅提高了自己的JavaScript编程能力，还学会了如何设计和实现一个完整的互动系统。</p>
+            <p>桌宠系统的开发让我意识到，一个好的用户体验不仅仅是功能的实现，更是细节的打磨。从桌宠的每一个动作、每一个表情，到与用户的每一次互动，都需要精心设计，才能给用户带来愉悦的体验。</p>
+            <p>未来，我计划继续完善桌宠系统，添加更多的动画效果和互动功能，让它成为网站的一个亮点。</p>
+        </div>
+        
+        <a href="index.html#blog" class="back-btn">返回开发日志</a>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 巴拿拿猫的小窝</p>
+        </div>
+    </footer>
+</body>
+</html>

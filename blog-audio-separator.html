@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音频分离工具开发日志 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 博客详情页样式 */
+        body {
+            background: #121212;
+            color: #e0e0e0;
+        }
+        
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #f0f0f0;
+            text-shadow: 0 0 10px rgba(255, 193, 7, 0.5);
+        }
+        
+        .blog-detail-meta {
+            font-size: 1rem;
+            color: #9e9e9e;
+            margin-bottom: 2rem;
+        }
+        
+        .blog-content {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #333;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #FFC107;
+            border-bottom: 2px solid #FFC107;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-content {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-item {
+            background: #252525;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-item h4 {
+            margin-top: 0;
+            color: #f0f0f0;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-item p {
+            color: #9e9e9e;
+            font-size: 0.9rem;
+        }
+        
+        .code-block {
+            background: #252525;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            border-left: 4px solid #FFC107;
+        }
+        
+        .code-block pre {
+            margin: 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #FFC107;
+            color: #212121;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #FFC107;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: #FFD54F;
+            color: #212121;
+            box-shadow: 0 10px 25px rgba(255, 193, 7, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .blog-detail-container {
+                padding: 1rem;
+            }
+            
+            .blog-detail-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 背景灰烬效果 -->
+    <div class="ash-container" id="ashContainer"></div>
+    
+    <!-- 跟随导航 -->
+    <nav class="side-nav" id="sideNav">
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#items" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">道具展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">小游戏</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#items">道具展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">音频分离工具开发日志</h1>
+                <div class="blog-detail-meta">
+                    <span>发布日期：2026年4月22日</span> | 
+                    <span>阅读次数：0</span> | 
+                    <span>分类：技术开发</span>
+                </div>
+            </div>
+            
+            <div class="blog-content">
+                <h2 class="section-title">项目介绍</h2>
+                <div class="section-content">
+                    <p>音频分离工具是一个基于Python和深度学习的音频处理工具，能够将音频文件分离为多个音轨（如人声、鼓、贝斯、其他乐器等），并为每个音轨生成可视化的波形图。该工具支持多种音频格式，包括WAV、M4A、MP3等，为音乐创作、音频分析等场景提供了便捷的解决方案。</p>
+                </div>
+                
+                <h2 class="section-title">技术栈</h2>
+                <div class="section-content">
+                    <ul>
+                        <li>Python 3.8+</li>
+                        <li>Flask (Web界面)</li>
+                        <li>Demucs (深度学习音频分离)</li>
+                        <li>Spleeter (传统音频分离方法)</li>
+                        <li>FFmpeg (音频格式转换)</li>
+                        <li>Librosa (音频处理)</li>
+                        <li>Matplotlib (波形图生成)</li>
+                        <li>PyTorch (深度学习框架)</li>
+                    </ul>
+                </div>
+                
+                <h2 class="section-title">核心功能</h2>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <h4>多格式支持</h4>
+                        <p>支持WAV、M4A、MP3、FLAC、OGG等多种音频格式，通过FFmpeg自动转换为适合处理的格式。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>深度学习分离</h4>
+                        <p>使用Demucs和Spleeter等深度学习模型，实现高质量的音频分离，能够准确分离人声、鼓、贝斯和其他乐器。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>波形图生成</h4>
+                        <p>为每个分离的音轨生成可视化的波形图，直观展示音频的amplitude 变化，方便用户分析和使用。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>批量处理功能</h4>
+                        <p>支持批量处理多个音频文件，提高处理效率，适合处理大量音频的场景。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>Web界面</h4>
+                        <p>提供基于Flask的Web界面，用户可以通过浏览器上传文件、选择分离模式并下载结果。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>灵活配置</h4>
+                        <p>支持多种分离模式，如2-stems（人声+伴奏）、4-stems（人声+鼓+贝斯+其他）等，满足不同的分离需求。</p>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">技术实现</h2>
+                <div class="section-content">
+                    <h3>1. 音频分离核心</h3>
+                    <p>使用Demucs作为主要的音频分离引擎，它是一个基于深度学习的音频分离模型，具有较高的分离质量。同时提供Spleeter作为备选方案，以应对不同的场景需求。</p>
+                    
+                    <div class="code-block">
+                        <pre>def separate_audio_demucs(input_path, output_dir, stems='4stems'):
+    if not DEMUCS_AVAILABLE:
+        raise Exception("Demucs not installed")
+    
+    model_name = get_model_name(stems)
+    logger.info(f"Loading Demucs model: {model_name}")
+    
+    model = pretrained.get_model(model_name)
+    model.eval()
+    
+    if torch.cuda.is_available():
+        model.cuda()
+    
+    audio = AudioFile(input_path)
+    wav = audio.read(streams=0)
+    
+    wav = wav.mean(0)
+    wav = wav.unsqueeze(0)
+    
+    if torch.cuda.is_available():
+        wav = wav.cuda()
+    
+    with torch.no_grad():
+        sources = apply_model(model, wav, shifts=1, split=True)
+    
+    sources = sources.squeeze(0).cpu()
+    
+    track_names = {
+        'htdemucs': ['vocals', 'accompaniment'],
+        'htdemucs_4s': ['vocals', 'drums', 'bass', 'other'],
+        'htdemucs_6s': ['vocals', 'drums', 'bass', 'other']
+    }
+    
+    names = track_names.get(model_name, ['vocals', 'drums', 'bass', 'other'])
+    
+    os.makedirs(output_dir, exist_ok=True)
+    output_files = []
+    
+    for name, source in zip(names, sources):
+        output_path = os.path.join(output_dir, f'{name}.wav')
+        save_audio(source, output_path, audio.samplerate)
+        output_files.append({
+            'name': name,
+            'path': output_path,
+            'filename': f'{name}.wav'
+        })
+    
+    return output_files</pre>
+                    </div>
+                    
+                    <h3>2. 格式转换处理</h3>
+                    <p>对于非WAV格式的音频文件，使用FFmpeg进行转换，确保Demucs能够正确处理。这是解决M4A等格式无法直接处理的关键步骤。</p>
+                    
+                    <div class="code-block">
+                        <pre># 1. 如果不是WAV，先转为WAV
+working_file = input_file
+converted_wav = os.path.join(out_dir, f"{base_name}_converted.wav")
+
+if not filename.lower().endswith('.wav'):
+    print("\n[1/4] 转换为WAV...")
+    try:
+        cmd = [
+            "ffmpeg", "-y",
+            "-i", input_file,
+            "-ar", "44100",
+            "-ac", "1",
+            "-c:a", "pcm_s16le",
+            converted_wav
+        ]
+        result = subprocess.run(cmd, capture_output=True, text=True)
+        if result.returncode != 0:
+            print("  [警告] ffmpeg失败，尝试直接使用原始文件...")
+        else:
+            working_file = converted_wav
+            print("  ✅ 转换成功！")
+    except FileNotFoundError:
+        print("  [提示] 找不到ffmpeg，尝试直接使用原始文件...")
+    except Exception as e:
+        print(f"  [警告] 转换出错: {e}，尝试直接使用原始文件...")</pre>
+                    </div>
+                    
+                    <h3>3. 波形图生成</h3>
+                    <p>使用Librosa和Matplotlib生成每个音轨的波形图，为不同类型的音频使用不同的颜色，提高可视化效果。</p>
+                </div>
+                
+                <h2 class="section-title">遇到的问题与解决方案</h2>
+                <div class="section-content">
+                    <h3>1. M4A文件处理问题</h3>
+                    <p><strong>问题：</strong>直接使用Demucs处理M4A文件时会失败，只能处理WAV文件。</p>
+                    <p><strong>解决方案：</strong>在预处理阶段添加FFmpeg转换步骤，将非WAV文件先转换为WAV格式，然后再进行分离。</p>
+                    
+                    <h3>2. 依赖安装问题</h3>
+                    <p><strong>问题：</strong>Demucs和Spleeter等依赖安装较为复杂，容易出现版本冲突。</p>
+                    <p><strong>解决方案：</strong>提供详细的安装说明和处理步骤，自动安装所需依赖。</p>
+                    
+                    <h3>3. 处理速度问题</h3>
+                    <p><strong>问题：</strong>深度学习模型处理音频文件速度较慢，特别是对于较长的音频。</p>
+                    <p><strong>解决方案：</strong>优化处理流程，使用GPU加速（如果可用），并提供批量处理功能，让用户可以在后台处理多个文件。</p>
+                </div>
+                
+                <h2 class="section-title">使用方法</h2>
+                <div class="section-content">
+                    <h3>Web界面方式</h3>
+                    <ol>
+                        <li>运行 `AudioSeparator.py` 启动Flask服务</li>
+                        <li>在浏览器中打开 `http://localhost:5000`</li>
+                        <li>上传音频文件（支持WAV格式）</li>
+                        <li>选择分离模式（2-stems或4-stems）</li>
+                        <li>点击分离按钮，等待处理完成</li>
+                        <li>下载分离后的音轨和波形图</li>
+                    </ol>
+                    
+                    <h3>批量处理方式（支持M4A等格式）</h3>
+                    <ol>
+                        <li>安装并配置FFmpeg（详细步骤见下方）</li>
+                        <li>运行 `全能分离.bat` 或 `batch_convert_and_separate.py`</li>
+                        <li>程序会自动处理当前目录下的所有音频文件</li>
+                        <li>处理完成后，每个音频文件会生成一个包含分离音轨和波形图的文件夹</li>
+                    </ol>
+                    
+                    <h3>FFmpeg安装和配置步骤</h3>
+                    <ol>
+                        <li><strong>下载FFmpeg：</strong>
+                            <ul>
+                                <li>访问 <a href="https://ffmpeg.org/download.html" target="_blank">FFmpeg官网</a></li>
+                                <li>点击 "Windows builds from gyan.dev"</li>
+                                <li>下载最新的 "ffmpeg-git-full.7z" 文件</li>
+                            </ul>
+                        </li>
+                        <li><strong>解压FFmpeg：</strong>
+                            <ul>
+                                <li>将下载的7z文件解压到 `C:\ffmpeg` 目录</li>
+                                <li>确保 `C:\ffmpeg\bin` 目录存在，并且包含 ffmpeg.exe 文件</li>
+                            </ul>
+                        </li>
+                        <li><strong>添加到系统环境变量：</strong>
+                            <ul>
+                                <li>右键点击「此电脑」→「属性」→「高级系统设置」→「环境变量」</li>
+                                <li>在「系统变量」中找到「Path」变量，点击「编辑」</li>
+                                <li>点击「新建」，输入 `C:\ffmpeg\bin`，点击「确定」保存</li>
+                            </ul>
+                        </li>
+                        <li><strong>验证安装：</strong>
+                            <ul>
+                                <li>关闭所有已打开的命令提示符</li>
+                                <li>打开一个新的命令提示符</li>
+                                <li>输入 `ffmpeg -version` 并回车</li>
+                                <li>如果显示FFmpeg的版本信息，说明安装成功</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+                
+                <h2 class="section-title">开发心得</h2>
+                <div class="section-content">
+                    <p>通过开发音频分离工具，我深刻体会到：</p>
+                    <ul>
+                        <li>深度学习模型在音频处理领域的强大能力，Demucs等模型能够实现高质量的音频分离</li>
+                        <li>格式转换的重要性，不同的音频格式需要不同的处理方法</li>
+                        <li>用户体验的重要性，提供Web界面和批量处理版本满足不同用户的需求</li>
+                        <li>依赖管理的复杂性，需要为用户提供详细的安装和使用指南</li>
+                    </ul>
+                    <p>这个工具不仅可以用于个人音乐制作，还可以应用于音频分析、教学等领域，具有广阔的应用前景。未来计划进一步优化处理速度，支持更多音频格式，并添加更多音频处理功能。</p>
+                </div>
+                
+                <a href="index.html#blog" class="btn-back">返回开发日志</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: 19859256157@163.com</p>
+                <p>所在地: 福建厦门</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

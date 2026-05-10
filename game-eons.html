@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eons - 游戏详情 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 游戏详情页样式 - 蓝绿色系 */
+        body {
+            background: linear-gradient(to bottom, #5ec5b4, #96d9ce);
+        }
+        
+        .game-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .game-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .game-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #2a6d63;
+            text-shadow: 0 0 10px rgba(42, 109, 99, 0.5);
+        }
+        
+        .game-detail-subtitle {
+            font-size: 1.2rem;
+            color: #2a6d63;
+            margin-bottom: 2rem;
+        }
+        
+        .game-detail-cover {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border: 2px solid #2a6d63;
+        }
+        
+        .game-detail-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 3rem;
+        }
+        
+        .game-detail-main {
+            background: linear-gradient(to bottom, #f0fdfa, #e6f7f4);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 2px solid #5ec5b4;
+            color: #2a6d63;
+        }
+        
+        .game-detail-sidebar {
+            background: linear-gradient(to bottom, #f0fdfa, #e6f7f4);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 2px solid #5ec5b4;
+            color: #2a6d63;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #5ec5b4;
+        }
+        
+        .section-content {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .game-features {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .game-features li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .game-features li::before {
+            content: "•";
+            color: #5ec5b4;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+        
+        .gallery-container {
+            margin-top: 2rem;
+        }
+        
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 2px solid #5ec5b4;
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .gallery-item {
+            height: 200px;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #2a6d63;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #2a6d63;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: #1e5248;
+            color: #fff;
+            box-shadow: 0 10px 25px rgba(42, 109, 99, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .game-detail-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .game-detail-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 前景灰烬特效 -->
+    <div class="ash-container" id="ashContainer"></div>
+    
+    <!-- 跟随导航 -->
+    <nav class="side-nav" id="sideNav">
+        <button class="nav-toggle-btn" id="navToggleBtn">
+            <span class="toggle-icon"></span>
+        </button>
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">小游戏</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="game-detail-container">
+            <div class="game-detail-header">
+                <h1 class="game-detail-title">Eons</h1>
+                <p class="game-detail-subtitle">将射线的延伸视为无限向前的时间</p>
+                <div style="width: 100%; position: relative; padding-top: 56.25%;">
+                    <video controls style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2); border: 2px solid #2F4F2F;">
+                        <source src="videos/Eons.mp4" type="video/mp4">
+                        您的浏览器不支持视频播放。
+                    </video>
+                </div>
+            </div>
+            
+            <div class="game-detail-content">
+                <div class="game-detail-main">
+                    <h2 class="section-title">游戏简介</h2>
+                    <div class="section-content">
+                        <p>《Eons》是一款独特的抽象解谜游戏，玩家需要在关卡中获取有限的端点，利用两种端点不同的作用并结合关卡中的不用机关，让射线无限的延伸下去。将射线的延伸视为无限向前的时间，通过玩家的操作促成每一个时间阶段的发展，让无限的时间有意义。将每一个关卡赋予一个历史发展阶段，让整个关卡流程的视觉效果成为一本史书，一个在无限时间流逝中发展的有限的成就。</p>
+                    </div>
+                    
+                    <h2 class="section-title">制作思路</h2>
+                    <div class="section-content">
+                        <p>制作思路源于对时间概念的哲学思考，我们希望通过游戏的形式来探索时间的本质和意义。通过抽象的几何元素和射线的延伸，我们试图创造一种独特的游戏体验，让玩家思考时间的流逝和意义。</p>
+                        <p>技术实现方面，我们使用C#语言和Unity引擎进行游戏开发，利用Unity的强大渲染能力和物理系统实现游戏效果。游戏采用模块化设计，将关卡系统、射线系统、解谜机制等功能分离，提高代码的可维护性。</p>
+                        <p>开发过程中，我们重点关注了游戏的视觉设计和谜题设计，通过精心设计的关卡和视觉效果，确保游戏的可玩性和思考性。</p>
+                    </div>
+                    
+                    <h2 class="section-title">团队制作花絮</h2>
+                    <div class="section-content">
+                        <p>《Eons》是由我们7人团队在2024年7月的48小时极限开发大赛-深圳凉屋站制作的，整个开发过程充满了思考和创新。从最初的概念设计到最终的游戏上线，我们经历了几次迭代和改进。</p>
+                        <p>开发初期，我们花费了大量时间讨论游戏的核心概念和视觉风格，由于三个策划的观点不一爆发了言语冲突，这种情况在游戏开发的过程中很常见所以也见怪不怪了哈哈，最终以投票确定了抽象几何的设计方向。在实现过程中，我们遇到了射线系统、关卡设计等技术挑战，但通过团队协作和不断学习，最终成功解决了这些问题。</p>
+                        <p>测试阶段是最有趣的部分，我们发布到顽社并且在比赛线下巡演邀请了许多朋友参与测试，收集他们的反馈并不断优化游戏体验。</p>
+                    </div>
+                    
+                    <div class="gallery-container">
+                        <h3>花絮照片</h3>
+                        <div class="gallery-grid">
+                            <div class="gallery-item">
+                                <img src="images/Eons_4.png" alt="团队工作照">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="images/Eons_5.png" alt="团队工作照">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                        <a href="index.html" class="btn-back">返回首页</a>
+                        <a href="https://www.gmhub.com/game/5326" class="btn-back" style="background: linear-gradient(135deg, #5ec5b4, #96d9ce); color: #2a6d63; border: 2px solid #5ec5b4;">游戏下载</a>
+                    </div>
+                </div>
+                
+                <div class="game-detail-sidebar">
+                    <h3>游戏信息</h3>
+                    <ul class="game-features">
+                        <li>开发时间：2024年7月</li>
+                        <li>开发工具：unity,github</li>
+                        <li>游戏类型：益智 / 解谜</li>
+                        <li>平台：PC</li>
+                        <li>开发赛事：48小时极限开发大赛-深圳凉屋站</li>
+                        <li>团队成员：7人</li>
+                    </ul>
+                    
+                    <h3>技术栈</h3>
+                    <ul class="game-features">
+                        <li>前端：C sharp</li>
+                        <li>游戏引擎：unity</li>
+                        <li>美术：Photoshop</li>
+                        <li>音效：Audacity</li>
+                    </ul>
+                    
+                    <h3>游戏特色</h3>
+                    <ul class="game-features">
+                        <li>抽象几何视觉效果</li>
+                        <li>时间概念的创新诠释</li>
+                        <li>多种解谜机制</li>
+                        <li>渐进式难度设计</li>
+                        <li>哲学思考元素</li>
+                        <li>成就系统</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: contact@bananacatonl1.dev</p>
+                <p>所在地: 中国上海</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 我的作品集</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

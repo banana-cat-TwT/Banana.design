@@ -1,0 +1,299 @@
+﻿﻿﻿﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地狱酒店游戏开发日志 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 博客详情页样式 */
+        body {
+            background: #121212;
+            color: #e0e0e0;
+        }
+        
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #f0f0f0;
+            text-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+        }
+        
+        .blog-detail-meta {
+            font-size: 1rem;
+            color: #9e9e9e;
+            margin-bottom: 2rem;
+        }
+        
+        .blog-content {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #333;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #F44336;
+            border-bottom: 2px solid #F44336;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-content {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .video-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+        
+        .video-item {
+            background: #252525;
+            border-radius: 8px;
+            padding: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .video-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .video-item h4 {
+            margin-top: 0;
+            color: #f0f0f0;
+            margin-bottom: 0.5rem;
+        }
+        
+        .video-item p {
+            color: #9e9e9e;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .video-placeholder {
+            width: 100%;
+            height: 180px;
+            background: #333;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #F44336;
+            color: #f0f0f0;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #F44336;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: #EF5350;
+            color: #f0f0f0;
+            box-shadow: 0 10px 25px rgba(244, 67, 54, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .blog-detail-container {
+                padding: 1rem;
+            }
+            
+            .blog-detail-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 前景灰烬特效 -->
+    <div class="ash-container" id="ashContainer"></div>
+    
+    <!-- 跟随导航 -->
+    <nav class="side-nav" id="sideNav">
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#items" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">道具展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">小游戏</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#items">道具展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">地狱酒店游戏开发日志</h1>
+                <div class="blog-detail-meta">
+                    <span>发布日期：2026年4月12日</span> | 
+                    <span>阅读次数：0</span> | 
+                    <span>分类：游戏开发</span>
+                </div>
+            </div>
+            
+            <div class="blog-content">
+                <h2 class="section-title">项目概述</h2>
+                <div class="section-content">
+                    <p>《地狱酒店》是一款多人合作恐怖游戏。在游戏中玩家将扮演被雇佣的清洁工，在充满诡异的地下酒店求生。用第一人称的操作方式，通过解谜探索、服务超自然顾客等方式获取金钱。每三天需完成绩效指标，否则全体将被变成怪物，次日你们又会在锅炉房重组，继续这场恐怖的打工循环。</p>
+                </div>
+                
+                <h2 class="section-title">技术栈</h2>
+                <div class="section-content">
+                    <ul>
+                        <li>Unity游戏引擎</li>
+                        <li>C#编程语言</li>
+                        <li>Blender建模</li>
+                        <li>Substance Painter材质</li>
+                        <li>Adobe Photoshop</li>
+                    </ul>
+                </div>
+                
+                <h2 class="section-title">开发内容</h2>
+                <div class="section-content">
+                    <h3>1. 角色与怪物设计</h3>
+                    <p>负责所有怪物的整个流程制作，包括建模、绑定、动画、各种特效等。</p>
+                    
+                    <h3>2. 场景设计</h3>
+                    <p>负责开始界面大场景的制作，包括地下工厂的HDRI场景制作、动画、特效、特殊材质效果等。</p>
+                    
+                    <h3>3. UI制作</h3>
+                    <p>处理游戏的UI界面制作，确保界面风格与游戏整体风格一致。</p>
+                </div>
+                
+                <h2 class="section-title">视频展示</h2>
+                <div class="video-gallery">
+                    <div class="video-item">
+                        <h4>地狱酒店</h4>
+                        <p>游戏开发过程和效果展示</p>
+                        <div class="video-placeholder">视频：地狱酒店.mp4</div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">开发心得</h2>
+                <div class="section-content">
+                    <p>通过《地狱酒店》的开发，我深刻体会到：</p>
+                    <ul>
+                        <li>多人游戏的开发需要考虑更多的网络同步和玩家互动问题</li>
+                        <li>恐怖游戏的氛围营造非常重要，通过灯光、音效和视觉效果的结合可以创造出很好的恐怖氛围</li>
+                        <li>游戏机制的设计需要平衡压力和趣味性，确保玩家既有压力又有乐趣</li>
+                        <li>团队合作在游戏开发中至关重要，不同岗位的专业人员需要密切配合</li>
+                    </ul>
+                    <p>《地狱酒店》是一个非常有挑战性的项目，通过这个项目我积累了丰富的游戏开发经验，特别是在多人游戏、恐怖游戏和美术制作方面。</p>
+                </div>
+                
+                <a href="index.html#blog" class="btn-back">返回开发日志</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: 19859256157@163.com</p>
+                <p>所在地: 广东深圳</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
