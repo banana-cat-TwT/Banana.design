@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>游戏毛发渲染开发日志 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: #121212;
+            color: #e0e0e0;
+        }
+        
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #f0f0f0;
+            text-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
+        }
+        
+        .blog-detail-meta {
+            font-size: 1rem;
+            color: #9e9e9e;
+            margin-bottom: 2rem;
+        }
+        
+        .blog-content {
+            background: #1e1e1e;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid #333;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #9C27B0;
+            border-bottom: 2px solid #9C27B0;
+            padding-bottom: 0.5rem;
+        }
+        
+        .section-content {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-item {
+            background: #252525;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-item h4 {
+            margin-top: 0;
+            color: #f0f0f0;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-item p {
+            color: #9e9e9e;
+            font-size: 0.9rem;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #9C27B0;
+            color: #f0f0f0;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #9C27B0;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: #BA68C8;
+            color: #f0f0f0;
+            box-shadow: 0 10px 25px rgba(156, 39, 176, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .blog-detail-container {
+                padding: 1rem;
+            }
+            
+            .blog-detail-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ash-container" id="ashContainer"></div>
+    
+    <nav class="side-nav" id="sideNav">
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#items" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">道具展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">小游戏</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#items">道具展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">游戏毛发渲染技术研究</h1>
+                <div class="blog-detail-meta">
+                    <span>发布日期：2026年5月11日</span> | 
+                    <span>阅读次数：0</span> | 
+                    <span>分类：UE/Unity</span>
+                </div>
+            </div>
+            
+            <div class="blog-content">
+                <h2 class="section-title">毛发渲染概述</h2>
+                <div class="section-content">
+                    <p>毛发渲染是游戏和影视领域中极具挑战性的技术之一。真实的毛发具有各项异性反射、半透明、散射等特殊光学特性，传统的BRDF模型无法很好地表现这些效果。同时，实时渲染对性能的要求也使得毛发渲染成为一个技术难点。</p>
+                </div>
+                
+                <h2 class="section-title">毛发的制作方式</h2>
+                <div class="section-content">
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <h4>面片烘焙</h4>
+                            <p>将毛发信息烘焙到面片上，通过纹理实现毛发效果，性能消耗较小，适合大规模角色或远景使用。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>网格建模</h4>
+                            <p>使用几何网格直接构建毛发形状，配合材质表现细节，适合风格化较短的毛发效果。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>引导线系统</h4>
+                            <p>通过引导线控制毛发形态，配合物理模拟，实现自然的动态效果，是现代毛发系统的主流方案。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>多Pass渲染</h4>
+                            <p>通过多层渲染叠加，模拟毛发的深度和层次感，常用于高质量的毛发渲染需求。</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">技术挑战与解决方案</h2>
+                <div class="section-content">
+                    <h3>透明排序错误</h3>
+                    <p>毛发的半透明特性容易导致深度排序问题。解决方案包括：按深度排序、使用Alpha预乘、基于瓦片的排序等技术。</p>
+                    
+                    <h3>切线与自然生长方向不匹配</h3>
+                    <p>模型切线往往与毛发自然生长方向不一致，需要使用专门的毛发切线或自定义UV流向来控制毛发朝向。</p>
+                    
+                    <h3>多Pass渲染的性能问题</h3>
+                    <p>多层渲染虽然效果好，但性能消耗大。优化方案包括LOD技术、视距剔除、简化远处毛发细节等。</p>
+                </div>
+                
+                <h2 class="section-title">总结与展望</h2>
+                <div class="section-content">
+                    <p>毛发渲染技术在不断发展，从传统的几何方案到最新的神经渲染技术，游戏开发者有了越来越多的选择。选择适合项目风格和性能预算的方案是关键。未来，随着硬件性能提升和算法优化，我们会看到更加真实和高效的毛发渲染方案。</p>
+                </div>
+                
+                <a href="index.html#blog" class="btn-back">返回开发日志</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: 19859256157@163.com</p>
+                <p>所在地: 广东深圳</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
