@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live2D制作日志 - 我的作品集</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+            color: #e0e0e0;
+            min-height: 100vh;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+        
+        .blog-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #a855f7;
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.5);
+        }
+        
+        .blog-detail-meta {
+            font-size: 1rem;
+            color: #a855f7;
+            margin-bottom: 2rem;
+        }
+        
+        .blog-content {
+            background: rgba(26, 26, 46, 0.9);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(168, 85, 247, 0.3);
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #a855f7;
+            border-bottom: 2px solid rgba(168, 85, 247, 0.5);
+            padding-bottom: 0.5rem;
+        }
+        
+        .subsection-title {
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            color: #c4b5fd;
+        }
+        
+        .info-box {
+            background: rgba(168, 85, 247, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            border-left: 3px solid #a855f7;
+            font-style: italic;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+            font-size: 0.9rem;
+        }
+        
+        th, td {
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            padding: 0.75rem;
+            text-align: left;
+        }
+        
+        th {
+            background: rgba(168, 85, 247, 0.2);
+            color: #c4b5fd;
+        }
+        
+        pre {
+            background: #1a1a2e;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            border: 1px solid rgba(168, 85, 247, 0.3);
+            font-size: 0.85rem;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: rgba(168, 85, 247, 0.3);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 3rem;
+            border: 2px solid rgba(168, 85, 247, 0.5);
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: rgba(168, 85, 247, 0.5);
+            box-shadow: 0 10px 25px rgba(168, 85, 247, 0.4);
+        }
+        
+        .center-btn {
+            text-align: center;
+        }
+        
+        .highlight {
+            background: rgba(168, 85, 247, 0.2);
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+        }
+        
+        ul {
+            padding-left: 1.5rem;
+        }
+        
+        li {
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="blog-detail-container">
+        <div class="blog-detail-header">
+            <h1 class="blog-detail-title">Live2D 制作日志</h1>
+            <div class="blog-detail-meta">发布日期：2026年5月12日 | 分类：动画制作</div>
+        </div>
+        
+        <div class="blog-content">
+            <div class="info-box">
+                <strong>制作软件</strong>：Live2D Cubism Editor<br>
+                <strong>制作内容</strong>：OC 角色2D全身人体拆分 → 可动人物动态图<br>
+                <strong>使用时段</strong>：2023年1月—2月（春节期间）<br>
+                <strong>记录日期</strong>：2026年5月12日
+            </div>
+
+            <h2 class="section-title">一、项目概述</h2>
+            <p>2023年春节期间开始接触 Live2D Cubism，为个人 OC 角色制作2D全身动态模型。核心工作流程是将一张完整的2D角色立绘拆分为多个独立图层部件，再在 Live2D 中为各部件添加网格、变形器与参数驱动，最终实现角色的呼吸、眨眼、头部转动等动态效果，输出为可动的动态图。</p>
+
+            <h2 class="section-title">二、时间线</h2>
+            <table>
+                <tr><th>时间</th><th>事件</th></tr>
+                <tr><td>2023年1月</td><td>春节假期期间开始接触 Live2D Cubism</td></tr>
+                <tr><td>2023年1月—2月</td><td>为 OC 角色进行全身人体拆分与动态制作</td></tr>
+                <tr><td>2023年2月后</td><td>停止使用，未再持续深入</td></tr>
+            </table>
+            <p><strong>使用性质</strong>：兴趣驱动、业余探索。聚焦于单个 OC 角色的2D全身拆分与动态化，属于入门级实践。</p>
+
+            <h2 class="section-title">三、制作流程</h2>
+
+            <h3 class="subsection-title">3.1 软件安装与版本选择</h3>
+            <table>
+                <tr><th>步骤</th><th>说明</th></tr>
+                <tr><td>下载安装</td><td>Live2D 官网下载 <a href="https://www.live2d.com/en/download/cubism/" target="_blank">Live2D Cubism Editor</a></td></tr>
+                <tr><td>版本选择</td><td>Cubism 4 或 5 均可，免费版支持基础功能（导出有分辨率限制）</td></tr>
+                <tr><td>授权说明</td><td>免费版可用于学习和非商业用途，商业使用需购买许可证</td></tr>
+            </table>
+
+            <h3 class="subsection-title">3.2 前期准备——2D立绘图层拆分</h3>
+            <p>Live2D 的核心前提是<strong>将一张完整的角色立绘拆分为多个可独立运动的图层部件</strong>。这是整个流程中最关键的步骤之一。</p>
+
+            <h4 style="color: #c4b5fd; margin-top: 1rem;">全身人体拆分参考表</h4>
+            <table>
+                <tr><th>部位</th><th>拆分部件</th><th>拆分要点</th></tr>
+                <tr><td>头部</td><td>前发、后发、脸、耳朵</td><td>前后发需分层，耳朵在侧发下方</td></tr>
+                <tr><td>眼睛</td><td>眼白、瞳孔、上眼睑、下眼睑、睫毛</td><td>眼睑单独拆出以实现眨眼，瞳孔独立实现视线移动</td></tr>
+                <tr><td>嘴巴</td><td>嘴巴闭合、嘴巴张开、牙齿、舌头</td><td>按开合状态拆分，用于说话/表情切换</td></tr>
+                <tr><td>眉毛</td><td>左眉、右眉</td><td>独立拆出以实现表情变化</td></tr>
+                <tr><td>身体</td><td>脖子、躯干</td><td>脖子需单独层以支持头部转动时的遮挡关系</td></tr>
+                <tr><td>手臂</td><td>左上臂、左前臂、左手、右上臂、右前臂、右手</td><td>按关节拆分，需考虑前后遮挡</td></tr>
+                <tr><td>腿部</td><td>左大腿、左小腿、左脚、右大腿、右小腿、右脚</td><td>同上，按关节拆分</td></tr>
+                <tr><td>服装</td><td>上衣前片、上衣后片、裙子/下装</td><td>服装需随身体部件一起拆分，注意褶皱区域</td></tr>
+                <tr><td>配饰</td><td>发饰、项链等</td><td>需跟随对应部件运动</td></tr>
+            </table>
+
+            <div class="info-box" style="margin-top: 1rem;">
+                <strong>拆分核心原则：</strong><br>
+                1. 每个会独立运动的部件必须单独为一个图层<br>
+                2. 被遮挡的部分也必须补全（如后发被前发遮挡的部分、手臂被身体遮挡的部分）<br>
+                3. 拆分时使用 PSD 分层导出，保留透明背景
+            </div>
+
+            <h4 style="color: #c4b5fd; margin-top: 1rem;">拆分工具链</h4>
+            <table>
+                <tr><th>工具</th><th>用途</th></tr>
+                <tr><td>Photoshop / Clip Studio Paint</td><td>立绘拆层、PSD 分层保存</td></tr>
+                <tr><td>Live2D Cubism Editor</td><td>导入 PSD，自动识别图层</td></tr>
+            </table>
+
+            <h3 class="subsection-title">3.3 导入 PSD 与网格生成</h3>
+            <ol>
+                <li>在 Live2D Cubism Editor 中新建项目</li>
+                <li>导入拆分好的 <strong>PSD 文件</strong>，软件自动按图层名创建部件</li>
+                <li>为每个部件生成<strong>网格（Art Mesh）</strong>：
+                    <ul>
+                        <li>简单部件（眼睛、嘴巴）：使用自动网格，少量三角形即可</li>
+                        <li>复杂部件（头发、服装）：手动调整网格密度，在需要弯曲变形的区域加密网格</li>
+                    </ul>
+                </li>
+            </ol>
+            <p><strong>网格质量直接决定变形效果</strong>。网格太疏会导致弯曲时出现棱角，太密则影响性能。</p>
+
+            <h3 class="subsection-title">3.4 变形器（Deformer）设置</h3>
+            <p>变形器是控制部件运动的核心机制：</p>
+            <table>
+                <tr><th>变形器类型</th><th>用途</th><th>应用场景</th></tr>
+                <tr><td>弯曲变形器</td><td>控制部件的弯曲/形变</td><td>头发摆动、身体扭动、裙摆飘动</td></tr>
+                <tr><td>旋转变形器</td><td>控制部件的旋转</td><td>头部转动、手臂摆动、眼球转动</td></tr>
+            </table>
+
+            <h4 style="color: #c4b5fd; margin-top: 1rem;">变形器层级结构（全身模型参考）</h4>
+            <pre>
+根变形器（整体）
+├── 头部变形器
+│   ├── 面部变形器
+│   │   ├── 眼睛变形器
+│   │   ├── 嘴巴变形器
+│   │   └── 眉毛变形器
+│   ├── 前发变形器
+│   └── 后发变形器
+├── 身体变形器
+│   ├── 左臂变形器
+│   │   ├── 左前臂变形器
+│   │   └── 左手变形器
+│   └── 右臂变形器
+│       ├── 右前臂变形器
+│       └── 右手变形器
+└── 腿部变形器</pre>
+
+            <h3 class="subsection-title">3.5 参数绑定与动态制作</h3>
+            <p>Live2D 通过<strong>参数（Parameter）</strong>驱动部件运动，常见参数如下：</p>
+            <table>
+                <tr><th>参数</th><th>类型</th><th>驱动效果</th></tr>
+                <tr><td>角度X/Y/Z</td><td>角色朝向</td><td>头部左转/右转/仰头/低头</td></tr>
+                <tr><td>身体角度X/Y</td><td>身体朝向</td><td>身体微倾/前倾</td></tr>
+                <tr><td>眼睛开合</td><td>眨眼</td><td>上眼睑下落→闭合→张开</td></tr>
+                <tr><td>嘴巴开合</td><td>说话</td><td>嘴巴张合动画</td></tr>
+                <tr><td>嘴巴变形</td><td>表情</td><td>微笑/嘟嘴/撇嘴等</td></tr>
+                <tr><td>眉毛角度</td><td>表情</td><td>皱眉/挑眉/悲伤眉</td></tr>
+                <tr><td>呼吸</td><td>循环动画</td><td>身体微微起伏</td></tr>
+                <tr><td>头发摆动</td><td>物理模拟</td><td>头发随头部运动飘动</td></tr>
+            </table>
+            <p><strong>关键操作</strong>：在每个参数的起止点分别调整部件的关键姿态，Live2D 自动插值生成中间帧。</p>
+
+            <h3 class="subsection-title">3.6 物理与场景设置</h3>
+            <table>
+                <tr><th>功能</th><th>说明</th></tr>
+                <tr><td>物理模拟</td><td>为头发、裙摆等部件添加摆动物理，使动作更自然</td></tr>
+                <tr><td>场景设置</td><td>配置画布尺寸、背景色等输出参数</td></tr>
+                <tr><td>眼睛追踪</td><td>设置鼠标追踪视线，增强互动感</td></tr>
+            </table>
+
+            <h3 class="subsection-title">3.7 导出</h3>
+            <table>
+                <tr><th>导出格式</th><th>用途</th></tr>
+                <tr><td>.model3.json</td><td>Live2D 标准模型文件，用于接入 VTube Studio 等直播软件</td></tr>
+                <tr><td>动态图/GIF</td><td>导出为可动的动态图，用于社交平台展示</td></tr>
+                <tr><td>视频文件</td><td>渲染为 MP4 等视频格式</td></tr>
+            </table>
+
+            <h2 class="section-title">四、文件格式流转图</h2>
+            <pre>
+2D 立绘（单张）
+    │
+    ▼
+Photoshop / CSP 拆层
+    │
+    ▼
+导出 PSD（分层）
+    │
+    ▼
+Live2D Cubism Editor
+    │  ├── 生成网格（Art Mesh）
+    │  ├── 设置变形器（Deformer）
+    │  ├── 绑定参数（Parameter）
+    │  └── 物理模拟
+    │
+    ▼
+导出
+├── .model3.json → VTube Studio 等直播驱动
+├── 动态图/GIF → 社交平台展示
+└── 视频 → MP4 输出</pre>
+
+            <h2 class="section-title">五、注意事项与经验总结</h2>
+            <table>
+                <tr><th>要点</th><th>说明</th></tr>
+                <tr><td>拆分是重中之重</td><td>立绘拆分的精细程度直接决定最终动态效果的上限，宁可拆多不可拆少</td></tr>
+                <tr><td>补全被遮挡区域</td><td>部件运动时会露出原本被遮挡的部分，必须提前补画，否则出现穿帮</td></tr>
+                <tr><td>命名规范</td><td>PSD 图层命名要清晰（如「左眼_上眼睑」「右臂_前臂」），方便在 Live2D 中管理</td></tr>
+                <tr><td>网格密度权衡</td><td>弯曲区域加密，平坦区域可疏，整体控制三角面数量以保证性能</td></tr>
+                <tr><td>参数不宜过多</td><td>入门阶段先做好基础参数（头部转动、眨眼、呼吸），再逐步扩展表情</td></tr>
+                <tr><td>物理模拟需调试</td><td>头发/裙摆的物理参数需要反复调试才能达到自然效果，不要一步到位</td></tr>
+                <tr><td>全身模型工作量大</td><td>全身拆分+绑定的制作周期远大于半身模型，建议先从半身练手</td></tr>
+            </table>
+
+            <h2 class="section-title">六、后续可拓展方向</h2>
+            <ul>
+                <li><input type="checkbox" disabled> 将 Live2D 模型接入 VTube Studio 进行实时驱动</li>
+                <li><input type="checkbox" disabled> 制作更丰富的表情组合（超过标准表情组）</li>
+                <li><input type="checkbox" disabled> 尝试 Live2D 与 3D 工作流结合（如2D角色+3D场景混合）</li>
+                <li><input type="checkbox" disabled> 如有需要可作为毕设中2D→3D工作流对比的技术参考</li>
+            </ul>
+
+            <p style="text-align: center; color: #888; margin-top: 2rem;">*日志创建时间：2026-05-12 | 使用时段：2023年1月—2月*</p>
+        </div>
+        
+        <div class="center-btn">
+            <a href="index.html#blog" class="btn-back">← 返回开发日志</a>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
