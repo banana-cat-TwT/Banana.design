@@ -9398,3 +9398,33 @@ html {
     box-shadow: 0 6px 20px rgba(76, 201, 240, 0.6);
     transform: translateY(-2px);
 }
+
+.blog-card-hellhotel {
+    background: linear-gradient(135deg, #1a0a00 0%, #2d1810 100%);
+    border: 2px solid #ff7518;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 117, 24, 0.2);
+}
+
+.blog-card-hellhotel:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 117, 24, 0.4);
+    border-color: #ffaa44;
+}
+
+.blog-card-hellhotel .blog-image {
+    background: linear-gradient(135deg, #ff7518 0%, #9e4494 100%);
+}
+
+.blog-card-hellhotel .blog-content {
+    background: linear-gradient(180deg, rgba(45, 24, 16, 0.95) 0%, rgba(26, 10, 0, 0.95) 100%);
+}
+
+.blog-card-hellhotel .blog-meta .blog-date {
+    background: rgba(212, 165, 116, 0.2);
+}
+
+.blog-card-hellhotel .read-more:hover {
+    background: linear-gradient(135deg, #ffaa44 0%, #b858b0 100%);
+    box-shadow: 0 6px 20px rgba(255, 117, 24, 0.6);
+    transform: translateY(-2px);
+}
