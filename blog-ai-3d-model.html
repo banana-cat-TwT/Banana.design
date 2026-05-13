@@ -260,6 +260,41 @@
             background: rgba(232, 58, 151, 0.3);
         }
 
+        .screenshot-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .screenshot-item {
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(232, 58, 125, 0.2);
+        }
+
+        .screenshot-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .screenshot-item:hover img {
+            transform: scale(1.02);
+        }
+
+        .screenshot-caption {
+            padding: 10px;
+            text-align: center;
+            color: #2B4F3F;
+            font-size: 0.9rem;
+            background: rgba(0, 0, 0, 0.05);
+        }
+
         @media (max-width: 768px) {
             body {
                 cursor: auto;
@@ -355,10 +390,17 @@
                 </ul>
                 <div class="video-container" style="margin-top: 20px;">
                     <video controls width="100%">
-                        <source src="videos/3000AI生成/风格化卡通生成2.mp4" type="video/mp4">
+                        <source src="videos/3000/fenggehua2_1.mp4" type="video/mp4">
                         您的浏览器不支持HTML5视频播放。
                     </video>
-                    <p class="video-caption">试验二：风格化卡通生成2</p>
+                    <p class="video-caption">试验二：风格化卡通生成（第一部分）</p>
+                </div>
+                <div class="video-container" style="margin-top: 20px;">
+                    <video controls width="100%">
+                        <source src="videos/3000/fenggehua2_2.mp4" type="video/mp4">
+                        您的浏览器不支持HTML5视频播放。
+                    </video>
+                    <p class="video-caption">试验二：风格化卡通生成（第二部分）</p>
                 </div>
                 
                 <h3>试验三：风格化卡通人物（低模状态）</h3>
@@ -384,10 +426,24 @@
                 </ul>
                 <div class="video-container" style="margin-top: 20px;">
                     <video controls width="100%">
-                        <source src="videos/3000AI生成/写实手枪模型生成过程视频.mp4" type="video/mp4">
+                        <source src="videos/3000/shouqiang1.mp4" type="video/mp4">
                         您的浏览器不支持HTML5视频播放。
                     </video>
-                    <p class="video-caption">试验四：写实手枪模型生成过程</p>
+                    <p class="video-caption">试验四：写实手枪模型生成过程（第一部分）</p>
+                </div>
+                <div class="video-container" style="margin-top: 20px;">
+                    <video controls width="100%">
+                        <source src="videos/3000/shouqiang2.mp4" type="video/mp4">
+                        您的浏览器不支持HTML5视频播放。
+                    </video>
+                    <p class="video-caption">试验四：写实手枪模型生成过程（第二部分）</p>
+                </div>
+                <div class="video-container" style="margin-top: 20px;">
+                    <video controls width="100%">
+                        <source src="videos/3000/shouqiang3.mp4" type="video/mp4">
+                        您的浏览器不支持HTML5视频播放。
+                    </video>
+                    <p class="video-caption">试验四：写实手枪模型生成过程（第三部分）</p>
                 </div>
             </div>
 
@@ -444,6 +500,21 @@
                     <li>圆形物品生成容易出现棱角</li>
                     <li>大部分模型的底面凹凸不平</li>
                 </ul>
+                
+                <div class="screenshot-gallery">
+                    <div class="screenshot-item">
+                        <img src="image/3000AI生成/3000_4.png" alt="AI生成模型截图1">
+                        <div class="screenshot-caption">模型生成截图一</div>
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="image/3000AI生成/3000_2.png" alt="AI生成模型截图2">
+                        <div class="screenshot-caption">模型生成截图二</div>
+                    </div>
+                    <div class="screenshot-item">
+                        <img src="image/3000AI生成/3000_1.png" alt="AI生成模型截图3">
+                        <div class="screenshot-caption">模型生成截图三</div>
+                    </div>
+                </div>
 
                 <h3>适用场景</h3>
                 <ul>

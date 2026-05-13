@@ -6,9 +6,8 @@
     <title>音乐类3D游戏开发日志 - 巴拿拿猫的个人网站</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* 博客详情页样式 */
         body {
-            background: #121212;
+            background: linear-gradient(180deg, #1a2534 0%, #121a26 100%);
             color: #e0e0e0;
         }
         
@@ -26,35 +25,36 @@
         .blog-detail-title {
             font-size: 2.5rem;
             margin-bottom: 1rem;
-            color: #f0f0f0;
-            text-shadow: 0 0 10px rgba(244, 67, 54, 0.5);
+            color: #E0F0FF;
+            text-shadow: 0 0 10px rgba(80, 160, 255, 0.5);
         }
         
         .blog-detail-meta {
             font-size: 1rem;
-            color: #9e9e9e;
+            color: #A8D4FF;
             margin-bottom: 2rem;
         }
         
         .blog-content {
-            background: #1e1e1e;
+            background: linear-gradient(135deg, #1a2a40 0%, #253a5a 100%);
             border-radius: 12px;
             padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 2px solid #333;
+            box-shadow: 0 10px 30px rgba(0, 30, 60, 0.5), 0 0 30px rgba(60, 140, 220, 0.1);
+            border: 2px solid rgba(100, 180, 255, 0.4);
         }
         
         .section-title {
             font-size: 1.5rem;
             margin-bottom: 1.5rem;
-            color: #F44336;
-            border-bottom: 2px solid #F44336;
+            color: #4da0ff;
+            border-bottom: 2px solid #3d7cc9;
             padding-bottom: 0.5rem;
         }
         
         .section-content {
             margin-bottom: 2rem;
             line-height: 1.6;
+            color: #C8E0FF;
         }
         
         .yaogun-features {
@@ -65,41 +65,48 @@
         }
         
         .feature-item {
-            background: #252525;
+            background: linear-gradient(135deg, #253a5a 0%, #1a2a40 100%);
             border-radius: 8px;
             padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(0, 30, 60, 0.4);
+            border: 1px solid rgba(80, 160, 255, 0.3);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 30, 60, 0.5);
         }
         
         .feature-item h4 {
             margin-top: 0;
-            color: #f0f0f0;
+            color: #E0F0FF;
             margin-bottom: 0.5rem;
         }
         
         .feature-item p {
-            color: #9e9e9e;
+            color: #A8D4FF;
             font-size: 0.9rem;
         }
         
         .btn-back {
             display: inline-block;
             padding: 0.75rem 1.5rem;
-            background: #F44336;
-            color: #f0f0f0;
+            background: linear-gradient(135deg, #3d7cc9 0%, #4da0ff 100%);
+            color: #fff;
             text-decoration: none;
             border-radius: 50px;
             font-weight: bold;
             transition: all 0.3s ease;
             margin-top: 2rem;
-            border: 2px solid #F44336;
+            border: 2px solid rgba(80, 160, 255, 0.6);
         }
         
         .btn-back:hover {
             transform: translateY(-3px);
-            background: #EF5350;
-            color: #f0f0f0;
-            box-shadow: 0 10px 25px rgba(244, 67, 54, 0.4);
+            background: linear-gradient(135deg, #4da0ff 0%, #60b0ff 100%);
+            color: #fff;
+            box-shadow: 0 10px 25px rgba(60, 140, 220, 0.4);
         }
         
         @media (max-width: 768px) {
@@ -114,10 +121,8 @@
     </style>
 </head>
 <body>
-    <!-- 背景灰烬效果 -->
     <div class="ash-container" id="ashContainer"></div>
     
-    <!-- 跟随导航 -->
     <nav class="side-nav" id="sideNav">
         <div class="side-nav-panel">
             <div class="nav-header">
@@ -188,10 +193,9 @@
     <main>
         <div class="blog-detail-container">
             <div class="blog-detail-header">
-                <h1 class="blog-detail-title">音乐类3D游戏开发日志</h1>
+                <h1 class="blog-detail-title">【废案】音乐类3D游戏开发日志</h1>
                 <div class="blog-detail-meta">
-                    <span>发布日期：2024年11月18日</span> | 
-                    <span>阅读次数：0</span> | 
+                    <span>发布日期：2025年11月18日</span> | 
                     <span>分类：Unity</span>
                 </div>
             </div>
@@ -199,8 +203,9 @@
             <div class="blog-content">
                 <h2 class="section-title">项目介绍</h2>
                 <div class="section-content">
-                    <p>yaogun项目是一个基于Unity引擎开发的音乐节奏游戏项目。该项目旨在探索音乐与游戏的结合，通过节奏点击和音乐可视化来创造沉浸式的游戏体验。</p>
-                    <p>通过这个项目，我深入学习了音乐游戏的设计原理、节奏检测算法以及音乐可视化技术，为后续的游戏开发项目打下了坚实的基础。</p>
+                    <p><strong>【废案说明】</strong>该项目为CrazyWeb开发比赛的参赛项目，原计划开发一款大型3D拳皇多人对战类型的音乐游戏。由于策划撰写的策划案过于宏大，超出了短短几天开发比赛的时间限制，导致队伍在开发中途解散，项目最终未能完成。</p>
+                    <p>在该项目中，我担任3D美术岗位，负责角色和场景的设计与制作。美术风格原计划对标《罪恶装备》系列，追求华丽的视觉效果和独特的艺术风格。</p>
+                    <p>原计划是一个基于Unity引擎开发的音乐节奏游戏项目，旨在探索音乐与游戏的结合，通过节奏点击和音乐可视化来创造沉浸式的游戏体验。</p>
                 </div>
                 
                 <h2 class="section-title">技术栈</h2>
@@ -285,7 +290,6 @@
                 
                 <h2 class="section-title">开发心得</h2>
                 <div class="section-content">
-                    <p>通过yaogun项目的开发，我深刻体会到：</p>
                     <ul>
                         <li>音乐游戏是一种独特的游戏类型，需要音乐与游戏玩法的完美结合</li>
                         <li>节奏检测是音乐游戏的核心技术，需要准确的算法支持</li>
@@ -306,12 +310,12 @@
             <div class="footer-section">
                 <h3>BananaCatOnl1</h3>
                 <p>探索技术与创作的边界</p>
-                <p>记录开发者的成长历程</p>
+                <p>这个小家正在装修中噢</p>
             </div>
             <div class="footer-section">
                 <h3>联系方式</h3>
                 <p>邮箱: 19859256157@163.com</p>
-                <p>所在地: 福建厦门</p>
+                <p>所在地:广东深圳（毕业旅行中，位置不固定）</p>
             </div>
             <div class="footer-section">
                 <h3>社交媒体</h3>
