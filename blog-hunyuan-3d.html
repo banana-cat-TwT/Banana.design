@@ -13,8 +13,8 @@
             --highlight: #e26d8c;
             --highlight-bright: #ff83b9;
             --highlight-glow: rgba(232, 58, 157, 0.3);
-            --dark-bg: #1a3235;
-            --dark-bg-deep: #0f1928;
+            --dark-bg: #335c62;
+            --dark-bg-deep: #4c888b;
             --light-bg: #B8D4A8;
             --light-bg-soft: #D4E8CC;
         }
@@ -139,7 +139,8 @@
 
         .screenshot-item img {
             width: 100%;
-            height: auto;
+            height: 280px;
+            object-fit: cover;
             display: block;
         }
 
@@ -173,7 +174,7 @@
             position: fixed;
             width: 30px;
             height: 30px;
-            background-image: url('images/guangb.png');
+            background-image: url('image/guangb.png');
             background-size: contain;
             background-repeat: no-repeat;
             pointer-events: none;
@@ -184,6 +185,28 @@
 
         .custom-cursor.clicking {
             transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(232, 125, 58, 0.8) 0%, rgba(232, 125, 58, 0.4) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 0.8s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3);
+            }
         }
 
         .highlight-box {
@@ -223,11 +246,11 @@
                 
                 <div class="screenshot-grid">
                     <div class="screenshot-item">
-                        <img src="images/hunyuanComfyUI/屏幕截图 2026-05-06 170315.png" alt="初始界面">
+                        <img src="image/hunyuanComfyUI/屏幕截图 2026-05-06 170315.png" alt="初始界面">
                         <div class="screenshot-caption">混元3D管线初始界面</div>
                     </div>
                     <div class="screenshot-item">
-                        <img src="images/hunyuanComfyUI/屏幕截图 2026-05-06 170536.png" alt="单视图生成">
+                        <img src="image/hunyuanComfyUI/屏幕截图 2026-05-06 170536.png" alt="单视图生成">
                         <div class="screenshot-caption">单视图生成效果</div>
                     </div>
                 </div>
@@ -243,11 +266,11 @@
                 
                 <div class="screenshot-grid">
                     <div class="screenshot-item">
-                        <img src="images/hunyuanComfyUI/屏幕截图 2026-05-07 103548.png" alt="多视图尝试">
+                        <img src="image/hunyuanComfyUI/屏幕截图 2026-05-07 103548.png" alt="多视图尝试">
                         <div class="screenshot-caption">多视图与条件合并实验</div>
                     </div>
                     <div class="screenshot-item">
-                        <img src="images/hunyuanComfyUI/屏幕截图 2026-05-07 110019.png" alt="节点连接">
+                        <img src="image/hunyuanComfyUI/屏幕截图 2026-05-07 110019.png" alt="节点连接">
                         <div class="screenshot-caption">复杂的节点连接</div>
                     </div>
                 </div>
@@ -263,11 +286,11 @@
                 
                 <div class="screenshot-grid">
                     <div class="screenshot-item">
-                        <img src="images/hunyuanComfyUI/屏幕截图 2026-05-07 113508.png" alt="简化节点">
+                        <img src="image/hunyuanComfyUI/屏幕截图 2026-05-07 113508.png" alt="简化节点">
                         <div class="screenshot-caption">节点简化过程</div>
                     </div>
                     <div class="screenshot-item">
-                        <img src="images/hunyuanComfyUI/屏幕截图 2026-05-07 114446.png" alt="最终流程">
+                        <img src="image/hunyuanComfyUI/屏幕截图 2026-05-07 114446.png" alt="最终流程">
                         <div class="screenshot-caption">最终简化的节点流程</div>
                     </div>
                 </div>
@@ -301,16 +324,21 @@
         </div>
 
         <div style="text-align: center; margin-top: 2rem;">
-            <button class="back-btn" onclick="history.back()">← 返回</button>
+            <button class="back-btn" onclick="history.back()">返回</button>
         </div>
     </div>
 
     <script>
         const cursor = document.getElementById('customCursor');
+        let trailCount = 0;
+        const maxTrails = 20;
+
         if (cursor) {
             document.addEventListener('mousemove', function(e) {
                 cursor.style.left = e.clientX + 'px';
                 cursor.style.top = e.clientY + 'px';
+                
+                createTrail(e.clientX, e.clientY);
             });
             document.addEventListener('mousedown', function() {
                 cursor.classList.add('clicking');
@@ -318,6 +346,25 @@
             document.addEventListener('mouseup', function() {
                 cursor.classList.remove('clicking');
             });
+        }
+
+        function createTrail(x, y) {
+            if (trailCount >= maxTrails) return;
+
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            trail.style.width = Math.random() * 8 + 4 + 'px';
+            trail.style.height = trail.style.width;
+            document.body.appendChild(trail);
+
+            trailCount++;
+
+            setTimeout(() => {
+                trail.remove();
+                trailCount--;
+            }, 800);
         }
     </script>
 </body>
