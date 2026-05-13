@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>zbrush zwarp超写实人物制作流程日志 - 我的作品集</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary: #3ca9c9;
+            --secondary: #2f97bd;
+            --accent: #3f6ca6;
+            --dark-bg: #315482;
+            --dark-bg-deep: #465261;
+            --light-bg: #e8f4f8;
+            --light-bg-soft: #f0f6fa;
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--dark-bg-deep) 0%, var(--dark-bg) 100%);
+            background-attachment: fixed;
+            color: var(--light-bg-soft);
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            cursor: none;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: -10%;
+            width: 120%;
+            height: 100%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(60, 169, 201, 0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(47, 151, 189, 0.06) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .blog-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--light-bg-soft);
+        }
+
+        .blog-section {
+            background: rgba(70, 82, 97, 0.6);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(60, 169, 201, 0.3);
+        }
+
+        .blog-section h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .blog-section h4 {
+            color: var(--secondary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .step-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-list li {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(63, 108, 166, 0.2);
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .step-list li::before {
+            content: "✓ ";
+            color: var(--primary);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .highlight-box {
+            background: rgba(60, 169, 201, 0.15);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .highlight-box strong {
+            color: var(--secondary);
+        }
+
+        .warning-box {
+            background: rgba(47, 151, 189, 0.2);
+            border-left: 4px solid var(--secondary);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .warning-box strong {
+            color: var(--primary);
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: linear-gradient(145deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(60, 169, 201, 0.4);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(60, 169, 201, 0.6);
+            background: linear-gradient(145deg, var(--secondary), var(--primary));
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            background-image: url('image/guangb.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(60, 169, 201, 0.8) 0%, rgba(63, 108, 166, 0.4) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 0.8s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3);
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            border: 1px solid rgba(60, 169, 201, 0.3);
+            padding: 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(63, 108, 166, 0.3);
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        td {
+            background: rgba(49, 84, 130, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="custom-cursor" id="customCursor"></div>
+    <div class="blog-detail-container">
+
+        <div class="blog-content">
+            <section class="blog-section">
+                <h3>zbrush zwarp超写实人物制作概述</h3>
+                <p>这篇日志记录了我2024年使用zbrush的zwarp插件制作超写实人物的完整流程。zwarp是一个强大的贴图投射工具，可以将高精度的超写实拍图直接投射到3d模型表面，大大提升人物的真实感和细节表现。</p>
+            </section>
+
+            <section class="blog-section">
+                <h3>一、前期准备工作</h3>
+                
+                <h4>1.1 超写实贴图资源准备</h4>
+                <p>在开始使用zwarp进行投射之前，首先需要准备好高质量的超写实贴图资源，这是整个流程的基础！</p>
+                
+                <div class="highlight-box">
+                    <strong>必须准备的贴图类型：</strong><br>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>基础颜色贴图（color/albedo）- 提供皮肤的基础色调</li>
+                        <li>法线贴图（normal map）- 添加表面细微凹凸细节</li>
+                        <li>粗糙度贴图（roughness）- 控制皮肤的光泽质感</li>
+                        <li>高度贴图（height/displacement）- 用于增加表面起伏细节</li>
+                        <li>环境光遮蔽贴图（ao）- 增强细节和真实感</li>
+                    </ul>
+                </div>
+
+                <h4>1.2 贴图质量要求</h4>
+                <table>
+                    <tr><th>贴图属性</th><th>推荐规格</th></tr>
+                    <tr><td>分辨率</td><td>4k (4096x4096) 或更高</td></tr>
+                    <tr><td>格式</td><td>png 或 tiff</td></tr>
+                    <tr><td>纹理质量</td><td>超写实级别，毛孔、皱纹等细节清晰可见</td></tr>
+                </table>
+
+                <div class="warning-box">
+                    <strong>💡 电脑配置提示：</strong>根据自己电脑性能选择合适面数的模型进行投射，低配电脑可分次投射避免卡顿。
+                </div>
+            </section>
+
+            <section class="blog-section">
+                <h3>二、模型准备阶段</h3>
+                
+                <h4>2.1 基础模型选择</h4>
+                <ul class="step-list">
+                    <li>选择面数合适的基础模型</li>
+                    <li>确保模型uv已经展开好，没有拉伸和重叠</li>
+                    <li>检查模型拓扑是否良好</li>
+                    <li>确保模型比例正确，符合人体结构</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>我的经验：</strong>即使电脑配置一般，也要保持面部有足够细分，这样投射出来的细节才有地方附着。
+                </div>
+
+                <h4>2.2 uv准备工作</h4>
+                <ul class="step-list">
+                    <li>检查uv是否完整覆盖整个模型</li>
+                    <li>确保uv壳之间有足够间距</li>
+                    <li>重要部位（面部）可以分配更多uv空间</li>
+                    <li>保持uv排布整齐</li>
+                </ul>
+            </section>
+
+            <section class="blog-section">
+                <h3>三、zwarp插件使用流程</h3>
+                
+                <h4>3.1 zwarp插件安装与基本设置</h4>
+                <ul class="step-list">
+                    <li>将zwarp插件文件放到zbrush插件目录</li>
+                    <li>启动zbrush，在插件菜单中找到zwarp</li>
+                    <li>打开插件面板，熟悉基本操作界面</li>
+                    <li>根据需要调整插件的基础设置</li>
+                </ul>
+
+                <h4>3.2 导入贴图资源</h4>
+                <ul class="step-list">
+                    <li>在zwarp面板中导入准备好的超写实贴图</li>
+                    <li>确保贴图方向正确，没有颠倒</li>
+                    <li>调整贴图的对齐方式，匹配模型朝向</li>
+                    <li>可以先导入颜色贴图作为预览参考</li>
+                </ul>
+
+                <h4>3.3 模型与贴图对齐</h4>
+                <ul class="step-list">
+                    <li>将模型调整到合适的视角</li>
+                    <li>使用zwarp的对齐工具匹配模型和贴图</li>
+                    <li>调整透明度，方便观察对齐效果</li>
+                    <li>关键特征点对齐（眼睛、鼻子、嘴巴位置要准）</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>对齐技巧：</strong>建议先对齐眼睛和嘴巴这些关键特征，然后再调整其他部位。可以使用多个视角进行对齐。
+                </div>
+
+                <h4>3.4 开始投射贴图</h4>
+                <ul class="step-list">
+                    <li>确认对齐无误后，开始投射操作</li>
+                    <li>选择要投射的贴图类型（先从颜色开始）</li>
+                    <li>设置投射强度和混合模式</li>
+                    <li>执行投射，观察效果</li>
+                    <li>根据结果调整参数，再次投射</li>
+                </ul>
+
+                <div class="warning-box">
+                    <strong>⚠️ 投射注意事项：</strong><br>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>投射前保存项目！投射过程中可能会卡顿或崩溃</li>
+                        <li>每次投射后检查效果，不满意立即撤销</li>
+                        <li>投射过程中不要进行其他操作，耐心等待</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="blog-section">
+                <h3>四、投射后调整与优化</h3>
+                
+                <h4>4.1 检查投射效果</h4>
+                <ul class="step-list">
+                    <li>从不同视角观察模型，看贴图是否正确</li>
+                    <li>检查关键区域（面部、手部）的细节</li>
+                    <li>观察贴图接缝是否明显</li>
+                    <li>确认贴图拉伸情况</li>
+                </ul>
+
+                <h4>4.2 手工修正</h4>
+                <ul class="step-list">
+                    <li>对于投射不理想的区域进行手工绘制</li>
+                    <li>使用zbrush的画笔工具修补细节</li>
+                    <li>调整颜色和明暗，让过渡更自然</li>
+                    <li>添加一些手工雕刻的细节，增加真实感</li>
+                </ul>
+
+                <h4>4.3 贴图导出与后续</h4>
+                <ul class="step-list">
+                    <li>确认效果满意后，导出投射好的贴图</li>
+                    <li>可以导出不同通道的贴图</li>
+                    <li>在其他软件中（substance painter等）继续优化</li>
+                    <li>最后导入引擎测试效果</li>
+                </ul>
+            </section>
+
+            <section class="blog-section">
+                <h3>五、常见问题与解决方案</h3>
+                
+                <table>
+                    <tr><th>问题</th><th>解决方案</th></tr>
+                    <tr><td>投射后贴图模糊</td><td>增加模型细分，使用更高清贴图</td></tr>
+                    <tr><td>贴图位置错位</td><td>回到对齐步骤重新调整</td></tr>
+                    <tr><td>投射过程中崩溃</td><td>使用更低面数模型，分次投射</td></tr>
+                    <tr><td>贴图接缝明显</td><td>调整uv，使用多个视角投射</td></tr>
+                    <tr><td>细节丢失</td><td>调整投射强度和混合模式</td></tr>
+                </table>
+
+                <div class="highlight-box">
+                    <strong>我的建议：</strong>遇到问题不要慌！先保存项目，然后逐步排查。可以尝试降低设置，或者用更简单的模型测试。
+                </div>
+            </section>
+
+            <section class="blog-section">
+                <h3>六、个人心得与总结</h3>
+                
+                <h4>6.1 zwarp使用心得</h4>
+                <p>使用zwarp插件制作超写实人物，让我深刻体会到了工具的重要性。相比传统的手工绘制，投射贴图的方式效率提升太多了！</p>
+                
+                <ul class="step-list">
+                    <li>准备工作比操作更重要，贴图质量决定最终效果</li>
+                    <li>好的基础模型能让投射事半功倍</li>
+                    <li>不要完全依赖自动投射，手工调整很重要</li>
+                    <li>多练习，找到最适合自己的参数组合</li>
+                </ul>
+
+                <h4>6.2 给初学者的建议</h4>
+                <div class="highlight-box">
+                    <strong>我的建议：</strong><br>
+                    <ul style="margin-top: 10px; padding-left: 20px;">
+                        <li>先从简单的模型开始练习，熟悉zwarp的基本操作</li>
+                        <li>不要一开始就追求完美，先完成再优化</li>
+                        <li>多做测试，了解不同参数的影响</li>
+                        <li>记录自己的工作流程，形成个人经验</li>
+                    </ul>
+                </div>
+            </section>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="back-btn" onclick="history.back()">← 返回开发日志</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cursor = document.getElementById('customCursor');
+        let trailCount = 0;
+        const maxTrails = 20;
+
+        if (cursor) {
+            document.addEventListener('mousemove', function(e) {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                createTrail(e.clientX, e.clientY);
+            });
+            document.addEventListener('mousedown', function() {
+                cursor.classList.add('clicking');
+            });
+            document.addEventListener('mouseup', function() {
+                cursor.classList.remove('clicking');
+            });
+        }
+
+        function createTrail(x, y) {
+            if (trailCount >= maxTrails) return;
+
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            trail.style.width = Math.random() * 8 + 4 + 'px';
+            trail.style.height = trail.style.width;
+            document.body.appendChild(trail);
+
+            trailCount++;
+
+            setTimeout(() => {
+                trail.remove();
+                trailCount--;
+            }, 800);
+        }
+    </script>
+</body>
+</html>
