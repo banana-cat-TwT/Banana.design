@@ -9242,3 +9242,50 @@ html {
     font-size: 0.85rem;
     line-height: 1.4;
 }
+
+/* 粉红配色博客卡片样式 */
+.blog-card-pink {
+    background: linear-gradient(135deg, #FFE4EC 0%, #FFD1DC 50%, #FFB6C1 100%);
+    border: 2px solid #FF69B4;
+    box-shadow: 0 8px 25px rgba(255, 105, 180, 0.2), 0 0 0 1px rgba(255, 182, 193, 0.3);
+}
+
+.blog-card-pink:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(255, 105, 180, 0.35), 0 0 20px rgba(255, 182, 193, 0.5);
+    border-color: #FF1493;
+}
+
+.blog-card-pink .blog-image {
+    background: linear-gradient(135deg, #FFC0CB 0%, #FFB6C1 100%);
+}
+
+.blog-card-pink .blog-content {
+    background: linear-gradient(180deg, #FFF5F8 0%, #FFE4EC 100%);
+}
+
+.blog-card-pink .blog-meta .blog-date {
+    color: #DB7093;
+    background: rgba(255, 182, 193, 0.3);
+}
+
+.blog-card-pink .blog-content h3 {
+    color: #C71585;
+    text-shadow: 0 0 10px rgba(255, 105, 180, 0.3);
+}
+
+.blog-card-pink .blog-content p {
+    color: #8B4513;
+}
+
+.blog-card-pink .read-more {
+    background: linear-gradient(135deg, #FF69B4 0%, #FF1493 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 105, 180, 0.4);
+}
+
+.blog-card-pink .read-more:hover {
+    background: linear-gradient(135deg, #FF1493 0%, #C71585 100%);
+    box-shadow: 0 6px 20px rgba(255, 105, 180, 0.6);
+    transform: translateY(-2px);
+}
