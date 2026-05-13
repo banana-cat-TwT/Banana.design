@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网易Y3编辑器使用体验 - 我的作品集</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary: #e74c3c;
+            --secondary: #c0392b;
+            --accent: #e67e22;
+            --dark-bg: #2c2c2c;
+            --dark-bg-deep: #1a1a1a;
+            --light-bg: #f5f5f5;
+            --light-bg-soft: #e8e8e8;
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--dark-bg-deep) 0%, var(--dark-bg) 100%);
+            background-attachment: fixed;
+            color: var(--light-bg-soft);
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            cursor: none;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: -10%;
+            width: 120%;
+            height: 100%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(231, 76, 60, 0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(230, 126, 34, 0.06) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .blog-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .blog-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--primary);
+            letter-spacing: 2px;
+            text-shadow: 0 0 20px rgba(231, 76, 60, 0.5);
+        }
+
+        .blog-subtitle {
+            font-size: 1.2rem;
+            color: var(--accent);
+            margin-bottom: 20px;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: var(--light-bg);
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .blog-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--light-bg-soft);
+        }
+
+        .blog-section {
+            background: rgba(44, 44, 44, 0.9);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 2px solid rgba(231, 76, 60, 0.3);
+        }
+
+        .blog-section h3 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .blog-section h4 {
+            color: var(--accent);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .step-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .step-list li {
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: rgba(231, 76, 60, 0.1);
+            border-radius: 8px;
+            border-left: 3px solid var(--primary);
+        }
+
+        .step-list li::before {
+            content: "✓ ";
+            color: var(--primary);
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .highlight-box {
+            background: rgba(231, 76, 60, 0.15);
+            border-left: 4px solid var(--primary);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .highlight-box strong {
+            color: var(--accent);
+        }
+
+        .warning-box {
+            background: rgba(230, 126, 34, 0.15);
+            border-left: 4px solid var(--accent);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .warning-box strong {
+            color: var(--primary);
+        }
+
+        .back-btn {
+            display: inline-block;
+            background: linear-gradient(145deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(231, 76, 60, 0.6);
+            background: linear-gradient(145deg, var(--secondary), var(--primary));
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            background-image: url('image/guangb.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(231, 76, 60, 0.8) 0%, rgba(230, 126, 34, 0.4) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 0.8s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3);
+            }
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        th, td {
+            border: 1px solid rgba(231, 76, 60, 0.3);
+            padding: 1rem;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(231, 76, 60, 0.2);
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        td {
+            background: rgba(44, 44, 44, 0.5);
+        }
+    </style>
+</head>
+<body>
+    <div class="custom-cursor" id="customCursor"></div>
+    <div class="blog-detail-container">
+
+        <div class="blog-content">
+            <section class="blog-section">
+                <h3>网易Y3编辑器使用体验</h3>
+                <p>这篇日志记录了2024年使用网易Y3编辑器制作古风游戏的使用体验。Y3编辑器是一个游戏开发工具，让我可以快速把自己的3D模型资源放进去做游戏。</p>
+            </section>
+
+            <section class="blog-section">
+                <h3>一、基本使用情况</h3>
+                
+                <h4>1.1 使用时间</h4>
+                <table>
+                    <tr><th>内容</th><th>说明</th></tr>
+                    <tr><td>使用时间</td><td>2024年</td></tr>
+                    <tr><td>编辑器</td><td>网易Y3编辑器</td></tr>
+                    <tr><td>游戏类型</td><td>古风题材游戏</td></tr>
+                </table>
+
+                <h4>1.2 主要功能使用</h4>
+                <ul class="step-list">
+                    <li>把自己做的3D模型导入编辑器作为主控角色</li>
+                    <li>把资源模型也放进编辑器里</li>
+                    <li>做了几个动作替换</li>
+                    <li>把动作文件导入编辑器</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>最方便的一点</strong><br>
+                    <p>直接把模型和动作放进编辑器就行，不用写人物操控脚本！编辑器已经处理好了，只需要把动作导进去就能用，非常省事。</p>
+                </div>
+            </section>
+
+            <section class="blog-section">
+                <h3>二、编辑器优点</h3>
+                
+                <h4>2.1 资源库丰富</h4>
+                <p>编辑器自己的库里面模型挺多的，很多现成的素材可以直接用。</p>
+                <table>
+                    <tr><th>优点</th><th>说明</th></tr>
+                    <tr><td>模型资源多</td><td>库里面有很多现成的模型可以用</td></tr>
+                    <tr><td>不用写脚本</td><td>人物操控不需要自己写脚本，编辑器内置了</td></tr>
+                    <tr><td>导入方便</td><td>自己的3D模型和动作都能导进去</td></tr>
+                    <tr><td>上手快</td><td>操作比较简单，容易入门</td></tr>
+                </table>
+
+                <h4>2.2 使用流程</h4>
+                <ul class="step-list">
+                    <li>导入自己制作的3D模型作为主控角色</li>
+                    <li>准备好需要的动作文件</li>
+                    <li>把动作导入编辑器进行替换</li>
+                    <li>设置角色的动作和操控</li>
+                    <li>测试游戏效果</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>使用感受</strong><br>
+                    <p>整体用下来感觉挺方便的，特别是对不想写太多代码的人来说很友好。基本的游戏框架编辑器都搭好了，只需要把自己的资源放进去就行。</p>
+                </div>
+            </section>
+
+            <section class="blog-section">
+                <h3>三、编辑器局限</h3>
+                
+                <h4>3.1 自定义游戏比较麻烦</h4>
+                <table>
+                    <tr><th>局限</th><th>说明</th></tr>
+                    <tr><td>自由度限制</td><td>自定义游戏的话会比较麻烦一些</td></tr>
+                    <tr><td>框架限制</td><td>编辑器的框架比较固定</td></tr>
+                    <tr><td>深度定制难</td><td>想要做很特别的自定义功能不太容易</td></tr>
+                </table>
+
+                <div class="warning-box">
+                    <strong>局限感受</strong><br>
+                    <p>虽然方便，但是局限也比较大。如果只是想做个简单的游戏，用现成的素材没问题，但想要做完全自定义的游戏，就会觉得麻烦一点。</p>
+                </div>
+            </section>
+
+            <section class="blog-section">
+                <h3>四、个人总结与建议</h3>
+                
+                <h4>4.1 适用人群</h4>
+                <table>
+                    <tr><th>适用场景</th><th>推荐度</th></tr>
+                    <tr><td>新手入门游戏开发</td><td>⭐⭐⭐⭐</td></tr>
+                    <tr><td>使用现成资源做简单游戏</td><td>⭐⭐⭐⭐⭐</td></tr>
+                    <tr><td>不想写太多代码的开发者</td><td>⭐⭐⭐⭐</td></tr>
+                    <tr><td>高度自定义游戏</td><td>⭐⭐</td></tr>
+                </table>
+
+                <h4>4.2 个人建议</h4>
+                <ul class="step-list">
+                    <li>可以试着玩玩看这个编辑器，体验一下快速做游戏的感觉</li>
+                    <li>适合用来做原型或者简单的游戏项目</li>
+                    <li>如果是想要做很复杂的自定义游戏，可能需要考虑其他工具</li>
+                    <li>利用好编辑器里的资源库，能节省很多时间</li>
+                </ul>
+
+                <div class="highlight-box">
+                    <strong>总体评价</strong><br>
+                    <p>Y3编辑器是一个不错的入门级游戏开发工具，对于新手来说很友好。虽然有一定局限，但用来做简单的游戏或者学习游戏开发流程，还是值得试试的。</p>
+                </div>
+            </section>
+
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="back-btn" onclick="history.back()">← 返回开发日志</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cursor = document.getElementById('customCursor');
+        let trailCount = 0;
+        const maxTrails = 20;
+
+        if (cursor) {
+            document.addEventListener('mousemove', function(e) {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                createTrail(e.clientX, e.clientY);
+            });
+            document.addEventListener('mousedown', function() {
+                cursor.classList.add('clicking');
+            });
+            document.addEventListener('mouseup', function() {
+                cursor.classList.remove('clicking');
+            });
+        }
+
+        function createTrail(x, y) {
+            if (trailCount >= maxTrails) return;
+
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            trail.style.width = Math.random() * 8 + 4 + 'px';
+            trail.style.height = trail.style.width;
+            document.body.appendChild(trail);
+
+            trailCount++;
+
+            setTimeout(() => {
+                trail.remove();
+                trailCount--;
+            }, 800);
+        }
+    </script>
+</body>
+</html>
