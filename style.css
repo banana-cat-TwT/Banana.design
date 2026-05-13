@@ -9299,8 +9299,70 @@ html {
 
 .blog-card-game:hover {
     transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 15px 40px rgba(76, 201, 240, 0.35), 0 0 20px rgba(76, 201, 240, 0.5);
+    box-shadow: 0 15px 40px rgba(76, 201, 240, 0.35), 0 0 20px rgba(114, 239, 221, 0.5);
     border-color: #72efdd;
+}
+
+/* Unity卡片样式 */
+.blog-card-unity {
+    background: linear-gradient(135deg, #D93B58 0%, #D95F5F 100%);
+    border: 2px solid #F29F8C;
+    box-shadow: 0 8px 25px rgba(217, 59, 88, 0.3), 0 0 0 1px rgba(242, 159, 140, 0.4);
+}
+
+.blog-card-unity:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(217, 59, 88, 0.45), 0 0 20px rgba(242, 159, 140, 0.6);
+    border-color: #F2C49B;
+}
+
+.blog-card-unity .blog-image {
+    background: linear-gradient(135deg, #F29F8C 0%, #F2C49B 100%);
+}
+
+.blog-card-unity .blog-content {
+    background: linear-gradient(180deg, rgba(217, 95, 95, 0.95) 0%, rgba(217, 59, 88, 0.95) 100%);
+}
+
+.blog-card-unity .blog-meta .blog-date {
+    background: rgba(242, 235, 213, 0.15);
+}
+
+.blog-card-unity .read-more:hover {
+    background: linear-gradient(135deg, #D95F5F 0%, #D93B58 100%);
+    box-shadow: 0 6px 20px rgba(217, 59, 88, 0.6);
+    transform: translateY(-2px);
+}
+
+/* 美术卡片样式 */
+.blog-card-fine-art {
+    background: linear-gradient(135deg, #7A6090 0%, #A794C1 100%);
+    border: 2px solid #E9AEC1;
+    box-shadow: 0 8px 25px rgba(122, 96, 144, 0.3), 0 0 0 1px rgba(233, 174, 193, 0.4);
+}
+
+.blog-card-fine-art:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(122, 96, 144, 0.45), 0 0 20px rgba(233, 174, 193, 0.6);
+    border-color: #CE7692;
+}
+
+.blog-card-fine-art .blog-image {
+    background: linear-gradient(135deg, #E9AEC1 0%, #E7D5E5 100%);
+}
+
+.blog-card-fine-art .blog-content {
+    background: linear-gradient(180deg, rgba(167, 148, 193, 0.95) 0%, rgba(122, 96, 144, 0.95) 100%);
+}
+
+.blog-card-fine-art .blog-meta .blog-date {
+    background: rgba(231, 213, 229, 0.15);
+}
+
+.blog-card-fine-art .read-more:hover {
+    background: linear-gradient(135deg, #CE7692 0%, #7A6090 100%);
+    box-shadow: 0 6px 20px rgba(122, 96, 144, 0.6);
+    transform: translateY(-2px);
 }
 
 .blog-card-game .blog-image {
