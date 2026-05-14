@@ -4696,6 +4696,38 @@ nav ul li a:hover::after {
     padding-bottom: 0.5rem;
 }
 
+.category-tabs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.tab-btn {
+    padding: 0.75rem 2rem;
+    border: 2px solid #b86800;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #b86800 0%, #cc7500 100%);
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(184, 104, 0, 0.5);
+}
+
+.tab-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(184, 104, 0, 0.5);
+    background: linear-gradient(135deg, #a85c00 0%, #b86800 100%);
+}
+
+.tab-btn.active {
+    background: linear-gradient(135deg, #a85c00 0%, #cc6600 100%);
+    border-color: #b86800;
+    color: #fff;
+    box-shadow: 0 0 15px rgba(184, 104, 0, 0.4), 0 0 30px rgba(184, 104, 0, 0.5);
+}
+
 .experience-container {
     display: flex;
     flex-direction: column;

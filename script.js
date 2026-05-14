@@ -1371,6 +1371,18 @@ function closeAboutDetail() {
     }
 }
 
+// 切换项目经历分类
+function switchCategory(category) {
+    const tabs = document.querySelectorAll('.tab-btn');
+    const contents = document.querySelectorAll('.category-content');
+    
+    tabs.forEach(tab => tab.classList.remove('active'));
+    document.querySelector(`.tab-btn[onclick="switchCategory('${category}')"]`).classList.add('active');
+    
+    contents.forEach(content => content.style.display = 'none');
+    document.getElementById(`${category}-content`).style.display = 'block';
+}
+
 // 点击模态框外部关闭
 window.onclick = function(event) {
     const modal = document.getElementById('workDetailModal');
