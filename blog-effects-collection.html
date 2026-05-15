@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视觉效果开发合集 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: #FBFFBF;
+            color: #333;
+        }
+        
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #B399FF;
+            text-shadow: 0 0 10px rgba(179, 153, 255, 0.5);
+        }
+        
+        .blog-detail-subtitle {
+            font-size: 1.2rem;
+            color: #FF9791;
+            margin-bottom: 1rem;
+        }
+        
+        .blog-detail-meta {
+            font-size: 1rem;
+            color: #666;
+        }
+        
+        .blog-content {
+            background: #FFFFD4;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            border: 2px solid #ABC5FF;
+        }
+        
+        .section-title, .blog-content h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #B399FF !important;
+            border-bottom: 2px solid #FF9791;
+            padding-bottom: 0.5rem;
+            text-align: left;
+        }
+        
+        .subsection-title {
+            font-size: 1.25rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #FF9791;
+        }
+        
+        .section-content {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+        
+        .feature-item {
+            background: #FBFFBF;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ABC5FF;
+        }
+        
+        .feature-item h4 {
+            margin-top: 0;
+            color: #B399FF;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature-item p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .video-gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .video-item {
+            background: #FBFFBF;
+            border: 1px solid #ABC5FF;
+            border-radius: 12px;
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .video-item:hover {
+            border-color: #B399FF;
+            box-shadow: 0 6px 25px rgba(179, 153, 255, 0.2);
+            transform: translateY(-3px);
+        }
+        
+        .video-item h4 {
+            margin: 0 0 0.5rem 0;
+            color: #B399FF;
+            font-size: 1.1rem;
+        }
+        
+        .video-item p {
+            margin: 0 0 1rem 0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .video-container {
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 16 / 9;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #ABC5FF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .video-container video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #FF9791, #B399FF);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #FF9791;
+        }
+        
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, #B399FF, #FF9791);
+            color: #fff;
+            box-shadow: 0 10px 25px rgba(179, 153, 255, 0.4);
+        }
+        
+        @media (max-width: 768px) {
+            .blog-detail-container {
+                padding: 1rem;
+            }
+            
+            .blog-detail-title {
+                font-size: 2rem;
+            }
+            
+            .video-gallery {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            
+            .video-container {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="side-nav" id="sideNav">
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#items" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">道具展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">小游戏</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#items">道具展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">视觉效果开发合集</h1>
+                <p class="blog-detail-subtitle">探索材质系统、粒子特效、环境效果和动画效果的开发实践（共46个演示）</p>
+                <div class="blog-detail-meta">
+                    <span>发布日期：2025年4月</span> | 
+                    <span>分类：技术开发</span>
+                </div>
+            </div>
+            
+            <div class="blog-content">
+                <h2 class="section-title">一、项目概述</h2>
+                <div class="section-content">
+                    <p>本合集汇集了我在视觉效果开发领域的多项探索与实践，涵盖材质系统、粒子特效、环境效果和动画效果等多个方向。通过这些项目，我深入研究了实时渲染技术、着色器编程、粒子系统设计等核心技能，为游戏、影视和虚拟现实场景创建了丰富多样的视觉效果。</p>
+                    <p>技术栈涵盖 Unity/UE5 引擎、ShaderGraph、HLSL 着色器编程、SP、SD等工具，形成了一套完整的视觉效果开发工作流程。本合集共包含46个视频演示，全面展示各类视觉效果的开发成果。</p>
+                </div>
+                
+                <h2 class="section-title">二、材质系统开发（9个视频/图片）</h2>
+                <div class="section-content">
+                    <p>材质是视觉效果的基础，决定了物体表面的视觉表现。以下是我开发的主要材质效果：</p>
+                    
+                    <h3 class="subsection-title">2.1 宝石材质系列</h3>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <h4>发光翡翠</h4>
+                            <p>实现翡翠的绿色发光效果，模拟了次表面散射，展现宝石内部光线传播的自然美感。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>蓝宝石</h4>
+                            <p>经典蓝色宝石材质，具有高折射率和内部反射，呈现深邃的蓝色光泽。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>绿宝石/蓝水晶</h4>
+                            <p>多种宝石材质效果，探索不同颜色和光学特性的实现方法。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>钻石</h4>
+                            <p>高折射率的钻石材质，具有强烈的折射效果和璀璨的光芒。</p>
+                        </div>
+                    </div>
+                    
+                    <h3 class="subsection-title">2.2 卡通材质开发</h3>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <h4>柔和的卡通材质</h4>
+                            <p>平滑的色彩过渡，适合卡通角色渲染，营造温馨可爱的视觉风格。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>卡通硬阴影</h4>
+                            <p>清晰的轮廓边缘，增强卡通效果的视觉冲击力。</p>
+                        </div>
+                    </div>
+
+                    <h3 class="subsection-title">2.3 材质效果展示</h3>
+                    <div class="video-gallery">
+                        <div class="video-item">
+                            <h4>次表面发光翡翠1</h4>
+                            <p>次表面散射效果第一版</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/次表面发光翡翠1.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>次表面发光翡翠2</h4>
+                            <p>次表面散射效果第二版</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/次表面发光翡翠2.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>蓝宝石</h4>
+                            <p>经典蓝色宝石材质</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/蓝宝石.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>绿宝石</h4>
+                            <p>绿色宝石材质</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/绿宝石.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>蓝水晶</h4>
+                            <p>蓝色水晶材质</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/蓝水晶.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>钻石</h4>
+                            <p>高折射率钻石材质</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/钻石.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>柔和的卡通材质</h4>
+                            <p>开发平滑过渡的卡通材质</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/柔和的卡通材质.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>卡通硬阴影</h4>
+                            <p>实现清晰边缘的卡通轮廓效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/卡通硬阴影.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>塑料材质</h4>
+                            <p>展示塑料材质的效果</p>
+                            <div class="video-container">
+                                <img src="videos/一些视频/塑料.png" alt="塑料材质" style="width: 100%; height: 100%; object-fit: contain;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">三、粒子特效开发（11个视频）</h2>
+                <div class="section-content">
+                    <p>粒子特效是增强场景视觉冲击力的关键元素，以下是我开发的主要特效：</p>
+                    
+                    <h3 class="subsection-title">3.1 核心特效类型</h3>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <h4>发光消散特效</h4>
+                            <p>通过粒子系统和shader实现物体发光并逐渐消散的效果，模拟真实的能量消散过程。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>火焰燃烧特效</h4>
+                            <p>多层粒子和颜色渐变模拟真实的火焰燃烧过程，具有逼真的视觉效果。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>线条聚合特效</h4>
+                            <p>程序化生成线条并控制其运动轨迹，实现线条聚合和扩散的动态效果。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>风格化灯光和积雪</h4>
+                            <p>探索风格化的灯光效果和积雪特效，为场景增添独特的视觉风格。</p>
+                        </div>
+                    </div>
+
+                    <h3 class="subsection-title">3.2 粒子特效展示</h3>
+                    <div class="video-gallery">
+                        <div class="video-item">
+                            <h4>发光消散特效</h4>
+                            <p>实现物体发光并逐渐消散的效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/发光消散特效.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>火焰燃烧</h4>
+                            <p>模拟真实的火焰燃烧过程</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/火焰燃烧.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>线条聚合</h4>
+                            <p>程序化生成线条聚合效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/线条聚合.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>粒子消散</h4>
+                            <p>粒子消散效果演示</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/粒子消散.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>粒子包裹</h4>
+                            <p>粒子系统包裹效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/lizibaoguo1.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>火星粒子</h4>
+                            <p>火星粒子特效效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/huojinlizi1.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>星星粒子</h4>
+                            <p>星星粒子特效效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/xingxinglizi1.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>方块粒子</h4>
+                            <p>方块粒子特效效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/fangkuailizi1.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>粒子闪烁</h4>
+                            <p>粒子闪烁特效效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/lizishanshuo1.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>粒子频闪</h4>
+                            <p>粒子频闪特效效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/粒子频闪.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>风格化灯光和积雪特效</h4>
+                            <p>风格化灯光和积雪效果演示</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/风格化灯光和积雪特效.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">四、环境效果开发（6个视频）</h2>
+                <div class="section-content">
+                    <p>环境效果是构建游戏氛围的重要元素，能够大大增强场景的沉浸感：</p>
+                    
+                    <h3 class="subsection-title">4.1 环境效果类型</h3>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <h4>水面效果</h4>
+                            <p>模拟水面的反光、透明度和波动效果，使用噪声纹理和正弦函数实现真实的水面波动。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>冰面效果</h4>
+                            <p>实现冰面的特殊视觉效果，包含结冰柱和解冻过程。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>动态草</h4>
+                            <p>模拟草的生长和随风飘动效果，使用噪声纹理和风向参数实现自然的摆动。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>雪的消融</h4>
+                            <p>模拟物体溶解的过程，通过shader实现渐变消失效果。</p>
+                        </div>
+                    </div>
+
+                    <h3 class="subsection-title">4.2 环境效果展示</h3>
+                    <div class="video-gallery">
+                        <div class="video-item">
+                            <h4>基础水面1</h4>
+                            <p>模拟水面的反光和透明度效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/基础水面1.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>水面</h4>
+                            <p>水面效果展示</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/水面.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>水面效果</h4>
+                            <p>另一个水面效果演示</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/shui1.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>冰面1</h4>
+                            <p>冰面效果演示</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/冰面1.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>雪的消融</h4>
+                            <p>模拟物体溶解的过程</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/雪的消融.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>动态草</h4>
+                            <p>模拟草的生长和随风飘动效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/动态草.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">五、动画效果开发（8个视频）</h2>
+                <div class="section-content">
+                    <p>动画效果为场景增添生动的动态表现，以下是主要的动画类型：</p>
+                    
+                    <h3 class="subsection-title">5.1 动画效果类型</h3>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <h4>水面动画</h4>
+                            <p>展示水面的波动动画效果，具有平滑的波动形态和颜色变化。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>泡泡动画</h4>
+                            <p>通过粒子系统和物理模拟实现泡泡的上升和破裂效果。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>星星动画</h4>
+                            <p>实现星星的闪烁和移动效果，具有随机的大小、颜色和闪烁频率。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>电流动画</h4>
+                            <p>通过材质动画和粒子系统实现多种电流和跳电效果。</p>
+                        </div>
+                    </div>
+
+                    <h3 class="subsection-title">5.2 动画效果展示</h3>
+                    <div class="video-gallery">
+                        <div class="video-item">
+                            <h4>泡泡</h4>
+                            <p>展示泡泡的上升和破裂效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/泡泡.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>星星</h4>
+                            <p>展示星星的闪烁和移动效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/星星.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>排线</h4>
+                            <p>展示线条的排列和动画效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/排线.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>单根电</h4>
+                            <p>单根电流效果演示</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/单根电.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>单线电流1</h4>
+                            <p>单线电流效果第一版</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/单线电流1.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>电2</h4>
+                            <p>另一个电流效果演示</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/电2.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>持续的单线电流1</h4>
+                            <p>持续的单线电流效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/持续的单线电流1.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>跳电</h4>
+                            <p>跳电效果演示</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/跳电.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">六、其他效果开发（11个视频）</h2>
+                <div class="section-content">
+                    <p>除了上述主要方向，还探索了多种独特的视觉效果：</p>
+                    
+                    <h3 class="subsection-title">6.1 特色效果类型</h3>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <h4>单色/双色材质</h4>
+                            <p>简化的色彩方案，突出卡通风格的艺术表现力。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>电路板效果</h4>
+                            <p>通过线条和着色器实现电路板的视觉效果，具有细节处理和颜色调整。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>HLSL初步尝试</h4>
+                            <p>进行HLSL着色器编程的初步尝试，为高级效果开发打下基础。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>卡通云/屏保/屏幕扰动</h4>
+                            <p>探索多种有趣的视觉效果，为场景增添独特的视觉风格。</p>
+                        </div>
+                    </div>
+
+                    <h3 class="subsection-title">6.2 其他效果展示</h3>
+                    <div class="video-gallery">
+                        <div class="video-item">
+                            <h4>单色</h4>
+                            <p>单色材质效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/单色.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>双色</h4>
+                            <p>双色材质效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/双色.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>HLSL初步尝试</h4>
+                            <p>展示HLSL着色器编程的初步尝试效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/hlsl初尝试.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>电路板</h4>
+                            <p>展示电路板的视觉效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/电路板.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>卡通云</h4>
+                            <p>展示卡通风格的云朵效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/卡通云.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>屏幕扰动</h4>
+                            <p>展示屏幕扰动效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/屏幕扰动.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>屏保</h4>
+                            <p>屏保效果演示</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/屏保.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>按键效果</h4>
+                            <p>按键效果演示</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/按键效果.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>结冰柱</h4>
+                            <p>结冰柱效果演示</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/结冰柱.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>解冻</h4>
+                            <p>解冻效果演示</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/解冻.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>地狱酒店</h4>
+                            <p>地狱酒店项目相关效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/地狱酒店.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                        <div class="video-item">
+                            <h4>乱线效果</h4>
+                            <p>乱线特效效果</p>
+                            <div class="video-container">
+                                <video controls preload="metadata">
+                                    <source src="videos/一些视频/luanxian1.mp4" type="video/mp4">
+                                    您的浏览器不支持视频播放
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h2 class="section-title">七、技术难点与解决方案</h2>
+                <div class="section-content">
+                    <h3 class="subsection-title">7.1 视觉真实感</h3>
+                    <p><strong>难点：</strong>如何使视觉效果看起来更加真实自然？</p>
+                    <p><strong>解决方案：</strong>使用多层粒子系统、颜色渐变、噪声纹理和物理模拟等技术，模拟真实世界的物理现象。例如火焰的燃烧、水面的波动、草的摆动等效果，都需要考虑物理规律和自然特性。</p>
+                    
+                    <h3 class="subsection-title">7.2 性能优化</h3>
+                    <p><strong>难点：</strong>复杂的视觉效果往往伴随着性能开销，如何在保证效果质量的同时优化性能？</p>
+                    <p><strong>解决方案：</strong>使用对象池技术、LOD（细节层次）系统、GPU实例化等方法优化粒子系统和渲染性能，确保效果在不同设备上都能流畅运行。</p>
+                    
+                    <h3 class="subsection-title">7.3 交互性与可控性</h3>
+                    <p><strong>难点：</strong>如何让视觉效果与游戏逻辑实现交互？</p>
+                    <p><strong>解决方案：</strong>通过脚本控制粒子系统参数、材质属性和动画状态，实现根据玩家动作触发不同效果的功能。</p>
+                    
+                    <h3 class="subsection-title">7.4 着色器开发</h3>
+                    <p><strong>难点：</strong>如何实现复杂的视觉效果而不影响性能？</p>
+                    <p><strong>解决方案：</strong>合理使用ShaderGraph和HLSL编程，优化着色器代码，避免不必要的计算开销。</p>
+                </div>
+                
+                <h2 class="section-title">八、总结与展望</h2>
+                <div class="section-content">
+                    <p>通过这些视觉效果开发项目，我系统地掌握了材质系统、粒子特效、环境效果和动画效果的开发技术。本合集共包含46个演示，全面展示了各类视觉效果的开发成果：</p>
+                    <ul>
+                        <li><strong>材质系统开发：</strong>9个视频/图片，涵盖发光翡翠、蓝宝石、绿宝石、蓝水晶、钻石、卡通材质、塑料材质等</li>
+                        <li><strong>粒子特效开发：</strong>11个视频，涵盖发光消散、火焰燃烧、线条聚合、各种粒子效果等</li>
+                        <li><strong>环境效果开发：</strong>6个视频，涵盖水面、冰面、雪的消融、动态草等</li>
+                        <li><strong>动画效果开发：</strong>8个视频，涵盖泡泡、星星、各种电流动画等</li>
+                        <li><strong>其他效果开发：</strong>12个视频，涵盖单色双色、HLSL、电路板、卡通云、屏幕扰动、屏保、按键效果、地狱酒店、乱线效果等</li>
+                    </ul>
+                    <p>这些经验不仅提升了我的技术能力，也为游戏和影视场景的视觉表现提供了丰富的解决方案。</p>
+                    <p>未来计划：</p>
+                    <ul>
+                        <li>深入研究光线追踪和全局光照技术，提升画面真实感</li>
+                        <li>探索机器学习在视觉效果生成中的应用</li>
+                        <li>开发更多创新的视觉效果，拓展技术边界</li>
+                        <li>优化现有效果的性能，提升运行效率</li>
+                        <li>尝试将这些技术应用到虚拟现实和增强现实场景中</li>
+                    </ul>
+                    <p>视觉效果开发是一个持续探索和创新的领域，我将继续学习和实践，不断提升自己的技术水平。</p>
+                </div>
+                
+                <div style="text-align: center;">
+                    <a href="index.html#blog" class="btn-back">返回开发日志</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱：19859256157@163.com</p>
+                <p>所在地：广东深圳</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
