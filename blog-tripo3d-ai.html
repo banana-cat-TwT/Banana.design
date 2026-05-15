@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tripo3D AI模型生成研究日志 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary: #00d4aa;
+            --secondary: #7ee8fa;
+            --accent: #00b894;
+            --highlight: #ffeaa7;
+            --dark-bg: #0a192f;
+            --dark-bg-deep: #020c1b;
+            --light-bg: #e6f1f5;
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--dark-bg) 0%, var(--dark-bg-deep) 100%);
+            background-attachment: fixed;
+            color: var(--light-bg);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at 30% 40%, rgba(0, 212, 170, 0.15) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 60%, rgba(126, 232, 250, 0.1) 0%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .blog-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .blog-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .blog-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+            text-shadow: 0 0 20px rgba(126, 232, 250, 0.3);
+        }
+
+        .blog-subtitle {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-meta {
+            font-size: 0.9rem;
+            color: var(--secondary);
+            margin-bottom: 2rem;
+        }
+
+        .blog-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .blog-section {
+            background: rgba(10, 25, 47, 0.8);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(0, 212, 170, 0.2);
+        }
+
+        .blog-section h3 {
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+            border-bottom: 2px solid var(--primary);
+            padding-bottom: 0.5rem;
+        }
+
+        .blog-section h4 {
+            color: var(--primary);
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .feature-item {
+            background: rgba(0, 212, 170, 0.1);
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: 1px solid rgba(0, 212, 170, 0.3);
+        }
+
+        .feature-item h4 {
+            margin-top: 0;
+            color: var(--secondary);
+        }
+
+        .feature-item p {
+            color: var(--light-bg);
+            font-size: 0.9rem;
+        }
+
+        .highlight-box {
+            background: rgba(255, 234, 167, 0.1);
+            border-left: 4px solid var(--highlight);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .highlight-box strong {
+            color: var(--highlight);
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(145deg, var(--primary), var(--accent));
+            color: var(--dark-bg);
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid var(--primary);
+        }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(145deg, var(--secondary), var(--primary));
+            box-shadow: 0 10px 25px rgba(0, 212, 170, 0.4);
+        }
+
+        .video-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .video-card {
+            background: rgba(0, 212, 170, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 212, 170, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .video-card:hover {
+            border-color: var(--primary);
+            box-shadow: 0 6px 25px rgba(0, 212, 170, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .video-card video {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+        }
+
+        .video-card-content {
+            padding: 1rem;
+        }
+
+        .video-card h4 {
+            margin: 0 0 0.5rem 0;
+            color: var(--secondary);
+            font-size: 1rem;
+        }
+
+        .video-card p {
+            margin: 0;
+            color: var(--light-bg);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .blog-detail-container {
+                padding: 1rem;
+            }
+
+            .blog-title {
+                font-size: 2rem;
+            }
+
+            .video-showcase {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="blog-detail-container">
+        <div class="blog-header">
+            <h1 class="blog-title">Tripo3D AI模型生成研究日志</h1>
+            <p class="blog-subtitle">探索Tripo3D平台在3D模型生成中的应用</p>
+            <div class="blog-meta">
+                <span>发布日期：2026年5月15日</span> | 
+                <span>阅读次数：0</span> | 
+                <span>分类：大模型</span>
+            </div>
+        </div>
+
+        <div class="blog-content">
+            <div class="blog-section">
+                <h3>项目概述</h3>
+                <p>Tripo3D是另一个基于AI的三维模型生成平台，专注于从图像或文本描述快速生成高质量的3D模型。本研究旨在对比Tripo3D与Meshy等平台的表现，探索其在游戏资产生产流程中的应用潜力。</p>
+            </div>
+
+            <div class="blog-section">
+                <h3>平台特点分析</h3>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <h4>图像转3D</h4>
+                        <p>支持从单张图像直接生成3D模型，适合照片级别的模型创建</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>文本转3D</h4>
+                        <p>支持自然语言描述生成3D模型，快速实现创意概念</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>高质量输出</h4>
+                        <p>生成模型具有较好的拓扑结构和UV，便于后续处理</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>多格式支持</h4>
+                        <p>支持导出多种常见3D格式，兼容主流3D软件</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-section">
+                <h3>模型生成视频展示</h3>
+                <p>以下是使用Tripo3D平台进行3D模型生成的过程记录：</p>
+                <div class="video-showcase">
+                    <div class="video-card">
+                        <video src="videos/tripo/MAIKE2.mp4" controls playsinline>
+                            您的浏览器不支持视频播放
+                        </video>
+                        <div class="video-card-content">
+                            <h4>人物模型生成研究</h4>
+                            <p>探索Tripo3D在人物模型生成方面的表现</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-section">
+                <h3>测试案例与结果</h3>
+                <h4>测试1：人物模型生成</h4>
+                <p>探索Tripo3D在人物模型生成方面的表现</p>
+                <div class="highlight-box">
+                    <strong>结果：</strong>生成的人物模型质量良好，基本结构完整，可以作为基础模型直接进行细化和优化。虽然仍存在一些细节不足，但整体形态和比例较为合理，适合作为快速原型或概念验证的基础，能够有效提高建模工作效率。
+                </div>
+            </div>
+
+            <div class="blog-section">
+                <h3>技术优势与局限性</h3>
+                <h4>优势</h4>
+                <ul>
+                    <li>生成速度快，适合快速原型制作和概念验证</li>
+                    <li>支持多种输入方式（图像/文本），灵活便捷</li>
+                    <li>生成的模型基础结构完整，可直接作为细化基础</li>
+                    <li>界面操作简便，易于上手</li>
+                    <li>输出模型格式兼容主流3D软件，便于后续处理</li>
+                </ul>
+
+                <h4>改进空间</h4>
+                <ul>
+                    <li>复杂细节的还原度仍有提升空间</li>
+                    <li>生成结果的随机性较大，需要一定筛选</li>
+                    <li>材质和纹理质量可进一步优化</li>
+                </ul>
+            </div>
+
+            <div class="blog-section">
+                <h3>应用场景与建议</h3>
+                <p>Tripo3D适合作为创意探索和概念验证工具，适用于：</p>
+                <ul>
+                    <li>快速概念设计和原型验证</li>
+                    <li>简单物件和场景元素的批量生成</li>
+                    <li>作为传统建模流程的辅助参考</li>
+                    <li>灵感和创意的快速可视化</li>
+                </ul>
+                <p>建议将AI生成的模型作为基础参考，需要进行大量手动优化和调整才能达到项目所需的质量标准。对于人物模型等高精度要求的应用，目前的AI生成技术仍有较大提升空间。</p>
+            </div>
+
+            <div class="blog-section">
+                <h3>总结与展望</h3>
+                <p>Tripo3D作为AI辅助3D模型生成工具，在某些应用场景下展现出了一定的价值。然而在人物模型生成方面仍存在明显的局限性，生成的模型质量不稳定，结构问题突出。期待未来版本能在细节还原和结构准确性方面有所改进。</p>
+            </div>
+
+            <div style="text-align: center;">
+                <a href="index.html#blog" class="btn-back">返回开发日志</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
