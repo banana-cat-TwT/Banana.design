@@ -3104,32 +3104,41 @@ nav ul li a:hover::after {
 
 .item-card-fazhang .item-back {
     background: linear-gradient(180deg, #2a1b3d 0%, #1a1025 100%);
+    overflow: hidden;
 }
 
 .item-card-fazhang h3 {
     color: #EBC4FF;
     margin-bottom: 0.5rem;
     font-size: 1.2rem;
-    background: rgba(42, 27, 61, 0.9);
+    background: rgba(42, 27, 61, 0.95);
     padding: 0.5rem 1rem;
     border-radius: 4px;
     border-bottom: 2px solid #B985C7;
-    text-shadow: 0 0 10px rgba(185, 133, 199, 0.8);
+    text-shadow: 0 0 15px rgba(185, 133, 199, 1);
+    position: relative;
+    z-index: 10;
 }
 
 .item-card-fazhang h4 {
-    color: #EBC4FF;
+    color: #D8BFFF;
     margin-bottom: 1rem;
     font-size: 0.9rem;
     text-transform: uppercase;
     letter-spacing: 1px;
+    position: relative;
+    z-index: 10;
+    text-shadow: 0 0 10px rgba(216, 191, 255, 0.8);
 }
 
 .item-card-fazhang p {
-    color: #D8C8E6;
+    color: #E8D5FF;
     margin-bottom: 1.5rem;
     font-size: 0.85rem;
     line-height: 1.4;
+    position: relative;
+    z-index: 10;
+    text-shadow: 0 0 8px rgba(232, 213, 255, 0.6);
 }
 
 .item-card-fazhang .item-detail-btn {
@@ -3138,6 +3147,8 @@ nav ul li a:hover::after {
     color: white;
     border: none;
     padding: 0.5rem 1rem;
+    position: relative;
+    z-index: 10;
 }
 
 /* 中华娘发包卡片样式 */
@@ -3292,6 +3303,37 @@ nav ul li a:hover::after {
     width: 100%;
     height: 100%;
     background: rgba(200, 230, 245, 0.6);
+    z-index: 0;
+}
+
+.item-back-video-container-fazhang {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}
+
+.item-back-video-fazhang {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 107.25%;
+    height: auto;
+    max-height: 107.25%;
+    transform: translate(-50%, -50%);
+    object-fit: contain;
+    opacity: 0.5;
+}
+
+.item-back-overlay-fazhang {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 182, 193, 0.2);
     z-index: 0;
 }
 
