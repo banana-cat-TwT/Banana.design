@@ -219,7 +219,6 @@
             <p class="blog-subtitle">探索Tripo3D平台在3D模型生成中的应用</p>
             <div class="blog-meta">
                 <span>发布日期：2026年5月15日</span> | 
-                <span>阅读次数：0</span> | 
                 <span>分类：大模型</span>
             </div>
         </div>
@@ -261,8 +260,26 @@
                             您的浏览器不支持视频播放
                         </video>
                         <div class="video-card-content">
-                            <h4>人物模型生成研究</h4>
-                            <p>探索Tripo3D在人物模型生成方面的表现</p>
+                            <h4>麦克（写实风男性角色）</h4>
+                            <p>写实风格人物模型生成过程</p>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <video src="videos/tripo/nvqishi1.mp4" controls playsinline muted preload="metadata">
+                            您的浏览器不支持视频播放
+                        </video>
+                        <div class="video-card-content">
+                            <h4>女骑士（卡通风格角色）</h4>
+                            <p>风格化卡通角色模型生成过程 - 视角1</p>
+                        </div>
+                    </div>
+                    <div class="video-card">
+                        <video src="videos/tripo/nvqishi2.mp4" controls playsinline muted preload="metadata">
+                            您的浏览器不支持视频播放
+                        </video>
+                        <div class="video-card-content">
+                            <h4>女骑士（卡通风格角色）</h4>
+                            <p>风格化卡通角色模型生成过程 - 视角2</p>
                         </div>
                     </div>
                 </div>
@@ -270,6 +287,9 @@
 
             <div class="blog-section">
                 <h3>测试案例与结果</h3>
+                
+                <h4>一、写实角色模块：麦克（写实风男性角色）</h4>
+                
                 <h4>步骤1：角色设计参考图</h4>
                 <p>在使用Tripo3D生成模型之前，首先需要准备角色设计参考图，包括三视图和大头照。这些参考图使用GPT Image 2.0生成，作为Tripo3D的输入参考。</p>
                 <div style="display: flex; justify-content: center; margin: 1.5rem 0;">
@@ -280,6 +300,22 @@
                 <p>探索Tripo3D在人物模型生成方面的表现</p>
                 <div class="highlight-box">
                     <strong>结果：</strong>生成的人物模型质量良好，基本结构完整，可以作为基础模型直接进行细化和优化。虽然仍存在一些细节不足，但整体形态和比例较为合理，适合作为快速原型或概念验证的基础，能够有效提高建模工作效率。
+                </div>
+
+                <h4>二、风格化角色模块：女骑士（卡通风格角色）</h4>
+                <p>针对风格化卡通角色进行了专项测试，探索Tripo3D在生成非写实风格角色方面的能力。通过调整提示词，生成了具有鲜明卡通风格的女性骑士角色模型。</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+                    <div style="background: rgba(0, 212, 170, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(0, 212, 170, 0.3);">
+                        <img src="image/nvqishi1.png" alt="风格化卡通角色模型1" style="width: 100%; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <p style="text-align: center; color: var(--secondary); font-size: 0.9rem;">风格化骑士 - 正面视图</p>
+                    </div>
+                    <div style="background: rgba(0, 212, 170, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(0, 212, 170, 0.3);">
+                        <img src="image/nvqishi2.png" alt="风格化卡通角色模型2" style="width: 100%; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <p style="text-align: center; color: var(--secondary); font-size: 0.9rem;">风格化骑士 - 侧面视图</p>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <strong>结果：</strong>Tripo3D在风格化卡通角色生成方面表现出色，能够很好地理解并还原卡通风格的特征。生成的女性骑士角色具有清晰的轮廓、鲜明的色彩和可爱的造型，展示了平台在非写实风格模型生成方面的潜力。
                 </div>
             </div>
 
