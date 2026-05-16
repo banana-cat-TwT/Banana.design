@@ -313,6 +313,10 @@
                         <img src="image/nvqishi2.png" alt="风格化卡通角色模型2" style="width: 100%; border-radius: 8px; margin-bottom: 0.5rem;">
                         <p style="text-align: center; color: var(--secondary); font-size: 0.9rem;">风格化骑士 - 侧面视图</p>
                     </div>
+                    <div style="background: rgba(0, 120, 212, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(0, 212, 170, 0.3);">
+                        <img src="image/nvqishi5.png" alt="风格化卡通角色模型T-Pose" style="width: 100%; border-radius: 8px; margin-bottom: 0.5rem;">
+                        <p style="text-align: center; color: var(--secondary); font-size: 0.9rem;">风格化骑士 - T-Pose版本</p>
+                    </div>
                 </div>
                 
                 <h4>生成过程中出现的问题</h4>
@@ -330,6 +334,22 @@
                 <div class="highlight-box">
                     <strong>结果：</strong>Tripo3D在风格化卡通角色生成方面表现还可以，大致能理解并还原卡通风格的特征。
                 </div>
+                
+                <h4>T-Pose模型深度点评</h4>
+                <p><strong>优点：</strong></p>
+                <ul>
+                    <li>披风与裙子分离，没有出现黏连问题，结构相对清晰</li>
+                    <li>下半身除了鞋子，其他部件建模质量较高，可以拆开来直接使用</li>
+                    <li>贴图生成效果尚可，基本符合风格要求</li>
+                </ul>
+                <p><strong>待改进问题：</strong></p>
+                <ul>
+                    <li>复杂结构（尤其是腰部区域）需要手动拆分处理</li>
+                    <li>手部生成质量不稳定，手指经常粘在一起，可能需要在参考图中明确分开绘制</li>
+                    <li>硬表面/金属部件的面与面之间过渡错误，缺乏精细处理</li>
+                    <li>拓扑结构类似ZBrush自动拓扑的效果，精度有待提升</li>
+                </ul>
+                <p><strong>总结：</strong>虽然Tripo3D能够快速生成风格化角色的基础模型，但对于精细结构和复杂部件的处理仍需人工干预和优化。建议在原画阶段将人物组件提前拆分，以获得更好的生成效果。</p>
             </div>
 
             <div class="blog-section">
