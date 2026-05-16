@@ -10,7 +10,7 @@
 }
 
 :root {
-    --primary: #ff8c42;      /* 温暖橙 */
+    --primary: #ec7b35;      /* 温暖橙 */
     --secondary: #ffb347;     /* 淡橙黄 */
     --accent: #ffa94d;       /* 琥珀橙 */
     --dark-bg: #2d1f1a;      /* 暖棕黑 */
@@ -116,7 +116,7 @@ li, span, a, td, th {
 
 .ash-particle {
     position: absolute;
-    background: rgba(255, 182, 193, 0.7);
+    background: rgba(140, 177, 226, 0.7);
     clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
     animation: ashFloat linear forwards;
 }
