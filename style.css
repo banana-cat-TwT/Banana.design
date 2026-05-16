@@ -3080,6 +3080,66 @@ nav ul li a:hover::after {
     padding: 0.5rem 1rem;
 }
 
+/* 法杖卡片样式 - 梦幻配色 */
+.item-card-fazhang {
+    background: linear-gradient(180deg, #1a1025 0%, #B985C7 100%);
+    border: 2px solid #B985C7;
+    box-shadow: 0 5px 15px rgba(185, 133, 199, 0.3), inset 0 0 20px rgba(235, 196, 255, 0.1), 0 0 15px rgba(185, 133, 199, 0.3);
+}
+
+.item-card-fazhang::before {
+    background: linear-gradient(45deg, transparent 30%, rgba(185, 133, 199, 0.2) 50%, transparent 70%);
+}
+
+.item-card-fazhang:hover {
+    z-index: 100;
+    transform: translateY(-10px) scale(1.05) rotate(0deg) !important;
+    box-shadow: 0 15px 30px rgba(185, 133, 199, 0.4), 0 0 0 2px #EBC4FF, inset 0 0 30px rgba(235, 196, 255, 0.2), 0 0 25px rgba(185, 133, 199, 0.4);
+    border-color: #EBC4FF;
+}
+
+.item-card-fazhang .item-front {
+    background: linear-gradient(180deg, #FCD7FC 30%, #FFDBE8 100%);
+}
+
+.item-card-fazhang .item-back {
+    background: linear-gradient(180deg, #2a1b3d 0%, #1a1025 100%);
+}
+
+.item-card-fazhang h3 {
+    color: #EBC4FF;
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    background: rgba(42, 27, 61, 0.9);
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border-bottom: 2px solid #B985C7;
+    text-shadow: 0 0 10px rgba(185, 133, 199, 0.8);
+}
+
+.item-card-fazhang h4 {
+    color: #EBC4FF;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.item-card-fazhang p {
+    color: #D8C8E6;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+}
+
+.item-card-fazhang .item-detail-btn {
+    background: linear-gradient(135deg, #FF9AB5 0%, #B985C7 100%);
+    box-shadow: 0 4px 10px rgba(185, 133, 199, 0.3);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+}
+
 /* 中华娘发包卡片样式 */
 .item-card-zhonghuaniang {
     background: linear-gradient(180deg, #FFF8F0 0%, #FFEED8 100%);
