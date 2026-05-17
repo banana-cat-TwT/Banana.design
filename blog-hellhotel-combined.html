@@ -251,17 +251,60 @@
                     <p><strong>多人合作版本：</strong>玩家将扮演被雇佣的清洁工，在充满诡异的地下酒店求生。采用第一人称操作方式，通过解谜探索、服务超自然顾客等方式获取金钱。每三天需完成绩效指标，否则全体将被变成怪物，次日在锅炉房重组，继续这场恐怖的打工循环。</p>
                     
                     <p><strong>单人探索版本：</strong>玩家将在一个充满神秘和危险的酒店中探索，面对各种怪物和挑战。游戏使用了现代化的视觉效果和音效设置，为玩家提供了沉浸式的游戏体验。</p>
+
+                    <h3 class="subsection-title">策划要点</h3>
+                    <p><strong>游戏定位：</strong>搞怪向3D物理模拟游戏、多人恐怖游戏，结合《致命公司》的核心循环和《Octodad Dadliest Catch》的物理效果。</p>
+                    <p><strong>核心玩法：</strong>玩家扮演被束缚的橡胶员工，在充满超自然房客的地底酒店求生，通过清洁血肉污渍、服务超自然房客等方式获取资金。</p>
+                    <p><strong>房客系统：</strong>包含会引发黑雾的孤独老妇、痴恋玩家的病娇跟踪狂等10+种危险存在。</p>
+                    <p><strong>绩效机制：</strong>每三天需达成绩效指标，否则全员将被制成香肠，次日在锅炉房重组。</p>
                 </div>
                 
                 <h2 class="section-title">技术栈</h2>
                 <div class="section-content">
                     <ul>
-                        <li><strong>引擎与语言：</strong>Unity 3D、C# 脚本</li>
-                        <li><strong>建模与材质：</strong>Blender、Substance Painter、Adobe Photoshop</li>
+                        <li><strong>引擎与语言：</strong>Unity 2022.3.59f1、C# 脚本</li>
+                        <li><strong>建模与材质：</strong>Blender、Substance Painter、Adobe Photoshop、3ds Max</li>
                         <li><strong>物理与动画：</strong>Obi 物理插件、DOTween 动画插件</li>
                         <li><strong>特效与UI：</strong>ARPG Effects 特效包、DamageNumbersPro 伤害数字插件</li>
-                        <li><strong>音频处理：</strong>专业音频处理工具</li>
+                        <li><strong>音频处理：</strong>Audacity</li>
                     </ul>
+                </div>
+
+                <h2 class="section-title">材质与特效系统</h2>
+                <div class="section-content">
+                    <h3 class="subsection-title">PBR材质制作</h3>
+                    <p>项目采用完整的PBR（基于物理的渲染）材质流程，包含以下材质通道：</p>
+                    <ul>
+                        <li><strong>Base Color（基础色）：</strong>定义物体的表面颜色</li>
+                        <li><strong>Height（高度贴图）：</strong>用于表面凹凸细节</li>
+                        <li><strong>Metallic（金属度）：</strong>控制金属和非金属属性</li>
+                        <li><strong>Mixed AO（混合环境光遮蔽）：</strong>增强深度感</li>
+                        <li><strong>Normal（法线贴图）：</strong>提供表面细节</li>
+                        <li><strong>Roughness（粗糙度）：</strong>控制表面光滑程度</li>
+                        <li><strong>Opacity（不透明度）：</strong>用于透明材质</li>
+                        <li><strong>Translucency（半透明）：</strong>模拟次表面散射</li>
+                    </ul>
+
+                    <h3 class="subsection-title">环境材质</h3>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <h4>开始场景环境</h4>
+                            <p>包含墙、中景货架、中远景圆柱容器、右边大水管、右边小水管、右边水塔、右边肉泥、头顶水管、抓夹、操作台、操作室前方围栏、操作室地板、操作室拖车、操作室货架、操作室货物、流水线轨道、烤肠、熔炉等环境物体的PBR材质。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>水材质系统</h4>
+                            <p>使用Shader Graph开发了动态水和静态水两种材质，包含Waterfall瀑布贴图和完整的水流动画效果。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>操作台灯系统</h4>
+                            <p>包含alarmlight报警灯（中心扩散式、左到右）、粒子特效雾贴图材质、蓝色发光屏幕材质、五颜六色小按键材质、半透明材质等。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>体积光Shader</h4>
+                            <p>实现了体积光照效果，增强场景的沉浸感和氛围。</p>
+                        </div>
+                    </div>
+
                 </div>
 
                 <h2 class="section-title">项目结构</h2>
@@ -280,6 +323,14 @@
                 <h2 class="section-title">核心功能</h2>
                 <div class="section-content">
                     <div class="feature-list">
+                        <div class="feature-item">
+                            <h4>系统管家</h4>
+                            <p>实现了游戏内的系统管家功能，包括任务提示、绩效追踪、状态管理等核心UI系统。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>手机推销动画</h4>
+                            <p>开发了手机推销的交互动画系统，包含电话接听、产品展示、顾客服务等完整流程。</p>
+                        </div>
                         <div class="feature-item">
                             <h4>怪物AI系统</h4>
                             <p>实现了多种怪物的AI行为，包括追逐、躲避、攻击等，为玩家提供了富有挑战性的敌人。</p>
@@ -310,40 +361,49 @@
                 <h2 class="section-title">开发过程</h2>
                 <div class="section-content">
                     <h3 class="subsection-title">1. 项目初始阶段</h3>
-                    <p>搭建Unity项目框架，配置了必要的插件和资源，为后续的开发工作做好了准备。</p>
+                    <p>搭建Unity项目框架，配置了必要的插件和资源，为后续的开发工作做好了准备。使用Unity 2022.3.59f1版本，配置URP渲染管线，设置版本控制和项目规范。</p>
 
-                    <h3 class="subsection-title">2. 核心系统实现</h3>
-                    <p>实现了游戏的核心系统，包括玩家控制、怪物AI、物理交互等，确保游戏的基本玩法能够正常运行。</p>
+                    <h3 class="subsection-title">2. 团队协作与策划</h3>
+                    <p>在2024年Ciga Game Jam深圳凉屋站的团队开发中，与来自腾讯、网易工作的队友以及AI生成研究方向的硕士队友进行深入交流。了解AI技术在实际工作岗位中的应用方式，以及研究室在三维模型生成领域的具体研究进展与成果。这段经历深刻影响了对AI技术发展的认知，建立了对AI技术（包括在3D领域应用）的心理接受基础。</p>
 
-                    <h3 class="subsection-title">3. 资源创建</h3>
-                    <p>创建了游戏所需的各种资源，包括3D模型、材质、音效等，为游戏提供了丰富的视觉和听觉体验。</p>
+                    <h3 class="subsection-title">3. 核心系统实现</h3>
+                    <p>实现了游戏的核心系统，包括玩家控制、怪物AI、物理交互等，确保游戏的基本玩法能够正常运行。开发了系统管家功能和手机推销动画系统。</p>
 
-                    <h3 class="subsection-title">4. 关卡设计</h3>
-                    <p>设计了酒店的关卡布局，包括走廊、房间、电梯等场景，为玩家提供了探索的空间。</p>
+                    <h3 class="subsection-title">4. 美术与材质制作</h3>
+                    <p>使用Blender、3ds Max、Substance Painter、Photoshop等工具创建游戏所需的各种资源。负责开始场景大场景的PBR模型制作、动画、特效、特殊材质效果、UI制作，以及角色怪物的建模、绑定、动作、各种专属特效等。</p>
 
-                    <h3 class="subsection-title">5. 特效与动画</h3>
-                    <p>添加了各种特效和动画，包括粒子效果、角色动画、UI动画等，提升了游戏的视觉体验。</p>
+                    <h3 class="subsection-title">5. 材质与Shader开发</h3>
+                    <p>使用Shader Graph开发了多种特殊Shader，包括水材质、皮毛材质、透明宝石材质、报警灯特效等。实现了完整的PBR材质管线，包含基座色、高度图、金属度、法线、粗糙度等通道。</p>
 
-                    <h3 class="subsection-title">6. 测试与调试</h3>
+                    <h3 class="subsection-title">6. 特效与动画</h3>
+                    <p>添加了各种特效和动画，包括粒子效果、角色动画、UI动画等，提升了游戏的视觉体验。使用Unity Recorder录制了大量演示动画和效果展示。</p>
+
+                    <h3 class="subsection-title">7. 测试与调试</h3>
                     <p>进行了全面的测试和调试，确保游戏的稳定性和可玩性，修复了各种bug和问题。</p>
                 </div>
                 
                 <h2 class="section-title">技术难点与解决方案</h2>
                 <div class="section-content">
                     <p><strong>难点1：怪物AI行为</strong></p>
-                    <p>解决方案：设计了一套智能的AI系统，实现了怪物的追逐、躲避、攻击等行为，确保怪物的行为自然且具有挑战性。</p>
+                    <p>解决方案：设计了一套智能的AI系统，实现了怪物的追逐、躲避、攻击等行为，确保怪物的行为自然且具有挑战性。为10+种超自然房客设计了独特的行为模式。</p>
 
                     <p><strong>难点2：物理模拟</strong></p>
-                    <p>解决方案：使用Obi物理插件，实现了绳索、布料等物理效果，增加了游戏的真实感和互动性。</p>
+                    <p>解决方案：使用Obi物理插件，实现了绳索、布料等物理效果，增加了游戏的真实感和互动性。特别优化了橡胶员工的物理效果。</p>
 
                     <p><strong>难点3：恐怖氛围营造</strong></p>
-                    <p>解决方案：通过音效设计、灯光效果和怪物行为，营造了恐怖的游戏氛围，增加了玩家的沉浸感。</p>
+                    <p>解决方案：通过音效设计、灯光效果和怪物行为，营造了恐怖的游戏氛围，增加了玩家的沉浸感。使用体积光Shader和粒子特效增强视觉效果。</p>
 
-                    <p><strong>难点4：性能优化</strong></p>
+                    <p><strong>难点4：材质与Shader开发</strong></p>
+                    <p>解决方案：使用Shader Graph开发了多种特殊Shader，包括透明宝石材质、皮毛材质、报警灯特效等。完整的PBR材质管线确保了视觉质量。</p>
+
+                    <p><strong>难点5：性能优化</strong></p>
                     <p>解决方案：使用性能优化技术，如LOD、对象池、异步加载等，确保游戏在不同设备上都能流畅运行。</p>
 
-                    <p><strong>难点5：多人游戏同步</strong></p>
+                    <p><strong>难点6：多人游戏同步</strong></p>
                     <p>解决方案：多人游戏的开发需要考虑更多的网络同步和玩家互动问题，确保游戏机制的设计平衡压力和趣味性。</p>
+
+                    <p><strong>难点7：系统管家与UI系统</strong></p>
+                    <p>解决方案：设计了完善的任务提示、绩效追踪、状态管理等UI系统，确保玩家能清晰了解游戏状态。</p>
                 </div>
 
                 <h2 class="section-title">视频展示</h2>
@@ -382,20 +442,31 @@
                         <li>恐怖游戏的氛围营造非常重要，通过灯光、音效和视觉效果的结合可以创造出很好的恐怖氛围</li>
                         <li>游戏机制的设计需要平衡压力和趣味性，确保玩家既有压力又有乐趣</li>
                         <li>团队合作在游戏开发中至关重要，不同岗位的专业人员需要密切配合</li>
+                        <li>材质与Shader的开发对游戏视觉质量有决定性影响，完整的PBR管线能显著提升画面质感</li>
+                        <li>与行业内专业人士的交流对技术认知和发展方向有重要启发</li>
                     </ul>
-                    <p>《地狱酒店》是一个非常有挑战性的项目，通过这个项目我积累了丰富的游戏开发经验，特别是在多人游戏、恐怖游戏和美术制作方面。</p>
+                    <p>《地狱酒店》是一个非常有挑战性的项目，通过这个项目我积累了丰富的游戏开发经验，特别是在多人游戏、恐怖游戏、美术制作、材质与Shader开发等方面。与腾讯、网易的专业人士以及AI研究方向的硕士队友的合作，让我对行业发展有了更深入的认识。</p>
                 </div>
                 
                 <h2 class="section-title">总结与展望</h2>
                 <div class="section-content">
-                    <p>地狱酒店是一个恐怖风格的Unity游戏系列，通过精心的设计和开发，为玩家提供了沉浸式的游戏体验。项目已经完成了核心功能的开发，包括怪物AI、物理交互、音频系统和UI系统。</p>
+                    <p>《地狱酒店》是一个恐怖风格的Unity游戏系列，通过精心的设计和开发，为玩家提供了沉浸式的游戏体验。项目已经完成了核心功能的开发，包括：</p>
+                    <ul>
+                        <li>系统管家与手机推销动画系统</li>
+                        <li>10+种超自然房客的怪物AI</li>
+                        <li>物理交互与橡胶员工效果</li>
+                        <li>完整的PBR材质与Shader系统</li>
+                        <li>音频系统与UI系统</li>
+                        <li>开始场景与大环境制作</li>
+                    </ul>
                     <p>未来计划：</p>
                     <ul>
                         <li>添加更多怪物类型和游戏机制</li>
                         <li>扩展游戏地图和关卡内容</li>
                         <li>优化游戏性能和用户体验</li>
-                        <li>开发多人游戏模式</li>
+                        <li>完善多人游戏模式</li>
                         <li>发布游戏到Steam等平台</li>
+                        <li>探索AI辅助游戏开发的更多可能性</li>
                     </ul>
                 </div>
                 
