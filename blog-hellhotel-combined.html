@@ -252,11 +252,13 @@
                     
                     <p><strong>单人探索版本：</strong>玩家将在一个充满神秘和危险的酒店中探索，面对各种怪物和挑战。游戏使用了现代化的视觉效果和音效设置，为玩家提供了沉浸式的游戏体验。</p>
 
-                    <h3 class="subsection-title">策划要点</h3>
+                    <h3 class="subsection-title">策划书要点</h3>
                     <p><strong>游戏定位：</strong>搞怪向3D物理模拟游戏、多人恐怖游戏，结合《致命公司》的核心循环和《Octodad Dadliest Catch》的物理效果。</p>
                     <p><strong>核心玩法：</strong>玩家扮演被束缚的橡胶员工，在充满超自然房客的地底酒店求生，通过清洁血肉污渍、服务超自然房客等方式获取资金。</p>
                     <p><strong>房客系统：</strong>包含会引发黑雾的孤独老妇、痴恋玩家的病娇跟踪狂等10+种危险存在。</p>
                     <p><strong>绩效机制：</strong>每三天需达成绩效指标，否则全员将被制成香肠，次日在锅炉房重组。</p>
+                    <p><strong>世界观设定：</strong>地底深处的神秘酒店，由神秘的"经理"运营，员工必须不断工作以维持生存。</p>
+                    <p><strong>艺术风格：</strong>暗黑卡通风格，结合血肉、机械、超自然元素的独特视觉表现。</p>
                 </div>
                 
                 <h2 class="section-title">技术栈</h2>
@@ -272,36 +274,56 @@
 
                 <h2 class="section-title">材质与特效系统</h2>
                 <div class="section-content">
-                    <h3 class="subsection-title">PBR材质制作</h3>
-                    <p>项目采用完整的PBR（基于物理的渲染）材质流程，包含以下材质通道：</p>
+                    <h3 class="subsection-title">PBR材质制作流程</h3>
+                    <p>项目采用完整的PBR（基于物理的渲染）材质流程，使用Substance Painter进行纹理绘制，包含以下材质通道：</p>
                     <ul>
-                        <li><strong>Base Color（基础色）：</strong>定义物体的表面颜色</li>
-                        <li><strong>Height（高度贴图）：</strong>用于表面凹凸细节</li>
-                        <li><strong>Metallic（金属度）：</strong>控制金属和非金属属性</li>
-                        <li><strong>Mixed AO（混合环境光遮蔽）：</strong>增强深度感</li>
-                        <li><strong>Normal（法线贴图）：</strong>提供表面细节</li>
-                        <li><strong>Roughness（粗糙度）：</strong>控制表面光滑程度</li>
-                        <li><strong>Opacity（不透明度）：</strong>用于透明材质</li>
-                        <li><strong>Translucency（半透明）：</strong>模拟次表面散射</li>
+                        <li><strong>Base Color（基础色）：</strong>定义物体的表面颜色，包含完整的颜色信息</li>
+                        <li><strong>Height（高度贴图）：</strong>用于表面凹凸细节，支持Parallax Occlusion Mapping</li>
+                        <li><strong>Metallic（金属度）：</strong>控制金属和非金属属性，范围0-1</li>
+                        <li><strong>Mixed AO（混合环境光遮蔽）：</strong>增强模型深度感和细节表现</li>
+                        <li><strong>Normal（法线贴图）：</strong>提供表面微观细节，增强真实感</li>
+                        <li><strong>Roughness（粗糙度）：</strong>控制表面光滑程度，影响反射效果</li>
+                        <li><strong>Opacity（不透明度）：</strong>用于透明材质，如玻璃、水等</li>
+                        <li><strong>Translucency（半透明）：</strong>模拟次表面散射，如皮肤、蜡烛等</li>
                     </ul>
 
-                    <h3 class="subsection-title">环境材质</h3>
+                    <h3 class="subsection-title">环境材质系统</h3>
                     <div class="feature-list">
                         <div class="feature-item">
                             <h4>开始场景环境</h4>
-                            <p>包含墙、中景货架、中远景圆柱容器、右边大水管、右边小水管、右边水塔、右边肉泥、头顶水管、抓夹、操作台、操作室前方围栏、操作室地板、操作室拖车、操作室货架、操作室货物、流水线轨道、烤肠、熔炉等环境物体的PBR材质。</p>
+                            <p>包含墙、中景货架、中远景圆柱容器、右边大水管、右边小水管、右边水塔、右边肉泥、头顶水管、抓夹、操作台、操作室前方围栏、操作室地板、操作室拖车、操作室货架、操作室货物、流水线轨道、烤肠、熔炉等环境物体的PBR材质。每个物体都有独立的材质实例，支持实时调整。</p>
                         </div>
                         <div class="feature-item">
                             <h4>水材质系统</h4>
-                            <p>使用Shader Graph开发了动态水和静态水两种材质，包含Waterfall瀑布贴图和完整的水流动画效果。</p>
+                            <p>使用Shader Graph开发了动态水和静态水两种材质，包含Waterfall瀑布贴图和完整的水流动画效果。动态水支持波纹效果、折射反射、泡沫模拟等高级特性。</p>
                         </div>
                         <div class="feature-item">
                             <h4>操作台灯系统</h4>
-                            <p>包含alarmlight报警灯（中心扩散式、左到右）、粒子特效雾贴图材质、蓝色发光屏幕材质、五颜六色小按键材质、半透明材质等。</p>
+                            <p>包含alarmlight报警灯（中心扩散式、左到右扫描效果）、粒子特效雾贴图材质、蓝色发光屏幕材质、五颜六色小按键材质、半透明材质等。灯光系统支持颜色变化、闪烁频率调整等功能。</p>
                         </div>
                         <div class="feature-item">
                             <h4>体积光Shader</h4>
-                            <p>实现了体积光照效果，增强场景的沉浸感和氛围。</p>
+                            <p>实现了体积光照效果，增强场景的沉浸感和氛围。体积光支持雾浓度、光照强度、散射系数等参数调整。</p>
+                        </div>
+                    </div>
+
+                    <h3 class="subsection-title">特殊材质效果</h3>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <h4>血肉材质</h4>
+                            <p>开发了专门的血肉材质，包含次表面散射效果，模拟真实的生物组织视觉效果。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>金属锈蚀材质</h4>
+                            <p>实现了金属锈蚀效果，包含锈迹纹理、磨损边缘、氧化层等细节。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>发光材质</h4>
+                            <p>支持自发光效果，可用于霓虹灯、显示器、发光生物等场景元素。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>玻璃与透明材质</h4>
+                            <p>实现了高质量的玻璃和透明材质，包含折射、反射、色散等效果。</p>
                         </div>
                     </div>
 
@@ -325,35 +347,35 @@
                     <div class="feature-list">
                         <div class="feature-item">
                             <h4>系统管家</h4>
-                            <p>实现了游戏内的系统管家功能，包括任务提示、绩效追踪、状态管理等核心UI系统。</p>
+                            <p>实现了游戏内的系统管家功能，包括任务提示、绩效追踪、状态管理等核心UI系统。系统管家会定期发布清洁任务、顾客服务请求和特殊事件，玩家需要在规定时间内完成以维持绩效。</p>
                         </div>
                         <div class="feature-item">
-                            <h4>手机推销动画</h4>
-                            <p>开发了手机推销的交互动画系统，包含电话接听、产品展示、顾客服务等完整流程。</p>
+                            <h4>手机推销动画系统</h4>
+                            <p>开发了完整的手机推销交互动画系统，包含电话接听、产品展示、顾客服务等完整流程。玩家需要通过手机接听神秘顾客的电话，根据语音提示完成各种服务任务。动画系统包括手机震动反馈、来电显示、通话界面等细节。</p>
                         </div>
                         <div class="feature-item">
                             <h4>怪物AI系统</h4>
-                            <p>实现了多种怪物的AI行为，包括追逐、躲避、攻击等，为玩家提供了富有挑战性的敌人。</p>
+                            <p>实现了多种怪物的AI行为，包括追逐、躲避、攻击等，为玩家提供了富有挑战性的敌人。每个怪物都有独特的行为模式和攻击方式，如孤独老妇的黑雾攻击、病娇跟踪狂的瞬移追逐等。</p>
                         </div>
                         <div class="feature-item">
-                            <h4>物理交互</h4>
-                            <p>使用Obi物理插件，实现了绳索、布料等物理效果，增加了游戏的真实感和互动性。</p>
+                            <h4>物理交互系统</h4>
+                            <p>使用Obi物理插件，实现了绳索、布料等物理效果，增加了游戏的真实感和互动性。玩家角色作为"橡胶员工"，具有独特的物理特性，可以拉伸、变形，增加了游戏的趣味性和挑战性。</p>
                         </div>
                         <div class="feature-item">
                             <h4>音频系统</h4>
-                            <p>设计了完整的音频系统，包括环境音效、背景音乐和角色音效，为游戏创造了恐怖的氛围。</p>
+                            <p>设计了完整的音频系统，包括环境音效、背景音乐和角色音效，为游戏创造了恐怖的氛围。使用Audacity进行音频处理，包含3D音效定位、动态音量控制等功能。</p>
                         </div>
                         <div class="feature-item">
                             <h4>UI系统</h4>
-                            <p>开发了直观的用户界面，包括菜单、HUD、地图等，提高了游戏的用户体验。</p>
+                            <p>开发了直观的用户界面，包括菜单、HUD、地图等，提高了游戏的用户体验。HUD显示绩效进度、金钱数量、任务提示等关键信息。</p>
                         </div>
                         <div class="feature-item">
                             <h4>角色与怪物设计</h4>
-                            <p>负责所有怪物的整个流程制作，包括建模、绑定、动画、各种特效等。</p>
+                            <p>负责所有怪物的整个流程制作，包括建模、绑定、动画、各种特效等。怪物设计融合了恐怖和搞怪元素，创造独特的视觉风格。</p>
                         </div>
                         <div class="feature-item">
                             <h4>场景设计</h4>
-                            <p>负责开始界面大场景的制作，包括地下工厂的HDRI场景制作、动画、特效、特殊材质效果等。</p>
+                            <p>负责开始界面大场景的制作，包括地下工厂的HDRI场景制作、动画、特效、特殊材质效果等。场景设计注重细节表现，营造沉浸式的恐怖氛围。</p>
                         </div>
                     </div>
                 </div>

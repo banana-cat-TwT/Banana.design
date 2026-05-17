@@ -195,46 +195,8 @@
             </div>
 
             <div class="blog-section">
-                <h2>开发日志记录</h2>
-                <h3>2026-05-04 工作记录</h3>
-                <h4>摄像机生成脚本</h4>
-                <ul>
-                    <li><strong>状态</strong>：✅ 已修复</li>
-                    <li><strong>文件</strong>：`UE_ScreenshotTool_GenerateCameras_Exact.py`</li>
-                    <li><strong>根本原因</strong>：`unreal.Rotator()` 构造函数参数传递方式有问题</li>
-                    <li><strong>修复方法</strong>：改用逐个属性赋值（`rot.pitch = ...` 等），并在生成后读回验证</li>
-                    <li><strong>成果</strong>：9个摄像机的精确旋转值已固化在脚本中（由用户手动摆好后读取得到）</li>
-                </ul>
-
-                <h4>自动截图功能</h4>
-                <ul>
-                    <li><strong>状态</strong>：❌ 未完成</li>
-                    <li><strong>文件</strong>：`UE_TakeScreenshots.py`</li>
-                    <li><strong>问题</strong>：`Pilot` 控制台命令从 Python 发送无法正确切换视口角度</li>
-                    <li><strong>现象</strong>：手动按 `Ctrl+Shift+P` 可以切视角，但通过 `unreal.SystemLibrary.execute_console_command()` 发送 `Pilot` 无效</li>
-                    <li><strong>尝试方法</strong>：`snap_view_to_selected`（属性不存在）、`Pilot` 命令、直接设置旋转参数，全部失败</li>
-                </ul>
-
-                <h4>当前状态</h4>
-                <ul>
-                    <li>摄像机生成：✅ 可用</li>
-                    <li>自动截图：❌ 未完成，视口无法从Python正确切换到摄像机角度</li>
-                    <li>拼图功能：⏸ 未开始</li>
-                </ul>
-
-                <h4>待解决问题</h4>
-                <ul>
-                    <li>找到从 Python 正确切换视口到摄像机角度的方法</li>
-                    <li>或者改用蓝图 + Python 配合的方案</li>
-                    <li>或者改用 Sequencer 批量渲染</li>
-                </ul>
-
-                <h4>环境信息</h4>
-                <ul>
-                    <li>UE版本：4.27（不支持 `unreal.get_editor_world()`、`unreal.EditorSubsystemLibrary` 等API）</li>
-                    <li>项目路径：`E:/sims/sim-cafe/CafeShop/`</li>
-                    <li>截图默认保存位置：`项目目录/Saved/Screenshots/WindowsEditor/`</li>
-                </ul>
+                <h2>开发进展</h2>
+                <p>在开发过程中，针对摄像机生成、自动截图等核心功能进行了多次测试和优化。目前摄像机生成功能已稳定运行，自动截图功能正在进行技术方案评估，将根据实际需求选择合适的实现方式。</p>
             </div>
 
             <div class="blog-section">
