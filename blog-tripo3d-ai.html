@@ -282,6 +282,15 @@
                             <p>风格化卡通角色模型生成过程 - 视角2</p>
                         </div>
                     </div>
+                    <div class="video-card">
+                        <video src="videos/tripo/naichameimei1.mp4" controls playsinline muted preload="metadata">
+                            您的浏览器不支持视频播放
+                        </video>
+                        <div class="video-card-content">
+                            <h4>日常服装角色（卡通风格）</h4>
+                            <p>日常服装卡通风格角色模型生成过程</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -356,6 +365,20 @@
                 <div class="highlight-box">
                     <strong>结果：</strong>Tripo3D在风格化卡通角色生成方面表现还可以，大致能理解并还原卡通风格的特征。
                 </div>
+
+                <h4>日常服装角色模型深度分析</h4>
+                <p><strong>问题分析：</strong></p>
+                <ul>
+                    <li><strong>手部与服装黏连问题：</strong>由于我的参考图中手和衣服是贴合在一起的，AI识别成了一体的设计，生成出来的手跟裙子粘在一块，下次生成时最好把手分开一些。</li>
+                    <li><strong>模型多余块面问题：</strong>AI有时候生成出来的裙摆会有多余的块面，可能它对裙子的结构不是很理解。</li>
+                    <li><strong>腰部布线问题：</strong>本来两条线就可以解决的问题，但是AI生成出来的腰部会有没必要的布线，导致腰部布线不自然。</li>
+                    <li><strong>脸部不符合参考：</strong>生成出来的脸完全不是我三视图给的那个脸，跟预期的面部特征差异较大。</li>
+                    <li><strong>耳朵生成不稳定：</strong>每次生成耳朵部分都会出错，只有一两次耳朵是圆的还可以用，大多数时候耳朵都有问题。</li>
+                </ul>
+                <p><strong>优点：</strong></p>
+                <ul>
+                    <li><strong>腿部以下的质量较好：</strong>Tripo生成的下半身都没啥问题，可以拆下来直接用，上半身总是会出错。</li>
+                </ul>
                 
                 <h4>T-Pose模型深度点评</h4>
                 <p><strong>优点：</strong></p>
