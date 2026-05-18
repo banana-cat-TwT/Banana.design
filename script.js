@@ -2547,18 +2547,40 @@ async function getVisitorInfo() {
     else if (userAgent.includes('Edge')) browser = 'Edge';
     else if (userAgent.includes('Opera')) browser = 'Opera';
     
-    // 获取城市
-    let city = '定位中...';
+    // 获取城市 - 优化版本：添加超时和缓存
+    let city = '未知城市';
     try {
-        const url = CONFIG.geoApiUrl || 'https://ipapi.co/json/';
-        const response = await fetch(url);
-        const data = await response.json();
-        
-        if (data.city) city = data.city;
-        else if (data.city_name) city = data.city_name;
-        else if (data.district) city = data.district;
+        // 检查缓存
+        const cachedCity = sessionStorage.getItem('visitorCity');
+        if (cachedCity) {
+            city = cachedCity;
+        } else {
+            const url = CONFIG.geoApiUrl || 'https://ipapi.co/json/';
+            
+            // 创建超时Promise
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('请求超时')), 3000);
+            });
+            
+            // 使用Promise.race实现超时控制
+            const response = await Promise.race([
+                fetch(url),
+                timeoutPromise
+            ]);
+            
+            const data = await response.json();
+            
+            if (data.city) city = data.city;
+            else if (data.city_name) city = data.city_name;
+            else if (data.district) city = data.district;
+            
+            // 缓存结果，有效期1小时
+            sessionStorage.setItem('visitorCity', city);
+            sessionStorage.setItem('visitorCityTime', Date.now().toString());
+        }
     } catch (e) {
-        city = '无法获取位置';
+        // 超时或错误时使用默认值，不影响页面加载
+        console.log('位置检测超时或失败，使用默认值');
     }
     
     return { os, browser, city };
