@@ -2433,6 +2433,83 @@ nav ul li a:hover::after {
     border-color: #A37C3F;
 }
 
+/* 灵鹿角色卡片样式 - 冰雪配色 */
+.character-card-linglu {
+    background: linear-gradient(135deg, #E8F4F8 10%, #B8D4E3 50%, #9BC5D6 100%);
+    border: 2px solid #6AB1D7;
+    box-shadow: 0 8px 20px rgba(106, 177, 215, 0.4);
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* 装饰元素 - 雪花效果 */
+.character-card-linglu::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle, rgba(255, 255, 255, 0.6) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255, 255, 255, 0.4) 1px, transparent 1px);
+    background-size: 30px 30px, 20px 20px;
+    background-position: 0 0, 15px 15px;
+    pointer-events: none;
+    z-index: 0;
+    animation: snowfall 15s linear infinite;
+}
+
+@keyframes snowfall {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(100px); }
+}
+
+.character-card-linglu .character-back {
+    background: linear-gradient(135deg, #E8F4F8 0%, #B8D4E3 100%);
+    border: 2px solid #6AB1D7;
+    border-radius: 15px;
+    position: relative;
+    overflow: hidden;
+}
+
+.back-overlay-linglu {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(184, 212, 227, 0.7);
+    z-index: 0;
+}
+
+.character-card-linglu .character-back h3,
+.character-card-linglu .character-back h4 {
+    color: #2E5A7A;
+    text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8);
+    font-family: 'Arial', sans-serif;
+    position: relative;
+    z-index: 1;
+}
+
+.character-card-linglu .character-back p {
+    color: #3A6A8A;
+    font-family: 'Arial', sans-serif;
+    position: relative;
+    z-index: 1;
+}
+
+.character-card-linglu:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(106, 177, 215, 0.6);
+}
+
+.character-card-linglu.active {
+    background: linear-gradient(135deg, #E8F4F8 0%, #B8D4E3 50%, #9BC5D6 100%);
+    box-shadow: 0 20px 40px rgba(106, 177, 215, 0.8);
+}
+
 .item-card-soul .item-front {
     background: transparent;
 }
