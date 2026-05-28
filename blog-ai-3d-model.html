@@ -207,32 +207,32 @@
             display: none;
         }
 
-        .video-container {
-            position: relative;
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto 20px;
+        .video-item {
+            background: rgba(0, 0, 0, 0.15);
             border-radius: 12px;
             overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
-            aspect-ratio: 16/9;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+            border: 1px solid rgba(232, 58, 125, 0.2);
+            width: 100%;
+            max-width: 1100px;
+            margin: 20px auto;
         }
 
-        .video-container video {
+        .video-item video {
             width: 100%;
-            height: 100%;
+            height: 500px;
             display: block;
+            background: #000;
             object-fit: cover;
         }
 
-        .video-caption {
-            text-align: center;
-            color: #bde6d4;
-            font-size: 0.9rem;
-            margin-top: 10px;
-            background: rgba(0, 0, 0, 0.3);
+        .video-item .video-caption {
             padding: 10px;
-            border-radius: 0 0 12px 12px;
+            text-align: center;
+            color: #2B4F3F;
+            font-size: 0.9rem;
+            background: rgba(0, 0, 0, 0.05);
+            margin: 0;
         }
 
         .ai-tool-box {
@@ -372,9 +372,9 @@
                     <li><strong>高模细节过度：</strong>AI会不必要地将眼睛和脸部红晕结构做出来，增加不必要的面数</li>
                     <li><strong>飘带贴合问题：</strong>蝴蝶结等飘带部件面与面之间贴得太近，不符合建模规范</li>
                 </ul>
-                <div class="video-container" style="margin-top: 20px;">
-                    <video controls width="100%">
-                        <source src="videos/3000AI生成/风格化卡通生成1.mp4" type="video/mp4">
+                <div class="video-item">
+                    <video controls>
+                        <source src="videos/3000/风格化卡通生成1.mp4" type="video/mp4">
                         您的浏览器不支持HTML5视频播放。
                     </video>
                     <p class="video-caption">试验一：风格化卡通生成1</p>
@@ -388,15 +388,15 @@
                     <li><strong>发型问题：</strong>低模发型效果不佳，需要手动处理</li>
                     <li><strong>UV问题：</strong>自动生成的UV展开质量较差，需要重新处理</li>
                 </ul>
-                <div class="video-container" style="margin-top: 20px;">
-                    <video controls width="100%">
+                <div class="video-item">
+                    <video controls>
                         <source src="videos/3000/fenggehua2_1.mp4" type="video/mp4">
                         您的浏览器不支持HTML5视频播放。
                     </video>
                     <p class="video-caption">试验二：风格化卡通生成（第一部分）</p>
                 </div>
-                <div class="video-container" style="margin-top: 20px;">
-                    <video controls width="100%">
+                <div class="video-item">
+                    <video controls>
                         <source src="videos/3000/fenggehua2_2.mp4" type="video/mp4">
                         您的浏览器不支持HTML5视频播放。
                     </video>
@@ -410,9 +410,9 @@
                     <li><strong>裙子构造问题：</strong>AI默认将裙子做成没有凹进去的形态，不符合真实裙底结构</li>
                     <li><strong>模型法线问题：</strong>AI生成的低模法线容易发黑，或者有莫名其妙的棱角法线</li>
                 </ul>
-                <div class="video-container" style="margin-top: 20px;">
-                    <video controls width="100%">
-                        <source src="videos/3000AI生成/风格化卡通生成3.mp4" type="video/mp4">
+                <div class="video-item">
+                    <video controls>
+                        <source src="videos/3000/风格化卡通生成3.mp4" type="video/mp4">
                         您的浏览器不支持HTML5视频播放。
                     </video>
                     <p class="video-caption">试验三：风格化卡通生成3</p>
@@ -424,22 +424,22 @@
                     <li><strong>钢模部分：</strong>整体效果尚可，基础结构生成比较稳定</li>
                     <li><strong>拓扑问题：</strong>采用默认的低模拓扑功能容易出现破面，但智能拓扑只在小角落出现</li>
                 </ul>
-                <div class="video-container" style="margin-top: 20px;">
-                    <video controls width="100%">
+                <div class="video-item">
+                    <video controls>
                         <source src="videos/3000/shouqiang1.mp4" type="video/mp4">
                         您的浏览器不支持HTML5视频播放。
                     </video>
                     <p class="video-caption">试验四：写实手枪模型生成过程（第一部分）</p>
                 </div>
-                <div class="video-container" style="margin-top: 20px;">
-                    <video controls width="100%">
+                <div class="video-item">
+                    <video controls>
                         <source src="videos/3000/shouqiang2.mp4" type="video/mp4">
                         您的浏览器不支持HTML5视频播放。
                     </video>
                     <p class="video-caption">试验四：写实手枪模型生成过程（第二部分）</p>
                 </div>
-                <div class="video-container" style="margin-top: 20px;">
-                    <video controls width="100%">
+                <div class="video-item">
+                    <video controls>
                         <source src="videos/3000/shouqiang3.mp4" type="video/mp4">
                         您的浏览器不支持HTML5视频播放。
                     </video>
