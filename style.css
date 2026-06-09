@@ -9747,8 +9747,62 @@ html {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
-    
+
     .video-container {
         max-width: 100%;
     }
+}
+
+/* 可折叠区域样式 */
+.collapsible-section {
+    margin: 15px 0;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.collapsible-section summary {
+    background: linear-gradient(135deg, rgba(236, 123, 53, 0.2), rgba(255, 179, 71, 0.1));
+    padding: 12px 16px;
+    cursor: pointer;
+    font-weight: bold;
+    color: #ffb347;
+    border: 1px solid rgba(236, 123, 53, 0.3);
+    border-radius: 8px;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.collapsible-section summary:hover {
+    background: linear-gradient(135deg, rgba(236, 123, 53, 0.3), rgba(255, 179, 71, 0.2));
+}
+
+.collapsible-section summary::-webkit-details-marker {
+    display: none;
+}
+
+.collapsible-section[open] summary {
+    border-radius: 8px 8px 0 0;
+}
+
+.collapsible-content {
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(236, 123, 53, 0.2);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+}
+
+.collapsible-content p {
+    margin-bottom: 12px;
+    line-height: 1.8;
+}
+
+.collapsible-content p:last-child {
+    margin-bottom: 0;
+}
+
+.collapsible-content strong {
+    color: #ffffff !important;
 }
