@@ -2434,6 +2434,81 @@ nav ul li a:hover::after {
 }
 
 /* 灵鹿角色卡片样式 - 冰雪配色 */
+.character-card-soldier {
+    background: linear-gradient(135deg, #1a0f0a 0%, #2d1810 50%, #1a0a00 100%);
+    border: 2px solid #8B4513;
+    box-shadow: 0 8px 20px rgba(139, 69, 19, 0.4);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.character-card-soldier::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        radial-gradient(circle, rgba(255, 100, 50, 0.3) 1px, transparent 1px),
+        radial-gradient(circle, rgba(255, 150, 50, 0.2) 1px, transparent 1px);
+    background-size: 40px 40px, 25px 25px;
+    background-position: 0 0, 20px 20px;
+    pointer-events: none;
+    z-index: 0;
+    animation: emberfloat 8s ease-in-out infinite;
+}
+
+@keyframes emberfloat {
+    0%, 100% { transform: translateY(0) translateX(0); opacity: 0.6; }
+    50% { transform: translateY(-20px) translateX(10px); opacity: 0.9; }
+}
+
+.character-card-soldier .character-back {
+    background: linear-gradient(135deg, #1a0f0a 0%, #2d1810 100%);
+    border: 2px solid #8B4513;
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.back-overlay-soldier {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(26, 15, 10, 0.6);
+    z-index: 0;
+}
+
+.character-card-soldier .character-back h3,
+.character-card-soldier .character-back h4 {
+    color: #D2691E;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    font-family: 'Arial', sans-serif;
+    position: relative;
+    z-index: 1;
+}
+
+.character-card-soldier .character-back p {
+    color: #CD853F;
+    font-family: 'Arial', sans-serif;
+    position: relative;
+    z-index: 1;
+}
+
+.character-card-soldier:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(139, 69, 19, 0.6);
+}
+
+.character-card-soldier.active {
+    background: linear-gradient(135deg, #1a0f0a 0%, #2d1810 50%, #1a0a00 100%);
+    box-shadow: 0 20px 40px rgba(139, 69, 19, 0.8);
+}
+
 .character-card-linglu {
     background: linear-gradient(135deg, #E8F4F8 10%, #B8D4E3 50%, #9BC5D6 100%);
     border: 2px solid #6AB1D7;
@@ -9637,6 +9712,36 @@ html {
 .blog-card-hellhotel .read-more:hover {
     background: linear-gradient(135deg, #ffaa44 0%, #b858b0 100%);
     box-shadow: 0 6px 20px rgba(255, 117, 24, 0.6);
+    transform: translateY(-2px);
+}
+
+.blog-card-fps-soldier {
+    background: linear-gradient(135deg, #1a0f0a 0%, #2d1810 100%);
+    border: 2px solid #8B4513;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 107, 53, 0.2);
+}
+
+.blog-card-fps-soldier:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6), 0 0 30px rgba(255, 107, 53, 0.4);
+    border-color: #FF6B35;
+}
+
+.blog-card-fps-soldier .blog-image {
+    background: linear-gradient(135deg, #8B4513 0%, #2d1810 100%);
+}
+
+.blog-card-fps-soldier .blog-content {
+    background: linear-gradient(180deg, rgba(45, 24, 16, 0.95) 0%, rgba(26, 15, 10, 0.95) 100%);
+}
+
+.blog-card-fps-soldier .blog-meta .blog-date {
+    background: rgba(205, 133, 63, 0.2);
+}
+
+.blog-card-fps-soldier .read-more:hover {
+    background: linear-gradient(135deg, #FF8C5A 0%, #A0522D 100%);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.6);
     transform: translateY(-2px);
 }
 
