@@ -2643,6 +2643,64 @@ nav ul li a:hover::after {
     box-shadow: 0 20px 40px rgba(139, 26, 26, 0.8);
 }
 
+.character-card-lolita {
+    background: linear-gradient(135deg, #1b2d2a 0%, #101a1b 100%);
+    border: 2px solid #8fbc9f;
+}
+
+.character-card-lolita::before {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    background: linear-gradient(135deg, #8fbc9f 0%, #a8d8b8 50%, #8fbc9f 100%);
+    border-radius: 12px;
+    z-index: -1;
+    opacity: 0.3;
+    animation: gradientShiftLolita 4s ease infinite;
+}
+
+@keyframes gradientShiftLolita {
+    0%, 100% { background: linear-gradient(135deg, #8fbc9f 0%, #a8d8b8 50%, #8fbc9f 100%); }
+    50% { background: linear-gradient(135deg, #a8d8b8 0%, #8fbc9f 50%, #a8d8b8 100%); }
+}
+
+.character-card-lolita .character-back {
+    background: linear-gradient(180deg, rgba(143, 188, 159, 0.2) 0%, rgba(168, 216, 184, 0.1) 50%, rgba(143, 188, 159, 0.1) 100%);
+}
+
+.back-overlay-lolita {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(ellipse at top right, rgba(143, 188, 159, 0.25) 0%, transparent 50%),
+                radial-gradient(ellipse at bottom left, rgba(168, 216, 184, 0.15) 0%, transparent 50%);
+    border-radius: 8px;
+}
+
+.character-card-lolita .character-back h3,
+.character-card-lolita .character-back h4 {
+    color: #8fbc9f;
+}
+
+.character-card-lolita .character-back p {
+    color: #a8d8b8;
+}
+
+.character-card-lolita:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(143, 188, 159, 0.5);
+}
+
+.character-card-lolita.active {
+    background: linear-gradient(135deg, #0a1010 0%, #1b2d2a 100%);
+    box-shadow: 0 20px 40px rgba(143, 188, 159, 0.7);
+}
+
 .item-card-soul .item-front {
     background: transparent;
 }
