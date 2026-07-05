@@ -251,6 +251,19 @@
                     </div>
                     <p style="color: #D9D4CC; font-size: 0.9rem; margin-top: 0.5rem; text-align: center;">地狱酒店游戏宣传视频</p>
                 </div>
+
+                <!-- 游戏演示视频 -->
+                <div class="game-demo-container" style="margin-top: 2rem;">
+                    <h3 style="color: #D96C2B; margin-bottom: 1rem; text-align: center;">游戏演示视频</h3>
+                    <div style="position: relative; width: 100%; border-radius: 12px; overflow: hidden; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); border: 2px solid #4A5560; background: #1a0a00;">
+                        <video id="gameDemoVideo" controls preload="metadata" style="width: 100%; display: block;">
+                            <source id="demoSource1" src="videos/diyujiudian2.mp4" type="video/mp4">
+                            <source id="demoSource2" src="videos/diyujiudian3.mp4" type="video/mp4" class="hidden-source">
+                            您的浏览器不支持视频播放，请点击 <a href="videos/diyujiudian2.mp4" style="color: #D96C2B;">下载视频</a>
+                        </video>
+                    </div>
+                    <p id="demoLabel" style="color: #D9D4CC; font-size: 0.9rem; margin-top: 0.5rem; text-align: center;">地狱酒店游戏实际游玩演示 - 第一部分</p>
+                </div>
                 
 
             </div>
@@ -340,5 +353,40 @@
     </footer>
 
     <script src="script.js"></script>
+    <script>
+        // 游戏演示视频自动衔接播放逻辑
+        (function() {
+            const video = document.getElementById('gameDemoVideo');
+            const label = document.getElementById('demoLabel');
+            const source1 = document.getElementById('demoSource1');
+            const source2 = document.getElementById('demoSource2');
+            
+            if (!video || !label || !source1 || !source2) return;
+            
+            // 当前播放状态
+            let currentPart = 1;
+            
+            // 监听视频结束事件
+            video.addEventListener('ended', function() {
+                if (currentPart === 1) {
+                    // 切换到第二部分
+                    currentPart = 2;
+                    video.src = source2.src;
+                    label.textContent = '地狱酒店游戏实际游玩演示 - 第二部分';
+                    video.load();
+                    video.play().catch(function(e) {
+                        console.log('自动播放被阻止，请手动点击播放:', e);
+                    });
+                } else {
+                    // 第二部分也播放完毕，重置回第一部分
+                    currentPart = 1;
+                    video.src = source1.src;
+                    label.textContent = '地狱酒店游戏实际游玩演示 - 第一部分';
+                    video.load();
+                    // 重置完成后不再自动播放，等待用户操作
+                }
+            });
+        })();
+    </script>
 </body>
 </html>
