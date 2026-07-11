@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简历 - AI 3D训练师</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @page {
+            size: A4;
+            margin: 0;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #f5f0eb;
+            color: #333;
+            line-height: 1.45;
+            font-size: 11.5px;
+        }
+
+        .resume-container {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            background: #fffaf7;
+            padding: 10mm 12mm;
+            box-shadow: 0 0 30px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            padding-bottom: 6px;
+            border-bottom: 1.5px solid #f0d8c8;
+            margin-bottom: 6px;
+        }
+
+        .header-left {
+            text-align: left;
+        }
+
+        .header-contact {
+            font-size: 10.5px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .header-contact-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .header-photo {
+            width: 24mm;
+            height: 33mm;
+            border: 1.5px solid #f0d8c8;
+            border-radius: 4px;
+            background: #fff5ee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #d4b8a8;
+            font-size: 10px;
+        }
+
+        .section {
+            margin-bottom: 6px;
+        }
+
+        .section-title {
+            font-size: 12px;
+            font-weight: bold;
+            color: #c97b5f;
+            margin-bottom: 4px;
+            padding-bottom: 3px;
+            border-bottom: 1.5px solid #f0d8c8;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 3px;
+            height: 11px;
+            background: #e8a87c;
+            margin-right: 5px;
+            border-radius: 2px;
+        }
+
+        .experience-item {
+            margin-bottom: 4px;
+            position: relative;
+            padding-left: 8px;
+            border-left: 1.5px solid #f0d8c8;
+        }
+
+        .experience-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1px;
+        }
+
+        .experience-company {
+            font-weight: bold;
+            color: #444;
+            font-size: 11px;
+        }
+
+        .experience-date {
+            font-size: 9.5px;
+            color: #999;
+            white-space: nowrap;
+        }
+
+        .experience-position {
+            color: #c97b5f;
+            font-size: 10px;
+            margin-bottom: 2px;
+            font-weight: 500;
+        }
+
+        .experience-desc {
+            font-size: 10px;
+            color: #555;
+            line-height: 1.45;
+        }
+
+        .experience-desc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .experience-desc li {
+            position: relative;
+            padding-left: 9px;
+            margin-bottom: 0;
+        }
+
+        .experience-desc li::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #e8a87c;
+            font-size: 9px;
+        }
+
+        .print-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #e8a87c, #c97b5f);
+            color: #fff;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            box-shadow: 0 4px 15px rgba(201, 123, 95, 0.4);
+            transition: all 0.3s;
+            z-index: 100;
+        }
+
+        .print-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(201, 123, 95, 0.5);
+        }
+
+        .hobby-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .hobby-item {
+            flex: 1;
+            min-width: 140px;
+            padding: 8px 12px;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #f0d5c2;
+        }
+
+        .hobby-name {
+            font-weight: 600;
+            color: #c97b5f;
+            font-size: 11px;
+            margin-bottom: 2px;
+        }
+
+        .hobby-desc {
+            font-size: 9.5px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        @media print {
+            .print-btn {
+                display: none;
+            }
+            body {
+                background: #fff;
+            }
+            .resume-container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="print-btn" onclick="window.print()">📄 导出 PDF</button>
+
+    <div class="resume-container">
+        <div class="header">
+            <div class="header-left">
+                <div class="header-contact">
+                    <div class="header-contact-row">
+                        <span>👤 姓名：郑婷仪</span>
+                        <span>📧 邮箱1：19859256157@163.com</span>
+                        <span>📧 邮箱2：874389103@qq.com</span>
+                        <span>💬 微信：httpnotonl1</span>
+                    </div>
+                    <div class="header-contact-row">
+                        <span>🌐 自制个人网站：https://banana-cat-twt.github.io/Banana.design/</span>
+                        <span>📍 意向城市：上海 / 深圳</span>
+                    </div>
+                </div>
+                <div class="header-education" style="margin-top: 4px; padding-top: 4px; border-top: 1px solid #f0d8c8;">
+                    <div class="experience-header">
+                        <div class="experience-company">中国美术学院 · 动画与游戏学院</div>
+                        <div class="experience-date">2022.09.01 - 2026.06.25</div>
+                    </div>
+                    <div class="experience-position">动画专业 · 本科</div>
+                    <div class="experience-desc">
+                        <ul>
+                            <li>毕业论文/设计研究方向：三维全流程辅助二维动画创作·实时引擎视觉开发与混合媒介表达</li>
+                            <li>研究覆盖：3D建模/材质/绑定/动画/特效/Shader开发/引擎渲染全流程</li>
+                            <li>技术实践：使用Maya/3ds Max/Unity实现建模→绑定→动画→引擎打光运镜特效→分层渲染→CSP/PS手绘加工混合媒介工作流</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="header-photo">照片</div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">个人简介</div>
+            <div class="experience-desc" style="padding-left: 10px; border-left: 1.5px solid #f0d8c8;">
+                <ul>
+                    <li>专注3D角色与技术美术方向，近1年游戏行业经验，擅长PBR全流程制作，并且有卡通二次元/手绘流程制作经验</li>
+                    <li>熟练掌握3ds Max、Maya、ZBrush、Substance Painter、Unity、UE、KeyShot、Toolbag等软件，具备AI工具应用经验，通过AI工作流提升资产制作效率</li>
+                    <li>良好的跨部门沟通与协作能力，多次参与游戏开发比赛，善于与策划/程序对接，制定资源交付标准，推动项目顺利落地</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">工作/实习经历</div>
+            
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div class="experience-company">腾讯天美IEG · 3D美术</div>
+                    <div class="experience-date">2025.08.11 - 2026.05.12</div>
+                </div>
+                <div class="experience-position">3D角色</div>
+                <div class="experience-desc">
+                    <ul>
+                        <li>参与6个赛季PBR角色、配饰及道具全流程制作，专精模型材质精度与贴图制作，在UE引擎中调试符合项目风格的美术效果，保障资产在游戏环境中的稳定性与一致性</li>
+                        <li>作为两条角色生产管线接口人，从IP联动需求确认到材质标准统一、资源制作、版本迭代上线全程跟进，同步策划、美术项目经理等多方对齐问题并推动闭环落地</li>
+                        <li>累计主导约30个完整需求的设计工作，独立完成角色、道具及配饰模型制作，跟进美术相关bug修复，及时响应并解决游戏中的技术问题</li>
+                        <li>自主开发引擎一键多视角截图工具，将提效思路迁移至毕业设计与个人项目，搭建轻量化在线个人作品展示平台</li>
+                        <li>探索AI辅助工作流，围绕LoRA、混元、Meshy、Tripo、Trellis等方向开展大模型训练与生成探索，使用公司内部AI平台辅助资产生产</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div class="experience-company">海康威视 · 3D设计</div>
+                    <div class="experience-date">2025.06.16 - 2025.08.01</div>
+                </div>
+                <div class="experience-position">3D美术 · 数字孪生项目</div>
+                <div class="experience-desc">
+                    <ul>
+                        <li>负责写实类模型制作，独立完成从模型搭建、UV拆分、贴图材质绘制到引擎内渲染的全管线，兼顾Shader实现与调校</li>
+                        <li>累计稳定交付十余个项目资产，保证模型在质感、光影响应和细节还原上达到写实标准，根据反馈迭代调优</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div class="experience-company">WA IMAGING文化传媒</div>
+                    <div class="experience-date">2023.07.16 - 2023.10.01</div>
+                </div>
+                <div class="experience-position">场景设计 · 摄像剪辑</div>
+                <div class="experience-desc">
+                    <ul>
+                        <li>协助完成拍摄全流程，包括场景布置、道具制作、跟拍录像、后期剪辑及多平台宣传发布，将打光构图经验运用于3D角色打光与镜头设计</li>
+                        <li>AI技术兴起初期开始接触并主动学习，在资深团队影响下养成日常审美积累习惯</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">项目经历</div>
+            
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div class="experience-company">腾讯游戏美术高校公开课 · 米哈游学园美术训练营/OPENDAY · 网易雷火角色制作训练营</div>
+                    <div class="experience-date">2024.03 - 2025.02</div>
+                </div>
+                <div class="experience-position">3D角色学员</div>
+                <div class="experience-desc">
+                    <ul>
+                        <li>系统学习游戏制作完整管线与各岗位职责，完成PBR角色全流程制作（武器/道具/服装/人物）</li>
+                        <li>通过参与各公司训练营活动，系统学习游戏制作完整管线与各岗位职责，建立规范化任务交付与迭代流程认知</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div class="experience-company">《电路链接》城市电路模拟经营游戏</div>
+                    <div class="experience-date">2024.12 - 2025.02</div>
+                </div>
+                <div class="experience-position">3D美术/技美 · 获星游优秀奖 / 金辰奖最佳技术应用奖</div>
+                <div class="experience-desc">
+                    <ul>
+                        <li>负责3D场景/特效/动画及TA全链路工作，统一项目美术风格、自制Shader、VFX特效等提升游戏视觉表现力</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div class="experience-company">《渊影》三七互娱高校小游戏开发大赛</div>
+                    <div class="experience-date">2024.10 - 2024.11</div>
+                </div>
+                <div class="experience-position">美术 · 获全开放赛道全国第三名</div>
+                <div class="experience-desc">
+                    <ul>
+                        <li>输出"2D影子王国+3D现实世界"双世界观设定，主导童话手绘风视觉标准制定，独立完成所有美术设计，获全开放赛道全国第三名</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div class="experience-company">《地狱酒店》恐怖欢乐向多人游戏</div>
+                    <div class="experience-date">2025.03 - 2025.05</div>
+                </div>
+                <div class="experience-position">3D美术/技美</div>
+                <div class="experience-desc">
+                    <ul>
+                        <li>独立负责开始界面大场景与全部角色怪物全流程制作，涵盖场景PBR制作、建模绑定、动画特效、Shader材质调试及UI界面制作</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">兴趣爱好</div>
+            <div class="hobby-list">
+                <div class="hobby-item">
+                    <div class="hobby-name">🎮 游戏开发</div>
+                    <div class="hobby-desc">利用课余时间开发小型游戏，学习游戏引擎和游戏设计原理</div>
+                </div>
+                <div class="hobby-item">
+                    <div class="hobby-name">🎬 看剧看电影</div>
+                    <div class="hobby-desc">通过影视作品感受不同的故事和世界观，为创作积累灵感</div>
+                </div>
+                <div class="hobby-item">
+                    <div class="hobby-name">🌍 旅游</div>
+                    <div class="hobby-desc">喜欢探索不同的地方，体验当地文化和风景，为创作寻找灵感</div>
+                </div>
+                <div class="hobby-item">
+                    <div class="hobby-name">🤖 研究前沿科技</div>
+                    <div class="hobby-desc">关注AI、3D生成、游戏引擎等前沿技术发展，不断学习和探索新技术在创作中的应用</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+    </script>
+</body>
+</html>
