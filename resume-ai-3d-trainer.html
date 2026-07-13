@@ -34,12 +34,24 @@
         }
 
         .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: stretch;
             padding-bottom: 6px;
             border-bottom: 1.5px solid #f0d8c8;
             margin-bottom: 6px;
+        }
+
+        .header-title {
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: #c97b5f;
+            margin-bottom: 6px;
+            letter-spacing: 4px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
         }
 
         .header-left {
@@ -56,19 +68,6 @@
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
-        }
-
-        .header-photo {
-            width: 24mm;
-            height: 33mm;
-            border: 1.5px solid #f0d8c8;
-            border-radius: 4px;
-            background: #fff5ee;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #d4b8a8;
-            font-size: 10px;
         }
 
         .section {
@@ -221,35 +220,37 @@
 
     <div class="resume-container">
         <div class="header">
-            <div class="header-left">
-                <div class="header-contact">
-                    <div class="header-contact-row">
-                        <span>👤 姓名：郑婷仪</span>
-                        <span>📧 邮箱1：19859256157@163.com</span>
-                        <span>📧 邮箱2：874389103@qq.com</span>
-                        <span>💬 微信：httpnotonl1</span>
+            <div class="header-title">个人简历</div>
+            <div class="header-content">
+                <div class="header-left">
+                    <div class="header-contact">
+                        <div class="header-contact-row">
+                            <span>👤 姓名：郑婷仪</span>
+                            <span>📧 邮箱1：19859256157@163.com</span>
+                            <span>📧 邮箱2：874389103@qq.com</span>
+                            <span>💬 微信：httpnotonl1</span>
+                        </div>
+                        <div class="header-contact-row">
+                            <span>🌐 自制个人网站：https://banana-cat-twt.github.io/Banana.design/</span>
+                            <span>📍 意向城市：上海 / 深圳</span>
+                        </div>
                     </div>
-                    <div class="header-contact-row">
-                        <span>🌐 自制个人网站：https://banana-cat-twt.github.io/Banana.design/</span>
-                        <span>📍 意向城市：上海 / 深圳</span>
-                    </div>
-                </div>
-                <div class="header-education" style="margin-top: 4px; padding-top: 4px; border-top: 1px solid #f0d8c8;">
-                    <div class="experience-header">
-                        <div class="experience-company">中国美术学院 · 动画与游戏学院</div>
-                        <div class="experience-date">2022.09.01 - 2026.06.25</div>
-                    </div>
-                    <div class="experience-position">动画专业 · 本科</div>
-                    <div class="experience-desc">
-                        <ul>
-                            <li>毕业论文/设计研究方向：三维全流程辅助二维动画创作·实时引擎视觉开发与混合媒介表达</li>
-                            <li>研究覆盖：3D建模/材质/绑定/动画/特效/Shader开发/引擎渲染全流程</li>
-                            <li>技术实践：建模→绑定→动画→shader制作→引擎打光运镜特效→分层渲染→CSP/PS加工混合媒介工作流→后期合成与音效制作</li>
-                        </ul>
+                    <div class="header-education" style="margin-top: 4px; padding-top: 4px; border-top: 1px solid #f0d8c8;">
+                        <div class="experience-header">
+                            <div class="experience-company">中国美术学院 · 动画与游戏学院</div>
+                            <div class="experience-date">2022.09.01 - 2026.06.25</div>
+                        </div>
+                        <div class="experience-position">动画专业 · 本科</div>
+                        <div class="experience-desc">
+                            <ul>
+                                <li>毕业论文/设计研究方向：三维全流程辅助二维动画创作·实时引擎视觉开发与混合媒介表达</li>
+                                <li>研究覆盖：3D建模/材质/绑定/动画/特效/Shader开发/引擎渲染全流程</li>
+                                <li>技术实践：建模→绑定→动画→shader制作→引擎打光运镜特效→分层渲染→CSP/PS加工混合媒介工作流→后期合成与音效制作</li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="header-photo">照片</div>
         </div>
 
         <div class="section">
