@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3ds Max Python脚本：批量统计模型顶点与面数 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+        }
+
+        .blog-detail-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .blog-detail-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #e94560;
+            text-shadow: 0 0 20px rgba(233, 69, 96, 0.4);
+        }
+
+        .blog-detail-subtitle {
+            font-size: 1rem;
+            color: #8892b0;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .blog-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(233, 69, 96, 0.2);
+            color: #e94560;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(233, 69, 96, 0.3);
+        }
+
+        .blog-detail-content {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: #ccd6f6;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #64ffda;
+            border-bottom: 1px solid rgba(100, 255, 218, 0.3);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .section-content {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-left: 3px solid #e94560;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #e6e6e6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .gallery-container {
+            margin-top: 2rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #e94560, #ff6b6b);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 1px solid rgba(233, 69, 96, 0.5);
+        }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(233, 69, 96, 0.4);
+        }
+
+        .highlight {
+            color: #e94560;
+            font-weight: bold;
+        }
+
+        .warning {
+            background: rgba(233, 69, 96, 0.1);
+            border-left: 3px solid #e94560;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .tip {
+            background: rgba(100, 255, 218, 0.1);
+            border-left: 3px solid #64ffda;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">3ds Max Python脚本：批量统计模型顶点与面数，实现资产初筛</h1>
+                <p class="blog-detail-subtitle">2026年3月27日 - 4月 · 清明假期前后开发</p>
+                <div class="blog-tags">
+                    <span class="blog-tag">Python</span>
+                    <span class="blog-tag">3dsMax脚本</span>
+                    <span class="blog-tag">三维管线自动化</span>
+                    <span class="blog-tag">AI训练数据预处理</span>
+                </div>
+            </div>
+
+            <div class="blog-detail-content">
+                <h2 class="section-title">项目背景</h2>
+                <div class="section-content">
+                    <p>项目组采用「总部初加工→外部承包商处理→返回总部」的多环节生产流程，在此过程中遇到了显著的效率瓶颈：</p>
+                    <ul>
+                        <li><span class="highlight">初加工耗时过长：</span>总部的初加工环节本身需要投入大量时间和精力，是整个流程的主要耗时点；</li>
+                        <li><span class="highlight">工作负担加剧：</span>团队本身已有繁重的任务量，多环节生产流程的引入进一步增加了工作负担；</li>
+                        <li><span class="highlight">个人精力投入过大：</span>初加工环节需要大量个人精力投入，影响工作生活平衡；</li>
+                        <li><span class="highlight">效率与质量难以兼顾：</span>在高负荷下，既要保证生产效率，又要维持资产质量，难度较大。</li>
+                    </ul>
+                    <p>针对上述痛点，设计并实现了这套自动化工具链：一方面通过Python脚本将重复性的资产质检任务自动化，减少人工投入；另一方面制定统一美术规范辅助AI识别2D三视图和3D模型特征，实现AI精准建模，从而有效减少初加工环节的个人精力投入，同时保持生产流程的准确性与效率。</p>
+                    <p><span class="highlight">核心目标：</span>建立「自动化初筛+人工精修+AI辅助」的高效流水线，在保持资产质量的前提下，减少初加工环节的个人精力投入。</p>
+                </div>
+
+                <h2 class="section-title">技术方案设计</h2>
+                <div class="section-content">
+                    <p>本项目包含两个核心部分，分别针对不同的问题场景：</p>
+                    <ul>
+                        <li><span class="highlight">1. 自动化资产质检脚本：</span>基于3ds Max Python API编写脚本，批量遍历目录内三维模型，自动统计顶点量、三角面、四边面数值，并检测模型破面情况，根据自定义阈值快速标记面数超标或存在破面问题的资产；搭配人工精修环节，搭建「脚本初筛+人工精细化拓扑优化」流水线，提升资产质检效率。</li>
+                        <li><span class="highlight">2. AI辅助建模规范体系：</span>针对「总部初加工→外部承包商处理→返回总部」多环节生产流程的效率痛点，制定统一美术规范辅助AI识别2D三视图以及3D模型的特征，输出CSV汇总表导入生成平台，实现AI精准建模与批量生成PBR全流程基础模型，有效减少初加工环节的个人精力投入，同时保持生产流程的准确性与效率。</li>
+                    </ul>
+                </div>
+
+                <h2 class="section-title">脚本功能清单</h2>
+                <div class="section-content">
+                    <ul>
+                        <li><span class="highlight">1.</span> 批量读取指定文件夹下FBX、OBJ格式模型文件；</li>
+                        <li><span class="highlight">2.</span> 统计每个模型总顶点数、三角面数、四边面数；</li>
+                        <li><span class="highlight">3.</span> 检测模型破面情况，标记存在拓扑问题的资产；</li>
+                        <li><span class="highlight">4.</span> 根据自定义阈值标记面数超标模型；</li>
+                        <li><span class="highlight">5.</span> 将统计结果导出CSV报表，方便后续筛选处理与AI平台导入。</li>
+                    </ul>
+                </div>
+
+                <h2 class="section-title">开发局限与设计考量</h2>
+                <div class="section-content">
+                    <div class="warning">
+                        <p><strong>局限1：</strong>脚本仅完成参数统计、筛查任务，无法自动重构四边拓扑；强行代码层面做自动四边重拓扑很容易损坏面部、关节等关键区域的细节布线。</p>
+                        <p><strong>局限2：</strong>最终采用流水线方案：脚本批量筛出不合格模型，后续借助Max自带ProOptimizer原生减面工具做精细化优化，效果优于纯自研减面代码。</p>
+                    </div>
+                    <p><span class="highlight">设计考量：</span>明确工具边界，脚本的价值在于「快速筛选」而非「自动修复」，将专业的拓扑优化工作留给人工完成，确保美术质量。这种「工具辅助+人工精修」的分工模式，既保证了效率，又兼顾了产出质量。</p>
+                    <p><span class="highlight">AI协作设计：</span>在素材整合阶段，通过制定统一的美术规范辅助AI识别2D三视图特征，输出标准化CSV汇总表导入生成平台，实现AI精准建模。这种「规范引导+数据驱动」的方式，有效提升了AI生成资产的准确度与一致性。</p>
+                </div>
+
+                <h2 class="section-title">面向AI训练场景的拓展展望</h2>
+                <div class="section-content">
+                    <div class="tip">
+                        <p>目前正在复刻这套统计逻辑改写Blender Python版本，后续可以用来批量审查AI生成的3D训练素材，批量把控数据集面数规范，适配大模型三维数据预处理的工作需求。</p>
+                    </div>
+                    <p><span class="highlight">拓展方向：</span></p>
+                    <ul>
+                        <li><span class="highlight">格式扩展：</span>迁移至Blender Python，支持glTF/FBX等通用格式，覆盖更多3D软件生态；</li>
+                        <li><span class="highlight">质检增强：</span>增加UV岛数量、贴图分辨率、LOD层级等质检项，构建完整的资产质量评估体系；</li>
+                        <li><span class="highlight">AI训练对接：</span>将脚本输出的CSV报表直接对接AI训练数据集预处理流水线，自动过滤不合格素材，提升训练数据质量；</li>
+                        <li><span class="highlight">规范迭代：</span>持续优化美术规范文档，提升AI识别2D特征的准确率，实现更精准的AI辅助建模。</li>
+                    </ul>
+                </div>
+
+                <a href="index.html#blog" class="btn-back">返回博客列表</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: 19859256157@163.com</p>
+                <p>所在地: 广东深圳</p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+</body>
+</html>
