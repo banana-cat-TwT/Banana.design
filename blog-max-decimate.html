@@ -8,6 +8,7 @@
     <style>
         body {
             background: linear-gradient(135deg, #2d1f1f, #3d2929, #4a3232);
+            cursor: none;
         }
 
         .blog-detail-container {
@@ -117,6 +118,45 @@
             color: #FFC17A;
             font-weight: bold;
         }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(255, 193, 122, 0.9) 0%, rgba(191, 142, 142, 0.7) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            box-shadow: 0 0 10px rgba(255, 193, 122, 0.5);
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(191, 142, 142, 0.9) 0%, rgba(148, 101, 101, 0.5) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 1s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.2);
+            }
+        }
     </style>
 </head>
 <body>
@@ -142,40 +182,52 @@
 
             <h2 class="section-title">技术方案设计</h2>
             <div class="section-content">
-                <p>本插件采用「自动化粗筛+人工精修」的流水线方案，核心思路是：</p>
+                <p>本插件的核心思路是在3ds Max中实现资产减面的自动化处理，具体方案如下：</p>
                 <ul>
-                    <li><span class="highlight">1. 脚本批量初筛：</span>使用之前开发的资产质检脚本，快速标记面数超标或存在破面问题的模型，建立待处理资产列表；</li>
-                    <li><span class="highlight">2. 智能减面处理：</span>基于3ds Max内置的ProOptimizer工具，通过Python API调用实现批量化减面，同时保留关键区域的细节；</li>
-                    <li><span class="highlight">3. 人工精细化拓扑优化：</span>脚本处理后的模型交由美术人员进行关键区域的拓扑修复，确保角色面部、关节等部位的布线质量。</li>
+                    <li><span class="highlight">1. 模型导入检验：</span>将FBX/OBJ格式模型导入3ds Max，使用脚本批量统计模型的顶点、三角面、四边面数量，并检测破面情况；</li>
+                    <li><span class="highlight">2. 自动减面处理：</span>复制原始模型，基于3ds Max内置的ProOptimizer工具，在副本上进行减面，支持设置减面率（0%-100%），可以自己设置规则；</li>
+                    <li><span class="highlight">3. 人工精修环节：</span>减面后的模型交由美术人员进行关键区域（面部、关节等）的拓扑修复，确保布线质量。</li>
                 </ul>
             </div>
 
-            <h2 class="section-title">插件功能清单</h2>
+            <h2 class="section-title">当前实现功能</h2>
             <div class="section-content">
                 <ul>
-                    <li><span class="highlight">1.</span> 批量读取指定文件夹下FBX、OBJ格式模型文件；</li>
-                    <li><span class="highlight">2.</span> 支持自定义减面比例（20%-90%），灵活控制优化程度；</li>
-                    <li><span class="highlight">3.</span> 集成ProOptimizer核心算法，保留边界边和材质边界；</li>
-                    <li><span class="highlight">4.</span> 支持顶点颜色和UV坐标的保留，确保贴图正确性；</li>
-                    <li><span class="highlight">5.</span> 批量导出减面后的模型，生成优化前后对比报表；</li>
-                    <li><span class="highlight">6.</span> 支持LOD层级自动生成，一次性输出多个精度级别。</li>
+                    <li><span class="highlight">1.</span> 批量读取指定文件夹下FBX、OBJ格式模型文件并导入3ds Max；</li>
+                    <li><span class="highlight">2.</span> 自动统计每个模型的顶点数、三角面数、四边面数；</li>
+                    <li><span class="highlight">3.</span> 检测模型破面情况，标记存在拓扑问题的资产；</li>
+                    <li><span class="highlight">4.</span> 自动复制原始模型，在副本上进行减面处理，减面成功；</li>
+                    <li><span class="highlight">5.</span> 支持设置减面率（0%-100%），可以自己设置减面规则。</li>
                 </ul>
             </div>
 
-            <h2 class="section-title">开发局限与设计考量</h2>
+            <h2 class="section-title">当前局限与改进方向</h2>
             <div class="section-content">
-                <p>在开发过程中，我遇到了几个关键问题，这些经历也让我对减面算法有了更深入的理解：</p>
+                <p>目前插件仍有一些需要优化的地方，也是后续改进的重点：</p>
                 <ul>
-                    <li><span class="highlight">1. 自动四边重拓扑的局限：</span>最初尝试在代码层面实现自动四边重拓扑，但发现对于角色面部、关节等复杂区域，算法很难保持自然的布线流向，容易产生畸形面和拉伸UV；</li>
-                    <li><span class="highlight">2. ProOptimizer的优势：</span>最终选择使用3ds Max自带的ProOptimizer工具，它在减面过程中能够智能识别边界边、材质边界和硬边，在保持模型整体形状的同时最大化减少面数，效果明显优于纯自研减面代码；</li>
-                    <li><span class="highlight">3. 关键区域保护策略：</span>针对角色模型，采取了先标记关键区域（面部、手部、关节）再进行减面的策略，确保这些区域保留足够的细节；</li>
-                    <li><span class="highlight">4. 批处理效率优化：</span>通过多线程加载和批量处理，大幅提升了处理海量资产的效率，单次处理100+模型的时间从数小时缩短到几十分钟。</li>
+                    <li><span class="highlight">1. 自动四边重拓扑困难：</span>尝试在代码层面实现自动四边重拓扑，但对于角色面部、关节等复杂区域，算法很难保持自然的布线流向，容易产生畸形面和拉伸UV；</li>
+                    <li><span class="highlight">2. 缺乏批量导出功能：</span>尚未实现减面后模型的批量导出和优化前后对比报表生成；</li>
+                    <li><span class="highlight">3. LOD层级自动生成待实现：</span>一次性输出多个精度级别LOD的功能尚未开发；</li>
+                    <li><span class="highlight">4. 关键区域保护策略待完善：</span>针对角色模型的面部、手部、关节等关键区域的保护策略尚未完全实现。</li>
+                </ul>
+                <p>基于以上局限，目前采取的方案是：脚本批量筛出不合格模型并自动减面，后续借助Max自带ProOptimizer原生减面工具进行精细化调整，效果优于纯自研减面代码。</p>
+            </div>
+
+            <h2 class="section-title">功能展望</h2>
+            <div class="section-content">
+                <p>目前正在尝试改善和优化以下功能，期望在后续版本中实现：</p>
+                <ul>
+                    <li><span class="highlight">1. 自定义减面比例：</span>实现脚本层面的批量减面比例设置，灵活控制优化程度（20%-90%）；</li>
+                    <li><span class="highlight">2. 批量导出与报表生成：</span>自动导出减面后的模型，生成优化前后对比报表；</li>
+                    <li><span class="highlight">3. LOD层级自动生成：</span>一次性输出多个精度级别，适配不同性能需求；</li>
+                    <li><span class="highlight">4. 关键区域保护策略：</span>针对角色模型，先标记关键区域（面部、手部、关节）再进行减面，确保这些区域保留足够的细节；</li>
+                    <li><span class="highlight">5. Blender Python版本复刻：</span>将这套减面逻辑改写为Blender Python版本，适配AI训练数据预处理场景。</li>
                 </ul>
             </div>
 
             <h2 class="section-title">面向AI训练场景的拓展展望</h2>
             <div class="section-content">
-                <p>目前正在复刻这套减面逻辑改写Blender Python版本，后续可以用于以下场景：</p>
+                <p>待核心功能完善后，后续可以用于以下场景：</p>
                 <ul>
                     <li><span class="highlight">1. AI生成3D训练素材预处理：</span>批量审查和优化AI生成的3D模型，确保数据集面数规范统一；</li>
                     <li><span class="highlight">2. LOD自动生成流水线：</span>为游戏引擎自动生成多精度LOD层级，适配不同性能需求的设备；</li>
@@ -187,11 +239,53 @@
             <h2 class="section-title">总结</h2>
             <div class="section-content">
                 <p>通过这次减面插件的开发，我深刻体会到在三维管线自动化中，「工具链整合」比「从零实现算法」更为重要。3ds Max的ProOptimizer经过多年迭代，在减面质量和效率上都有很好的表现，与其重新造轮子，不如通过脚本将其集成到自动化流程中，同时结合人工精修环节确保最终质量。</p>
-                <p>这套方案不仅解决了当前项目中的资产优化问题，更为未来AI训练数据预处理和大规模资产生产奠定了基础。</p>
+                <p>目前插件仍在改善和尝试中，核心功能尚未完全完善，但这套方案为未来AI训练数据预处理和大规模资产生产奠定了基础。</p>
             </div>
         </div>
 
         <center><a href="index.html#blog" class="btn-back">返回博客列表</a></center>
     </div>
+
+    <script>
+        const cursor = document.createElement('div');
+        cursor.className = 'custom-cursor';
+        document.body.appendChild(cursor);
+
+        let trailCount = 0;
+        const maxTrails = 50;
+
+        function createTrail(x, y) {
+            if (trailCount >= maxTrails) return;
+
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            trail.style.width = Math.random() * 6 + 4 + 'px';
+            trail.style.height = trail.style.width;
+            document.body.appendChild(trail);
+
+            trailCount++;
+
+            setTimeout(() => {
+                trail.remove();
+                trailCount--;
+            }, 600);
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            createTrail(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('mousedown', function() {
+            cursor.classList.add('clicking');
+        });
+
+        document.addEventListener('mouseup', function() {
+            cursor.classList.remove('clicking');
+        });
+    </script>
 </body>
 </html>

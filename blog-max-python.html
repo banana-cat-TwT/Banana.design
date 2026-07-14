@@ -8,6 +8,7 @@
     <style>
         body {
             background: linear-gradient(135deg, #2d1f1f, #3d2929, #4a3232);
+            cursor: none;
         }
 
         .blog-detail-container {
@@ -148,6 +149,45 @@
             font-weight: bold;
         }
 
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(255, 193, 122, 0.9) 0%, rgba(191, 142, 142, 0.7) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            box-shadow: 0 0 10px rgba(255, 193, 122, 0.5);
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(191, 142, 142, 0.9) 0%, rgba(148, 101, 101, 0.5) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 1s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.2);
+            }
+        }
+
         .warning {
             background: rgba(233, 69, 96, 0.1);
             border-left: 3px solid #e94560;
@@ -278,5 +318,47 @@
         </div>
         <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
     </footer>
+
+    <script>
+        const cursor = document.createElement('div');
+        cursor.className = 'custom-cursor';
+        document.body.appendChild(cursor);
+
+        let trailCount = 0;
+        const maxTrails = 50;
+
+        function createTrail(x, y) {
+            if (trailCount >= maxTrails) return;
+
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            trail.style.width = Math.random() * 6 + 4 + 'px';
+            trail.style.height = trail.style.width;
+            document.body.appendChild(trail);
+
+            trailCount++;
+
+            setTimeout(() => {
+                trail.remove();
+                trailCount--;
+            }, 600);
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            createTrail(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('mousedown', function() {
+            cursor.classList.add('clicking');
+        });
+
+        document.addEventListener('mouseup', function() {
+            cursor.classList.remove('clicking');
+        });
+    </script>
 </body>
 </html>
