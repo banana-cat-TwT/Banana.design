@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3ds Max减面插件研究日志 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #2d1f1f, #3d2929, #4a3232);
+        }
+
+        .blog-detail-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .blog-detail-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #BF8E8E;
+            text-shadow: 0 0 20px rgba(191, 142, 142, 0.4);
+        }
+
+        .blog-detail-subtitle {
+            font-size: 1rem;
+            color: #D4B8B8;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .blog-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(191, 142, 142, 0.2);
+            color: #BF8E8E;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(191, 142, 142, 0.3);
+        }
+
+        .blog-detail-content {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(191, 142, 142, 0.2);
+            color: #E3CFCF;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #FFC17A;
+            border-bottom: 1px solid rgba(255, 193, 122, 0.3);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .section-content {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-left: 3px solid #BF8E8E;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #E3CFCF;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            background: linear-gradient(135deg, #946565, #BF8E8E);
+            color: #E3CFCF;
+            text-decoration: none;
+            border-radius: 25px;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(148, 101, 101, 0.4);
+        }
+
+        .btn-back:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(148, 101, 101, 0.6);
+        }
+
+        .highlight {
+            color: #FFC17A;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="blog-detail-container">
+        <div class="blog-detail-header">
+            <h1 class="blog-detail-title">3ds Max减面插件研究日志</h1>
+            <p class="blog-detail-subtitle">2026年3月 · 清明前后开发</p>
+            <div class="blog-tags">
+                <span class="blog-tag">Python</span>
+                <span class="blog-tag">3dsMax脚本</span>
+                <span class="blog-tag">网格优化</span>
+                <span class="blog-tag">LOD生成</span>
+                <span class="blog-tag">三维管线自动化</span>
+            </div>
+        </div>
+
+        <div class="blog-detail-content">
+            <h2 class="section-title">项目背景</h2>
+            <div class="section-content">
+                <p>在三维资产生产流程中，高面数模型的性能优化是一个普遍痛点。特别是在「总部初加工→外部承包商处理→返回总部」的多环节流程中，外部承包商提交的角色、道具模型面数往往超标，导致引擎运行卡顿、内存占用过高。</p>
+                <p>市面上通用的减面算法（如Quadric Error Metric、Edge Collapse）虽然效率高，但容易破坏角色五官、关节这类关键区域的拓扑结构，造成美术质量损失。因此需要一个既能保证效率，又能兼顾美术质量的减面解决方案。</p>
+            </div>
+
+            <h2 class="section-title">技术方案设计</h2>
+            <div class="section-content">
+                <p>本插件采用「自动化粗筛+人工精修」的流水线方案，核心思路是：</p>
+                <ul>
+                    <li><span class="highlight">1. 脚本批量初筛：</span>使用之前开发的资产质检脚本，快速标记面数超标或存在破面问题的模型，建立待处理资产列表；</li>
+                    <li><span class="highlight">2. 智能减面处理：</span>基于3ds Max内置的ProOptimizer工具，通过Python API调用实现批量化减面，同时保留关键区域的细节；</li>
+                    <li><span class="highlight">3. 人工精细化拓扑优化：</span>脚本处理后的模型交由美术人员进行关键区域的拓扑修复，确保角色面部、关节等部位的布线质量。</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">插件功能清单</h2>
+            <div class="section-content">
+                <ul>
+                    <li><span class="highlight">1.</span> 批量读取指定文件夹下FBX、OBJ格式模型文件；</li>
+                    <li><span class="highlight">2.</span> 支持自定义减面比例（20%-90%），灵活控制优化程度；</li>
+                    <li><span class="highlight">3.</span> 集成ProOptimizer核心算法，保留边界边和材质边界；</li>
+                    <li><span class="highlight">4.</span> 支持顶点颜色和UV坐标的保留，确保贴图正确性；</li>
+                    <li><span class="highlight">5.</span> 批量导出减面后的模型，生成优化前后对比报表；</li>
+                    <li><span class="highlight">6.</span> 支持LOD层级自动生成，一次性输出多个精度级别。</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">开发局限与设计考量</h2>
+            <div class="section-content">
+                <p>在开发过程中，我遇到了几个关键问题，这些经历也让我对减面算法有了更深入的理解：</p>
+                <ul>
+                    <li><span class="highlight">1. 自动四边重拓扑的局限：</span>最初尝试在代码层面实现自动四边重拓扑，但发现对于角色面部、关节等复杂区域，算法很难保持自然的布线流向，容易产生畸形面和拉伸UV；</li>
+                    <li><span class="highlight">2. ProOptimizer的优势：</span>最终选择使用3ds Max自带的ProOptimizer工具，它在减面过程中能够智能识别边界边、材质边界和硬边，在保持模型整体形状的同时最大化减少面数，效果明显优于纯自研减面代码；</li>
+                    <li><span class="highlight">3. 关键区域保护策略：</span>针对角色模型，采取了先标记关键区域（面部、手部、关节）再进行减面的策略，确保这些区域保留足够的细节；</li>
+                    <li><span class="highlight">4. 批处理效率优化：</span>通过多线程加载和批量处理，大幅提升了处理海量资产的效率，单次处理100+模型的时间从数小时缩短到几十分钟。</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">面向AI训练场景的拓展展望</h2>
+            <div class="section-content">
+                <p>目前正在复刻这套减面逻辑改写Blender Python版本，后续可以用于以下场景：</p>
+                <ul>
+                    <li><span class="highlight">1. AI生成3D训练素材预处理：</span>批量审查和优化AI生成的3D模型，确保数据集面数规范统一；</li>
+                    <li><span class="highlight">2. LOD自动生成流水线：</span>为游戏引擎自动生成多精度LOD层级，适配不同性能需求的设备；</li>
+                    <li><span class="highlight">3. 资产轻量化方案：</span>针对VR/AR场景，实现自动化的资产轻量化处理，降低运行时资源消耗；</li>
+                    <li><span class="highlight">4. 云端渲染优化：</span>与云端渲染平台集成，在上传前自动优化模型面数，减少传输和渲染成本。</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">总结</h2>
+            <div class="section-content">
+                <p>通过这次减面插件的开发，我深刻体会到在三维管线自动化中，「工具链整合」比「从零实现算法」更为重要。3ds Max的ProOptimizer经过多年迭代，在减面质量和效率上都有很好的表现，与其重新造轮子，不如通过脚本将其集成到自动化流程中，同时结合人工精修环节确保最终质量。</p>
+                <p>这套方案不仅解决了当前项目中的资产优化问题，更为未来AI训练数据预处理和大规模资产生产奠定了基础。</p>
+            </div>
+        </div>
+
+        <center><a href="index.html#blog" class="btn-back">返回博客列表</a></center>
+    </div>
+</body>
+</html>
