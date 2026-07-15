@@ -234,7 +234,7 @@
                 <p>以下是针对同一张复杂结构的风格化角色三视图进行模型生成的过程记录：</p>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
                     <div style="background: rgba(229, 196, 148, 0.1); border-radius: 10px; overflow: hidden; border: 1px solid rgba(229, 196, 148, 0.2);">
-                        <video src="videos/hunyuan3D/hunyuan3D1.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto; max-height: 300px; object-fit: cover;">
+                        <video src="videos/hunyuan3D/hunyuan3D1.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto; object-fit: contain;">
                             您的浏览器不支持视频播放
                         </video>
                         <div style="padding: 1rem; text-align: center;">
@@ -243,7 +243,7 @@
                         </div>
                     </div>
                     <div style="background: rgba(229, 196, 148, 0.1); border-radius: 10px; overflow: hidden; border: 1px solid rgba(229, 196, 148, 0.2);">
-                        <video src="videos/hunyuan3D/hunyuan3D3.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto; max-height: 300px; object-fit: cover;">
+                        <video src="videos/hunyuan3D/hunyuan3D3.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto; object-fit: contain;">
                             您的浏览器不支持视频播放
                         </video>
                         <div style="padding: 1rem; text-align: center;">
@@ -252,7 +252,7 @@
                         </div>
                     </div>
                     <div style="background: rgba(229, 196, 148, 0.1); border-radius: 10px; overflow: hidden; border: 1px solid rgba(229, 196, 148, 0.2);">
-                        <video src="videos/hunyuan3D/hunyuan3D2.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto; max-height: 300px; object-fit: cover;">
+                        <video src="videos/hunyuan3D/hunyuan3D2.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto; object-fit: contain;">
                             您的浏览器不支持视频播放
                         </video>
                         <div style="padding: 1rem; text-align: center;">
@@ -261,7 +261,7 @@
                         </div>
                     </div>
                     <div style="background: rgba(229, 196, 148, 0.1); border-radius: 10px; overflow: hidden; border: 1px solid rgba(229, 196, 148, 0.2);">
-                        <video src="videos/hunyuan3D/hunyuan3D4.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto; max-height: 300px; object-fit: cover;">
+                        <video src="videos/hunyuan3D/hunyuan3D4.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto; object-fit: contain;">
                             您的浏览器不支持视频播放
                         </video>
                         <div style="padding: 1rem; text-align: center;">
@@ -280,7 +280,7 @@
                 <p>尝试使用混元3D的世界生成功能，探索从单张图像生成3D场景的可能性：</p>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
                     <div style="background: rgba(229, 196, 148, 0.1); border-radius: 10px; overflow: hidden; border: 1px solid rgba(229, 196, 148, 0.2);">
-                        <video src="videos/hunyuan3D/混元世界生成1.mp4" controls playsinline style="width: 100%; height: auto; max-height: 300px; object-fit: cover;">
+                        <video src="videos/hunyuan3D/混元世界生成1.mp4" controls playsinline style="width: 100%; height: auto; object-fit: contain;">
                             您的浏览器不支持视频播放
                         </video>
                         <div style="padding: 1rem; text-align: center;">
@@ -328,12 +328,56 @@
                 <p>虽然整体表现不错，但仍有一些小问题需要注意：</p>
                 <ul>
                     <li><strong>对称线无法完全闭合：</strong>生成的模型中间的对称线没有办法完全闭合，存在微小的缝隙或错位</li>
+                    <li><strong>鞋底拓扑边缘布线冗余：</strong>以鞋子为例，鞋底边缘存在一些不必要的线，这些线条不仅多余，还不够直，影响了整体拓扑的整洁度</li>
                     <li><strong>人工处理方便：</strong>不过这些小错误人工处理起来也行，不算大问题，但尽量还是把这些小错误转化为0会更利于用户体验，提高工作效率</li>
                 </ul>
 
                 <h4>总结</h4>
                 <p>综合来看，混元3D在低模拓扑方面的表现优于其他平台，是目前处理低模拓扑的较好选择。建议在生成后进行简单的人工检查和修复，即可获得质量不错的低模资产。</p>
             </div>
+
+            <div class="blog-section">
+                <h3>AI绑骨动作生成实验</h3>
+                <p>尝试使用混元3D的AI绑骨功能为风格化卡通模型绑定骨骼并生成动作，探索AI绑骨在复杂角色模型上的表现：</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                    <div style="background: rgba(229, 196, 148, 0.1); border-radius: 10px; overflow: hidden; border: 1px solid rgba(229, 196, 148, 0.2);">
+                        <video src="videos/hunyuan3D/混元ai绑骨动作1.mp4" controls playsinline style="width: 100%; height: auto; object-fit: contain;">
+                            您的浏览器不支持视频播放
+                        </video>
+                        <div style="padding: 1rem; text-align: center;">
+                            <h4 style="color: #8B7355; margin-bottom: 0.5rem;">AI绑骨动作生成实验</h4>
+                            <p style="font-size: 0.9rem; color: #A08060;">风格化卡通模型的AI骨骼绑定与动作生成</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>实验结果分析</h4>
+                <div class="subsection-box">
+                    <h4>存在的问题</h4>
+                    <ul>
+                        <li><strong>头部骨骼定位不准确：</strong>AI绑定的头部骨骼位置存在偏差，导致生成的两个动作中角色头部均呈现低头状态，无法保持正常的抬头姿态</li>
+                        <li><strong>裙子区域畸变严重：</strong>由于AI绑骨对复杂衣物结构的识别存在局限性，当角色抬腿时，裙子部分的网格会发生较大程度的畸变，影响整体动画效果</li>
+                    </ul>
+                </div>
+
+                <div class="subsection-box">
+                    <h4>原因分析</h4>
+                    <ul>
+                        <li>AI绑骨算法对风格化卡通模型的骨骼位置理解存在偏差，尤其是头部这类非标准骨骼结构</li>
+                        <li>裙子等柔性衣物部件的骨骼权重分配不够合理，导致动画时网格变形控制不佳</li>
+                    </ul>
+                </div>
+
+                <div class="subsection-box">
+                    <h4>改进建议</h4>
+                    <ul>
+                        <li>建议在AI绑骨后手动调整头部骨骼的位置和旋转，修正初始姿态</li>
+                        <li>对于裙子等复杂衣物部件，建议手动绘制骨骼权重或添加额外的约束骨骼</li>
+                        <li>期待未来版本能提升对风格化角色和复杂衣物的绑骨精度</li>
+                    </ul>
+                </div>
+            </div>
+
             <div class="blog-section">
                 <h3>复杂风格化角色生成分析</h3>
                 <div class="test-result">
