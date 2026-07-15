@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI短剧制作日志：用AI弥补剧情遗憾 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            cursor: none;
+        }
+
+        .blog-detail-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .blog-detail-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #50A0FF;
+            text-shadow: 0 0 20px rgba(80, 160, 255, 0.4);
+        }
+
+        .blog-detail-subtitle {
+            font-size: 1rem;
+            color: #A8D4FF;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .blog-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(80, 160, 255, 0.2);
+            color: #50A0FF;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(80, 160, 255, 0.3);
+        }
+
+        .blog-detail-content {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(80, 160, 255, 0.2);
+            color: #E0F0FF;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #80D0FF;
+            border-bottom: 1px solid rgba(128, 208, 255, 0.3);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .section-content {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #3d7cc9, #50A0FF);
+            color: #E0F0FF;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 1px solid rgba(80, 160, 255, 0.5);
+        }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(80, 160, 255, 0.4);
+        }
+
+        .highlight {
+            color: #80D0FF;
+            font-weight: bold;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(80, 160, 255, 0.9) 0%, rgba(61, 124, 201, 0.7) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            box-shadow: 0 0 10px rgba(80, 160, 255, 0.5);
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, rgba(80, 160, 255, 0.9) 0%, rgba(61, 124, 201, 0.5) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 0.6s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.2);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="blog-detail-container">
+        <div class="blog-detail-header">
+            <h1 class="blog-detail-title">AI短剧制作日志：用AI弥补剧情遗憾</h1>
+            <p class="blog-detail-subtitle">2026年7月 · 制作中</p>
+            <div class="blog-tags">
+                <span class="blog-tag">AI创作</span>
+                <span class="blog-tag">短剧制作</span>
+                <span class="blog-tag">AI生成</span>
+                <span class="blog-tag">创意表达</span>
+            </div>
+        </div>
+
+        <div class="blog-detail-content">
+            <h2 class="section-title">创作背景</h2>
+            <div class="section-content">
+                <p>最近开始尝试用AI工具制作短电影，主要是为了弥补一些喜欢的作品剧情太少、意犹未尽的遗憾。很多时候看完一部动画、游戏或者小说，总会觉得某些情节没有展开，某些角色的故事线不够完整，于是萌生了用AI来创作属于自己的续作或番外的想法。</p>
+                <p>AI技术的发展让个人创作者也能实现电影级别的视觉效果，无需庞大的团队和高昂的成本。通过AI生成画面、配音、配乐等元素，可以快速将脑海中的故事呈现出来，这对于表达个人创意和情感是一种非常有效的方式。</p>
+            </div>
+
+            <h2 class="section-title">制作流程</h2>
+            <div class="section-content">
+                <p>目前的制作流程主要分为以下几个步骤：</p>
+                <ul>
+                    <li><span class="highlight">1. 构思剧本：</span>根据喜欢的作品设定，构思新的剧情线或番外故事，确定角色、场景和情节发展；</li>
+                    <li><span class="highlight">2. AI生成分镜：</span>使用AI工具根据剧本描述生成关键帧画面，确定镜头角度和画面构图；</li>
+                    <li><span class="highlight">3. 画面生成：</span>基于分镜描述，使用AI图像生成工具生成逐帧画面；</li>
+                    <li><span class="highlight">4. 后期合成：</span>将生成的画面导入视频编辑软件，添加转场效果、字幕和背景音乐；</li>
+                    <li><span class="highlight">5. 配音与音效：</span>使用AI配音工具为角色添加语音，配合音效增强沉浸感。</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">当前制作进展</h2>
+            <div class="section-content">
+                <p>目前正在制作几个不同题材的短剧项目：</p>
+                <ul>
+                    <li><span class="highlight">1. 游戏角色番外篇：</span>为喜欢的游戏角色创作独立故事，展现他们在主线剧情之外的生活片段；</li>
+                    <li><span class="highlight">2. 动画续作想象：</span>基于动画的世界观，创作自己心中的续篇剧情；</li>
+                    <li><span class="highlight">3. 原创故事尝试：</span>尝试创作完全原创的短篇故事，探索AI在创意写作中的可能性。</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">技术工具</h2>
+            <div class="section-content">
+                <p>制作过程中使用的主要工具包括：</p>
+                <ul>
+                    <li><span class="highlight">AI图像生成：</span>用于生成场景、角色和分镜画面；</li>
+                    <li><span class="highlight">AI视频生成：</span>用于生成动态画面和特效；</li>
+                    <li><span class="highlight">AI配音：</span>用于为角色添加语音对白；</li>
+                    <li><span class="highlight">视频编辑软件：</span>用于后期合成和剪辑；</li>
+                    <li><span class="highlight">音频处理工具：</span>用于添加背景音乐和音效。</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">当前挑战与改进方向</h2>
+            <div class="section-content">
+                <p>在制作过程中遇到的主要挑战包括：</p>
+                <ul>
+                    <li><span class="highlight">1. 画面一致性：</span>AI生成的画面在不同帧之间可能存在风格不一致的问题，需要反复调整提示词；</li>
+                    <li><span class="highlight">2. 动作连贯性：</span>生成的连续帧之间动作衔接不够自然，需要后期手动调整；</li>
+                    <li><span class="highlight">3. 配音情感表达：</span>AI配音的情感表达不够细腻，需要寻找更合适的音色和语调；</li>
+                    <li><span class="highlight">4. 叙事节奏把控：</span>短剧的时长有限，如何在短时间内讲好一个完整的故事是一个挑战。</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">创作心得</h2>
+            <div class="section-content">
+                <p>通过AI短剧的制作，我深刻体会到AI技术为创意表达带来的无限可能。以前需要专业团队才能完成的事情，现在个人也能通过AI工具实现，这大大降低了创作门槛，让更多人能够表达自己的想法和情感。</p>
+                <p>同时，AI也不是万能的，它更像是一个强大的辅助工具。真正的创意和情感表达仍然需要创作者的精心设计和打磨。在未来，我希望能够不断探索AI与创意结合的更多可能性，创作出更有深度和感染力的作品。</p>
+            </div>
+
+            <h2 class="section-title">总结</h2>
+            <div class="section-content">
+                <p>AI短剧制作是一个充满乐趣和挑战的过程。通过这个方式，我不仅能够弥补自己对喜爱作品的剧情遗憾，还能锻炼自己的叙事能力和创意表达。虽然目前仍在探索阶段，但已经感受到了AI创作带来的无限乐趣和可能性。</p>
+                <p>后续将继续尝试更多题材和风格的短剧制作，不断提升作品的质量和完成度。</p>
+            </div>
+        </div>
+
+        <center><a href="index.html#blog" class="btn-back">返回博客列表</a></center>
+    </div>
+
+    <script>
+        const cursor = document.createElement('div');
+        cursor.className = 'custom-cursor';
+        document.body.appendChild(cursor);
+
+        let trailCount = 0;
+        const maxTrails = 50;
+
+        function createTrail(x, y) {
+            if (trailCount >= maxTrails) return;
+
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            trail.style.width = Math.random() * 6 + 4 + 'px';
+            trail.style.height = trail.style.width;
+            document.body.appendChild(trail);
+
+            trailCount++;
+
+            setTimeout(() => {
+                trail.remove();
+                trailCount--;
+            }, 600);
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            createTrail(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('mousedown', function() {
+            cursor.classList.add('clicking');
+        });
+
+        document.addEventListener('mouseup', function() {
+            cursor.classList.remove('clicking');
+        });
+    </script>
+</body>
+</html>
