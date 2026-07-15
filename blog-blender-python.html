@@ -225,6 +225,61 @@
                 </ul>
             </div>
 
+            <h2 class="section-title">AI辅助学习笔记：Blender Python自动化教程总结</h2>
+            <div class="section-content">
+                <p>通过AI辅助整理了一份完整的Blender Python自动化学习文档，以下是核心内容总结：</p>
+
+                <h3 style="color: #FFC17A; margin-top: 1.5rem; margin-bottom: 0.8rem;">核心概念：bpy模块与三大核心</h3>
+                <p><span class="highlight">bpy</span>是Blender的Python接口，理解它就像掌握了Blender的遥控器。其中最重要的三个概念：</p>
+                <ul>
+                    <li><span class="highlight">bpy.data</span> —— 仓库：文件里所有的数据（物体、材质、网格等），通过名字精准访问，最稳定推荐使用；</li>
+                    <li><span class="highlight">bpy.context</span> —— 当前状态：记录"此时此刻"选中了什么、激活了什么；</li>
+                    <li><span class="highlight">bpy.ops</span> —— 操作命令：对应界面上的按钮，但依赖上下文，批量处理时容易报错。</li>
+                </ul>
+                <p>新手准则：能用bpy.data直接改属性的，优先用bpy.data；只有复杂操作（如加修改器）才用bpy.ops。</p>
+
+                <h3 style="color: #FFC17A; margin-top: 1.5rem; margin-bottom: 0.8rem;">批量处理核心：循环</h3>
+                <p>自动化的灵魂就是循环。把"对一个物体的操作"套进for循环，就变成了"对一堆物体的操作"。</p>
+                <div class="code-block">
+                    <pre>for obj in bpy.context.selected_objects:
+    obj.location.z += 1  # 每个选中物体都抬高1米</pre>
+                </div>
+
+                <h3 style="color: #FFC17A; margin-top: 1.5rem; margin-bottom: 0.8rem;">实战案例速记</h3>
+                <p>以下是几个高频实用脚本模板：</p>
+                <ul>
+                    <li><span class="highlight">批量改名：</span>给选中物体加后缀（如_LP标记低模）；</li>
+                    <li><span class="highlight">批量导入/导出：</span>遍历文件夹导入FBX，或把选中物体逐个导出OBJ；</li>
+                    <li><span class="highlight">批量减面：</span>使用Decimate修改器批量生成低模；</li>
+                    <li><span class="highlight">材质应用：</span>给所有选中物体统一套上同一个材质；</li>
+                    <li><span class="highlight">一键清空场景：</span>删除所有物体并清理残留数据。</li>
+                </ul>
+
+                <h3 style="color: #FFC17A; margin-top: 1.5rem; margin-bottom: 0.8rem;">角色资产工作流专用</h3>
+                <p>针对3D角色资产工作流，以下脚本特别实用：</p>
+                <ul>
+                    <li><span class="highlight">一键生成烘焙用低模：</span>复制高模→减面→自动改名（_high/_low）；</li>
+                    <li><span class="highlight">面数检查：</span>遍历场景找出面数超标的物体；</li>
+                    <li><span class="highlight">批量应用修改器：</span>交付前统一烘死所有修改器；</li>
+                    <li><span class="highlight">清零Transform：</span>统一应用旋转和缩放，避免引擎问题；</li>
+                    <li><span class="highlight">自动渲染转盘图：</span>批量渲染角色多角度展示图。</li>
+                </ul>
+
+                <h3 style="color: #FFC17A; margin-top: 1.5rem; margin-bottom: 0.8rem;">调试技巧与常见报错</h3>
+                <p><span class="highlight">万能调试法：</span>到处塞print()，输出在系统控制台（Window→Toggle System Console）查看。</p>
+                <p><span class="highlight">常见报错：</span>KeyError（名字错了）、AttributeError（属性错了）、IndentationError（缩进错了）、context is incorrect（上下文不对）。</p>
+
+                <h3 style="color: #FFC17A; margin-top: 1.5rem; margin-bottom: 0.8rem;">进阶：制作面板和插件</h3>
+                <p>学会写脚本后，可以把常用功能做成界面按钮：定义Operator（按钮功能）和Panel（界面容器），注册后就能在N面板里看到自定义工具。加上bl_info头存成.py文件，就能安装成正式插件。</p>
+
+                <h3 style="color: #FFC17A; margin-top: 1.5rem; margin-bottom: 0.8rem;">学习资源</h3>
+                <ul>
+                    <li><span class="highlight">官方文档：</span><a href="https://docs.blender.org/api/current/" style="color: #FFC17A;">Blender Python API</a></li>
+                    <li><span class="highlight">B站教程：</span>《Blender Python自动化脚本技术》</li>
+                    <li><span class="highlight">YouTube频道：</span>Darkfall、CG Python、Curtis Holt</li>
+                </ul>
+            </div>
+
             <h2 class="section-title">总结</h2>
             <div class="section-content">
                 <p>目前我对Blender Python脚本的学习尚处于初级阶段，主要通过B站教学视频等资源进行基础知识的积累。虽然距离实现完整的自动化工具还有很长的路要走，但相信通过持续学习和实践，能够逐步掌握相关技能。</p>
