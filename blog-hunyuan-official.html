@@ -275,6 +275,65 @@
             </div>
 
             <div class="blog-section">
+                <h3>世界生成功能实验</h3>
+                <p>尝试使用混元3D的世界生成功能，探索从单张图像生成3D场景的可能性：</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                    <div style="background: rgba(0, 255, 229, 0.1); border-radius: 10px; overflow: hidden; border: 1px solid rgb(0, 212, 170);">
+                        <video src="videos/hunyuan3D/混元世界生成1.mp4" controls playsinline style="width: 100%; height: auto; max-height: 300px; object-fit: cover;">
+                            您的浏览器不支持视频播放
+                        </video>
+                        <div style="padding: 1rem; text-align: center;">
+                            <h4 style="color: var(--secondary); margin-bottom: 0.5rem;">混元世界生成实验</h4>
+                            <p style="font-size: 0.9rem; color: var(--light-bg);">从单张图像生成3D场景的过程记录</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>实验结果分析</h4>
+                <div class="highlight-box">
+                    <strong>当前状态：</strong><br>
+                    从视频中可以看出，目前的世界生成功能更像是一个图片的雏形。生成的场景整体还远未达到"生成一个完整世界"的水准。
+                </div>
+
+                <div class="highlight-box">
+                    <strong>核心问题：单张图像的局限性</strong><br>
+                    用单张图片生成3D场景明显不符合AI生成的逻辑。因为AI只看到了一个角度的画面，它无法知道这个世界在其他角度是什么样子的。单张图片输入无法让AI完整、完美地处理所有需要的细节，比如场景的深度、背面结构、各个角度的衔接等。
+                </div>
+
+                <h4>使用建议</h4>
+                <ul>
+                    <li>当前的世界生成功能可以作为一种创意参考，帮助快速获得场景的大致感觉和氛围</li>
+                    <li>不要期望一次生成就能得到完整可用的场景，需要进行大量手动调整和补充</li>
+                    <li>如果想要生成完整的世界，可能需要提供多个角度的参考图，或者分区域逐步生成</li>
+                    <li>期待未来版本能够支持多视角输入或逐步构建的方式，提升世界生成的完整性和细节质量</li>
+                </ul>
+            </div>
+
+            <div class="blog-section">
+                <h3>低模拓扑功能评价</h3>
+                <div class="highlight-box">
+                    <strong>混元3D的进步：低模拓扑能力</strong><br>
+                    最近使用下来，混元在低模拓扑方面确实有进步，整体表现还行，在处理低模的时候第一个会想到的工具。
+                </div>
+
+                <h4>与其他平台的对比</h4>
+                <p>将多个平台都用来处理了几遍低模拓扑，可以明显看出混元对低模拓扑的理解会好一些：</p>
+                <ul>
+                    <li><strong>形状保持较好：</strong>其他平台一旦要求低面数的低模，就很容易出现形状畸变，次数相比混元会多一些，生成的模型不符合最基本的规范</li>
+                    <li><strong>拓扑结构合理：</strong>混元生成的低模拓扑结构相对合理，布线逻辑清晰，便于后续加工</li>
+                </ul>
+
+                <h4>存在的小问题</h4>
+                <p>虽然整体表现不错，但仍有一些小问题需要注意：</p>
+                <ul>
+                    <li><strong>对称线无法完全闭合：</strong>生成的模型中间的对称线没有办法完全闭合，存在微小的缝隙或错位</li>
+                    <li><strong>人工处理方便：</strong>不过这些小错误人工处理起来也行，不算大问题，但尽量还是把这些小错误转化为0会更利于用户体验，提高工作效率</li>
+                </ul>
+
+                <h4>总结</h4>
+                <p>综合来看，混元3D在低模拓扑方面的表现优于其他平台，是目前处理低模拓扑的较好选择。建议在生成后进行简单的人工检查和修复，即可获得质量不错的低模资产。</p>
+            </div>
+            <div class="blog-section">
                 <h3>复杂风格化角色生成分析</h3>
                 <div class="test-result">
                     <div class="test-item">
