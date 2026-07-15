@@ -474,6 +474,55 @@
             </div>
 
             <div class="blog-section">
+                <h3>AI绑骨与动作生成实验</h3>
+                <p>最近尝试了Tripo3D的AI自动绑骨功能，并测试了动作生成能力：</p>
+                <div class="video-showcase">
+                    <div class="video-card">
+                        <video src="videos/tripo/ai绑骨动作1.mp4" controls playsinline muted preload="metadata">
+                            您的浏览器不支持视频播放
+                        </video>
+                        <div class="video-card-content">
+                            <h4>AI绑骨动作实验</h4>
+                            <p>测试Tripo3D自动绑骨和动作生成功能</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h4>实验中发现的问题</h4>
+                <div class="highlight-box">
+                    <strong>问题1：模型位置偏移</strong><br>
+                    每次Tripo自动绑骨完成后，模型会自动向上移动一截，导致模型位置发生偏移，需要手动调整回原来的位置。
+                </div>
+                <div class="highlight-box">
+                    <strong>问题2：动作生成后无自动播放</strong><br>
+                    点击对应的动作按钮后，等待生成完成后界面没有任何反应。新用户可能会误以为生成失败，但实际上动作已经生成完成，只是没有自动播放。需要用户手动点击播放才能看到动作效果。
+                </div>
+                <div class="highlight-box">
+                    <strong>问题3：模型拉伸变形</strong><br>
+                    在动作播放过程中，模型某些部位会出现明显的拉伸变形，尤其是鞋子部分，变形后完全不像鞋子的样子。
+                </div>
+                <div class="highlight-box">
+                    <strong>问题4：穿模现象</strong><br>
+                    手和裙子之间存在穿模问题，动作播放时手部会穿透裙子。
+                </div>
+
+                <h4>与Mixamo的对比</h4>
+                <div class="highlight-box">
+                    <strong>相比Mixamo的优势：</strong><br>
+                    Tripo的绑骨效果整体比Mixamo好一些。如果上传的模型后面有飘带等附属部件，Mixamo很容易把脚和飘带绑在一起，导致动作严重失真。Tripo在处理这类复杂结构时表现相对更好。
+                </div>
+
+                <h4>总结</h4>
+                <p>整体效果还行，但仍有较大的改进空间。绑骨和动作生成的质量还不够稳定，需要在后续使用中继续研究和优化。建议在绑骨前对模型进行适当的预处理，如简化复杂结构、拆分容易干扰的部件等，以获得更好的效果。</p>
+
+                <h4>使用建议</h4>
+                <ul>
+                    <li>绑骨完成后，注意检查模型位置是否发生偏移，如有偏移需要手动调整</li>
+                    <li>动作生成完成后，不要误以为生成失败，尝试手动点击播放按钮查看动作效果</li>
+                    <li>建议Tripo团队在后续版本中优化绑骨后的模型位置稳定性，并增加动作生成完成后的自动播放功能</li>
+                </ul>
+            </div>
+            <div class="blog-section">
                 <h3>技术优势与局限性</h3>
                 <h4>优势</h4>
                 <ul>
