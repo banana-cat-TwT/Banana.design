@@ -210,6 +210,158 @@
             </div>
         </section>
 
+        <section id="news" class="parallax-section" style="background: #0a0a0a;">
+            <div class="news-content">
+                <h2 class="elastic-element">📰 每日新闻 | 2026-07-16</h2>
+                <div class="news-tabs elastic-element">
+                    <button class="news-tab active" onclick="switchNewsTab('ai')">🤖 AI</button>
+                    <button class="news-tab" onclick="switchNewsTab('game')">🎮 游戏</button>
+                </div>
+                
+                <div class="news-slider-wrapper elastic-element" id="aiNewsSection">
+                    <button class="news-slider-btn prev-btn" onclick="slideNews('ai', -1)">←</button>
+                    <div class="news-container" id="aiNewsContainer">
+                        <div class="news-card news-card-1 elastic-element">
+                            <div class="news-number">①</div>
+                            <div class="news-info">
+                                <h3>苹果"Apple智能"完成国内备案</h3>
+                                <p>端侧AI Coding落地里程碑。7月15日，苹果"Apple智能"正式获批备案，将接入阿里千问和百度AI等国产模型能力。端侧AI coding能力从云端走向本地设备，重塑开发者工作流边界。</p>
+                                <div class="news-tags">
+                                    <span class="tag">苹果</span>
+                                    <span class="tag">端侧AI</span>
+                                    <span class="tag">Coding</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="news-card news-card-2 elastic-element">
+                            <div class="news-number">②</div>
+                            <div class="news-info">
+                                <h3>阿里全员禁用Claude Code</h3>
+                                <p>AI Coding工具安全与国产替代转折点。7月10日起阿里全员禁用Claude Code，统一替换为自研编程平台Qoder。起因是Claude Code被通报存在安全后门，可回传敏感数据。</p>
+                                <div class="news-tags">
+                                    <span class="tag">阿里巴巴</span>
+                                    <span class="tag">AI安全</span>
+                                    <span class="tag">Qoder</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="news-card news-card-3 elastic-element">
+                            <div class="news-number">③</div>
+                            <div class="news-info">
+                                <h3>面壁智能半年融资超50亿</h3>
+                                <p>端侧AI Coding模型独角兽。面壁智能估值突破200亿元，成为端侧智能领域公开估值最大独角兽。核心产品MiniCPM系列端侧模型已与三星手机达成合作。</p>
+                                <div class="news-tags">
+                                    <span class="tag">面壁智能</span>
+                                    <span class="tag">融资</span>
+                                    <span class="tag">MiniCPM</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="news-card news-card-4 elastic-element">
+                            <div class="news-number">④</div>
+                            <div class="news-info">
+                                <h3>逐际动力Pre-IPO轮2亿美元</h3>
+                                <p>具身智能资本加速。深圳通用人形机器人公司逐际动力完成近2亿美元Pre-IPO轮融资，投后估值150亿元。中国具身智能赛道百亿估值阵营已约20家。</p>
+                                <div class="news-tags">
+                                    <span class="tag">逐际动力</span>
+                                    <span class="tag">具身智能</span>
+                                    <span class="tag">IPO</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="news-card news-card-5 elastic-element">
+                            <div class="news-number">⑤</div>
+                            <div class="news-info">
+                                <h3>WAIC 2026明日开幕</h3>
+                                <p>具身智能首次列为核心赛道。7月17-20日在上海启幕，超200家具身智能企业参展。重磅看点包括谷歌Gemini 3.5 Pro发布、华为Atlas 950首展、多款人形机器人新品发布。</p>
+                                <div class="news-tags">
+                                    <span class="tag">WAIC</span>
+                                    <span class="tag">具身智能</span>
+                                    <span class="tag">AI大会</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="news-slider-btn next-btn" onclick="slideNews('ai', 1)">→</button>
+                </div>
+
+                <div class="news-slider-wrapper elastic-element" id="gameNewsSection" style="display: none;">
+                    <button class="news-slider-btn prev-btn" onclick="slideNews('game', -1)">←</button>
+                    <div class="news-container" id="gameNewsContainer">
+                        <div class="news-card news-card-1 elastic-element">
+                            <div class="news-number">①</div>
+                            <div class="news-info">
+                                <h3>微软Xbox裁3200人、剥离4家工作室</h3>
+                                <p>收购时代终结的信号。微软宣布全球裁员约4800人，Xbox游戏业务承担3200人。四家工作室脱离Xbox体系：Compulsion Games和Double Fine重新独立，Ninja Theory和Undead Labs寻找新管理方。背后原因是Game Pass订阅增长远低于预期，收购回报率极低。</p>
+                                <div class="news-tags">
+                                    <span class="tag">微软</span>
+                                    <span class="tag">Xbox</span>
+                                    <span class="tag">裁员</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="news-card news-card-2 elastic-element">
+                            <div class="news-number">②</div>
+                            <div class="news-info">
+                                <h3>育碧年度报告自曝"裁员裁到大动脉"</h3>
+                                <p>核心人才流失列为重大业务风险。过去三年累计裁员超2000人，员工总数从约2万降至1.65万。育碧承认重组"实际上加大了留住优秀人才的难度"，已启动核心岗位继任计划。</p>
+                                <div class="news-tags">
+                                    <span class="tag">育碧</span>
+                                    <span class="tag">人才流失</span>
+                                    <span class="tag">风险</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="news-card news-card-3 elastic-element">
+                            <div class="news-number">③</div>
+                            <div class="news-info">
+                                <h3>暑期档战况：7月近20款新游上线</h3>
+                                <p>腾讯《舞力全开：派对》《失控进化》、网易《遗忘之海》、米哈游《崩坏：因缘精灵》二测同日上线。7月9日腾讯网易正面交锋，前者主打SOC生存对抗+多人PVP，后者主打木偶美学+航海探索。</p>
+                                <div class="news-tags">
+                                    <span class="tag">暑期档</span>
+                                    <span class="tag">腾讯</span>
+                                    <span class="tag">网易</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="news-card news-card-4 elastic-element">
+                            <div class="news-number">④</div>
+                            <div class="news-info">
+                                <h3>UE 5.8收官：研发转向UE6</h3>
+                                <p>Unreal Engine 5.8发布，这是UE5系列计划内的最后重大版本更新。核心更新包括MegaLights光照系统、实验性MCP插件支持Claude等模型直接接入引擎。官方明确研发重心已转向虚幻引擎6，核心语言为Verse。</p>
+                                <div class="news-tags">
+                                    <span class="tag">Unreal</span>
+                                    <span class="tag">UE5.8</span>
+                                    <span class="tag">AI</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="news-card news-card-5 elastic-element">
+                            <div class="news-number">⑤</div>
+                            <div class="news-info">
+                                <h3>中国游戏市场1-5月收入1584亿</h3>
+                                <p>同比增长超过12%，月均稳定在300亿以上。米哈游目前BOSS直聘上104个岗位正在直招，涵盖美术表现类、程序技术类、产品策划类。行业从"堆人"到"堆AI"，技术美术（TA）岗需求上升。</p>
+                                <div class="news-tags">
+                                    <span class="tag">市场</span>
+                                    <span class="tag">米哈游</span>
+                                    <span class="tag">TA</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="news-slider-btn next-btn" onclick="slideNews('game', 1)">→</button>
+                </div>
+            </div>
+        </section>
+
         <section id="works" class="parallax-section">
             <div class="parallax-bg" data-speed="0.3" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20abstract%20background%2C%20subtle%20gradient%2C%20modern%20design%2C%20neutral%20tones&image_size=landscape_16_9');"></div>
             <div class="works-content">

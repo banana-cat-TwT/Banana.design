@@ -1056,6 +1056,36 @@ function slideWorks(direction) {
     slider.scrollLeft = slideIndex * itemWidth;
 }
 
+function slideNews(tab, direction) {
+    const newsContainer = document.getElementById(tab === 'ai' ? 'aiNewsContainer' : 'gameNewsContainer');
+    if (!newsContainer) return;
+    
+    const scrollAmount = 380;
+    newsContainer.scrollBy({
+        left: scrollAmount * direction,
+        behavior: 'smooth'
+    });
+}
+
+function switchNewsTab(tab) {
+    const aiSection = document.getElementById('aiNewsSection');
+    const gameSection = document.getElementById('gameNewsSection');
+    const aiTab = document.querySelector('.news-tab:nth-child(1)');
+    const gameTab = document.querySelector('.news-tab:nth-child(2)');
+    
+    if (tab === 'ai') {
+        aiSection.style.display = 'block';
+        gameSection.style.display = 'none';
+        aiTab.classList.add('active');
+        gameTab.classList.remove('active');
+    } else {
+        aiSection.style.display = 'none';
+        gameSection.style.display = 'block';
+        aiTab.classList.remove('active');
+        gameTab.classList.add('active');
+    }
+}
+
 
 
 // 打开作品详情
