@@ -1126,7 +1126,7 @@ nav ul li a:hover::after {
 }
 
 .news-tab.active {
-    background: linear-gradient(135deg, rgba(255, 159, 67, 0.9), rgba(254, 202, 87, 0.9));
+    background: rgba(255, 159, 67, 0.9);
     border-color: rgba(255, 159, 67, 0.8);
     color: #fff;
 }
@@ -1212,7 +1212,7 @@ nav ul li a:hover::after {
     float: left;
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, #FF9F43, #FECA57);
+    background: #FF9F43;
     color: #fff;
     font-size: 1.5rem;
     font-weight: bold;
@@ -1285,7 +1285,7 @@ nav ul li a:hover::after {
     justify-content: space-between;
     align-items: center;
     padding: 1.5rem;
-    background: linear-gradient(135deg, rgba(255, 159, 67, 0.1), rgba(254, 202, 87, 0.1));
+    background: rgba(255, 159, 67, 0.1);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
@@ -1334,7 +1334,7 @@ nav ul li a:hover::after {
 }
 
 .archive-tab.active {
-    background: linear-gradient(135deg, rgba(255, 159, 67, 0.9), rgba(254, 202, 87, 0.9));
+    background: rgba(255, 159, 67, 0.9);
     border-color: rgba(255, 159, 67, 0.8);
     color: #fff;
 }

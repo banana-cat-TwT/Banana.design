@@ -1080,12 +1080,18 @@ function switchNewsTab(tab) {
         aiTab.classList.add('active');
         gameTab.classList.remove('active');
         archiveTab.classList.remove('active');
+        setTimeout(() => {
+            aiSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 50);
     } else {
         aiSection.style.display = 'none';
         gameSection.style.display = 'block';
         aiTab.classList.remove('active');
         gameTab.classList.add('active');
         archiveTab.classList.remove('active');
+        setTimeout(() => {
+            gameSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 50);
     }
 }
 
