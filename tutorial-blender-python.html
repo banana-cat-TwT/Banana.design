@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blender Python自动化教程 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #2d1f1f, #3d2929, #4a3232);
+            cursor: none;
+        }
+
+        .tutorial-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .tutorial-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .tutorial-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #BF8E8E;
+            text-shadow: 0 0 20px rgba(191, 142, 142, 0.4);
+        }
+
+        .tutorial-subtitle {
+            font-size: 1rem;
+            color: #D4B8B8;
+            margin-bottom: 1.5rem;
+        }
+
+        .tutorial-content {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(191, 142, 142, 0.2);
+            color: #E3CFCF;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #FFC17A;
+            border-bottom: 1px solid rgba(255, 193, 122, 0.3);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .subsection-title {
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: #BF8E8E;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-left: 3px solid #BF8E8E;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #E3CFCF;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .tutorial-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tutorial-table th, .tutorial-table td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(191, 142, 142, 0.2);
+        }
+
+        .tutorial-table th {
+            background: rgba(191, 142, 142, 0.2);
+            color: #FFC17A;
+        }
+
+        .tutorial-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .highlight {
+            color: #FFC17A;
+            font-weight: bold;
+        }
+
+        .note-box {
+            background: rgba(255, 193, 122, 0.1);
+            border-left: 3px solid #FFC17A;
+            padding: 0.8rem 1.2rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #946565, #BF8E8E);
+            color: #E3CFCF;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 1px solid rgba(191, 142, 142, 0.5);
+        }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(148, 101, 101, 0.4);
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(255, 193, 122, 0.9) 0%, rgba(191, 142, 142, 0.7) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            box-shadow: 0 0 10px rgba(255, 193, 122, 0.5);
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, rgba(191, 142, 142, 0.9) 0%, rgba(148, 101, 101, 0.5) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 0.6s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.2);
+            }
+        }
+
+        .toc {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border-left: 3px solid #BF8E8E;
+        }
+
+        .toc h3 {
+            color: #FFC17A;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .toc li {
+            margin: 0.5rem 0;
+        }
+
+        .toc a {
+            color: #E3CFCF;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .toc a:hover {
+            color: #FFC17A;
+        }
+    </style>
+</head>
+<body>
+    <div class="tutorial-container">
+        <div class="tutorial-header">
+            <h1 class="tutorial-title">Blender Python自动化零基础完整教程</h1>
+            <p class="tutorial-subtitle">面向会用Blender但没用过Blender Python的人 · Blender 4.x</p>
+        </div>
+
+        <div class="tutorial-content">
+            <div class="toc">
+                <h3>目录</h3>
+                <ul>
+                    <li><a href="#section0">0. 先说人话：为什么美术要学这个</a></li>
+                    <li><a href="#section1">1. 环境准备：把脚本工作区调出来</a></li>
+                    <li><a href="#section2">2. Python极速入门（只学够用的）</a></li>
+                    <li><a href="#section3">3. bpy是什么：Blender的"遥控器"</a></li>
+                    <li><a href="#section4">4. 三大核心模块：data / context / ops</a></li>
+                    <li><a href="#section5">5. 操作对象：选中、移动、改名、删除</a></li>
+                    <li><a href="#section6">6. 循环批量处理（自动化的灵魂）</a></li>
+                    <li><a href="#section7">7. 实战案例合集（可直接抄）</a></li>
+                    <li><a href="#section8">8. 进阶：做一个自己的按钮/面板/插件</a></li>
+                    <li><a href="#section9">9. 角色资产工作流专用脚本</a></li>
+                    <li><a href="#section10">10. 调试技巧 & 常见报错翻译</a></li>
+                    <li><a href="#section11">11. 学习资源 & 速查表</a></li>
+                </ul>
+            </div>
+
+            <h2 class="section-title" id="section0">0. 先说人话：为什么美术要学这个</h2>
+            <p>你平时在 Blender 里干的这些活，其实都能用一行行代码代替：</p>
+            <ul>
+                <li>一次性给 200 个物体统一改名 / 加后缀</li>
+                <li>批量把一个文件夹里 50 个 .fbx 导入、居中、再导出成 .obj</li>
+                <li>给所有选中的物体套同一个材质</li>
+                <li>一键把高模复制一份、加个 Decimate（减面）修改器、烘焙用的低模就出来了</li>
+                <li>半夜自动渲染 100 个角色的转盘图</li>
+            </ul>
+            <p><span class="highlight">核心逻辑很简单</span>：你在 Blender 界面点的每一个按钮，背后都对应一句 Python 代码。学会自动化 = 学会"不用手点、让代码替你点"。</p>
+            <p>你不需要变成程序员，只需要会<span class="highlight">照葫芦画瓢改脚本</span>，就已经能省掉大量重复劳动。</p>
+
+            <h2 class="section-title" id="section1">1. 环境准备：把脚本工作区调出来</h2>
+            <h3 class="subsection-title">1.1 打开 Scripting 工作区</h3>
+            <p>Blender 顶部有一排工作区标签（Layout / Modeling / Sculpting…），拉到最右边点 <span class="highlight">Scripting</span>。</p>
+            <div class="table-container">
+                <table class="tutorial-table">
+                    <tr>
+                        <th>区域</th>
+                        <th>名字</th>
+                        <th>作用</th>
+                    </tr>
+                    <tr>
+                        <td>左下</td>
+                        <td><span class="highlight">Python Console（交互控制台）</span></td>
+                        <td>输一行执行一行，试代码用</td>
+                    </tr>
+                    <tr>
+                        <td>中间</td>
+                        <td><span class="highlight">Text Editor（文本编辑器）</span></td>
+                        <td>写完整脚本，点 ▶ 运行</td>
+                    </tr>
+                    <tr>
+                        <td>左上</td>
+                        <td><span class="highlight">Info / 3D视图</span></td>
+                        <td>看操作对应的代码</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h3 class="subsection-title">1.2 打开"信息窗口"看代码提示（超重要的偷懒技巧）</h3>
+            <p>Blender 会把你每一步鼠标操作，翻译成代码显示出来。</p>
+            <p><span class="highlight">方法</span>：把某个窗口的类型切换成 <span class="highlight">Info（信息）</span>（点窗口左上角那个图标下拉菜单选 Info）。</p>
+            <div class="code-block">
+                <pre>bpy.ops.transform.translate(value=(0, 0, 1.5))
+bpy.ops.object.delete()</pre>
+            </div>
+            <div class="note-box">
+                <p>这招是新手最快的学习方式：<span class="highlight">不知道某个功能的代码怎么写？先用鼠标点一次，去 Info 窗口抄答案。</span></p>
+            </div>
+
+            <h3 class="subsection-title">1.3 打开系统控制台（看报错必备）</h3>
+            <ul>
+                <li><span class="highlight">Window（窗口）菜单 → Toggle System Console（切换系统控制台）</span></li>
+                <li>会弹出一个黑色的命令行窗口，你的 <code>print()</code> 输出和红色报错都在这里显示。</li>
+                <li>写脚本时<span class="highlight">建议一直开着</span>，出错了才知道错在哪。</li>
+            </ul>
+
+            <h3 class="subsection-title">1.4 建议勾选的设置</h3>
+            <p><span class="highlight">Edit → Preferences → Interface → 勾选 Python Tooltips 和 Developer Extras</span></p>
+            <p>勾选后，把鼠标悬停在任意按钮上，提示框里会直接告诉你这个按钮对应的 Python 命令。</p>
+
+            <h2 class="section-title" id="section2">2. Python极速入门（只学够用的）</h2>
+            <h3 class="subsection-title">2.1 变量：给东西起个名字存起来</h3>
+            <div class="code-block">
+                <pre>name = "角色A"      # 文字（字符串），要用引号
+count = 5           # 整数
+scale = 1.5         # 小数（浮点数）
+is_low_poly = True  # 布尔值：True / False</pre>
+            </div>
+            <p>变量就是一个"盒子"，把值装进去，后面用名字就能取出来。</p>
+
+            <h3 class="subsection-title">2.2 数据类型速记</h3>
+            <div class="table-container">
+                <table class="tutorial-table">
+                    <tr>
+                        <th>类型</th>
+                        <th>例子</th>
+                        <th>说明</th>
+                    </tr>
+                    <tr>
+                        <td>字符串 str</td>
+                        <td>"Cube"</td>
+                        <td>文字，必须加引号</td>
+                    </tr>
+                    <tr>
+                        <td>整数 int</td>
+                        <td>10</td>
+                        <td>没有小数点的数</td>
+                    </tr>
+                    <tr>
+                        <td>浮点数 float</td>
+                        <td>1.75</td>
+                        <td>带小数点</td>
+                    </tr>
+                    <tr>
+                        <td>布尔 bool</td>
+                        <td>True / False</td>
+                        <td>是/否，开/关</td>
+                    </tr>
+                    <tr>
+                        <td>列表 list</td>
+                        <td>[1, 2, 3]</td>
+                        <td>一串东西，有顺序</td>
+                    </tr>
+                    <tr>
+                        <td>元组 tuple</td>
+                        <td>(0, 0, 1)</td>
+                        <td>和列表像，但不可改（常用于坐标/颜色）</td>
+                    </tr>
+                </table>
+            </div>
+
+            <h3 class="subsection-title">2.3 列表（超级常用）</h3>
+            <div class="code-block">
+                <pre>positions = [0, 5, 10]
+positions[0]        # 取第1个（从0开始数！）→ 0
+positions[-1]       # 取最后一个 → 10
+positions.append(15)  # 往后加一个 → [0, 5, 10, 15]
+len(positions)      # 数一共几个 → 4</pre>
+            </div>
+            <div class="note-box">
+                <p><span class="highlight">重点</span>：编程里数数从 <span class="highlight">0</span> 开始。第一个是 [0]，第二个是 [1]。</p>
+            </div>
+
+            <h3 class="subsection-title">2.4 判断：如果……就……</h3>
+            <div class="code-block">
+                <pre>if count > 3:
+    print("数量够多")
+else:
+    print("数量太少")</pre>
+            </div>
+            <p>注意：<code>if</code> 那行末尾有<span class="highlight">冒号 :</span>，下面的语句要<span class="highlight">缩进</span>（按 Tab 或 4 个空格）。缩进在 Python 里不是好看，是<span class="highlight">语法</span>，错了会报错。</p>
+
+            <h3 class="subsection-title">2.5 循环：把同一件事重复做（自动化的核心！）</h3>
+            <div class="code-block">
+                <pre>for i in [1, 2, 3]:
+    print(i)
+# 输出 1、2、3
+
+for obj in bpy.context.selected_objects:
+    print(obj.name)
+# 依次打印每个被选中物体的名字</pre>
+            </div>
+            <p><code>for ... in ...:</code> 的意思是"对里面的每一个东西，都做一遍下面的操作"。<span class="highlight">批量处理 = 循环。</span>记住这句就够了。</p>
+
+            <h3 class="subsection-title">2.6 函数：把一段代码打包成一个"技能"</h3>
+            <div class="code-block">
+                <pre>def say_hello(name):
+    print("你好，" + name)
+
+say_hello("角色A")   # 调用它 → 你好，角色A</pre>
+            </div>
+
+            <h2 class="section-title" id="section3">3. bpy是什么：Blender的"遥控器"</h2>
+            <div class="code-block">
+                <pre>import bpy</pre>
+            </div>
+            <p><code>bpy</code> = <span class="highlight">B</span>lender <span class="highlight">Py</span>thon，是 Blender 官方提供的 Python 接口。你可以把 <code>bpy</code> 理解成 Blender 的<span class="highlight">遥控器</span>：想让 Blender 干啥，就通过 <code>bpy</code> 下命令。</p>
+
+            <h2 class="section-title" id="section4">4. 三大核心模块：data / context / ops</h2>
+            <p>这是整个 Blender Python 最重要的三个概念，理解它们就理解了 80%。</p>
+
+            <h3 class="subsection-title">4.1 bpy.data —— 文件里的所有数据（"仓库"）</h3>
+            <div class="code-block">
+                <pre>bpy.data.objects        # 所有物体
+bpy.data.objects["Cube"]  # 名叫 Cube 的物体
+bpy.data.materials      # 所有材质
+bpy.data.meshes         # 所有网格数据
+bpy.data.collections    # 所有集合
+bpy.data.scenes         # 所有场景
+
+# 数一共有多少个物体
+print(len(bpy.data.objects))
+
+# 遍历所有物体名字
+for obj in bpy.data.objects:
+    print(obj.name)</pre>
+            </div>
+            <p>特点：<span class="highlight">通过名字精准访问</span>，不管它选没选中、在不在当前视图，只要文件里有就能拿到。<span class="highlight">最稳定、最推荐用它来批量处理。</span></p>
+
+            <h3 class="subsection-title">4.2 bpy.context —— 当前状态（"现在选中/激活的是谁"）</h3>
+            <div class="code-block">
+                <pre>bpy.context.object              # 当前激活物体（描边偏亮的那个）
+bpy.context.active_object       # 同上
+bpy.context.selected_objects    # 所有被选中的物体（列表）
+bpy.context.scene               # 当前场景
+bpy.context.mode                # 当前模式（OBJECT / EDIT_MESH...）
+bpy.context.view_layer.objects.active  # 设置/获取激活物体</pre>
+            </div>
+            <p>特点：跟随你的鼠标选择变化。<span class="highlight">"处理我选中的这些"就用它。</span></p>
+            <div class="note-box">
+                <p><span class="highlight">小坑</span>：激活物体（active）和选中物体（selected）不是一回事。你可以同时选中 5 个（selected），但激活的（active）只有 1 个（最后点的那个，描边最亮）。</p>
+            </div>
+
+            <h3 class="subsection-title">4.3 bpy.ops —— 操作命令（"点按钮"）</h3>
+            <div class="code-block">
+                <pre>bpy.ops.mesh.primitive_cube_add()      # 添加一个立方体
+bpy.ops.object.delete()                # 删除选中的
+bpy.ops.transform.translate(value=(0, 0, 2))  # 沿Z轴移动2米
+bpy.ops.object.shade_smooth()          # 平滑着色
+bpy.ops.object.modifier_add(type='SUBSURF')   # 加细分修改器</pre>
+            </div>
+            <p>特点：简单直观（跟点按钮一样），但<span class="highlight">有个大坑</span>——<code>ops</code> 依赖"上下文（context）"，也就是它默认作用于"当前选中/当前鼠标所在的窗口"。在脚本里批量跑时容易出现 <code>context is incorrect</code> 报错。</p>
+            <p><span class="highlight">新手准则：</span></p>
+            <ul>
+                <li><span class="highlight">能用 bpy.data 直接改属性的，优先用 bpy.data</span>（稳）。</li>
+                <li>只有某些复杂操作（比如加修改器、进出编辑模式）才用 bpy.ops。</li>
+            </ul>
+            <div class="code-block">
+                <pre># 方式A：ops（模拟点按钮，依赖选中状态）
+bpy.ops.transform.translate(value=(0, 0, 2))
+
+# 方式B：直接改数据（更稳，推荐）
+bpy.data.objects["Cube"].location.z += 2</pre>
+            </div>
+
+            <h2 class="section-title" id="section5">5. 操作对象：选中、移动、改名、删除</h2>
+            <h3 class="subsection-title">5.1 拿到一个物体</h3>
+            <div class="code-block">
+                <pre>obj = bpy.data.objects["Cube"]   # 按名字拿
+obj = bpy.context.active_object   # 拿当前激活的</pre>
+            </div>
+
+            <h3 class="subsection-title">5.2 读写它的常见属性</h3>
+            <div class="code-block">
+                <pre>obj.name = "角色_头部"                # 改名
+obj.location = (1.0, 2.0, 0.0)      # 位置 (x, y, z)
+obj.location.z = 5                   # 只改 Z
+obj.rotation_euler = (0, 0, 1.5708)  # 旋转（弧度！90°≈1.5708）
+obj.scale = (2, 2, 2)                # 缩放
+obj.hide_set(True)                   # 在视图里隐藏
+obj.hide_render = True               # 渲染时隐藏</pre>
+            </div>
+            <div class="note-box">
+                <p><span class="highlight">旋转是弧度不是角度</span>。想用角度，用 math 转换：</p>
+                <div class="code-block">
+                    <pre>import math
+obj.rotation_euler.z = math.radians(90)  # 90度</pre>
+                </div>
+            </div>
+
+            <h3 class="subsection-title">5.3 选中 / 取消选中</h3>
+            <div class="code-block">
+                <pre># 先全部取消选中
+bpy.ops.object.select_all(action='DESELECT')
+
+# 选中某个物体
+obj = bpy.data.objects["Cube"]
+obj.select_set(True)
+
+# 把它设为激活物体（很多 ops 需要有激活物体）
+bpy.context.view_layer.objects.active = obj</pre>
+            </div>
+
+            <h3 class="subsection-title">5.4 创建物体</h3>
+            <div class="code-block">
+                <pre>bpy.ops.mesh.primitive_cube_add(size=2, location=(0, 0, 0))
+bpy.ops.mesh.primitive_uv_sphere_add(radius=1, location=(3, 0, 0))
+bpy.ops.object.camera_add(location=(0, -10, 5))
+bpy.ops.object.light_add(type='SUN', location=(0, 0, 10))</pre>
+            </div>
+
+            <h3 class="subsection-title">5.5 删除物体</h3>
+            <div class="code-block">
+                <pre># 方式A：删选中的
+bpy.ops.object.delete()
+
+# 方式B：按名字精准删（推荐批量时用）
+obj = bpy.data.objects["Cube"]
+bpy.data.objects.remove(obj, do_unlink=True)</pre>
+            </div>
+
+            <h2 class="section-title" id="section6">6. 循环批量处理（自动化的灵魂）</h2>
+            <h3 class="subsection-title">6.1 遍历所有选中的物体</h3>
+            <div class="code-block">
+                <pre>import bpy
+
+for obj in bpy.context.selected_objects:
+    print(obj.name)          # 打印名字
+    obj.location.z += 1      # 每个都抬高1米</pre>
+            </div>
+
+            <h3 class="subsection-title">6.2 只处理网格类型的物体（过滤）</h3>
+            <div class="code-block">
+                <pre>for obj in bpy.data.objects:
+    if obj.type == 'MESH':      # 只要网格
+        obj.select_set(True)</pre>
+            </div>
+            <p>常见 <code>type</code>：'MESH'（网格）、'CAMERA'、'LIGHT'、'ARMATURE'（骨架）、'EMPTY'（空物体）。</p>
+
+            <h3 class="subsection-title">6.3 批量改名（带序号）</h3>
+            <div class="code-block">
+                <pre>import bpy
+
+selected = bpy.context.selected_objects
+
+for i, obj in enumerate(selected):   # enumerate 同时给出序号 i
+    obj.name = f"Character_{i:03d}"  # Character_000, Character_001...</pre>
+            </div>
+            <div class="note-box">
+                <p><code>f"..._{i:03d}"</code> 里的 <code>03d</code> 表示补零成3位数。<code>f"..."</code> 是 f-string，能把变量嵌进文字里，超好用。</p>
+            </div>
+
+            <h2 class="section-title" id="section7">7. 实战案例合集（可直接抄）</h2>
+            <div class="note-box">
+                <p><span class="highlight">用法</span>：复制到 Text Editor，改改路径/参数，点 ▶ Run Script（或按 Alt+P）。</p>
+            </div>
+
+            <h3 class="subsection-title">案例1：给所有选中物体统一加后缀</h3>
+            <div class="code-block">
+                <pre>import bpy
+
+suffix = "_LP"   # 想加的后缀，比如低模标记
+
+for obj in bpy.context.selected_objects:
+    obj.name = obj.name + suffix
+    # 同时把它的网格数据也改名（可选，习惯好）
+    if obj.data:
+        obj.data.name = obj.name
+
+print("改名完成！")</pre>
+            </div>
+
+            <h3 class="subsection-title">案例2：一键清空场景（重开画布）</h3>
+            <div class="code-block">
+                <pre>import bpy
+
+# 删除所有物体
+bpy.ops.object.select_all(action='SELECT')
+bpy.ops.object.delete()
+
+# 清理没人用的数据块（材质、网格残留）
+for block in bpy.data.meshes:
+    if block.users == 0:
+        bpy.data.meshes.remove(block)
+
+print("场景已清空")</pre>
+            </div>
+
+            <h3 class="subsection-title">案例3：批量导入一个文件夹里所有 FBX</h3>
+            <div class="code-block">
+                <pre>import bpy
+import os
+
+# 改成你的文件夹路径（Windows 用 / 或 \\，别用单个 \）
+folder = "F:/models/fbx_in"
+
+for filename in os.listdir(folder):
+    if filename.lower().endswith(".fbx"):
+        filepath = os.path.join(folder, filename)
+        bpy.ops.import_scene.fbx(filepath=filepath)
+        print("已导入:", filename)
+
+print("全部导入完成")</pre>
+            </div>
+
+            <h3 class="subsection-title">案例4：批量把选中物体各自导出成 OBJ</h3>
+            <div class="code-block">
+                <pre>import bpy
+import os
+
+out_folder = "F:/models/obj_out"
+os.makedirs(out_folder, exist_ok=True)  # 文件夹不存在就创建
+
+for obj in bpy.context.selected_objects:
+    # 只选中当前这一个
+    bpy.ops.object.select_all(action='DESELECT')
+    obj.select_set(True)
+    bpy.context.view_layer.objects.active = obj
+
+    filepath = os.path.join(out_folder, obj.name + ".obj")
+    # Blender 4.x 用新的导出算子；旧版是 export_scene.obj
+    bpy.ops.wm.obj_export(filepath=filepath, export_selected_objects=True)
+    print("已导出:", obj.name)
+
+print("批量导出完成")</pre>
+            </div>
+            <div class="note-box">
+                <p><span class="highlight">版本差异提示</span>：Blender 4.x 导出 OBJ 用 <code>bpy.ops.wm.obj_export(...)</code>；3.x 用 <code>bpy.ops.export_scene.obj(...)</code>。不确定就去 Info 窗口手动导一次抄代码。</p>
+            </div>
+
+            <h3 class="subsection-title">案例5：给所有选中物体套同一个材质</h3>
+            <div class="code-block">
+                <pre>import bpy
+
+# 新建一个材质
+mat = bpy.data.materials.new(name="通用材质")
+mat.use_nodes = True
+# 设个基础色（RGBA，0~1）
+bsdf = mat.node_tree.nodes.get("Principled BSDF")
+if bsdf:
+    bsdf.inputs["Base Color"].default_value = (0.8, 0.2, 0.2, 1.0)
+
+for obj in bpy.context.selected_objects:
+    if obj.type == 'MESH':
+        obj.data.materials.clear()      # 清掉原材质
+        obj.data.materials.append(mat)  # 套上新的
+
+print("材质已批量应用")</pre>
+            </div>
+
+            <h3 class="subsection-title">案例6：批量加"平滑着色 + 细分修改器"</h3>
+            <div class="code-block">
+                <pre>import bpy
+
+for obj in bpy.context.selected_objects:
+    if obj.type != 'MESH':
+        continue
+    bpy.context.view_layer.objects.active = obj
+
+    # 平滑着色
+    bpy.ops.object.shade_smooth()
+
+    # 加细分修改器
+    mod = obj.modifiers.new(name="Subdiv", type='SUBSURF')
+    mod.levels = 1          # 视图层级
+    mod.render_levels = 2   # 渲染层级
+
+print("处理完成")</pre>
+            </div>
+
+            <h3 class="subsection-title">案例7：批量减面（做低模常用）</h3>
+            <div class="code-block">
+                <pre>import bpy
+
+ratio = 0.3   # 保留 30% 的面
+
+for obj in bpy.context.selected_objects:
+    if obj.type != 'MESH':
+        continue
+    mod = obj.modifiers.new(name="Decimate", type='DECIMATE')
+    mod.ratio = ratio
+    # 如果想直接烘死（应用修改器）：
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.object.modifier_apply(modifier=mod.name)
+
+print("减面完成")</pre>
+            </div>
+
+            <h2 class="section-title" id="section8">8. 进阶：做一个自己的按钮/面板/插件</h2>
+            <h3 class="subsection-title">8.1 最小可用面板（在右侧 N 面板里加一个标签）</h3>
+            <div class="code-block">
+                <pre>import bpy
+
+# 1) 定义一个操作（按钮点了干啥）
+class OBJECT_OT_add_suffix(bpy.types.Operator):
+    bl_idname = "object.add_suffix_lp"   # 唯一ID，格式 类别.名字
+    bl_label = "给选中物体加_LP后缀"       # 按钮上的文字
+
+    def execute(self, context):
+        for obj in context.selected_objects:
+            obj.name = obj.name + "_LP"
+        self.report({'INFO'}, "改名完成")   # 顶部提示
+        return {'FINISHED'}
+
+# 2) 定义一个面板（按钮放哪）
+class VIEW3D_PT_my_tools(bpy.types.Panel):
+    bl_label = "我的工具"
+    bl_idname = "VIEW3D_PT_my_tools"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+    bl_category = "我的工具"   # N面板里的标签名
+
+    def draw(self, context):
+        layout = self.layout
+        layout.operator("object.add_suffix_lp")  # 放上那个按钮
+
+# 3) 注册
+classes = [OBJECT_OT_add_suffix, VIEW3D_PT_my_tools]
+
+def register():
+    for cls in classes:
+        bpy.utils.register_class(cls)
+
+def unregister():
+    for cls in classes:
+        bpy.utils.unregister_class(cls)
+
+if __name__ == "__main__":
+    register()</pre>
+            </div>
+            <p>结构记忆：</p>
+            <ul>
+                <li><span class="highlight">Operator（操作符）</span> = 按钮的功能，核心在 <code>execute()</code> 里写你的逻辑。</li>
+                <li><span class="highlight">Panel（面板）</span> = 界面容器，<code>draw()</code> 里决定放哪些按钮。</li>
+                <li><span class="highlight">register/unregister</span> = 告诉 Blender "把我的东西挂上/卸下"。</li>
+            </ul>
+
+            <h3 class="subsection-title">8.2 变成正式插件（addon）</h3>
+            <div class="code-block">
+                <pre>bl_info = {
+    "name": "我的美术工具箱",
+    "author": "你的名字",
+    "version": (1, 0),
+    "blender": (4, 2, 0),
+    "location": "View3D > N面板 > 我的工具",
+    "description": "批量改名等实用工具",
+    "category": "Object",
+}
+
+# ...(下面接 8.1 的类和 register/unregister)...</pre>
+            </div>
+
+            <h2 class="section-title" id="section9">9. 角色资产工作流专用脚本</h2>
+            <h3 class="subsection-title">9.1 一键生成"烘焙用低模"（高模复制 + 减面 + 改名）</h3>
+            <div class="code-block">
+                <pre>import bpy
+
+DECIMATE_RATIO = 0.25   # 低模保留比例
+
+for high in list(bpy.context.selected_objects):
+    if high.type != 'MESH':
+        continue
+
+    # 复制一份作为低模
+    low = high.copy()
+    low.data = high.data.copy()   # 网格也复制，避免共享
+    low.name = high.name + "_low"
+    bpy.context.collection.objects.link(low)
+
+    # 给低模加减面
+    mod = low.modifiers.new(name="Decimate", type='DECIMATE')
+    mod.ratio = DECIMATE_RATIO
+
+    # 高模也统一改名规范
+    if not high.name.endswith("_high"):
+        high.name = high.name + "_high"
+
+print("高低模已生成，记得检查UV/法线")</pre>
+            </div>
+
+            <h3 class="subsection-title">9.2 检查场景里面数过高的物体（优化排查）</h3>
+            <div class="code-block">
+                <pre>import bpy
+
+LIMIT = 50000   # 面数上限
+
+print("===== 面数检查 =====")
+for obj in bpy.data.objects:
+    if obj.type == 'MESH':
+        # 需要用 evaluated 拿到应用修改器后的真实面数（简化版直接读原始网格）
+        poly_count = len(obj.data.polygons)
+        flag = "  ⚠超标" if poly_count > LIMIT else ""
+        print(f"{obj.name}: {poly_count} 面{flag}")</pre>
+            </div>
+
+            <h3 class="subsection-title">9.3 批量应用所有修改器（交付前烘死）</h3>
+            <div class="code-block">
+                <pre>import bpy
+
+for obj in bpy.context.selected_objects:
+    if obj.type != 'MESH':
+        continue
+    bpy.context.view_layer.objects.active = obj
+    for mod in list(obj.modifiers):
+        try:
+            bpy.ops.object.modifier_apply(modifier=mod.name)
+        except RuntimeError as e:
+            print(f"{obj.name} 的 {mod.name} 应用失败: {e}")
+
+print("修改器已应用")</pre>
+            </div>
+
+            <h3 class="subsection-title">9.4 批量设置 Transform（清零位置 + 应用缩放）</h3>
+            <div class="code-block">
+                <pre>import bpy
+
+for obj in bpy.context.selected_objects:
+    bpy.ops.object.select_all(action='DESELECT')
+    obj.select_set(True)
+    bpy.context.view_layer.objects.active = obj
+    # 应用旋转和缩放（保留位置）
+    bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
+
+print("旋转/缩放已应用，scale 现在都是 1")</pre>
+            </div>
+
+            <h3 class="subsection-title">9.5 自动渲染转盘图（角色展示）</h3>
+            <div class="code-block">
+                <pre>import bpy
+import math
+import os
+
+obj = bpy.context.active_object
+frames = 8                          # 转8个角度
+out = "F:/renders/turntable"
+os.makedirs(out, exist_ok=True)
+
+for i in range(frames):
+    obj.rotation_euler.z = math.radians(360 / frames * i)
+    bpy.context.scene.render.filepath = os.path.join(out, f"turn_{i:02d}.png")
+    bpy.ops.render.render(write_still=True)
+    print(f"已渲染第 {i+1}/{frames} 张")
+
+print("转盘渲染完成")</pre>
+            </div>
+
+            <h2 class="section-title" id="section10">10. 调试技巧 & 常见报错翻译</h2>
+            <h3 class="subsection-title">10.1 万能调试大法：print()</h3>
+            <div class="code-block">
+                <pre>print("走到这了")
+print("物体名字是:", obj.name)
+print("类型:", type(obj))</pre>
+            </div>
+            <p>输出在<span class="highlight">系统控制台</span>（Window → Toggle System Console）里看。</p>
+
+            <h3 class="subsection-title">10.2 用 dir() 查一个东西有哪些属性</h3>
+            <div class="code-block">
+                <pre>obj = bpy.context.active_object
+print(dir(obj))   # 列出 obj 能用的所有属性和方法</pre>
+            </div>
+
+            <h3 class="subsection-title">10.3 常见报错对照表</h3>
+            <div class="table-container">
+                <table class="tutorial-table">
+                    <tr>
+                        <th>报错信息</th>
+                        <th>人话翻译</th>
+                        <th>解决</th>
+                    </tr>
+                    <tr>
+                        <td><code>KeyError: 'Cube'</code></td>
+                        <td>找不到名叫 Cube 的东西</td>
+                        <td>名字打错了/物体不存在，检查拼写</td>
+                    </tr>
+                    <tr>
+                        <td><code>AttributeError: ... has no attribute ...</code></td>
+                        <td>这个东西没有你写的那个属性</td>
+                        <td>属性名错了，用 <code>dir()</code> 查正确名字</td>
+                    </tr>
+                    <tr>
+                        <td><code>RuntimeError: Operator ... context is incorrect</code></td>
+                        <td>ops 找不到合适的上下文</td>
+                        <td>鼠标/选中状态不对，改用 <code>bpy.data</code> 直接改，或先设好 active/selected</td>
+                    </tr>
+                    <tr>
+                        <td><code>IndentationError</code></td>
+                        <td>缩进错了</td>
+                        <td>检查每行前面的空格/Tab 是否对齐</td>
+                    </tr>
+                    <tr>
+                        <td><code>SyntaxError</code></td>
+                        <td>语法写错了</td>
+                        <td>多半是漏了 <code>:</code>、引号、括号没配对</td>
+                    </tr>
+                    <tr>
+                        <td><code>NoneType has no attribute</code></td>
+                        <td>你想操作的东西是"空的"(None)</td>
+                        <td>比如没选中任何物体，<code>active_object</code> 是 None，先判断 <code>if obj:</code></td>
+                    </tr>
+                </table>
+            </div>
+
+            <h3 class="subsection-title">10.4 bpy.ops 报 context 错误的经典解法</h3>
+            <div class="code-block">
+                <pre>bpy.ops.object.select_all(action='DESELECT')
+obj.select_set(True)
+bpy.context.view_layer.objects.active = obj   # 关键：设激活
+bpy.ops.object.shade_smooth()                 # 现在能跑了</pre>
+            </div>
+
+            <h2 class="section-title" id="section11">11. 学习资源 & 速查表</h2>
+            <h3 class="subsection-title">11.1 官方 & 权威资源</h3>
+            <ul>
+                <li><span class="highlight">Blender Python API 官方文档</span>（最权威）：<a href="https://docs.blender.org/api/current/" style="color: #FFC17A;">https://docs.blender.org/api/current/</a></li>
+                <li><span class="highlight">官方手册-脚本入门</span>：<a href="https://docs.blender.org/manual/en/latest/advanced/scripting/index.html" style="color: #FFC17A;">https://docs.blender.org/manual/en/latest/advanced/scripting/index.html</a></li>
+                <li>你参考的视频（Udemy 汉化，适合系统跟学）：《Blender Python 自动化脚本技术》B站 BV1DeAWeUE6K</li>
+                <li>英文优质频道：<span class="highlight">Darkfall</span>、<span class="highlight">CG Python</span>、<span class="highlight">Curtis Holt</span>（YouTube 搜 Blender Python）</li>
+            </ul>
+
+            <h3 class="subsection-title">11.2 学习方法建议（针对你）</h3>
+            <ol>
+                <li><span class="highlight">先抄后改</span>：从第7章案例里挑一个你天天干的活，跑通它，再改参数。</li>
+                <li><span class="highlight">多用 Info 窗口和 Tooltip 白嫖代码</span>，不用死记 API。</li>
+                <li><span class="highlight">先用 bpy.data 思维</span>（直接改属性），少依赖 bpy.ops，能躲开一大半报错。</li>
+                <li>每写通一个脚本，就存成 .py 收藏起来，攒成自己的工具箱。</li>
+            </ol>
+
+            <h3 class="subsection-title">11.3 最常用命令速查</h3>
+            <div class="code-block">
+                <pre>import bpy
+
+# —— 拿数据 ——
+bpy.data.objects              # 所有物体
+bpy.data.objects["名字"]       # 按名字拿
+bpy.context.selected_objects  # 选中的
+bpy.context.active_object     # 激活的
+
+# —— 选择 ——
+bpy.ops.object.select_all(action='SELECT')    # 全选
+bpy.ops.object.select_all(action='DESELECT')  # 全不选
+obj.select_set(True)                          # 选中某个
+bpy.context.view_layer.objects.active = obj   # 设为激活
+
+# —— 属性 ——
+obj.name          # 名字
+obj.location      # 位置
+obj.rotation_euler # 旋转（弧度）
+obj.scale         # 缩放
+obj.type          # 类型 'MESH'/'CAMERA'...
+
+# —— 创建/删除 ——
+bpy.ops.mesh.primitive_cube_add()
+bpy.data.objects.remove(obj, do_unlink=True)
+
+# —— 修改器 ——
+mod = obj.modifiers.new(name="X", type='DECIMATE')
+bpy.ops.object.modifier_apply(modifier=mod.name)
+
+# —— 角度转换 ——
+import math
+math.radians(90)   # 角度转弧度</pre>
+            </div>
+
+            <h2 class="section-title">结语</h2>
+            <p>自动化的本质就一句话：<span class="highlight">把手工重复的操作，写成循环让代码替你跑。</span></p>
+            <p>建议你今天就从<span class="highlight">案例1（批量改名）</span> 或 <span class="highlight">9.4（清零Transform）</span> 开始，跑通一个，你就入门了。后面遇到任何"这活好烦、要重复好多次"的时刻，回来翻这份文档找对应模板改一改就行。</p>
+
+            <center><a href="blog-blender-python.html" class="btn-back">返回学习日志</a></center>
+        </div>
+    </div>
+
+    <script>
+        const cursor = document.createElement('div');
+        cursor.className = 'custom-cursor';
+        document.body.appendChild(cursor);
+
+        let trailCount = 0;
+        const maxTrails = 50;
+
+        function createTrail(x, y) {
+            if (trailCount >= maxTrails) return;
+
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            trail.style.width = Math.random() * 6 + 4 + 'px';
+            trail.style.height = trail.style.width;
+            document.body.appendChild(trail);
+
+            trailCount++;
+
+            setTimeout(() => {
+                trail.remove();
+                trailCount--;
+            }, 600);
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            createTrail(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('mousedown', function() {
+            cursor.classList.add('clicking');
+        });
+
+        document.addEventListener('mouseup', function() {
+            cursor.classList.remove('clicking');
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Houdini学习日志 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #FFF5F5, #FFF0F5, #F5FAFF, #FFF8F0);
+            cursor: none;
+        }
+
+        .blog-detail-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .blog-detail-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #8B7373;
+            text-shadow: 0 0 20px rgba(139, 115, 115, 0.3);
+        }
+
+        .blog-detail-subtitle {
+            font-size: 1rem;
+            color: #A08080;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .blog-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(200, 180, 180, 0.2);
+            color: #8B7373;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(200, 180, 180, 0.4);
+        }
+
+        .blog-detail-content {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(139, 115, 115, 0.1);
+            border: 1px solid rgba(200, 180, 180, 0.3);
+            color: #6B5B5B;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #C5A5A5;
+            border-bottom: 1px solid rgba(197, 165, 165, 0.4);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .section-content {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .code-block {
+            background: rgba(240, 230, 230, 0.8);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-left: 3px solid #C5A5A5;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #5B4B4B;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #E8D0D0, #D4B8B8);
+            color: #6B5B5B;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 1px solid rgba(200, 180, 180, 0.5);
+        }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(197, 165, 165, 0.3);
+            background: linear-gradient(135deg, #D4B8B8, #E8D0D0);
+        }
+
+        .highlight {
+            color: #C5A5A5;
+            font-weight: bold;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(197, 165, 165, 0.9) 0%, rgba(200, 180, 200, 0.7) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            box-shadow: 0 0 10px rgba(197, 165, 165, 0.4);
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, rgba(197, 165, 165, 0.9) 0%, rgba(200, 180, 200, 0.5) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 0.6s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.2);
+            }
+        }
+
+        .table-container {
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .tutorial-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(245, 240, 240, 0.8);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .tutorial-table th, .tutorial-table td {
+            padding: 0.8rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(197, 165, 165, 0.3);
+        }
+
+        .tutorial-table th {
+            background: rgba(197, 165, 165, 0.2);
+            color: #8B7373;
+        }
+
+        .tutorial-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .note-box {
+            background: rgba(197, 165, 165, 0.1);
+            border-left: 3px solid #C5A5A5;
+            padding: 0.8rem 1.2rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="blog-detail-container">
+        <div class="blog-detail-header">
+            <h1 class="blog-detail-title">Houdini学习日志</h1>
+            <p class="blog-detail-subtitle">2026年7月 · 研究中</p>
+            <div class="blog-tags">
+                <span class="blog-tag">Houdini</span>
+                <span class="blog-tag">程序化</span>
+                <span class="blog-tag">SOP</span>
+                <span class="blog-tag">VEX</span>
+                <span class="blog-tag">Vellum</span>
+            </div>
+        </div>
+
+        <div class="blog-detail-content">
+            <h2 class="section-title">学习背景</h2>
+            <div class="section-content">
+                <p>此前主要x进行3D资产制作，随着对程序化工作流的深入理解，继续学习Houdini。Houdini的价值不在于做爆炸和海浪，而在于：</p>
+                <ul>
+                    <li><span class="highlight">程序化资产/破损/细节</span>：用节点一键生成破损边缘、碎石、藤蔓、鳞片排布，比手动雕刻快10倍；</li>
+                    <li><span class="highlight">布料与毛发解算</span>：Vellum（布料/绳索）、Groom（毛发）比Blender更可控，解算完可烘焙成静态mesh导回Blender/引擎；</li>
+                    <li><span class="highlight">风格化辅助</span>：程序化纹理、随机变化、实例化，特别适合风格化角色的场景和配饰；</li>
+                    <li><span class="highlight">HDA工具</span>：把流程打包成数字资产（.hda），在Unreal/Unity/Substance里直接拖用，是TA方向的核心能力。</li>
+                </ul>
+                <p><span class="highlight">一句话总结</span>：Houdini负责接管「重复、可控、要改一百遍」的那部分工作。</p>
+            </div>
+
+            <h2 class="section-title">核心理念：程序化与非破坏性</h2>
+            <div class="section-content">
+                <p>Houdini的本质就是用节点把一堆操作串成一条「菜谱」，输入一个东西，经过一串步骤，输出另一个东西。每一步都可回头改，且不会破坏原始数据。</p>
+                <div class="note-box">
+                    <p><span class="highlight">关键比喻：乐高</span></p>
+                    <ul>
+                        <li>每个节点是一块乐高；</li>
+                        <li>把节点连起来就是拼装；</li>
+                        <li>想改造型？换一块乐高/调一下凸起的位置，整座城堡跟着变；</li>
+                        <li>不需要「撤销重做」，因为根本没有「破坏」这回事——你只是改了菜谱。</li>
+                    </ul>
+                </div>
+                <p>如果你玩过Blender的几何节点，那Houdini对你来说不是从零开始，只是把那套逻辑放大了100倍。</p>
+            </div>
+
+            <h2 class="section-title">上下文全景图：Houdini的「楼层分布」</h2>
+            <div class="section-content">
+                <div class="table-container">
+                    <table class="tutorial-table">
+                        <tr>
+                            <th>上下文</th>
+                            <th>全称</th>
+                            <th>干什么</th>
+                            <th>学习优先级</th>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">OBJ</span></td>
+                            <td>Object</td>
+                            <td>场景物体层级，放geo、camera、light</td>
+                            <td>必学</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">SOP</span></td>
+                            <td>Surface Operators</td>
+                            <td>几何体的创建与处理（核心中的核心）</td>
+                            <td><span class="highlight">最高优先级</span></td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">DOP</span></td>
+                            <td>Dynamics Operators</td>
+                            <td>物理模拟：刚体/流体/烟/布料</td>
+                            <td>第二阶段</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">POP</span></td>
+                            <td>Particle Operators</td>
+                            <td>粒子系统（常在DOP里调用）</td>
+                            <td>按需学习</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">VOP</span></td>
+                            <td>VEX Operators</td>
+                            <td>用节点写「着色/计算」逻辑</td>
+                            <td>第二阶段</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">COP</span></td>
+                            <td>Compositing</td>
+                            <td>合成（类似Nuke/后期）</td>
+                            <td>低优先级</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">LOP</span></td>
+                            <td>Lighting/Solaris</td>
+                            <td>灯光镜头布局（USD流程）</td>
+                            <td>大项目时学</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">ROP</span></td>
+                            <td>Render Operators</td>
+                            <td>渲染输出节点</td>
+                            <td>基础了解</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="note-box">
+                    <p><span class="highlight">初学者策略</span>：先死磕SOP。SOP玩明白了，VOP/VEX自然来，DOP只是「在SOP外面套一层物理规则」。不要一上来就扑去学Pyro火焰——那会劝退90%的人。</p>
+                </div>
+            </div>
+
+            <h2 class="section-title">数据模型：Houdini真正的「内功」</h2>
+            <div class="section-content">
+                <p>这是和Blender最大不同的地方。一切都是数据。</p>
+                <h3 style="color: #7CAFC4; margin-top: 1.5rem; margin-bottom: 0.8rem;">几何体的四个层级</h3>
+                <ul>
+                    <li><span class="highlight">Point（点）</span>：空间里的一个坐标 @P；</li>
+                    <li><span class="highlight">Vertex（顶点）</span>：点和面的绑定关系；</li>
+                    <li><span class="highlight">Primitive（图元）</span>：面/线/体（polygon、curve、volume都算primitive）；</li>
+                    <li><span class="highlight">Detail（整体）</span>：整个物体的元数据。</li>
+                </ul>
+                <h3 style="color: #7CAFC4; margin-top: 1.5rem; margin-bottom: 0.8rem;">属性（Attribute）—— 最该理解的概念</h3>
+                <div class="table-container">
+                    <table class="tutorial-table">
+                        <tr>
+                            <th>属性</th>
+                            <th>含义</th>
+                            <th>例子</th>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">@P</span></td>
+                            <td>位置（Position）</td>
+                            <td>移动点就是改 @P</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">@N</span></td>
+                            <td>法线（Normal）</td>
+                            <td>朝向、光照</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">@Cd</span></td>
+                            <td>颜色（Color，RGB）</td>
+                            <td>给点染色</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">@scale</span></td>
+                            <td>缩放</td>
+                            <td>实例复制时每个物体大小不同</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">@ptnum</span></td>
+                            <td>点的序号（0,1,2…）</td>
+                            <td>用来做规律/随机</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="note-box">
+                    <p><span class="highlight">核心心法</span>：你不是「摆放」东西，你是「通过计算属性来让东西自己长出来」。例如：想让一片草每个草高度随机 → 给每根草一个随机 @scale.y → Copy节点按属性复制 → 整片草自然错落。</p>
+                </div>
+            </div>
+
+            <h2 class="section-title">新手必会的12个SOP节点</h2>
+            <div class="section-content">
+                <div class="table-container">
+                    <table class="tutorial-table">
+                        <tr>
+                            <th>节点</th>
+                            <th>作用</th>
+                            <th>类比</th>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">Box/Sphere/Grid/Tube</span></td>
+                            <td>基础几何体生成</td>
+                            <td>添加网格</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">Transform</span></td>
+                            <td>移动/旋转/缩放</td>
+                            <td>物体变换</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">Scatter</span></td>
+                            <td>在表面上撒点</td>
+                            <td>分布点</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">Copy to Points</span></td>
+                            <td>把模型复制到点上</td>
+                            <td>Instance on Points</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">Attribute Create</span></td>
+                            <td>手动建属性</td>
+                            <td>新建属性</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">Attribute Wrangle</span></td>
+                            <td>用VEX改属性（最强大）</td>
+                            <td>自定义属性处理</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">Group</span></td>
+                            <td>建组</td>
+                            <td>顶点组</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">Boolean</span></td>
+                            <td>布尔加减交</td>
+                            <td>布尔修改器</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">Subdivide/PolyExtrude/Bevel</span></td>
+                            <td>细分/挤出/倒角</td>
+                            <td>对应修改器</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">Resample/Curve</span></td>
+                            <td>曲线重采样、造型</td>
+                            <td>曲线编辑</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">VOP/Attribute VOP</span></td>
+                            <td>可视化写计算逻辑</td>
+                            <td>着色器节点</td>
+                        </tr>
+                        <tr>
+                            <td><span class="highlight">Null/Output</span></td>
+                            <td>标记输出终点</td>
+                            <td>—</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="note-box">
+                    <p><span class="highlight">上手建议</span>：先拿 Grid → Scatter（撒点）→ Copy to Points（复制小盒子）→ Transform 这条链练手，你会立刻体会到「节点串联生成画面」的爽感。</p>
+                </div>
+            </div>
+
+            <h2 class="section-title">VEX入门：别怕代码</h2>
+            <div class="section-content">
+                <p>VEX（Vector Expression Language）是Houdini的高性能脚本。你不需要先学编程，只要会几个句式就能做很酷的事。所有VEX写在Attribute Wrangle节点里。</p>
+                <div class="code-block">
+                    <pre>// 让所有点沿Y轴做正弦波动
+@P.y += sin(@ptnum * 0.5) * 0.1;
+
+// 按离原点的距离给点上红→蓝色
+float d = distance(@P, {0,0,0});
+@Cd = set(d, 0, 1 - d);
+
+// 给每个点随机缩放（用于Copy时大小不一）
+@scale = rand(@ptnum);
+
+// 隔一个点染成红色（按序号取模）
+if (@ptnum % 2 == 0) {
+    @Cd = set(1, 0, 0);
+}</pre>
+                </div>
+                <div class="note-box">
+                    <p><span class="highlight">心智模型</span>：VEX里你写的代码对「每一个元素」自动循环执行。你不用写for循环，Houdini帮你对每个点跑一遍。不想写代码？用VOP把同样的逻辑用节点连线画出来。</p>
+                </div>
+            </div>
+
+            <h2 class="section-title">学习资源</h2>
+            <div class="section-content">
+                <ul>
+                    <li><span class="highlight">《HOUDINI并不可怕：初学者系列》</span>（B站 BV1ERCpY2Eiw）—— 节奏平缓、零基础友好、中文；</li>
+                    <li><span class="highlight">Houdini 101《核心原理入门》</span>（B站 BV1tskEBTEau）—— 讲原理而非照做，含工程下载；</li>
+                    <li><span class="highlight">SideFX官方Foundations</span>（sidefx.com/learn）—— 最权威；</li>
+                    <li><span class="highlight">《VEX并不可怕：初学者系列》</span>（B站）—— 同一个UP，专讲VEX。</li>
+                </ul>
+                <p><a href="tutorial-houdini.html" class="btn-back" style="display: inline-block; margin-top: 1rem; margin-bottom: 1rem;">📖 查看完整教程页面</a></p>
+            </div>
+
+        </div>
+
+        <center><a href="index.html#blog" class="btn-back">返回博客列表</a></center>
+    </div>
+
+    <script>
+        const cursor = document.createElement('div');
+        cursor.className = 'custom-cursor';
+        document.body.appendChild(cursor);
+
+        let trailCount = 0;
+        const maxTrails = 50;
+
+        function createTrail(x, y) {
+            if (trailCount >= maxTrails) return;
+
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            trail.style.width = Math.random() * 6 + 4 + 'px';
+            trail.style.height = trail.style.width;
+            document.body.appendChild(trail);
+
+            trailCount++;
+
+            setTimeout(() => {
+                trail.remove();
+                trailCount--;
+            }, 600);
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            createTrail(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('mousedown', function() {
+            cursor.classList.add('clicking');
+        });
+
+        document.addEventListener('mouseup', function() {
+            cursor.classList.remove('clicking');
+        });
+    </script>
+</body>
+</html>
