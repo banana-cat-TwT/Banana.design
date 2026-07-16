@@ -1072,17 +1072,62 @@ function switchNewsTab(tab) {
     const gameSection = document.getElementById('gameNewsSection');
     const aiTab = document.querySelector('.news-tab:nth-child(1)');
     const gameTab = document.querySelector('.news-tab:nth-child(2)');
+    const archiveTab = document.querySelector('.news-tab:nth-child(3)');
     
     if (tab === 'ai') {
         aiSection.style.display = 'block';
         gameSection.style.display = 'none';
         aiTab.classList.add('active');
         gameTab.classList.remove('active');
+        archiveTab.classList.remove('active');
     } else {
         aiSection.style.display = 'none';
         gameSection.style.display = 'block';
         aiTab.classList.remove('active');
         gameTab.classList.add('active');
+        archiveTab.classList.remove('active');
+    }
+}
+
+function showArchive() {
+    const archiveModal = document.getElementById('archiveModal');
+    if (archiveModal) {
+        archiveModal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeArchive() {
+    const archiveModal = document.getElementById('archiveModal');
+    if (archiveModal) {
+        archiveModal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+}
+
+function switchArchiveTab(tab) {
+    const aiArchive = document.getElementById('aiArchiveList');
+    const gameArchive = document.getElementById('gameArchiveList');
+    const aiTab = document.querySelector('.archive-tab:nth-child(1)');
+    const gameTab = document.querySelector('.archive-tab:nth-child(2)');
+    
+    if (tab === 'ai') {
+        aiArchive.style.display = 'block';
+        gameArchive.style.display = 'none';
+        aiTab.classList.add('active');
+        gameTab.classList.remove('active');
+    } else {
+        aiArchive.style.display = 'none';
+        gameArchive.style.display = 'block';
+        aiTab.classList.remove('active');
+        gameTab.classList.add('active');
+    }
+}
+
+function loadArchiveDate(tab, date) {
+    closeArchive();
+    if (date === '2026-07-16') {
+        switchNewsTab(tab);
     }
 }
 

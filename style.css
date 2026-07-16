@@ -1090,15 +1090,16 @@ nav ul li a:hover::after {
     z-index: 1;
     text-align: center;
     padding: 4rem 0;
-    max-width: 1200px;
-    margin: 0 auto;
+    width: 100%;
+    max-width: none;
+    margin: 0;
 }
 
 .news-content h2 {
     font-size: 2rem;
     color: #fff;
     margin-bottom: 1rem;
-    text-shadow: 0 0 20px rgba(100, 180, 255, 0.5);
+    text-shadow: 0 0 20px rgba(255, 159, 67, 0.5);
 }
 
 .news-tabs {
@@ -1125,8 +1126,8 @@ nav ul li a:hover::after {
 }
 
 .news-tab.active {
-    background: linear-gradient(135deg, rgba(100, 180, 255, 0.8), rgba(180, 100, 255, 0.8));
-    border-color: rgba(100, 180, 255, 0.6);
+    background: linear-gradient(135deg, rgba(255, 159, 67, 0.9), rgba(254, 202, 87, 0.9));
+    border-color: rgba(255, 159, 67, 0.8);
     color: #fff;
 }
 
@@ -1139,28 +1140,12 @@ nav ul li a:hover::after {
 .news-slider-wrapper {
     position: relative;
     width: 100%;
-    padding: 0 3rem;
+    padding: 0;
 }
 
 .news-slider-wrapper::before,
 .news-slider-wrapper::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    width: 60px;
-    height: 100%;
-    z-index: 5;
-    pointer-events: none;
-}
-
-.news-slider-wrapper::before {
-    left: 0;
-    background: linear-gradient(to right, rgba(10, 10, 10, 1) 0%, rgba(10, 10, 10, 0) 100%);
-}
-
-.news-slider-wrapper::after {
-    right: 0;
-    background: linear-gradient(to left, rgba(10, 10, 10, 1) 0%, rgba(10, 10, 10, 0) 100%);
+    display: none;
 }
 
 .news-container {
@@ -1193,7 +1178,7 @@ nav ul li a:hover::after {
 }
 
 .news-slider-btn:hover {
-    background: rgb(100, 180, 255);
+    background: rgb(255, 159, 67);
 }
 
 .news-slider-btn.prev-btn {
@@ -1213,21 +1198,21 @@ nav ul li a:hover::after {
     overflow: hidden;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid rgba(100, 180, 255, 0.3);
+    border: 1px solid rgba(255, 159, 67, 0.3);
     text-align: left;
 }
 
 .news-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 8px 30px rgba(100, 180, 255, 0.3);
-    border-color: rgba(100, 180, 255, 0.6);
+    box-shadow: 0 8px 30px rgba(255, 159, 67, 0.3);
+    border-color: rgba(255, 159, 67, 0.6);
 }
 
 .news-number {
     float: left;
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, #64B4FF, #80D0FF);
+    background: linear-gradient(135deg, #FF9F43, #FECA57);
     color: #fff;
     font-size: 1.5rem;
     font-weight: bold;
@@ -1263,11 +1248,150 @@ nav ul li a:hover::after {
 
 .news-tags .tag {
     padding: 0.3rem 0.6rem;
-    background: rgba(100, 180, 255, 0.2);
-    color: #80D0FF;
+    background: rgba(255, 159, 67, 0.2);
+    color: #FF9F43;
     border-radius: 15px;
     font-size: 0.75rem;
-    border: 1px solid rgba(100, 180, 255, 0.3);
+    border: 1px solid rgba(255, 159, 67, 0.3);
+}
+
+.archive-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.archive-modal-content {
+    background: #1a1a1a;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow: hidden;
+    border: 1px solid rgba(255, 159, 67, 0.3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.archive-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(255, 159, 67, 0.1), rgba(254, 202, 87, 0.1));
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.archive-modal-header h2 {
+    color: #fff;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.archive-close-btn {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.archive-close-btn:hover {
+    color: #fff;
+}
+
+.archive-tabs {
+    display: flex;
+    gap: 0.5rem;
+    padding: 1rem 1.5rem;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.archive-tab {
+    flex: 1;
+    padding: 0.6rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.archive-tab:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+}
+
+.archive-tab.active {
+    background: linear-gradient(135deg, rgba(255, 159, 67, 0.9), rgba(254, 202, 87, 0.9));
+    border-color: rgba(255, 159, 67, 0.8);
+    color: #fff;
+}
+
+.archive-list {
+    padding: 1rem 1.5rem;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.archive-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.archive-list::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+}
+
+.archive-list::-webkit-scrollbar-thumb {
+    background: rgba(255, 159, 67, 0.3);
+    border-radius: 3px;
+}
+
+.archive-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 159, 67, 0.5);
+}
+
+.archive-item {
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px;
+    margin-bottom: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.archive-item:hover {
+    background: rgba(255, 159, 67, 0.1);
+    border-color: rgba(255, 159, 67, 0.3);
+    transform: translateX(5px);
+}
+
+.archive-date {
+    display: block;
+    color: #FF9F43;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+}
+
+.archive-preview {
+    display: block;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.85rem;
+    line-height: 1.4;
 }
 
 .work-card {

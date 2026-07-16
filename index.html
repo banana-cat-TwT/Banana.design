@@ -216,6 +216,7 @@
                 <div class="news-tabs elastic-element">
                     <button class="news-tab active" onclick="switchNewsTab('ai')">🤖 AI</button>
                     <button class="news-tab" onclick="switchNewsTab('game')">🎮 游戏</button>
+                    <button class="news-tab" onclick="showArchive()">📜 往期回顾</button>
                 </div>
                 
                 <div class="news-slider-wrapper elastic-element" id="aiNewsSection">
@@ -361,6 +362,31 @@
                 </div>
             </div>
         </section>
+
+        <div id="archiveModal" class="archive-modal" style="display: none;">
+            <div class="archive-modal-content">
+                <div class="archive-modal-header">
+                    <h2>📜 往期回顾</h2>
+                    <button class="archive-close-btn" onclick="closeArchive()">×</button>
+                </div>
+                <div class="archive-tabs">
+                    <button class="archive-tab active" onclick="switchArchiveTab('ai')">🤖 AI 日报</button>
+                    <button class="archive-tab" onclick="switchArchiveTab('game')">🎮 游戏日报</button>
+                </div>
+                <div class="archive-list" id="aiArchiveList">
+                    <div class="archive-item" onclick="loadArchiveDate('ai', '2026-07-16')">
+                        <span class="archive-date">2026-07-16</span>
+                        <span class="archive-preview">苹果"Apple智能"完成国内备案、阿里全员禁用Claude Code...</span>
+                    </div>
+                </div>
+                <div class="archive-list" id="gameArchiveList" style="display: none;">
+                    <div class="archive-item" onclick="loadArchiveDate('game', '2026-07-16')">
+                        <span class="archive-date">2026-07-16</span>
+                        <span class="archive-preview">微软Xbox裁3200人、UE 5.8收官转向UE6...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <section id="works" class="parallax-section">
             <div class="parallax-bg" data-speed="0.3" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20abstract%20background%2C%20subtle%20gradient%2C%20modern%20design%2C%20neutral%20tones&image_size=landscape_16_9');"></div>
