@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blender MCP 自动化工作流教学手册 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            cursor: none;
+        }
+
+        .blog-detail-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .blog-detail-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #7BA1FF;
+            text-shadow: 0 0 20px rgba(123, 161, 255, 0.4);
+        }
+
+        .blog-detail-subtitle {
+            font-size: 1rem;
+            color: #B8C5E0;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .blog-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(123, 161, 255, 0.2);
+            color: #7BA1FF;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(123, 161, 255, 0.3);
+        }
+
+        .blog-detail-content {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(123, 161, 255, 0.2);
+            color: #E8EEF7;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #FFC17A;
+            border-bottom: 1px solid rgba(255, 193, 122, 0.3);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .section-content {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-left: 3px solid #7BA1FF;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #E8EEF7;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #4A6FA5, #7BA1FF);
+            color: #E8EEF7;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 1px solid rgba(123, 161, 255, 0.5);
+        }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(74, 111, 165, 0.4);
+        }
+
+        .highlight {
+            color: #FFC17A;
+            font-weight: bold;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            border: 1px solid rgba(123, 161, 255, 0.3);
+            padding: 0.75rem;
+            text-align: left;
+        }
+
+        th {
+            background: rgba(123, 161, 255, 0.2);
+            color: #7BA1FF;
+        }
+
+        .warning-box {
+            background: rgba(255, 193, 122, 0.1);
+            border-left: 3px solid #FFC17A;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+            color: #FFC17A;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(123, 161, 255, 0.9) 0%, rgba(74, 111, 165, 0.7) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            box-shadow: 0 0 10px rgba(123, 161, 255, 0.5);
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, rgba(123, 161, 255, 0.9) 0%, rgba(74, 111, 165, 0.5) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 0.6s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.2);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .blog-detail-container {
+                padding: 1rem;
+            }
+            .blog-detail-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="custom-cursor"></div>
+
+    <div class="blog-detail-container">
+        <div class="blog-detail-header">
+            <h1 class="blog-detail-title">Blender MCP 自动化工作流 · 完整教学手册</h1>
+            <p class="blog-detail-subtitle">Claude AI 驱动 3D 场景与角色生成</p>
+            <div class="blog-tags">
+                <span class="blog-tag">Blender</span>
+                <span class="blog-tag">MCP</span>
+                <span class="blog-tag">Claude</span>
+                <span class="blog-tag">AI</span>
+                <span class="blog-tag">混元3D</span>
+                <span class="blog-tag">Python</span>
+            </div>
+        </div>
+
+        <div class="blog-detail-content">
+            <div class="section-content">
+                <p><span class="highlight">本手册整合自</span>：B 站系列视频《BLENDER MCP 自动化工作流（上 / 下）— Claude AI 驱动 3D 场景与角色生成》（UP 主：设计门外憨），并对照官方开源文档补全了每一步可照做的命令与提示词。</p>
+                <p>- 上集：<a href="https://www.bilibili.com/video/BV1dgTT6PEui" target="_blank" style="color: #7BA1FF;">https://www.bilibili.com/video/BV1dgTT6PEui</a></p>
+                <p>- 下集：<a href="https://www.bilibili.com/video/BV17MTT6iEsU" target="_blank" style="color: #7BA1FF;">https://www.bilibili.com/video/BV17MTT6iEsU</a></p>
+                <p>- 官方项目：<a href="https://github.com/ahujasid/blender-mcp" target="_blank" style="color: #7BA1FF;">https://github.com/ahujasid/blender-mcp</a>（MIT，Made by Siddharth）</p>
+                <p>- 混元3D 接入：<a href="https://github.com/cshara1/Hunyuan3D-2GP-for-blender-mcp" target="_blank" style="color: #7BA1FF;">https://github.com/cshara1/Hunyuan3D-2GP-for-blender-mcp</a></p>
+            </div>
+
+            <div class="section-title">0. 学前说明</div>
+            <div class="section-content">
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">0.1 这套工作流到底在做什么</h3>
+                <p>传统 3D 工作流：你 → 手动操作 Blender 菜单/快捷键 → 模型。</p>
+                <p>MCP 工作流：你 → 用中文/英文自然语言告诉 Claude → Claude 通过 <span class="highlight">MCP（Model Context Protocol，模型上下文协议）</span> 把指令翻译成 Blender 能执行的 Python → Blender 自动建模、打光、摆摄像机、出动画。</p>
+                <p>一句话：<span class="highlight">让 AI 从"只会说"变成"会动手做"</span>。Claude 负责理解意图和生成代码，Blender 负责执行，MCP 是两者之间的"万能遥控"。</p>
+            </div>
+
+            <div class="section-content">
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">0.2 软硬件要求</h3>
+                <table>
+                    <tr>
+                        <th>项目</th>
+                        <th>要求</th>
+                    </tr>
+                    <tr>
+                        <td>系统</td>
+                        <td>Windows 10/11 或 macOS</td>
+                    </tr>
+                    <tr>
+                        <td>Blender</td>
+                        <td>最新稳定版（建议 4.x）</td>
+                    </tr>
+                    <tr>
+                        <td>Claude</td>
+                        <td>桌面端 Claude Desktop（免费账号即可跑 MCP）</td>
+                    </tr>
+                    <tr>
+                        <td>Python</td>
+                        <td>需 uv 包管理器</td>
+                    </tr>
+                    <tr>
+                        <td>显卡（仅混元3D本地）</td>
+                        <td>支持 CUDA 的 NVIDIA 显卡，建议 ≥ 8GB 显存</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="section-title">第一部分：Claude AI 基础</div>
+            <div class="section-content">
+                <p><span class="highlight">为什么要先学 Claude 本身？</span> 因为 Blender MCP 的本质是"让 Claude 调工具"。你越会用 Claude 的 Artifacts、Projects、Skills，后面连上 Blender 时越能发挥威力。</p>
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">P2–P5 Claude 基础操作</h3>
+                <ul>
+                    <li><strong>Artifacts</strong>：对话中右侧独立的"可运行/可预览"结果面板（代码、HTML、SVG、图表等）</li>
+                    <li><strong>Projects</strong>：给 Claude 一个"长期项目空间"，可上传资料（参考图、风格指南），后续对话自动带上下文</li>
+                    <li><strong>提示词入门三要素</strong>：角色 + 任务 + 约束</li>
+                </ul>
+            </div>
+
+            <div class="section-title">第二部分：MCP 与 Blender 连接</div>
+            <div class="section-content">
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">P10 MCP 概念详解</h3>
+                <p><span class="highlight">MCP（Model Context Protocol）</span> 是一种开放协议，让 LLM（如 Claude）能标准化地调用外部工具/数据源。类比 USB 接口：以前每个设备要单独写驱动；有了 USB（MCP），只要遵守协议，AI 就能"插上"任意工具。</p>
+                <div class="code-block">
+                    <pre>┌─────────────┐     MCP      ┌──────────────────┐   本地socket   ┌──────────┐
+│  Host      │ ───────────▶ │  MCP Client      │ ────────────▶ │  MCP     │
+│ (Claude    │              │  (在 Claude 内)  │               │  Server  │
+│  Desktop)  │ ◀─────────── │                  │ ◀──────────── │ (Blender │
+└─────────────┘   结果回传    └──────────────────┘   指令执行     │  MCP)    │
+                                                              └──────────┘</pre>
+                </div>
+            </div>
+
+            <div class="section-content">
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">P14 使用 MCP 连接 Blender 与 Claude（核心步骤）</h3>
+                <p><strong>步骤 A：安装 Blender MCP 插件</strong></p>
+                <ol>
+                    <li>下载 <a href="https://github.com/ahujasid/blender-mcp" target="_blank" style="color: #7BA1FF;">blender-mcp</a> 仓库里的 addon.py</li>
+                    <li>打开 Blender → Edit → Preferences → Add-ons → Install...</li>
+                    <li>启用 "Interface: Blender MCP"</li>
+                    <li>在 3D 视口按 N 打开右侧边栏，出现 BlenderMCP 选项卡</li>
+                    <li>点击 "Connect to Claude"，Blender 端会在 localhost:9876 开启监听</li>
+                </ol>
+                <p><strong>步骤 B：配置 Claude Desktop</strong></p>
+                <div class="code-block">
+                    <pre>{
+  "mcpServers": {
+    "blender": {
+      "command": "uvx",
+      "args": ["blender-mcp"]
+    }
+  }
+}</pre>
+                </div>
+                <p>保存并完全退出重启 Claude Desktop。连接成功后，Claude 工具栏会出现<strong>锤子图标 🔨</strong>。</p>
+            </div>
+
+            <div class="section-title">第三部分：自然语言驱动 3D 创作</div>
+            <div class="section-content">
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">P15 利用 Claude 创建 Blender 模型</h3>
+                <table>
+                    <tr>
+                        <th>意图</th>
+                        <th>提示词示例</th>
+                    </tr>
+                    <tr>
+                        <td>基础物体</td>
+                        <td>"在原点创建一个低多边形风格的黄色鸭子"</td>
+                    </tr>
+                    <tr>
+                        <td>组合场景</td>
+                        <td>"创建一个地牢里的低多边形场景：一条龙守着一锅金子"</td>
+                    </tr>
+                    <tr>
+                        <td>改材质</td>
+                        <td>"把这辆车改成红色金属漆（red metallic）"</td>
+                    </tr>
+                    <tr>
+                        <td>加资产</td>
+                        <td>"用 Poly Haven 的 HDRI、岩石和植被，做一个海滩氛围"</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="section-content">
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">P21 使用迭代式 AI 流程优化场景创作</h3>
+                <p><span class="highlight">迭代式 AI 工作流 = 生成 → 截图 → critique → 修正，循环。</span></p>
+                <ol>
+                    <li><strong>生成</strong>：让 Claude 建初版场景</li>
+                    <li><strong>看</strong>：让 Claude 调用视口截图工具，把当前画面读回来</li>
+                    <li><strong>评</strong>：指出问题，例如"左边太空""主光太硬""比例不对"</li>
+                    <li><strong>改</strong>：Claude 针对性修改</li>
+                </ol>
+                <p>提示词示例："先截一张当前视口图，评估构图和灯光问题，列出 3 条最该改的点，然后直接改掉。"</p>
+            </div>
+
+            <div class="section-title">第四部分：混元 3D 图像转 3D 角色生成</div>
+            <div class="section-content">
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">5.1 混元 3D 是什么</h3>
+                <p>腾讯混元 3D 2.0 是一个大规模 3D 资产生成系统，两阶段：</p>
+                <ol>
+                    <li><strong>几何生成（Hunyuan3D-DiT，2.6B 参数）</strong>：输入一张图/一段文字 → 输出无纹理网格</li>
+                    <li><strong>纹理生成（Hunyuan3D-Paint，1.3B 参数）</strong>：把原图贴回网格 → 输出带高分辨率纹理的 glb/obj</li>
+                </ol>
+            </div>
+
+            <div class="section-content">
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">5.3 方案 B：本地免费部署</h3>
+                <div class="code-block">
+                    <pre>git clone https://github.com/cshara1/Hunyuan3D-2GP-for-blender-mcp.git
+cd Hunyuan3D-2GP-for-blender-mcp
+pip install -r requirements.txt
+
+# 编译纹理所需的自定义渲染器
+cd hy3dgen/texgen/custom_rasterizer
+python3 setup.py install
+cd ../../..
+
+# 启动带 MCP 的 API 服务器
+python api_server.py --enable_t23d --enable_tex</pre>
+                </div>
+            </div>
+
+            <div class="section-content">
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">5.4 图生 3D 的 Python 最小流程</h3>
+                <div class="code-block">
+                    <pre>from hy3dgen.shapegen import Hunyuan3DDiTFlowMatchingPipeline
+from hy3dgen.texgen import Hunyuan3DPaintPipeline
+
+# 1) 几何
+pipe = Hunyuan3DDiTFlowMatchingPipeline.from_pretrained('tencent/Hunyuan3D-2')
+mesh = pipe(image='assets/demo.png')[0]
+
+# 2) 纹理
+paint = Hunyuan3DPaintPipeline.from_pretrained('tencent/Hunyuan3D-2')
+mesh = paint(mesh, image='assets/demo.png')
+
+# 3) 保存给 Blender 用
+mesh.export('my_character.glb')</pre>
+                </div>
+            </div>
+
+            <div class="section-title">附录 A：Blender MCP 工具函数速查</div>
+            <div class="section-content">
+                <table>
+                    <tr>
+                        <th>能力</th>
+                        <th>对应工具</th>
+                        <th>说明</th>
+                    </tr>
+                    <tr>
+                        <td>执行任意 Blender Python</td>
+                        <td>execute_blender_code</td>
+                        <td>最高权限，可做任何操作，务必先存盘</td>
+                    </tr>
+                    <tr>
+                        <td>获取场景信息</td>
+                        <td>get_scene / get_scene_info</td>
+                        <td>列出物体、相机、灯光等</td>
+                    </tr>
+                    <tr>
+                        <td>创建物体</td>
+                        <td>create_object</td>
+                        <td>立方体/球/灯光/相机/空物体等</td>
+                    </tr>
+                    <tr>
+                        <td>设置材质</td>
+                        <td>set_material</td>
+                        <td>颜色、金属度、粗糙度</td>
+                    </tr>
+                    <tr>
+                        <td>生成 3D 模型</td>
+                        <td>generate_hunyuan3d_object</td>
+                        <td>接 Hunyuan3D / Rodin</td>
+                    </tr>
+                    <tr>
+                        <td>视口截图</td>
+                        <td>get_viewport_screenshot</td>
+                        <td>迭代工作流里"看"画面的关键</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="section-title">附录 B：常用提示词库</div>
+            <div class="section-content">
+                <p><strong>建模</strong>："Create a low-poly [X] in Blender, keep poly count minimal, add a name."</p>
+                <p><strong>场景</strong>："Build a cozy low-poly cabin scene: rounded wooden house, warm yellow window light, 3 low-poly trees, grass ground."</p>
+                <p><strong>相机/灯光</strong>："Point the camera at the scene center and make it isometric."</p>
+                <p><strong>动画</strong>："Make an Apple-style product reveal: black bg, product fades in, camera slowly orbits, 5s @ 24fps."</p>
+                <p><strong>迭代</strong>："Take a viewport screenshot, critique composition and lighting, list top 3 fixes, then apply them."</p>
+            </div>
+
+            <div class="section-title">附录 C：故障排查</div>
+            <div class="section-content">
+                <table>
+                    <tr>
+                        <th>现象</th>
+                        <th>原因 / 解决</th>
+                    </tr>
+                    <tr>
+                        <td>Claude 没有锤子图标</td>
+                        <td>claude_desktop_config.json 写错 / 没重启 / uvx 路径不对</td>
+                    </tr>
+                    <tr>
+                        <td>连接超时 / 端口冲突</td>
+                        <td>多个 MCP 客户端同时开；只留一个；重启两端</td>
+                    </tr>
+                    <tr>
+                        <td>Blender 没反应</td>
+                        <td>插件没点 "Connect to Claude"；确认 localhost:9876 没被防火墙挡</td>
+                    </tr>
+                    <tr>
+                        <td>混元 3D 显存爆炸</td>
+                        <td>关 --enable_tex 只跑几何；或用云端 API；升级显卡</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="section-title">附录 D：推荐学习顺序（一周计划）</div>
+            <div class="section-content">
+                <table>
+                    <tr>
+                        <th>天</th>
+                        <th>内容</th>
+                        <th>产出</th>
+                    </tr>
+                    <tr>
+                        <td>D1</td>
+                        <td>Claude 基础 + Artifacts/Projects</td>
+                        <td>一个 Artifacts 网页 demo</td>
+                    </tr>
+                    <tr>
+                        <td>D2</td>
+                        <td>MCP 概念 + 打通连接</td>
+                        <td>红球测试成功</td>
+                    </tr>
+                    <tr>
+                        <td>D3</td>
+                        <td>建模 / 相机灯光 / 产品动画</td>
+                        <td>一个产品动画片段</td>
+                    </tr>
+                    <tr>
+                        <td>D4</td>
+                        <td>复杂场景 + 迭代工作流</td>
+                        <td>一个打磨过的场景</td>
+                    </tr>
+                    <tr>
+                        <td>D5</td>
+                        <td>迭代实战 + 360° 导出</td>
+                        <td>成片 mp4</td>
+                    </tr>
+                    <tr>
+                        <td>D6</td>
+                        <td>混元 3D 本地部署</td>
+                        <td>一张图 → 3D 角色 glb</td>
+                    </tr>
+                    <tr>
+                        <td>D7</td>
+                        <td>综合：混元生成角色 + Claude 摆场景 + 出片</td>
+                        <td>完整作品集素材</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="section-content" style="text-align: center; color: #B8C5E0; font-size: 0.9rem; margin-top: 2rem;">
+                *整理日期：2026-07-17 · 资料来源：B 站「设计门外憨」系列视频 + blender-mcp、Hunyuan3D-2GP-for-blender-mcp 官方文档及公开教程。*
+            </div>
+
+            <div style="text-align: center;">
+                <a href="index.html" class="btn-back">← 返回首页</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cursor = document.querySelector('.custom-cursor');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            const trail = document.createElement('div');
+            trail.classList.add('cursor-trail');
+            trail.style.left = e.clientX + 'px';
+            trail.style.top = e.clientY + 'px';
+            document.body.appendChild(trail);
+            
+            setTimeout(() => {
+                trail.remove();
+            }, 600);
+        });
+        
+        document.addEventListener('mousedown', () => {
+            cursor.classList.add('clicking');
+        });
+        
+        document.addEventListener('mouseup', () => {
+            cursor.classList.remove('clicking');
+        });
+    </script>
+</body>
+</html>
