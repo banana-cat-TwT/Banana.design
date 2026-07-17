@@ -600,13 +600,79 @@
                     Tripo3D的组件拆分功能表现非常糟糕，完全无法正确识别和拆分模型的各个组件。拆分结果混乱不堪，经常把不该拆分的部分拆开，或者把该分开的组件粘在一起，完全达不到实际使用的要求。
                 </div>
 
+                <h4>金属头饰拓扑测试（新案例）</h4>
+                <p>针对Tripo3D的低模拓扑能力，进行了新一轮金属头饰模型的测试：</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                    <div style="background: rgba(113, 189, 210, 0.1); border-radius: 10px; overflow: hidden; border: 1px solid rgba(113, 189, 210, 0.2);">
+                        <video src="videos/tripo/tripo拓扑3.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto; object-fit: contain;">
+                            您的浏览器不支持视频播放
+                        </video>
+                        <div style="padding: 1rem; text-align: center;">
+                            <h4 style="color: #92bfd4; margin-bottom: 0.5rem;">金属头饰拓扑测试</h4>
+                            <p style="font-size: 0.9rem; color: #7ee8fa;">Tripo3D金属头饰低模拓扑实验演示</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>测试结果：相对规整，但仍有问题</strong><br>
+                    设置面数限制为5000四边面，实际生成了5539个四边面，超出了539面。
+                </div>
+
+                <h4>问题截图展示</h4>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                    <div style="background: rgba(113, 189, 210, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(113, 189, 210, 0.2);">
+                        <img src="image/tripo/影心头饰5000面拓扑/屏幕截图 2026-07-17 124710.png" alt="头饰拓扑截图1" style="width: 100%; border-radius: 8px;">
+                        <p style="text-align: center; color: #92bfd4; margin-top: 0.5rem; font-size: 0.9rem;">①</p>
+                    </div>
+                    <div style="background: rgba(113, 189, 210, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(113, 189, 210, 0.2);">
+                        <img src="image/tripo/影心头饰5000面拓扑/屏幕截图 2026-07-17 124715.png" alt="头饰拓扑截图2" style="width: 100%; border-radius: 8px;">
+                        <p style="text-align: center; color: #92bfd4; margin-top: 0.5rem; font-size: 0.9rem;">②</p>
+                    </div>
+                    <div style="background: rgba(113, 189, 210, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(113, 189, 210, 0.2);">
+                        <img src="image/tripo/影心头饰5000面拓扑/屏幕截图 2026-07-17 124721.png" alt="头饰拓扑截图3" style="width: 100%; border-radius: 8px;">
+                        <p style="text-align: center; color: #92bfd4; margin-top: 0.5rem; font-size: 0.9rem;">③</p>
+                    </div>
+                    <div style="background: rgba(113, 189, 210, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(113, 189, 210, 0.2);">
+                        <img src="image/tripo/影心头饰5000面拓扑/屏幕截图 2026-07-17 124739.png" alt="头饰拓扑截图4" style="width: 100%; border-radius: 8px;">
+                        <p style="text-align: center; color: #92bfd4; margin-top: 0.5rem; font-size: 0.9rem;">④</p>
+                    </div>
+                </div>
+
+                <h4>优点：边缘规整度提升</h4>
+                <div class="highlight-box">
+                    <strong>相比步枪测试的进步：</strong><br>
+                    金属头饰的边缘不像步枪拓扑出来的那样歪歪扭扭，整体布线相对规整，说明Tripo3D在处理对称、曲面类模型时表现更好。
+                </div>
+
+                <h4>存在的问题：</h4>
+                <div class="highlight-box">
+                    <strong>问题8：金属硬边多余卡线</strong><br>
+                    有很多金属硬边存在多余的卡线，卡线对低模来说是多此一举，反而增加了不必要的面数和布线复杂度。
+                </div>
+                <div class="highlight-box">
+                    <strong>问题9：金属边不流畅</strong><br>
+                    部分金属边缘的布线不够流畅自然，存在突兀的转折和不连续的边流。
+                </div>
+                <div class="highlight-box">
+                    <strong>问题10：面数超限</strong><br>
+                    设置5000四边面限制，实际生成5539面，超出约10.8%，面数控制精度仍需提升。
+                </div>
+
+                <div class="highlight-box">
+                    <strong>可接受的问题：内部花纹拓扑</strong><br>
+                    内部的花纹被完整拓扑出来，但对于低模来说这些细节其实可以省略。不过考虑到AI不了解这是小型头饰需要做减法，这个问题可以不追究。
+                </div>
+
                 <h4>总结与改进建议</h4>
                 <div class="problem-box" style="line-height: 1.5;">
-                    <strong>核心问题：</strong>Tripo3D的低模拓扑算法对硬表面模型的理解存在根本性缺陷，即使设置了非常宽裕的面数预算（6000面），也无法生成合格的低模。
+                    <strong>综合评估：</strong>Tripo3D的低模拓扑能力存在明显的模型类型差异。在处理对称、曲面类模型（如金属头饰）时表现相对规整，但在处理硬表面道具（如枪械）时存在根本性缺陷。
                     <ul>
                         <li>对于硬表面道具（如枪械、机械零件），建议放弃使用Tripo3D生成低模</li>
+                        <li>对于对称、曲面类模型（如头饰、装饰品），可以尝试使用，但仍需检查面数超限和卡线问题</li>
                         <li>如果必须使用，建议将生成的高模导入Blender/Max，使用Quad Remesher等专业工具重新拓扑</li>
-                        <li>对于角色模型，低模问题相对少一些，但仍需仔细检查</li>
+                        <li>面数控制精度不足，设置5000面限制实际生成5539面，超出约10.8%</li>
+                        <li>金属硬边存在多余卡线问题，对低模来说是多此一举</li>
                     </ul>
                 </div>
             </div>

@@ -496,7 +496,7 @@
                 <div class="character-gallery">
                     <div class="character-card character-card-lulu elastic-element">
                         <div class="character-front">
-                            <img src="image/chahuixinshi4.jpg" alt="下午茶系列角色">
+                            <img src="image/chahuixinshi3.png" alt="下午茶系列角色">
                         </div>
                         <div class="character-back">
                             <div class="back-video-container">
@@ -1098,11 +1098,14 @@
             <div class="blog-content">
                 <h2 class="elastic-element">开发日志</h2>
                 <p class="blog-description elastic-element">分享开发心得、技术文章和创作故事</p>
-                <div class="blog-categories elastic-element" style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem;">
+                <div class="blog-categories elastic-element" style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
                     <button class="category-btn active" data-category="all" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">全部</button>
                     <button class="category-btn" data-category="ue" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">UE</button>
                     <button class="category-btn" data-category="unity" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">Unity</button>
                     <button class="category-btn" data-category="llm" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">大模型</button>
+                    <button class="category-btn" data-category="csharp" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">C#</button>
+                    <button class="category-btn" data-category="python" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">Python</button>
+                    <button class="category-btn" data-category="shader" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">Shader</button>
                     <button class="category-btn" data-category="other" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">其他</button>
                 </div>
                 <style>
@@ -1113,7 +1116,7 @@
                     }
                 </style>
                 <div class="blog-container">
-                    <div class="blog-card elastic-element" data-category="effects" style="background: linear-gradient(135deg, #B399FF, #FF9791);">
+                    <div class="blog-card elastic-element" data-category="effects shader" style="background: linear-gradient(135deg, #B399FF, #FF9791);">
                         <div class="blog-image">
                             <img src="image/shijuefengmian2.png" alt="视觉效果合集" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
@@ -1165,6 +1168,20 @@
                             <h3 style="color: #FFF8E7;">混元3D官方平台AI模型生成研究日志</h3>
                             <p style="color: #F5E6D3;">深入探索混元官方平台的功能特性，测试风格化角色、场景道具、能量水晶等多种模型生成效果，分析平台的优势、局限性及在游戏开发中的应用潜力。</p>
                             <a href="blog-hunyuan-official.html" class="read-more" style="background: #FFF8E7; color: #8B5A2B; border-color: #FFF8E7;">阅读全文</a>
+                        </div>
+                    </div>
+
+                    <div class="blog-card elastic-element" data-category="llm" style="border: 2px solid #8B7355; background: linear-gradient(135deg, #8B7355, #D4C4A8);">
+                        <div class="blog-image">
+                            <img src="image/hunyuan3D/步枪_中度拓扑/屏幕截图 2026-07-17 115701.png" alt="AI低模拓扑研究" style="width: 100%; height: 100%; object-fit: cover;">
+                        </div>
+                        <div class="blog-content">
+                            <div class="blog-meta">
+                                <span class="blog-date" style="color: #FFF8E7;">2026年7月17日</span>
+                            </div>
+                            <h3 style="color: #FFF8E7;">AI低模拓扑技术原理与优化策略研究</h3>
+                            <p style="color: #F5E6D3;">深入剖析AI自动拓扑的实现机制，分析五边面、破面、穿模问题的根本原因，提出针对性优化策略与改进建议。</p>
+                            <a href="blog-ai-retopo-analysis.html" class="read-more" style="background: #FFF8E7; color: #8B5A2B; border-color: #FFF8E7;">阅读全文</a>
                         </div>
                     </div>
 
@@ -1224,7 +1241,7 @@
                         </div>
                     </div>
 
-                    <div class="blog-card blog-card-hellhotel elastic-element" data-category="unity">
+                    <div class="blog-card blog-card-hellhotel elastic-element" data-category="unity csharp">
                         <div class="blog-image">
                             <img src="image/DIYUJIUDIAN.png" alt="地狱酒店" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
@@ -1238,7 +1255,7 @@
                         </div>
                     </div>
 
-                    <div class="blog-card elastic-element" id="glsl-card" data-category="other">
+                    <div class="blog-card elastic-element" id="glsl-card" data-category="other shader">
                         <div class="blog-image">
                             <img src="image/glsl1.jpg" alt="GLSL shader研究" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
@@ -1251,7 +1268,7 @@
                             <a href="blog-glsl-study.html" class="read-more">阅读全文</a>
                         </div>
                     </div>
-                    <div class="blog-card blog-card-unity elastic-element" data-category="unity">
+                    <div class="blog-card blog-card-unity elastic-element" data-category="unity csharp">
                         <div class="blog-image">
                             <img src="image/unityzuopinji1.png" alt="Unity作品集网站开发" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
@@ -1462,7 +1479,7 @@
                             <a href="blog-ue-metahuman.html" class="read-more">阅读全文</a>
                         </div>
                     </div>
-                    <div class="blog-card elastic-element" data-category="ue">
+                    <div class="blog-card elastic-element" data-category="ue shader">
                         <div class="blog-image">
                             <div class="blog-image-placeholder">
                                 <div class="placeholder-dots">•••</div>
@@ -1477,7 +1494,7 @@
                             <a href="blog-ue-hlsl.html" class="read-more">阅读全文</a>
                         </div>
                     </div>
-                    <div class="blog-card elastic-element" data-category="unity" id="circuit-card" style="background: linear-gradient(135deg, #ed8240, #ea9f49);">
+                    <div class="blog-card elastic-element" data-category="unity csharp" id="circuit-card" style="background: linear-gradient(135deg, #ed8240, #ea9f49);">
                         <div class="blog-image">
                             <img src="image/DIANLULIANJIE4.png" alt="电路链接游戏" style="width: 100%; height: 100%; object-fit: cover;">
                         </div>
