@@ -147,6 +147,28 @@
             color: #FFC17A;
         }
 
+        .blog-image-container {
+            text-align: center;
+            margin: 1.5rem 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid rgba(123, 161, 255, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        .blog-image-container img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .blog-image-caption {
+            background: rgba(123, 161, 255, 0.1);
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+            color: #B8C5E0;
+        }
+
         .custom-cursor {
             position: fixed;
             width: 20px;
@@ -295,6 +317,10 @@
                     <li>在 3D 视口按 N 打开右侧边栏，出现 BlenderMCP 选项卡</li>
                     <li>点击 "Connect to Claude"，Blender 端会在 localhost:9876 开启监听</li>
                 </ol>
+                <div class="blog-image-container">
+                    <img src="image/blender-mcp/blender_mcp_panel.png" alt="Blender MCP 插件面板">
+                    <div class="blog-image-caption">Blender MCP 插件安装成功后，右侧边栏会出现 BlenderMCP 选项卡，显示端口配置和可用的 AI 服务（Poly Haven、Rodin、混元3D等）</div>
+                </div>
                 <p><strong>步骤 B：配置 Claude Desktop</strong></p>
                 <div class="code-block">
                     <pre>{
