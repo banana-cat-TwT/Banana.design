@@ -551,10 +551,29 @@
                     </div>
                 </div>
 
+                <h4>10000四边面测试视频展示</h4>
+                <p>第二次测试将面数限制设置为10000个四边面，试图观察增加面数预算是否能改善拓扑质量：</p>
+                <div class="video-showcase">
+                    <div class="video-card">
+                        <video src="videos/tripo/tripo拓扑2.mp4" controls playsinline muted preload="metadata">
+                            您的浏览器不支持视频播放
+                        </video>
+                        <div class="video-card-content">
+                            <h4>10000四边面步枪拓扑测试</h4>
+                            <p>第二次测试：增加面数预算后的低模拓扑表现</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>测试结果：面数超限且质量更差</strong><br>
+                    设置10000四边面限制，实际生成了11355个四边面，超过了10000面的限制。更糟糕的是，增加面数预算后，枪口变形反而比6000面版本更加严重。
+                </div>
+
                 <h4>问题详细分析</h4>
                 <div class="highlight-box">
                     <strong>问题1：不必要的冗余布线</strong><br>
-                    在一些完全没有必要的地方做了大量布线，导致面数浪费严重。明明可以用更少的面来表现，却生成了复杂的边缘循环，完全是面数浪费。
+                    在一些完全没有必要的地方做了大量布线，导致面数浪费严重。明明可以用更少的面来表现，却生成了复杂的边缘循环，完全是面数浪费。枪托部位尤其明显，布了一堆没有必要的线。
                 </div>
                 <div class="highlight-box">
                     <strong>问题2：角落隐藏破面</strong><br>
@@ -571,6 +590,14 @@
                 <div class="highlight-box">
                     <strong>问题5：五边面及以上的多边形</strong><br>
                     出现了大量五边面甚至更多边的多边形。这种n-gon在游戏引擎中会导致渲染问题，必须手动拆解为三角面或四边面。
+                </div>
+                <div class="highlight-box">
+                    <strong>问题6：面数超限且分布不合理</strong><br>
+                    设置14000边面限制时，实际生成了11355个四边面，超出了合理范围。更严重的是，这些多余的面分配在枪托等不需要高细节的地方，而枪口等关键部位反而变形严重，比6000面版本更畸形。
+                </div>
+                <div class="highlight-box">
+                    <strong>问题7：多组件拆分功能极差</strong><br>
+                    Tripo3D的组件拆分功能表现非常糟糕，完全无法正确识别和拆分模型的各个组件。拆分结果混乱不堪，经常把不该拆分的部分拆开，或者把该分开的组件粘在一起，完全达不到实际使用的要求。
                 </div>
 
                 <h4>总结与改进建议</h4>
