@@ -376,48 +376,210 @@
 
             <div class="section-title">第四部分：混元 3D 图像转 3D 角色生成</div>
             <div class="section-content">
-                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">5.1 混元 3D 是什么</h3>
-                <p>腾讯混元 3D 2.0 是一个大规模 3D 资产生成系统，两阶段：</p>
-                <ol>
-                    <li><strong>几何生成（Hunyuan3D-DiT，2.6B 参数）</strong>：输入一张图/一段文字 → 输出无纹理网格</li>
-                    <li><strong>纹理生成（Hunyuan3D-Paint，1.3B 参数）</strong>：把原图贴回网格 → 输出带高分辨率纹理的 glb/obj</li>
-                </ol>
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">连接原理（一句话理解）</h3>
+                <div class="code-block">
+                    <pre>Blender（带 MCP 插件）
+    │ 通过 MCP 协议
+    ▼
+Claude Desktop（发指令）
+    │ 调用工具
+    ▼
+Blender 插件收到 "生成 Hunyuan 模型" 指令
+    │ 向 API URL 发 HTTP 请求
+    ▼
+Hunyuan3D 本地 API 服务器（你要启动）
+    │ 在 GPU 上跑 DiT + Paint
+    ▼
+返回 .glb 模型给 Blender 场景</pre>
+                </div>
+                <p>所以你现在 Blender 里看到的是<strong>客户端配置</strong>，必须<strong>另外启动一个 Hunyuan3D 服务进程</strong>，并在 API URL 里填上它的地址。</p>
             </div>
 
             <div class="section-content">
-                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">5.3 方案 B：本地免费部署</h3>
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">方案选择：三种路子</h3>
+                <table>
+                    <tr>
+                        <th>方案</th>
+                        <th>要本地跑服务吗</th>
+                        <th>成本</th>
+                        <th>适合</th>
+                    </tr>
+                    <tr>
+                        <td>① 官方 API（official api）</td>
+                        <td>❌ 不用</td>
+                        <td>按次计费（可能有免费额度）</td>
+                        <td>不想本地部署的你，最推荐</td>
+                    </tr>
+                    <tr>
+                        <td>② 本地 / AutoDL（local api）</td>
+                        <td>✅ 要跑服务</td>
+                        <td>免费（AutoDL 按小时算卡费）</td>
+                        <td>有 N 卡 / 想免费</td>
+                    </tr>
+                    <tr>
+                        <td>③ 网页版手动</td>
+                        <td>❌</td>
+                        <td>免费</td>
+                        <td>零自动化、零折腾</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="section-content">
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">方案①：官方 API（最快接入）★推荐</h3>
+                <ol>
+                    <li>Blender 插件下拉框从 <code>local api</code> 改选 <strong>official api</strong></li>
+                    <li>去 <a href="https://console.cloud.tencent.com/cam/capi" target="_blank" style="color: #7BA1FF;">腾讯云控制台</a> 创建 SecretId / SecretKey（SecretKey 创建后立刻记下，之后查不到）</li>
+                    <li>搜「腾讯混元生3D」→ 阅读协议 → 开通服务（需实名认证）</li>
+                    <li>把 SecretId、SecretKey 填进 Blender 插件对应字段</li>
+                    <li>点 <code>Connect to MCP server</code>，之后让 Claude 直接调</li>
+                </ol>
+                <p>这是<strong>异步接口</strong>：提交任务 → 拿 JobId → 轮询状态 → 拿到 GLB 自动进 Blender。插件会自动轮询，你不用手动等。</p>
+            </div>
+
+            <div class="section-content">
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">方案②：Windows 本地部署</h3>
+                <p>使用 <code>cshara1/Hunyuan3D-2GP-for-blender-mcp</code> 仓库，专门给 Blender MCP 改了 API 服务，默认端口 8081。</p>
+                <h4 style="color: #B8C5E0; margin-top: 1rem;">3.1 准备 Python 环境</h4>
+                <div class="code-block">
+                    <pre>conda create -n hy3d python=3.10 -y
+conda activate hy3d
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121</pre>
+                </div>
+                <h4 style="color: #B8C5E0; margin-top: 1rem;">3.2 克隆仓库并装依赖</h4>
                 <div class="code-block">
                     <pre>git clone https://github.com/cshara1/Hunyuan3D-2GP-for-blender-mcp.git
 cd Hunyuan3D-2GP-for-blender-mcp
 pip install -r requirements.txt
+pip install -e .</pre>
+                </div>
+                <h4 style="color: #B8C5E0; margin-top: 1rem;">3.3 编译纹理所需的自定义渲染器（关键步骤）</h4>
+                <div class="code-block">
+                    <pre>cd hy3dgen\texgen\custom_rasterizer
+python setup.py install
+cd ..\..\..
 
-# 编译纹理所需的自定义渲染器
-cd hy3dgen/texgen/custom_rasterizer
-python3 setup.py install
-cd ../../..
+cd hy3dgen\texgen\differentiable_renderer
+python setup.py install
+cd ..\..\..</pre>
+                </div>
+                <p><strong>如果报错，先检查：</strong></p>
+                <ul>
+                    <li>安装 <strong>Visual C++ 生成工具</strong>（Build Tools for Visual Studio 2022）</li>
+                    <li>安装与 PyTorch 对应版本的 <strong>CUDA Toolkit</strong></li>
+                    <li>确认 Conda 环境已激活（括号里显示 hy3d）</li>
+                </ul>
+                <h4 style="color: #B8C5E0; margin-top: 1rem;">3.4 启动本地 API 服务器</h4>
+                <div class="code-block">
+                    <pre># 启用几何生成 + 纹理生成，默认端口 8081
+python api_server.py --enable_t23d --enable_tex --port 8081
 
-# 启动带 MCP 的 API 服务器
-python api_server.py --enable_t23d --enable_tex</pre>
+# 只生成几何、不要纹理（显存小/速度快）
+python api_server.py --enable_t23d --port 8081</pre>
                 </div>
             </div>
 
             <div class="section-content">
-                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">5.4 图生 3D 的 Python 最小流程</h3>
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">方案③：AutoDL 云端方案（推荐不想折腾 Windows 编译的人）</h3>
                 <div class="code-block">
-                    <pre>from hy3dgen.shapegen import Hunyuan3DDiTFlowMatchingPipeline
-from hy3dgen.texgen import Hunyuan3DPaintPipeline
+                    <pre>conda create -n hy3d python=3.10 -y
+conda activate hy3d
+pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
 
-# 1) 几何
-pipe = Hunyuan3DDiTFlowMatchingPipeline.from_pretrained('tencent/Hunyuan3D-2')
-mesh = pipe(image='assets/demo.png')[0]
+git clone https://github.com/cshara1/Hunyuan3D-2GP-for-blender-mcp.git
+cd Hunyuan3D-2GP-for-blender-mcp
+pip install -r requirements.txt
+pip install -e .
 
-# 2) 纹理
-paint = Hunyuan3DPaintPipeline.from_pretrained('tencent/Hunyuan3D-2')
-mesh = paint(mesh, image='assets/demo.png')
-
-# 3) 保存给 Blender 用
-mesh.export('my_character.glb')</pre>
+# 启动服务（用 AutoDL 提供的端口映射）
+python api_server.py --enable_t23d --enable_tex --host 0.0.0.0 --port 8081</pre>
                 </div>
+                <p><strong>安全的 SSH 端口转发（推荐）</strong></p>
+                <div class="code-block">
+                    <pre># 在 Windows 本地 PowerShell 运行
+ssh -L 8081:localhost:8081 root@xxx.autodl.pro -p &lt;SSH端口&gt;</pre>
+                </div>
+                <p>然后 Blender 里 API URL 填 <code>http://127.0.0.1:8081</code>。</p>
+            </div>
+
+            <div class="section-content">
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">Blender 端配置</h3>
+                <table>
+                    <tr>
+                        <th>设置项</th>
+                        <th>填什么</th>
+                    </tr>
+                    <tr>
+                        <td>Use Tencent Hunyuan 3D model generation</td>
+                        <td>勾选</td>
+                    </tr>
+                    <tr>
+                        <td>模式下拉框</td>
+                        <td>选 <code>local api</code> 或 <code>official api</code></td>
+                    </tr>
+                    <tr>
+                        <td>API URL</td>
+                        <td><code>http://127.0.0.1:8081</code></td>
+                    </tr>
+                    <tr>
+                        <td>Octree Resolution</td>
+                        <td>256（细节高）；8GB 显存建议 128</td>
+                    </tr>
+                    <tr>
+                        <td>Number of Inference Steps</td>
+                        <td>20</td>
+                    </tr>
+                    <tr>
+                        <td>Guidance Scale</td>
+                        <td>5.5</td>
+                    </tr>
+                    <tr>
+                        <td>Generate Texture</td>
+                        <td>服务器带了 <code>--enable_tex</code> 就勾选</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="section-content">
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">测试：让 Claude 生成一个混元 3D 模型</h3>
+                <p><strong>文生 3D：</strong></p>
+                <div class="code-block">
+                    <pre>在 Blender 中用 Hunyuan3D 生成一把木椅子，放在场景原点，并把它缩放到合适尺寸。</pre>
+                </div>
+                <p><strong>图生 3D：</strong></p>
+                <div class="code-block">
+                    <pre>读取 C:\Users\<你的用户名>\Desktop\concept.png，用本地 Hunyuan3D 把它生成带纹理的 3D 模型导入 Blender，居中并缩放到 2 米高。</pre>
+                </div>
+            </div>
+
+            <div class="section-content">
+                <h3 style="color: #7BA1FF; margin-bottom: 0.5rem;">常见错误排查</h3>
+                <table>
+                    <tr>
+                        <th>现象</th>
+                        <th>原因 / 解决</th>
+                    </tr>
+                    <tr>
+                        <td>Blender 点了生成没反应</td>
+                        <td>API URL 没填 / 服务没启动；确认终端里有 Uvicorn running 输出</td>
+                    </tr>
+                    <tr>
+                        <td>报 Connection refused</td>
+                        <td>端口不对 / 防火墙；Windows 防火墙允许 Python 通过</td>
+                    </tr>
+                    <tr>
+                        <td>生成几何成功但纹理失败</td>
+                        <td>没编译 custom_rasterizer 或没加 --enable_tex</td>
+                    </tr>
+                    <tr>
+                        <td>CUDA out of memory</td>
+                        <td>Octree Resolution 降到 128；关掉 Generate Texture</td>
+                    </tr>
+                    <tr>
+                        <td>模型发黑/没材质</td>
+                        <td>检查服务器是否带 --enable_tex，Blender 是否勾选</td>
+                    </tr>
+                </table>
             </div>
 
             <div class="section-title">附录 A：Blender MCP 工具函数速查</div>
