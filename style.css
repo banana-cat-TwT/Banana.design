@@ -4632,6 +4632,48 @@ nav ul li a:hover::after {
     box-shadow: 0 5px 15px rgba(79, 163, 217, 0.4);
 }
 
+.game-item-shawarma {
+    background: linear-gradient(135deg, #FFF9E6, #FFEFD5, #FFE4C4);
+    border: 3px solid #CD853F;
+    box-shadow: 0 8px 25px rgba(205, 133, 63, 0.2);
+}
+
+.game-item-shawarma:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(205, 133, 63, 0.3), 0 0 0 3px rgba(205, 133, 63, 0.2);
+    border-color: #8B4513;
+}
+
+.game-item.game-item-shawarma h3 {
+    color: #5D4037 !important;
+    text-shadow: none;
+}
+
+.game-item.game-item-shawarma p {
+    color: #4E342E !important;
+}
+
+.game-item-shawarma .game-link {
+    background: linear-gradient(135deg, #DEB887, #D2691E);
+    color: #fff;
+    border: 2px solid #8B4513;
+}
+
+.game-item-shawarma .game-link:hover {
+    background: linear-gradient(135deg, #D2691E, #CD853F);
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(139, 69, 19, 0.4);
+}
+
+.game-item-shawarma .game-img {
+    border: 2px solid #CD853F;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.game-item-shawarma .game-character {
+    border: 2px solid #CD853F;
+}
+
 .game-item:hover {
     transform: translateY(-5px);
     box-shadow: 0 5px 20px rgba(255, 159, 67, 0.3);

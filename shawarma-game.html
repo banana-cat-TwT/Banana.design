@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>铁板卷饼摊 - HTML5版</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #1a1a2e; font-family: 'Microsoft YaHei', sans-serif; overflow: hidden; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+#gameContainer { position: relative; width: 900px; height: 650px; margin: 0 auto; }
+canvas { display: block; border-radius: 12px; box-shadow: 0 0 40px rgba(255,165,0,0.3); }
+#uiOverlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+.start-screen, .game-over-screen {
+  position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: rgba(26,26,46,0.95); border-radius: 12px; pointer-events: auto;
+}
+.start-screen h1 {
+  font-size: 48px; color: #ff9f43; text-shadow: 3px 3px 0 #c0392b, 0 0 30px rgba(255,159,67,0.5);
+  margin-bottom: 10px; letter-spacing: 4px;
+}
+.start-screen .subtitle { color: #feca57; font-size: 20px; margin-bottom: 30px; }
+.start-screen .instructions {
+  color: #ddd; font-size: 14px; line-height: 1.9; text-align: center; max-width: 520px;
+  background: rgba(255,255,255,0.05); padding: 20px 30px; border-radius: 10px; margin-bottom: 30px;
+}
+.start-screen .instructions b { color: #ff9f43; }
+.start-screen .instructions .step { color: #feca57; font-weight: bold; }
+.btn-start {
+  background: linear-gradient(135deg, #ff9f43, #ee5a24); color: white; border: none;
+  padding: 16px 60px; font-size: 22px; border-radius: 30px; cursor: pointer;
+  font-family: 'Microsoft YaHei', sans-serif; font-weight: bold; letter-spacing: 2px;
+  box-shadow: 0 4px 15px rgba(238,90,36,0.4); transition: all 0.3s;
+}
+.btn-start:hover { transform: scale(1.05); box-shadow: 0 6px 25px rgba(238,90,36,0.6); }
+.game-over-screen h1 { font-size: 42px; margin-bottom: 20px; }
+.game-over-screen .stats { color: #feca57; font-size: 18px; line-height: 2; margin-bottom: 30px; text-align: center; }
+</style>
+</head>
+<body>
+<div id="gameContainer">
+<canvas id="gameCanvas" width="900" height="650"></canvas>
+<div id="uiOverlay">
+  <div class="start-screen" id="startScreen">
+    <h1>🌯 铁板卷饼摊</h1>
+    <div class="instructions">
+      📖 <b>怎么玩</b><br>
+      顾客来点餐，头顶气泡显示要的配料<br><br>
+      <span class="step">① 选工位</span> — 点击三个工位之一选中（金色边框=当前选中）<br>
+      <span class="step">② 加料</span> — 点配料按钮把食材放上卷饼<br>
+      <span class="step">③ 烤制</span> — 点「烤制」放进烤箱，等3秒烤熟<br>
+      <span class="step">④ 装盘</span> — 烤好后点「装盘」端出来<br>
+      <span class="step">⑤ 出餐</span> — 点「出餐」递给顾客<br><br>
+      💡 <b>三个工位可同时做不同的卷饼！</b>边烤边组装，效率翻倍<br>
+      ⚠️ 烤太久会焦！焦了只能丢弃重来<br>
+      ⭐ 配对+烤熟 = 赚钱 · 配错/生的/焦的 = 扣钱<br>
+      💰 每天目标 ¥200 · 共5天 · 累计冲分
+    </div>
+    <button class="btn-start" onclick="startGame()">开始营业</button>
+  </div>
+  <div class="game-over-screen" id="gameOverScreen" style="display:none;">
+    <h1 id="goTitle">🎉 营业结束！</h1>
+    <div class="stats" id="goStats"></div>
+    <button class="btn-start" onclick="startGame()">再来一局</button>
+  </div>
+</div>
+</div>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const W = 900, H = 650;
+
+// roundRect polyfill
+if (!CanvasRenderingContext2D.prototype.roundRect) {
+  CanvasRenderingContext2D.prototype.roundRect = function(x, y, w, h, r) {
+    if (typeof r === 'number') r = [r, r, r, r];
+    this.beginPath();
+    this.moveTo(x + r[0], y);
+    this.lineTo(x + w - r[1], y);
+    this.quadraticCurveTo(x + w, y, x + w, y + r[1]);
+    this.lineTo(x + w, y + h - r[2]);
+    this.quadraticCurveTo(x + w, y + h, x + w - r[2], y + h);
+    this.lineTo(x + r[3], y + h);
+    this.quadraticCurveTo(x, y + h, x, y + h - r[3]);
+    this.lineTo(x, y + r[0]);
+    this.quadraticCurveTo(x, y, x + r[0], y);
+    this.closePath();
+    return this;
+  };
+}
+
+// ============ 游戏状态 ============
+let gameState = 'menu';
+let money = 0, day = 1, maxDays = 5, dayTarget = 200;
+let dayEarnings = 0, customersServed = 0, totalScore = 0;
+let timeLeft = 0, dayDuration = 70;
+let combo = 0, comboTimer = 0;
+
+// ============ 多工位系统 ============
+const STATION_CENTERS = [160, 450, 740];
+let workstations = [];
+let selectedWS = 0;
+const COOK_TIME = 3;
+const BURN_TIME = 5;
+
+function initWorkstations() {
+  workstations = STATION_CENTERS.map((cx, i) => ({
+    id: i,
+    cx: cx,
+    foodState: 'empty',  // empty → assembling → cooking → ready → plated → served
+    currentWrap: [],      //                                  └→ burnt
+    cookTimer: 0,
+    burnTimer: 0,
+    shake: 0,
+    flash: 0,
+    flashColor: '',
+  }));
+}
+function ws() { return workstations[selectedWS]; }
+
+// ============ 配料系统 ============
+const INGREDIENTS = {
+  meat:    { name: '烤肉', color: '#c0392b', emoji: '🥩' },
+  lettuce: { name: '生菜', color: '#27ae60', emoji: '🥬' },
+  tomato:  { name: '番茄', color: '#e74c3c', emoji: '🍅' },
+  onion:   { name: '洋葱', color: '#f0c27b', emoji: '🧅' },
+  sauce:   { name: '酱料', color: '#f39c12', emoji: '🟡' },
+  fries:   { name: '薯条', color: '#e67e22', emoji: '🍟' },
+};
+const ING_KEYS = Object.keys(INGREDIENTS);
+
+// ============ 按钮系统 ============
+const ingredientButtons = [];
+const ingBtnW = 75, ingBtnSpacing = 83, ingBtnStartX = 15;
+ING_KEYS.forEach((key, i) => {
+  ingredientButtons.push({
+    key, x: ingBtnStartX + i * ingBtnSpacing, y: 545, w: ingBtnW, h: 80,
+    hover: false, press: 0,
+  });
+});
+
+// 动作按钮：烤制 / 装盘 / 出餐 / 丢弃
+const actionButtons = [
+  { key: 'cook',    label: '烤制', emoji: '🔥', x: 520, y: 545, w: 88, h: 80, color: '#e67e22', hover: false, press: 0 },
+  { key: 'plate',   label: '装盘', emoji: '🍽️', x: 618, y: 545, w: 88, h: 80, color: '#3498db', hover: false, press: 0 },
+  { key: 'serve',   label: '出餐', emoji: '🚀', x: 716, y: 545, w: 88, h: 80, color: '#2ecc71', hover: false, press: 0 },
+  { key: 'discard', label: '丢弃', emoji: '🗑️', x: 814, y: 545, w: 75, h: 80, color: '#e74c3c', hover: false, press: 0 },
+];
+
+// ============ 顾客系统 ============
+let customers = [];
+let customerSpawnTimer = 0;
+let customerSpawnInterval = 4;
+let nextCustomerId = 0;
+const customerSlots = [
+  { x: 120, occupied: false }, { x: 320, occupied: false },
+  { x: 520, occupied: false }, { x: 720, occupied: false },
+];
+const customerColors = ['#e74c3c','#3498db','#9b59b6','#1abc9c','#e67e22','#2ecc71','#f1c40f','#e84393'];
+const customerFaces = ['😎','🤓','😄','🙂','😐','🤔','😤','🥳'];
+
+function spawnCustomer() {
+  const slot = customerSlots.find(s => !s.occupied);
+  if (!slot) return;
+  const numIngs = 2 + Math.min(Math.floor(Math.random() * 3), Math.floor(day / 2) + 1);
+  const order = [];
+  const available = [...ING_KEYS];
+  for (let i = 0; i < numIngs && available.length > 0; i++) {
+    const idx = Math.floor(Math.random() * available.length);
+    order.push(available[idx]);
+    available.splice(idx, 1);
+  }
+  const patience = Math.max(14, 24 - day * 1.5);
+  customers.push({
+    id: nextCustomerId++, x: -80, targetX: slot.x, y: 260, slot,
+    order, patience, maxPatience: patience,
+    state: 'entering', leaveTimer: 0, happy: false,
+    color: customerColors[nextCustomerId % customerColors.length],
+    face: customerFaces[nextCustomerId % customerFaces.length],
+    bubbleScale: 0,
+  });
+  slot.occupied = true;
+}
+
+// ============ 粒子 & 文字 ============
+let particles = [];
+function spawnParticle(x, y, color) {
+  particles.push({ x, y, vx: (Math.random()-0.5)*4, vy: -Math.random()*4-2, color, life: 1.0, size: Math.random()*4+2 });
+}
+function spawnMoney(x, y, amount) {
+  particles.push({ x, y, vx: (Math.random()-0.5)*2, vy: -3, color: '#2ecc71', text: (amount>0?'+':'')+'¥'+amount, life: 1.5, isText: true });
+}
+let floatingTexts = [];
+function addFloatingText(x, y, text, color, size) {
+  floatingTexts.push({ x, y, text, color, size: size||18, life: 1.5, vy: -1.5 });
+}
+
+// ============ 烤箱火焰粒子 ============
+let fireParticles = [];
+function spawnFire() {
+  for (const s of workstations) {
+    if (s.foodState === 'cooking') {
+      fireParticles.push({
+        x: s.cx + (Math.random()-0.5)*45,
+        y: 375,
+        vx: (Math.random()-0.5)*1.5,
+        vy: -Math.random()*3-1,
+        life: 0.6,
+        size: Math.random()*7+3,
+      });
+    }
+  }
+}
+
+// ============ 输入 ============
+let mouseX = 0, mouseY = 0;
+canvas.addEventListener('mousemove', (e) => {
+  const rect = canvas.getBoundingClientRect();
+  mouseX = e.clientX - rect.left;
+  mouseY = e.clientY - rect.top;
+});
+
+canvas.addEventListener('click', (e) => {
+  if (gameState !== 'playing') return;
+  const rect = canvas.getBoundingClientRect();
+  const cx = e.clientX - rect.left;
+  const cy = e.clientY - rect.top;
+
+  // 工位选择（点击工位区域切换）
+  for (let i = 0; i < workstations.length; i++) {
+    const sc = workstations[i].cx;
+    if (cx >= sc - 120 && cx <= sc + 120 && cy >= 300 && cy <= 460) {
+      selectedWS = i;
+      return;
+    }
+  }
+
+  const s = ws();
+
+  // 配料按钮（仅空或组装中可用）
+  if (s.foodState === 'empty' || s.foodState === 'assembling') {
+    for (const btn of ingredientButtons) {
+      if (cx >= btn.x && cx <= btn.x+btn.w && cy >= btn.y && cy <= btn.y+btn.h) {
+        s.currentWrap.push(btn.key);
+        s.foodState = 'assembling';
+        btn.press = 1;
+        spawnParticle(btn.x+btn.w/2, btn.y, INGREDIENTS[btn.key].color);
+        return;
+      }
+    }
+  }
+
+  // 动作按钮
+  for (const btn of actionButtons) {
+    if (cx >= btn.x && cx <= btn.x+btn.w && cy >= btn.y && cy <= btn.y+btn.h) {
+      btn.press = 1;
+      handleAction(btn.key);
+      return;
+    }
+  }
+});
+
+// ============ 动作处理 ============
+function handleAction(action) {
+  const s = ws();
+  switch(action) {
+    case 'cook':
+      if (s.foodState === 'assembling' && s.currentWrap.length > 0) {
+        s.foodState = 'cooking';
+        s.cookTimer = 0;
+        addFloatingText(s.cx, 330, '进烤箱了！', '#e67e22', 18);
+      } else if (s.foodState === 'empty') {
+        addFloatingText(s.cx, 430, '卷饼是空的！', '#e74c3c', 16);
+        s.shake = 8;
+      } else {
+        addFloatingText(s.cx, 430, '现在不能烤！', '#e74c3c', 16);
+      }
+      break;
+
+    case 'plate':
+      if (s.foodState === 'ready') {
+        s.foodState = 'plated';
+        addFloatingText(s.cx, 380, '装盘完成！', '#3498db', 18);
+        s.flash = 1; s.flashColor = '#3498db';
+      } else if (s.foodState === 'cooking') {
+        addFloatingText(s.cx, 430, '还没烤好！', '#feca57', 16);
+      } else {
+        addFloatingText(s.cx, 430, '现在不能装盘！', '#e74c3c', 16);
+      }
+      break;
+
+    case 'serve':
+      if (s.foodState === 'plated') {
+        serveCurrentWrap();
+      } else if (s.foodState === 'ready') {
+        addFloatingText(s.cx, 430, '先装盘！', '#feca57', 16);
+      } else if (s.foodState === 'cooking') {
+        addFloatingText(s.cx, 430, '还没烤好！', '#feca57', 16);
+      } else if (s.foodState === 'assembling') {
+        addFloatingText(s.cx, 430, '先烤制！', '#feca57', 16);
+      } else {
+        addFloatingText(s.cx, 430, '没有食物！', '#e74c3c', 16);
+      }
+      break;
+
+    case 'discard':
+      if (s.foodState !== 'empty') {
+        s.currentWrap = [];
+        s.foodState = 'empty';
+        s.cookTimer = 0;
+        s.burnTimer = 0;
+        addFloatingText(s.cx, 410, '已丢弃', '#95a5a6', 16);
+        s.flash = 1; s.flashColor = '#7f8c8d';
+      }
+      break;
+  }
+}
+
+// ============ 出餐逻辑 ============
+function serveCurrentWrap() {
+  const s = ws();
+  const waiting = customers.filter(c => c.state === 'waiting');
+  if (waiting.length === 0) {
+    addFloatingText(s.cx, 430, '没有顾客在等！', '#e67e22', 16);
+    return;
+  }
+
+  const wrapSorted = [...s.currentWrap].sort().join(',');
+  let customer = null;
+  for (const c of waiting) {
+    if ([...c.order].sort().join(',') === wrapSorted) { customer = c; break; }
+  }
+
+  if (customer) {
+    const patienceRatio = customer.patience / customer.maxPatience;
+    const basePay = 20 + customer.order.length * 6;
+    const patienceBonus = Math.floor(basePay * patienceRatio * 0.5);
+    const comboBonus = combo * 4;
+    const totalPay = basePay + patienceBonus + comboBonus;
+
+    money += totalPay; dayEarnings += totalPay; customersServed++;
+    combo++; comboTimer = 5;
+    customer.happy = true; customer.state = 'leaving'; customer.leaveTimer = 1.5;
+    if (customer.slot) customer.slot.occupied = false;
+
+    s.flash = 1; s.flashColor = '#2ecc71';
+    spawnMoney(customer.x, customer.y - 40, totalPay);
+    addFloatingText(s.cx, 360, '完美！', '#2ecc71', 24);
+    if (combo >= 3) addFloatingText(s.cx, 335, `连击 x${combo}!`, '#feca57', 18);
+    for (let i = 0; i < 12; i++) spawnParticle(customer.x, customer.y, ['#2ecc71','#feca57','#ff9f43'][i%3]);
+  } else {
+    const penalty = 12;
+    money = Math.max(0, money - penalty);
+    combo = 0;
+    const angry = waiting[0];
+    angry.happy = false; angry.state = 'leaving'; angry.leaveTimer = 1.5;
+    if (angry.slot) angry.slot.occupied = false;
+    s.flash = 1; s.flashColor = '#e74c3c';
+    spawnMoney(angry.x, angry.y - 40, -penalty);
+    addFloatingText(s.cx, 380, '配错了！', '#e74c3c', 22);
+    s.shake = 12;
+  }
+
+  s.currentWrap = [];
+  s.foodState = 'empty';
+  s.cookTimer = 0;
+  s.burnTimer = 0;
+}
+
+// ============ 游戏循环 ============
+let lastTime = performance.now();
+
+function startGame() {
+  document.getElementById('startScreen').style.display = 'none';
+  document.getElementById('gameOverScreen').style.display = 'none';
+  gameState = 'playing';
+  money = 0; day = 1; dayEarnings = 0; customersServed = 0; totalScore = 0;
+  combo = 0; comboTimer = 0; timeLeft = dayDuration;
+  customers = []; particles = []; floatingTexts = []; fireParticles = [];
+  initWorkstations();
+  selectedWS = 0;
+  customerSpawnTimer = 1; customerSpawnInterval = 4;
+  customerSlots.forEach(s => s.occupied = false);
+  nextCustomerId = 0;
+}
+
+function endDay() {
+  gameState = 'dayEnd';
+  totalScore += dayEarnings;
+  customers.forEach(c => { c.state = 'leaving'; c.leaveTimer = 1; });
+  for (const s of workstations) {
+    s.currentWrap = []; s.foodState = 'empty'; s.cookTimer = 0; s.burnTimer = 0;
+  }
+
+  setTimeout(() => {
+    if (day >= maxDays) {
+      gameState = 'gameOver';
+      const success = totalScore >= dayTarget * maxDays * 0.7;
+      document.getElementById('goTitle').textContent = success ? '🎉 生意兴隆！' : '😅 还需努力...';
+      document.getElementById('goTitle').style.color = success ? '#2ecc71' : '#e74c3c';
+      document.getElementById('goStats').innerHTML =
+        `5天总收入：¥${totalScore}<br>服务顾客：${customersServed} 人<br>` +
+        `日均收入：¥${Math.floor(totalScore/maxDays)}<br>${success ? '🏆 你是卷饼之王！' : '下次加油！'}`;
+      document.getElementById('gameOverScreen').style.display = 'flex';
+    } else {
+      day++;
+      dayEarnings = 0; combo = 0; timeLeft = dayDuration;
+      customerSpawnInterval = Math.max(2, 4 - day * 0.3);
+      customerSpawnTimer = 1.5;
+      customerSlots.forEach(s => s.occupied = false);
+      customers = [];
+      for (const s of workstations) {
+        s.currentWrap = []; s.foodState = 'empty'; s.cookTimer = 0; s.burnTimer = 0;
+      }
+      gameState = 'playing';
+    }
+  }, 2000);
+}
+
+function update(dt) {
+  if (gameState !== 'playing') {
+    customers.forEach(c => {
+      if (c.state === 'leaving') {
+        c.leaveTimer -= dt;
+        c.x += (c.happy ? 200 : -150) * dt;
+        if (c.leaveTimer <= 0 && c.slot) c.slot.occupied = false;
+      }
+    });
+    customers = customers.filter(c => !(c.state === 'leaving' && c.leaveTimer <= 0));
+    return;
+  }
+
+  timeLeft -= dt;
+  if (timeLeft <= 0) { timeLeft = 0; endDay(); return; }
+  if (comboTimer > 0) { comboTimer -= dt; if (comboTimer <= 0) combo = 0; }
+
+  // === 所有工位的烹饪状态机 ===
+  for (const s of workstations) {
+    if (s.foodState === 'cooking') {
+      s.cookTimer += dt;
+      if (s.cookTimer >= COOK_TIME) {
+        s.foodState = 'ready';
+        s.burnTimer = 0;
+        addFloatingText(s.cx, 330, '烤好了！', '#2ecc71', 18);
+        s.flash = 1; s.flashColor = '#feca57';
+      }
+    } else if (s.foodState === 'ready') {
+      s.burnTimer += dt;
+      if (s.burnTimer >= BURN_TIME) {
+        s.foodState = 'burnt';
+        addFloatingText(s.cx, 350, '烧焦了！！', '#e74c3c', 20);
+        s.shake = 10;
+        s.flash = 1; s.flashColor = '#e74c3c';
+      }
+    }
+    if (s.shake > 0) s.shake -= dt * 30;
+    if (s.flash > 0) s.flash -= dt * 2;
+  }
+
+  // 火焰粒子
+  spawnFire();
+  for (const p of fireParticles) { p.x += p.vx; p.y += p.vy; p.life -= dt * 1.8; }
+  fireParticles = fireParticles.filter(p => p.life > 0);
+
+  // 顾客生成
+  customerSpawnTimer -= dt;
+  if (customerSpawnTimer <= 0) {
+    spawnCustomer();
+    customerSpawnTimer = customerSpawnInterval + Math.random() * 2;
+  }
+
+  // 顾客更新
+  for (const c of customers) {
+    if (c.state === 'entering') {
+      c.x += 150 * dt;
+      if (c.x >= c.targetX) { c.x = c.targetX; c.state = 'waiting'; }
+    } else if (c.state === 'waiting') {
+      c.patience -= dt;
+      c.bubbleScale = Math.min(1, c.bubbleScale + dt * 4);
+      if (c.patience <= 0) {
+        c.state = 'leaving'; c.leaveTimer = 1.5; c.happy = false; combo = 0;
+        addFloatingText(c.x, c.y - 60, '走了！', '#e74c3c', 18);
+        if (c.slot) c.slot.occupied = false;
+      }
+    } else if (c.state === 'leaving') {
+      c.leaveTimer -= dt;
+      c.x += (c.happy ? 200 : -150) * dt;
+    }
+  }
+  customers = customers.filter(c => !(c.state === 'leaving' && c.leaveTimer <= 0));
+
+  // 粒子 & 文字
+  for (const p of particles) { p.x += p.vx; p.y += p.vy; p.vy += 0.15; p.life -= dt * 1.5; }
+  particles = particles.filter(p => p.life > 0);
+  for (const t of floatingTexts) { t.y += t.vy; t.life -= dt; }
+  floatingTexts = floatingTexts.filter(t => t.life > 0);
+
+  // 按钮动画
+  const allBtns = [...ingredientButtons, ...actionButtons];
+  for (const btn of allBtns) {
+    btn.hover = mouseX >= btn.x && mouseX <= btn.x+btn.w && mouseY >= btn.y && mouseY <= btn.y+btn.h;
+    if (btn.press > 0) btn.press -= dt * 4;
+  }
+}
+
+// ============ 绘制 ============
+function drawBackground() {
+  // 白天天空
+  const skyGrad = ctx.createLinearGradient(0, 0, 0, 470);
+  skyGrad.addColorStop(0, '#5dade2'); skyGrad.addColorStop(0.5, '#85c1e9'); skyGrad.addColorStop(1, '#d6eaf8');
+  ctx.fillStyle = skyGrad; ctx.fillRect(0, 0, W, 470);
+
+  // 太阳
+  ctx.fillStyle = 'rgba(255,215,0,0.7)';
+  ctx.beginPath(); ctx.arc(800, 65, 28, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = 'rgba(255,235,59,0.4)';
+  ctx.beginPath(); ctx.arc(800, 65, 38, 0, Math.PI*2); ctx.fill();
+
+  // 云朵
+  drawCloud(140, 75, 32);
+  drawCloud(480, 50, 28);
+  drawCloud(350, 110, 22);
+
+  // 远处建筑剪影
+  ctx.fillStyle = 'rgba(255,255,255,0.15)';
+  ctx.fillRect(0, 380, 60, 90);
+  ctx.fillRect(840, 360, 60, 110);
+  ctx.fillStyle = 'rgba(255,255,255,0.1)';
+  ctx.fillRect(50, 400, 50, 70);
+
+  // 地面（人行道）
+  ctx.fillStyle = '#c4a882'; ctx.fillRect(0, 470, W, H-470);
+  // 地砖纹理
+  ctx.strokeStyle = 'rgba(139,111,71,0.3)'; ctx.lineWidth = 1;
+  for (let i = 0; i < W; i += 50) { ctx.beginPath(); ctx.moveTo(i, 470); ctx.lineTo(i, H); ctx.stroke(); }
+  for (let j = 480; j < H; j += 25) { ctx.beginPath(); ctx.moveTo(0, j); ctx.lineTo(W, j); ctx.stroke(); }
+
+  // 台面
+  const cg = ctx.createLinearGradient(0, 445, 0, 525);
+  cg.addColorStop(0, '#d4a574'); cg.addColorStop(1, '#a0734a');
+  ctx.fillStyle = cg; ctx.fillRect(0, 445, W, 20);
+  ctx.strokeStyle = 'rgba(139,69,19,0.3)'; ctx.lineWidth = 1;
+  for (let i = 0; i < W; i += 60) { ctx.beginPath(); ctx.moveTo(i, 445); ctx.lineTo(i, 465); ctx.stroke(); }
+
+  // 顶棚条纹（红白遮阳棚）
+  for (let i = 0; i < W; i += 80) { ctx.fillStyle = i%160===0 ? '#e74c3c' : '#fff'; ctx.fillRect(i, 0, 80, 30); }
+  ctx.fillStyle = '#c0392b'; ctx.fillRect(0, 30, W, 8);
+  // 棚边流苏
+  for (let i = 0; i < W; i += 20) {
+    ctx.fillStyle = i%40===0 ? '#e74c3c' : '#fff';
+    ctx.beginPath(); ctx.moveTo(i, 38); ctx.lineTo(i+10, 38); ctx.lineTo(i+5, 46); ctx.closePath(); ctx.fill();
+  }
+
+  // 顾客小桌
+  for (const slot of customerSlots) {
+    drawSmallTable(slot.x, 335);
+  }
+}
+
+function drawCloud(x, y, size) {
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
+  ctx.beginPath();
+  ctx.arc(x, y, size, 0, Math.PI*2);
+  ctx.arc(x + size*0.8, y - size*0.2, size*0.7, 0, Math.PI*2);
+  ctx.arc(x + size*1.5, y, size*0.6, 0, Math.PI*2);
+  ctx.arc(x + size*0.5, y + size*0.3, size*0.5, 0, Math.PI*2);
+  ctx.fill();
+}
+
+function drawSmallTable(x, y) {
+  ctx.fillStyle = 'rgba(0,0,0,0.1)';
+  ctx.beginPath(); ctx.ellipse(x, y+18, 22, 4, 0, 0, Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#6B4226';
+  ctx.fillRect(x-2, y, 4, 18);
+  ctx.fillStyle = '#8B6B4A';
+  ctx.beginPath(); ctx.ellipse(x, y, 20, 5, 0, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle = '#5D4029'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.ellipse(x, y, 20, 5, 0, 0, Math.PI*2); ctx.stroke();
+}
+
+// ============ 工位绘制 ============
+function drawWorkstation(s) {
+  const isActive = s.id === selectedWS;
+  const ox = s.cx - 50, oy = 345, ow = 100, oh = 65;
+
+  // 选中高亮边框
+  if (isActive) {
+    const pulse = Math.sin(performance.now()/250) * 0.25 + 0.75;
+    ctx.strokeStyle = `rgba(255,215,0,${pulse})`;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.roundRect(s.cx - 115, 302, 230, 155, 12);
+    ctx.stroke();
+  }
+
+  // 工位编号
+  ctx.fillStyle = isActive ? '#feca57' : '#7f8c8d';
+  ctx.font = 'bold 12px Microsoft YaHei'; ctx.textAlign = 'center';
+  ctx.fillText(`工位 ${s.id + 1}`, s.cx, 296);
+
+  // 烤箱外壳
+  ctx.fillStyle = '#2c3e50';
+  ctx.beginPath();
+  ctx.roundRect(ox, oy, ow, oh, 8);
+  ctx.fill();
+
+  // 烤箱内壁
+  const innerGrad = ctx.createLinearGradient(ox, oy, ox, oy+oh);
+  if (s.foodState === 'cooking') {
+    innerGrad.addColorStop(0, '#ff6b35'); innerGrad.addColorStop(0.5, '#f79e1e'); innerGrad.addColorStop(1, '#d35400');
+  } else if (s.foodState === 'ready') {
+    innerGrad.addColorStop(0, '#feca57'); innerGrad.addColorStop(1, '#f39c12');
+  } else if (s.foodState === 'burnt') {
+    innerGrad.addColorStop(0, '#2d3436'); innerGrad.addColorStop(1, '#1a1a1a');
+  } else {
+    innerGrad.addColorStop(0, '#34495e'); innerGrad.addColorStop(1, '#2c3e50');
+  }
+  ctx.fillStyle = innerGrad;
+  ctx.beginPath();
+  ctx.roundRect(ox+6, oy+6, ow-12, oh-12, 5);
+  ctx.fill();
+
+  // 烤箱边框
+  ctx.strokeStyle = isActive ? '#feca57' : '#7f8c8d'; ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.roundRect(ox, oy, ow, oh, 8);
+  ctx.stroke();
+
+  // 烹饪进度条
+  if (s.foodState === 'cooking') {
+    const progress = Math.min(1, s.cookTimer / COOK_TIME);
+    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+    ctx.fillRect(ox + 8, oy + oh - 10, ow - 16, 5);
+    ctx.fillStyle = '#2ecc71';
+    ctx.fillRect(ox + 8, oy + oh - 10, (ow - 16) * progress, 5);
+  }
+
+  // 烤好倒计时警告
+  if (s.foodState === 'ready') {
+    const burnRatio = s.burnTimer / BURN_TIME;
+    const blink = burnRatio > 0.6 ? (Math.sin(performance.now()/100) > 0 ? 1 : 0.3) : 1;
+    ctx.fillStyle = `rgba(231,76,60,${blink})`;
+    ctx.font = 'bold 10px Microsoft YaHei';
+    const tLeft = Math.max(0, BURN_TIME - s.burnTimer);
+    ctx.fillText(`${tLeft.toFixed(1)}s`, s.cx, oy + oh + 14);
+  }
+
+  if (s.foodState === 'burnt') {
+    ctx.fillStyle = '#e74c3c'; ctx.font = 'bold 11px Microsoft YaHei';
+    ctx.fillText('☠️焦了', s.cx, oy + oh + 14);
+  }
+
+  // 火焰粒子（属于该工位的）
+  for (const p of fireParticles) {
+    if (Math.abs(p.x - s.cx) < 60 && p.y < 420) {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.life);
+      const fireColor = p.life > 0.3 ? '#ff9f43' : '#e74c3c';
+      ctx.fillStyle = fireColor;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  // 食物展示
+  drawStationFood(s);
+}
+
+function drawStationFood(s) {
+  const cx = s.cx, cy = 428;
+  const shakeX = s.shake > 0 ? (Math.random()-0.5)*s.shake : 0;
+
+  ctx.textAlign = 'center';
+  if (s.foodState === 'empty') {
+    ctx.fillStyle = 'rgba(255,255,255,0.15)'; ctx.font = '11px Microsoft YaHei';
+    ctx.fillText('— 空 —', cx, cy + 5);
+    return;
+  }
+
+  // 烤制中/烤好/烤焦：食物在烤箱内
+  if (s.foodState === 'cooking' || s.foodState === 'ready' || s.foodState === 'burnt') {
+    ctx.save();
+    ctx.translate(cx + shakeX, 378);
+    drawWrapVisual(s.currentWrap, s.foodState);
+    ctx.restore();
+
+    if (s.foodState === 'cooking') {
+      ctx.fillStyle = 'rgba(255,159,67,0.5)'; ctx.font = '10px Microsoft YaHei';
+      ctx.fillText('🔥烤制中', cx, cy + 5);
+    } else if (s.foodState === 'ready') {
+      ctx.fillStyle = '#2ecc71'; ctx.font = 'bold 10px Microsoft YaHei';
+      ctx.fillText('✅快装盘', cx, cy + 5);
+    } else if (s.foodState === 'burnt') {
+      ctx.fillStyle = '#e74c3c'; ctx.font = 'bold 10px Microsoft YaHei';
+      ctx.fillText('丢弃重来', cx, cy + 5);
+    }
+    return;
+  }
+
+  // 组装中 / 已装盘：食物在台面上
+  ctx.save();
+  ctx.translate(cx + shakeX, cy);
+
+  if (s.foodState === 'plated') {
+    ctx.fillStyle = '#ecf0f1';
+    ctx.beginPath(); ctx.ellipse(0, 8, 50, 11, 0, 0, Math.PI*2); ctx.fill();
+    ctx.strokeStyle = '#bdc3c7'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.ellipse(0, 8, 50, 11, 0, 0, Math.PI*2); ctx.stroke();
+  }
+
+  drawWrapVisual(s.currentWrap, s.foodState);
+
+  // 闪光
+  if (s.flash > 0) {
+    ctx.strokeStyle = s.flashColor; ctx.globalAlpha = s.flash; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.ellipse(0, 0, 50, 22, 0, 0, Math.PI*2); ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+  ctx.restore();
+
+  if (s.foodState === 'assembling') {
+    ctx.fillStyle = 'rgba(255,255,255,0.3)'; ctx.font = '10px Microsoft YaHei';
+    ctx.fillText('组装中...', cx, cy - 28);
+  } else if (s.foodState === 'plated') {
+    ctx.fillStyle = '#2ecc71'; ctx.font = 'bold 10px Microsoft YaHei';
+    ctx.fillText('可出餐', cx, cy - 28);
+  }
+}
+
+function drawWrapVisual(wrap, state) {
+  const isBurnt = state === 'burnt';
+  const isCooked = state === 'ready' || state === 'plated';
+
+  // 饼皮
+  ctx.fillStyle = isBurnt ? '#3d3d3d' : isCooked ? '#daa520' : '#f4a460';
+  ctx.beginPath(); ctx.ellipse(0, 0, 42, 16, 0, 0, Math.PI*2); ctx.fill();
+  ctx.strokeStyle = isBurnt ? '#1a1a1a' : '#cd853f'; ctx.lineWidth = 2; ctx.stroke();
+
+  // 纹理
+  ctx.strokeStyle = 'rgba(139,69,19,0.2)'; ctx.lineWidth = 1;
+  for (let i = -30; i < 30; i += 8) { ctx.beginPath(); ctx.moveTo(i, -13); ctx.lineTo(i, 13); ctx.stroke(); }
+
+  // 配料
+  wrap.forEach((ing, i) => {
+    const ingData = INGREDIENTS[ing];
+    const offsetY = -6 - (i % 5) * 5;
+    const offsetX = ((i % 3) - 1) * 10;
+    ctx.fillStyle = isBurnt ? '#1a1a1a' : ingData.color;
+    ctx.beginPath(); ctx.ellipse(offsetX, offsetY, 8, 5, 0, 0, Math.PI*2); ctx.fill();
+    if (!isBurnt) {
+      ctx.font = '11px sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText(ingData.emoji, offsetX, offsetY + 4);
+    }
+  });
+
+  // 蒸汽
+  if (state === 'ready' || state === 'plated') {
+    const t = performance.now() / 500;
+    for (let i = 0; i < 2; i++) {
+      const sx = Math.sin(t + i*2) * 10;
+      const sy = -14 - (t*10 + i*15) % 22;
+      ctx.fillStyle = `rgba(255,255,255,${0.25 - i*0.08})`;
+      ctx.beginPath(); ctx.arc(sx, sy, 4, 0, Math.PI*2); ctx.fill();
+    }
+  }
+}
+
+function drawCustomer(c) {
+  const x = c.x, y = c.y;
+  ctx.save();
+  ctx.fillStyle = 'rgba(0,0,0,0.2)';
+  ctx.beginPath(); ctx.ellipse(x, y+70, 25, 6, 0, 0, Math.PI*2); ctx.fill();
+
+  ctx.fillStyle = c.color;
+  ctx.beginPath(); ctx.roundRect(x-22, y+10, 44, 55, 8); ctx.fill();
+
+  ctx.fillStyle = '#fdbcb4';
+  ctx.beginPath(); ctx.arc(x, y-5, 20, 0, Math.PI*2); ctx.fill();
+
+  ctx.font = '18px sans-serif'; ctx.textAlign = 'center';
+  let face = c.face;
+  if (c.state === 'waiting') {
+    const pr = c.patience / c.maxPatience;
+    if (pr < 0.3) face = '😡';
+    else if (pr < 0.6) face = '😤';
+  }
+  ctx.fillText(face, x, y);
+
+  if (c.state === 'waiting' && c.bubbleScale > 0) {
+    drawOrderBubble(x, y-60, c.order, c.bubbleScale);
+    const pr = Math.max(0, c.patience / c.maxPatience);
+    ctx.fillStyle = 'rgba(0,0,0,0.3)'; ctx.fillRect(x-25, y+72, 50, 5);
+    ctx.fillStyle = pr > 0.5 ? '#2ecc71' : pr > 0.25 ? '#feca57' : '#e74c3c';
+    ctx.fillRect(x-25, y+72, 50*pr, 5);
+  }
+  ctx.restore();
+}
+
+function drawOrderBubble(x, y, order, scale) {
+  ctx.save();
+  ctx.translate(x, y); ctx.scale(scale, scale);
+  const bw = 30 + order.length * 28, bh = 40;
+  ctx.fillStyle = 'rgba(255,255,255,0.95)'; ctx.strokeStyle = '#feca57'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.roundRect(-bw/2, -bh/2, bw, bh, 10); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-8, bh/2); ctx.lineTo(0, bh/2+12); ctx.lineTo(8, bh/2); ctx.closePath();
+  ctx.fillStyle = 'rgba(255,255,255,0.95)'; ctx.fill();
+  ctx.font = '18px sans-serif'; ctx.textAlign = 'center';
+  const sx = -bw/2 + 20;
+  order.forEach((ing, i) => ctx.fillText(INGREDIENTS[ing].emoji, sx + i*28, 6));
+  ctx.restore();
+}
+
+function drawButtons() {
+  const s = ws();
+  // 配料按钮
+  for (const btn of ingredientButtons) {
+    const ing = INGREDIENTS[btn.key];
+    const active = s.foodState === 'empty' || s.foodState === 'assembling';
+    drawButton(btn, ing, active);
+  }
+  // 动作按钮
+  const actionActive = {
+    cook:    s.foodState === 'assembling' && s.currentWrap.length > 0,
+    plate:   s.foodState === 'ready',
+    serve:   s.foodState === 'plated',
+    discard: s.foodState !== 'empty',
+  };
+  for (const btn of actionButtons) {
+    drawActionButton(btn, actionActive[btn.key], s);
+  }
+
+  // 当前工位指示
+  ctx.fillStyle = '#feca57'; ctx.font = 'bold 13px Microsoft YaHei'; ctx.textAlign = 'center';
+  ctx.fillText(`▶ 操作工位 ${selectedWS + 1}`, 450, 535);
+}
+
+function drawButton(btn, ing, active) {
+  const offsetY = btn.press > 0 ? 3 : 0;
+  const scale = btn.hover && active ? 1.05 : 1;
+  ctx.save();
+  ctx.translate(btn.x+btn.w/2, btn.y+btn.h/2+offsetY);
+  ctx.scale(scale, scale);
+  ctx.translate(-btn.w/2, -btn.h/2);
+
+  const grad = ctx.createLinearGradient(0, 0, 0, btn.h);
+  if (active) {
+    grad.addColorStop(0, btn.hover ? '#fff' : '#f5f5f5');
+    grad.addColorStop(1, '#e0e0e0');
+  } else {
+    grad.addColorStop(0, '#555'); grad.addColorStop(1, '#444');
+  }
+  ctx.fillStyle = grad;
+  ctx.beginPath(); ctx.roundRect(0, 0, btn.w, btn.h, 10); ctx.fill();
+  ctx.strokeStyle = active ? ing.color : '#666'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.roundRect(0, 0, btn.w, btn.h, 10); ctx.stroke();
+
+  ctx.font = '28px sans-serif'; ctx.textAlign = 'center';
+  ctx.globalAlpha = active ? 1 : 0.4;
+  ctx.fillText(ing.emoji, btn.w/2, 38);
+  ctx.fillStyle = active ? '#333' : '#888';
+  ctx.font = 'bold 12px Microsoft YaHei';
+  ctx.fillText(ing.name, btn.w/2, 62);
+  ctx.globalAlpha = 1;
+  ctx.restore();
+}
+
+function drawActionButton(btn, active, s) {
+  const offsetY = btn.press > 0 ? 3 : 0;
+  const scale = btn.hover && active ? 1.05 : 1;
+  ctx.save();
+  ctx.translate(btn.x+btn.w/2, btn.y+btn.h/2+offsetY);
+  ctx.scale(scale, scale);
+  ctx.translate(-btn.w/2, -btn.h/2);
+
+  const grad = ctx.createLinearGradient(0, 0, 0, btn.h);
+  if (active) {
+    grad.addColorStop(0, btn.color);
+    grad.addColorStop(1, shadeColor(btn.color, -20));
+  } else {
+    grad.addColorStop(0, '#555'); grad.addColorStop(1, '#444');
+  }
+  ctx.fillStyle = grad;
+  ctx.beginPath(); ctx.roundRect(0, 0, btn.w, btn.h, 10); ctx.fill();
+  ctx.strokeStyle = active ? '#fff' : '#666'; ctx.lineWidth = 2;
+  ctx.beginPath(); ctx.roundRect(0, 0, btn.w, btn.h, 10); ctx.stroke();
+
+  ctx.globalAlpha = active ? 1 : 0.4;
+  ctx.font = '24px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText(btn.emoji, btn.w/2, 35);
+  ctx.fillStyle = '#fff'; ctx.font = 'bold 13px Microsoft YaHei';
+  ctx.fillText(btn.label, btn.w/2, 60);
+  ctx.globalAlpha = 1;
+
+  // 当前步骤高亮
+  if (active && (btn.key === 'cook' && s.foodState === 'assembling' ||
+      btn.key === 'plate' && s.foodState === 'ready' ||
+      btn.key === 'serve' && s.foodState === 'plated')) {
+    const pulse = Math.sin(performance.now()/200) * 0.3 + 0.7;
+    ctx.strokeStyle = `rgba(255,255,255,${pulse})`; ctx.lineWidth = 3;
+    ctx.beginPath(); ctx.roundRect(-2, -2, btn.w+4, btn.h+4, 12); ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function shadeColor(color, percent) {
+  const num = parseInt(color.slice(1), 16);
+  const amt = Math.round(2.55 * percent);
+  const R = Math.max(0, Math.min(255, (num >> 16) + amt));
+  const G = Math.max(0, Math.min(255, ((num >> 8) & 0xff) + amt));
+  const B = Math.max(0, Math.min(255, (num & 0xff) + amt));
+  return '#' + ((R << 16) | (G << 8) | B).toString(16).padStart(6, '0');
+}
+
+function drawHUD() {
+  ctx.fillStyle = 'rgba(0,0,0,0.5)'; ctx.fillRect(0, 38, W, 35);
+  ctx.textAlign = 'left'; ctx.font = 'bold 16px Microsoft YaHei';
+  ctx.fillStyle = '#2ecc71'; ctx.fillText('💰 ¥' + money, 20, 60);
+  ctx.fillStyle = '#feca57'; ctx.textAlign = 'center';
+  ctx.fillText('第 ' + day + ' / ' + maxDays + ' 天', W/2, 60);
+  ctx.fillStyle = '#ff9f43'; ctx.textAlign = 'right';
+  ctx.fillText('今日: ¥' + dayEarnings + ' / ¥' + dayTarget, W-20, 60);
+
+  const tr = timeLeft / dayDuration;
+  ctx.fillStyle = 'rgba(255,255,255,0.1)'; ctx.fillRect(0, 73, W, 4);
+  ctx.fillStyle = tr > 0.3 ? '#3498db' : '#e74c3c'; ctx.fillRect(0, 73, W*tr, 4);
+
+  if (combo >= 2) {
+    ctx.save(); ctx.globalAlpha = Math.min(1, comboTimer/5 + 0.3);
+    ctx.fillStyle = '#feca57'; ctx.font = 'bold 20px Microsoft YaHei'; ctx.textAlign = 'center';
+    ctx.fillText('🔥 连击 x' + combo, W/2, 100); ctx.restore();
+  }
+
+  // 流程提示（基于当前选中工位）
+  const s = ws();
+  ctx.textAlign = 'center'; ctx.font = '12px Microsoft YaHei';
+  let stepText = '', stepColor = '#7f8c8d';
+  switch(s.foodState) {
+    case 'empty':      stepText = `工位${selectedWS+1}: ① 点配料加料`; stepColor = '#feca57'; break;
+    case 'assembling': stepText = `工位${selectedWS+1}: ① 继续加料 → ② 点「烤制」`; stepColor = '#e67e22'; break;
+    case 'cooking':    stepText = `工位${selectedWS+1}: ② 烤制中... 等3秒`; stepColor = '#e67e22'; break;
+    case 'ready':      stepText = `工位${selectedWS+1}: ③ 快点「装盘」！`; stepColor = '#2ecc71'; break;
+    case 'plated':     stepText = `工位${selectedWS+1}: ④ 点「出餐」送给顾客！`; stepColor = '#2ecc71'; break;
+    case 'burnt':      stepText = `工位${selectedWS+1}: ☠️ 烧焦了！点「丢弃」重来`; stepColor = '#e74c3c'; break;
+  }
+  ctx.fillStyle = stepColor;
+  ctx.fillText(stepText, W/2, 120);
+
+  // 其他工位状态摘要
+  ctx.font = '10px Microsoft YaHei';
+  let summary = '';
+  for (let i = 0; i < workstations.length; i++) {
+    if (i === selectedWS) continue;
+    const st = workstations[i];
+    const icons = { empty: '⬜', assembling: '🔧', cooking: '🔥', ready: '✅', plated: '🍽️', burnt: '☠️' };
+    summary += `工位${i+1}:${icons[st.foodState]} `;
+  }
+  if (summary) {
+    ctx.fillStyle = '#95a5a6';
+    ctx.fillText(summary.trim(), W/2, 138);
+  }
+
+  if (gameState === 'dayEnd') {
+    ctx.fillStyle = 'rgba(0,0,0,0.7)'; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = '#feca57'; ctx.font = 'bold 36px Microsoft YaHei'; ctx.textAlign = 'center';
+    ctx.fillText('第 ' + day + ' 天结束！', W/2, H/2 - 40);
+    ctx.fillStyle = '#2ecc71'; ctx.font = '24px Microsoft YaHei';
+    ctx.fillText('今日收入: ¥' + dayEarnings, W/2, H/2 + 10);
+    if (day < maxDays) { ctx.fillStyle = '#ff9f43'; ctx.font = '18px Microsoft YaHei';
+      ctx.fillText('准备迎接第 ' + (day+1) + ' 天...', W/2, H/2 + 50); }
+  }
+}
+
+function drawParticles() {
+  for (const p of particles) {
+    ctx.save(); ctx.globalAlpha = Math.max(0, p.life);
+    if (p.isText) {
+      ctx.fillStyle = p.color; ctx.font = 'bold 18px Microsoft YaHei'; ctx.textAlign = 'center';
+      ctx.fillText(p.text, p.x, p.y);
+    } else {
+      ctx.fillStyle = p.color;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI*2); ctx.fill();
+    }
+    ctx.restore();
+  }
+  for (const t of floatingTexts) {
+    ctx.save(); ctx.globalAlpha = Math.min(1, t.life);
+    ctx.fillStyle = t.color; ctx.font = 'bold ' + t.size + 'px Microsoft YaHei'; ctx.textAlign = 'center';
+    ctx.fillText(t.text, t.x, t.y); ctx.restore();
+  }
+}
+
+function render() {
+  ctx.clearRect(0, 0, W, H);
+  drawBackground();
+  if (gameState === 'menu') return; // 菜单态只显示背景，不画未初始化的工位
+  const sorted = [...customers].sort((a,b) => a.y - b.y);
+  for (const c of sorted) drawCustomer(c);
+  // 绘制所有工位（选中的最后画，在上层）
+  for (const s of workstations) {
+    if (s.id !== selectedWS) drawWorkstation(s);
+  }
+  drawWorkstation(workstations[selectedWS]);
+  drawButtons();
+  drawParticles();
+  drawHUD();
+}
+
+function gameLoop(now) {
+  const dt = Math.min(0.05, (now - lastTime) / 1000);
+  lastTime = now;
+  update(dt);
+  render();
+  requestAnimationFrame(gameLoop);
+}
+
+requestAnimationFrame(gameLoop);
+</script>
+</body>
+</html>
