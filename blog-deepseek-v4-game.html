@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeepSeek V4正式版生成网页开放世界游戏研究日志 - 香蕉猫的小窝</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary: #4A90D9;
+            --secondary: #7EC8E3;
+            --accent: #2C5F8A;
+            --highlight: #FF6B9D;
+            --highlight-bright: #FF8FB3;
+            --highlight-glow: rgba(255, 107, 157, 0.3);
+            --dark-bg: #1A2744;
+            --dark-bg-deep: #0F1A30;
+            --light-bg: #C5D9F0;
+            --light-bg-soft: #DCE8F5;
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--dark-bg) 0%, var(--dark-bg-deep) 100%);
+            background-attachment: fixed;
+            color: var(--light-bg-soft);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            cursor: none;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: -10%;
+            width: 120%;
+            height: 100%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(74, 144, 217, 0.12) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(255, 107, 157, 0.08) 0%, transparent 40%),
+                        radial-gradient(ellipse at 50% 50%, rgba(74, 144, 217, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(180deg, transparent 0%, rgba(74, 144, 217, 0.03) 20%, transparent 40%),
+                linear-gradient(0deg, transparent 0%, rgba(255, 107, 157, 0.03) 20%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .blog-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .blog-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--highlight);
+            letter-spacing: 2px;
+        }
+
+        .blog-subtitle {
+            font-size: 1.2rem;
+            color: #B8D4F0;
+            margin-bottom: 20px;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #B8D4F0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .blog-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #B8D4F0;
+        }
+
+        .blog-section {
+            background: rgba(26, 39, 68, 0.6);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(126, 200, 227, 0.2);
+        }
+
+        .blog-section h3 {
+            color: var(--highlight);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .blog-section h4 {
+            color: var(--secondary);
+            margin-bottom: 0.8rem;
+            font-size: 1.2rem;
+        }
+
+        .blog-section p {
+            margin-bottom: 1rem;
+        }
+
+        .blog-section ul, .blog-section ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .blog-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .blog-section blockquote {
+            border-left: 3px solid var(--highlight);
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: #90B8D8;
+            background: rgba(74, 144, 217, 0.08);
+            padding: 0.8rem 1rem;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .highlight-box {
+            background: rgba(255, 107, 157, 0.1);
+            border: 1px solid rgba(255, 107, 157, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .highlight-box h4 {
+            color: #FF8FB3;
+            margin-top: 0;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.6rem 1.5rem;
+            background: rgba(74, 144, 217, 0.2);
+            border: 1px solid rgba(126, 200, 227, 0.4);
+            border-radius: 50px;
+            color: #B8D4F0;
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .back-link:hover {
+            background: rgba(74, 144, 217, 0.35);
+            border-color: rgba(126, 200, 227, 0.7);
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            background: rgba(74, 144, 217, 0.2);
+            border: 1px solid rgba(126, 200, 227, 0.3);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: #7EC8E3;
+            margin: 0.2rem;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(126, 200, 227, 0.9) 0%, rgba(74, 144, 217, 0.7) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            box-shadow: 0 0 10px rgba(126, 200, 227, 0.4);
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, rgba(255, 107, 157, 0.9) 0%, rgba(255, 143, 179, 0.5) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 0.6s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.2);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="blog-detail-container">
+        <div class="blog-header">
+            <h1 class="blog-title">DeepSeek V4 正式版生成网页开放世界游戏研究日志</h1>
+            <div class="blog-subtitle">网页游戏生成 vs 正经游戏引擎开发——玩玩看</div>
+            <div class="blog-meta">
+                <span>📅 2026年7月</span>
+                <span>🏷️ 大模型 · AI游戏 · 研究日志</span>
+                <span>🔧 DeepSeek V4 · 网页游戏</span>
+            </div>
+            <div>
+                <span class="tag">DeepSeek</span>
+                <span class="tag">AI游戏生成</span>
+                <span class="tag">LLM</span>
+                <span class="tag">网页开发</span>
+            </div>
+        </div>
+
+        <div class="blog-content">
+            <div class="blog-section">
+                <h3>📖 背景</h3>
+                <p>前两天在B站上看到有博主发布了一个非常有意思的视频——用 <strong>DeepSeek V4 正式版</strong> 直接生成了一套能在网页上跑通的<strong>开放世界游戏</strong>。虽然老实说，网页游戏生成对于正经的游戏引擎开发来说可能没什么太大用处，但好奇心驱使我还是想亲自玩玩看。</p>
+                <p>毕竟，AI在游戏开发领域的边界到底在哪里？能不能从"辅助工具"进化到"独立创作者"？这个问题本身就很值得探索。</p>
+                <p>于是我用完全相同的指令，在我当前的 DeepSeek 版本上也生成了一个 GTA 风格的开放世界网页游戏——<strong>「滨湾市 (Binhai City)」</strong>，来对比与正式版的差距。</p>
+            </div>
+
+            <div class="blog-section">
+                <h3>🔍 DeepSeek V4 新旧版本判断方法</h3>
+                <p>在研究过程中，我发现了一个有趣的现象：目前很多用户（包括我自己）用的还不是真正的 DeepSeek V4 正式版。那怎么判断自己用的是新版还是旧版呢？</p>
+                
+                <div class="highlight-box">
+                    <h4>💡 正式版用户的判断标准</h4>
+                    <p>正式版用户发现，区分 DeepSeek V4 新旧版本的一个简单方法是看它生成回复时的<strong>开头用语</strong>：</p>
+                    <ul>
+                        <li>🔵 <strong>"Let me ..."</strong> 开头 → 新版 DeepSeek V4 正式版</li>
+                        <li>🟡 <strong>"I am ..."</strong> 开头 → 旧版</li>
+                    </ul>
+                    <p>这个细节虽然很微妙，但在实际使用中确实能帮助判断版本。目前我的版本还是旧版，生成时以 "I am" 开头，暂时还没体验到正式版的新能力。</p>
+                </div>
+            </div>
+
+            <div class="blog-section">
+                <h3>�️ 实验项目：滨湾市 (Binhai City)</h3>
+                <p>使用与正式版用户相同的 prompt 指令，在我的旧版 DeepSeek 上生成了一个 GTA 风格的网页开放世界游戏。项目采用 <strong>单文件架构</strong>（index.html，约 128KB），通过 CDN 加载 Three.js 0.185.1，双击即可运行，无需任何服务器。</p>
+                
+                <h4>技术架构</h4>
+                <ul>
+                    <li><strong>3D 引擎：</strong>Three.js 0.185.1（CDN import map 加载）</li>
+                    <li><strong>渲染：</strong>WebGLRenderer + PBR 材质 + 日夜循环 + 雾效</li>
+                    <li><strong>物理：</strong>自制 arcade 物理引擎（无外部依赖）</li>
+                    <li><strong>碰撞检测：</strong>AABB + 地面高度图</li>
+                    <li><strong>纹理/美术：</strong>全部 Canvas 2D 程序化生成，零外部资源</li>
+                    <li><strong>音效：</strong>全部 WebAudio 程序化合成</li>
+                    <li><strong>文件架构：</strong>单文件 index.html，包含全部 HTML/CSS/JS</li>
+                </ul>
+
+                <h4>六阶段开发计划</h4>
+                <ol>
+                    <li><strong>骨架搭建：</strong>场景初始化、游戏主循环、输入系统</li>
+                    <li><strong>车辆系统：</strong>JSON 声明式零件定义 → 3 种车型（轿车/跑车/SUV），加速/制动/转向/手刹漂移，第三人称跟随相机</li>
+                    <li><strong>道路与城市：</strong>600m×600m 城市地图，道路网络图（节点-边结构），16 种建筑类型（银行、商场、办公楼、酒店、公寓、警察局、医院、加油站、餐厅、仓库、便利店等），路灯、树木、护栏、集装箱、码头水域</li>
+                    <li><strong>玩家与交互：</strong>程序化人物模型，步行/驾驶无缝切换（E 上车/F 下车），相机切换，游戏状态机（LOADING → MAIN_MENU → FREE_ROAM/DRIVING/MISSION_ACTIVE/PAUSED/INDOOR）</li>
+                    <li><strong>音频与 UI：</strong>引擎声合成器（随转速变调）、轮胎摩擦声、碰撞金属声、脚步声、3 个电台 BGM 频道、HUD 速度表、Canvas 2D 小地图（带 GPS 导航）、暂停菜单、教程系统</li>
+                    <li><strong>任务与打磨：</strong>5 个剧情任务（初来乍到→城市巡游→紧急快递→高速追击→码头风云），日夜循环、屏幕震动、建筑室内系统（可进入玩家公寓和酒店大堂）</li>
+                </ol>
+            </div>
+
+            <div class="blog-section">
+                <h3>⚖️ 新旧版本对比：天差地别</h3>
+                <p>同样的指令，DeepSeek V4 正式版和我的旧版生成出来的东西完全不是一个量级。我的旧版生成结果存在以下明显问题：</p>
+                
+                <div class="highlight-box">
+                    <h4>🔴 旧版（I am...）的主要问题</h4>
+                    <ul>
+                        <li><strong>碰撞体严重缺失：</strong>除了房子（建筑）有基本的碰撞检测外，其他所有场景部件——路灯、树木、护栏、集装箱等——全部可以直接穿模，角色能直接走过去</li>
+                        <li><strong>美术资产简陋：</strong>建筑和场景物件都是最基础的 BoxGeometry/CylinderGeometry 组合，程序化纹理也相对粗糙，和正式版生成的"比较像个人样"的美术效果差距明显</li>
+                        <li><strong>整体观感粗糙：</strong>虽然功能框架搭起来了（能开车、能走路、能上下车、有任务、有音效），但整体感觉就是"勉强能跑"，离"像样"还有很大距离</li>
+                    </ul>
+                </div>
+
+                <p>相比之下，B站博主用 DeepSeek V4 正式版生成的游戏，美术资产明显更精致，碰撞检测也更完善，整体效果更像一个"正经游戏"。这印证了那个判断标准——"Let me" 和 "I am" 开头的版本，能力差距确实是巨大的。</p>
+            </div>
+
+            <div class="blog-section">
+                <h3>🎮 旧版生成的实际效果</h3>
+                <p>虽然整体简陋，但也不是一无是处。旧版还是成功实现了以下功能：</p>
+                <ul>
+                    <li><strong>驾驶体验：</strong>轿车、跑车、SUV 三种车型可以正常驾驶，手刹漂移手感尚可，第三人称相机跟随也基本流畅</li>
+                    <li><strong>城市规模：</strong>600m×600m 的地图不算小，道路网络、建筑布局、装饰物都按计划生成了</li>
+                    <li><strong>步行/驾驶切换：</strong>E 键上车、F 键下车，玩家可以在城市中步行探索再随时上车</li>
+                    <li><strong>建筑室内系统：</strong>玩家公寓和酒店大堂可以进入，室内有简单的家具布置（床、桌、椅、书架、吊灯、前台、沙发、盆栽等），虽然都是方盒子拼的</li>
+                    <li><strong>5 个任务：</strong>从新手引导到追车、送货，任务系统框架完整</li>
+                    <li><strong>音效系统：</strong>引擎声、轮胎摩擦声、碰撞声、电台 BGM 都有，算是可用的程度</li>
+                    <li><strong>小地图：</strong>Canvas 2D 绘制，带 GPS 导航路径线</li>
+                    <li><strong>日夜循环：</strong>太阳位置、环境光、雾色随时间渐变</li>
+                </ul>
+                <blockquote>
+                    ⚠️ 总结：旧版生成的游戏"框架有了，但细节全是窟窿"。就像一个只有骨架的房子，能遮风挡雨但远谈不上舒适。正式版用户展示的效果明显更接近"成品"。
+                </blockquote>
+            </div>
+
+            <div class="blog-section">
+                <h3>🤔 思考：AI游戏开发边界在哪里？</h3>
+                <p>这次对比实验让我对AI在游戏开发中的角色有了更清晰的认知：</p>
+                <ol>
+                    <li><strong>同一模型的不同版本，能力差距巨大：</strong>同样的 prompt，"Let me" 版本和 "I am" 版本生成的代码质量天差地别。这不仅仅是代码量的问题，而是对整个游戏系统的理解深度——碰撞检测、美术细节、交互逻辑，正式版明显更"懂"游戏开发</li>
+                    <li><strong>AI目前最适合做"快速原型"：</strong>对于验证想法、快速出Demo，AI的效率确实惊人。一个128KB的单文件HTML就能跑出一个可驾驶的3D开放世界，这在以前是不可想象的</li>
+                    <li><strong>但"生产级游戏"还需人类：</strong>真正的游戏开发涉及大量非代码因素——美术风格统一、性能优化、用户体验设计、版本迭代等，AI目前还无法胜任</li>
+                    <li><strong>AI作为"协作伙伴"最有价值：</strong>不是替代开发者，而是加速开发流程中的重复性工作，让开发者能专注于创意和设计</li>
+                </ol>
+            </div>
+
+            <div class="blog-section">
+                <h3>📝 后续计划</h3>
+                <p>等DeepSeek V4正式版推送后，我打算：</p>
+                <ul>
+                    <li>用完全相同的 prompt 在正式版上重新生成，对比新旧版本在每一个细节上的差异</li>
+                    <li>重点对比：碰撞检测完整性、美术资产质量、代码架构合理性、交互细节</li>
+                    <li>尝试让V4生成更复杂的游戏逻辑（如RPG对话系统、背包系统、NPC AI等）</li>
+                    <li>探索AI生成的代码能否直接导入Unity/UE中使用</li>
+                    <li>记录从"AI生成代码"到"可运行游戏"的完整流程，形成可复用的方法论</li>
+                </ul>
+            </div>
+        </div>
+
+        <div style="text-align: center;">
+            <a href="index.html" class="back-link">← 返回首页</a>
+        </div>
+    </div>
+
+    <script>
+        const cursor = document.createElement('div');
+        cursor.className = 'custom-cursor';
+        document.body.appendChild(cursor);
+
+        let trailCount = 0;
+        const maxTrails = 50;
+
+        function createTrail(x, y) {
+            if (trailCount >= maxTrails) return;
+
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            trail.style.width = Math.random() * 6 + 4 + 'px';
+            trail.style.height = trail.style.width;
+            document.body.appendChild(trail);
+
+            trailCount++;
+
+            setTimeout(() => {
+                trail.remove();
+                trailCount--;
+            }, 600);
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            createTrail(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('mousedown', function() {
+            cursor.classList.add('clicking');
+        });
+
+        document.addEventListener('mouseup', function() {
+            cursor.classList.remove('clicking');
+        });
+    </script>
+</body>
+</html>
