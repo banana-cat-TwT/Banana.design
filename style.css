@@ -2640,6 +2640,12 @@ nav ul li a:hover::after {
     transform-origin: center;
 }
 
+#ai-characters .character-card {
+    flex: 0 0 10%;
+    max-width: 180px;
+    min-width: 100px;
+}
+
 .character-card::before {
     content: '';
     position: absolute;
@@ -3133,6 +3139,15 @@ nav ul li a:hover::after {
     background: radial-gradient(ellipse at top right, rgba(80, 80, 120, 0.4) 0%, transparent 50%),
                 radial-gradient(ellipse at bottom left, rgba(100, 60, 140, 0.3) 0%, transparent 50%);
     border-radius: 8px;
+}
+
+.character-card-shadowheart {
+    background: linear-gradient(135deg, #0a0812 0%, #151025 100%);
+    border: 2px solid #6b5b8a;
+    box-shadow: 0 8px 20px rgba(107, 91, 138, 0.4);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
 }
 
 .character-card-shadowheart .character-back h3,
