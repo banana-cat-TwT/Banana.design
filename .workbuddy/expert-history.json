@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "sessions": {
+    "56f1ade070c943519f4d597487c2f435": [
+      {
+        "expertId": "RecruitmentExpert",
+        "name": "伯乐乐",
+        "profession": "招聘专家",
+        "avatarUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/avatars/11-ProfessionalServices/RecruitmentExpert/RecruitmentExpert.png",
+        "promptUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/experts/11-ProfessionalServices/RecruitmentExpert/RecruitmentExpert_zh.md",
+        "usedAt": 1784562232459,
+        "industryId": "11-ProfessionalServices"
+      }
+    ]
+  },
+  "lastUpdated": 1784637218038
+}
