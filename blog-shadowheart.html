@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shadowheart 暗影之心 - 香蕉猫的小窝</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f5f0eb;
+            --card-bg: #ffffff;
+            --text: #3a3335;
+            --text-secondary: #6b5b6e;
+            --accent: #8b5b7a;
+            --accent-light: #b892a8;
+            --border: #e8dce4;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Serif SC', 'DM Sans', serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.8;
+            min-height: 100vh;
+            cursor: none;
+        }
+        .custom-cursor {
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5b7a, #b892a8);
+            position: fixed;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px rgba(139, 91, 122, 0.5), 0 0 30px rgba(139, 91, 122, 0.2);
+            transition: transform 0.15s ease;
+        }
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.75);
+        }
+        .cursor-trail {
+            width: 8px; height: 8px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #d4a8c0, #b892a8);
+            position: fixed;
+            pointer-events: none;
+            z-index: 99998;
+            transform: translate(-50%, -50%);
+            animation: trailFade 0.6s ease-out forwards;
+        }
+        @keyframes trailFade {
+            0% { opacity: 0.8; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+        }
+
+        /* ===== 两栏布局：左卡片 + 右详情 ===== */
+        .blog-layout {
+            display: flex;
+            gap: 2.5rem;
+            padding: 2.5rem 2rem;
+            align-items: flex-start;
+        }
+
+        /* 左侧角色卡片（吸顶） */
+        .character-card {
+            flex: 0 1 340px;
+            max-width: 380px;
+            min-width: 280px;
+            height: auto !important;
+            overflow: visible !important;
+            position: sticky;
+            top: 2.5rem;
+            align-self: flex-start;
+            opacity: 1 !important;
+            transform: none !important;
+        }
+        .character-card-inner {
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: 0 6px 24px rgba(139, 91, 122, 0.10);
+        }
+        .character-card-inner img {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 16px 16px 0 0;
+            border-bottom: 1px solid var(--border);
+        }
+        .character-card-info {
+            padding: 1.6rem 1.4rem;
+            text-align: center;
+        }
+        .character-card-info h2 {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.35rem;
+            line-height: 1.4;
+        }
+        .character-card-sub {
+            color: var(--text-secondary);
+            font-size: 0.92rem;
+            margin-bottom: 1.1rem;
+        }
+        .blog-meta {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.7rem;
+            flex-wrap: wrap;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .blog-tag {
+            display: inline-block;
+            background: #f0e5ed;
+            color: #8b5b7a;
+            padding: 0.25rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 500;
+        }
+
+        /* 右侧详情内容 */
+        .detail-content {
+            flex: 1;
+            min-width: 0;
+            background: var(--card-bg);
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            padding: 2.6rem 2.8rem;
+            box-shadow: 0 6px 24px rgba(139, 91, 122, 0.06);
+        }
+        .blog-title {
+            font-size: 1.85rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+        .blog-subtitle {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            margin-bottom: 1.6rem;
+        }
+        .detail-body {
+            border-top: 1px solid var(--border);
+            padding-top: 1.8rem;
+        }
+        .detail-body blockquote {
+            border-left: 4px solid var(--accent-light);
+            background: #faf5f8;
+            padding: 1rem 1.3rem;
+            border-radius: 0 10px 10px 0;
+            margin: 0 0 2rem;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.9;
+        }
+        .detail-body blockquote strong {
+            color: var(--accent);
+        }
+        .section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 2rem 0 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border);
+        }
+        .section-title:first-child {
+            margin-top: 0;
+        }
+        .detail-body p {
+            margin: 0.9rem 0;
+            line-height: 1.95;
+            font-size: 1.02rem;
+        }
+        .detail-body strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+        .detail-body h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text);
+            margin: 1.6rem 0 0.8rem;
+        }
+        .table-wrap {
+            overflow-x: auto;
+            margin: 1.2rem 0 0.5rem;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+        }
+        .detail-body table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            min-width: 480px;
+        }
+        .detail-body th, .detail-body td {
+            padding: 0.8rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        .detail-body th {
+            background: #f7eff4;
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .detail-body tr:last-child td {
+            border-bottom: none;
+        }
+        .detail-body tbody tr:hover {
+            background: #faf5f8;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 2.5rem;
+            padding: 0.7rem 2rem;
+            background: var(--accent);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        .back-btn:hover {
+            background: #7a4d6a;
+            transform: translateY(-1px);
+        }
+
+        @media (max-width: 860px) {
+            .blog-layout {
+                flex-direction: column;
+                padding: 1.2rem 1rem;
+                gap: 1.5rem;
+            }
+            .character-card {
+                flex: none;
+                width: 100%;
+                position: static;
+                top: auto;
+            }
+            .character-card-inner img {
+                max-height: 420px;
+                object-fit: cover;
+            }
+            .detail-content { padding: 1.8rem 1.4rem; }
+            .blog-title { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="custom-cursor"></div>
+
+    <div class="blog-layout">
+        <!-- 左侧：角色卡片（吸顶） -->
+        <aside class="character-card">
+            <div class="character-card-inner">
+                <img src="image/shadowheart2.jpg" alt="Shadowheart 暗影之心">
+                <div class="character-card-info">
+                    <h2>Shadowheart 影心</h2>
+                    <p class="character-card-sub">博德之门3 · 3D角色</p>
+                    <div class="blog-meta">
+                        <span class="blog-tag">博德之门3</span>
+                        <span class="blog-tag">3D设计</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 右侧：详情内容 -->
+        <main class="detail-content">
+            <h1 class="blog-title">影心（Shadowheart）3D角色制作日志</h1>
+            <div class="blog-subtitle">角色制作记录 · 持续更新中</div>
+
+            <article class="detail-body">
+                <blockquote>
+                    <strong>日期：</strong>2026年7月24日<br>
+                    <strong>项目：</strong>影心角色模型 — 个人创作<br>
+                    <strong>当前阶段：</strong>高模初版（High-Poly Draft v1）
+                </blockquote>
+
+                <h2 class="section-title">一、制作动机</h2>
+                <p>最近玩《博德之门3》很喜欢影心这个角色。</p>
+                <p>她身上有一种很矛盾的迷人感，半精灵血脉、暗夜女神的信徒，黑色幽默、以及她和信仰、记忆之间复杂的纠葛，让她成为整个游戏过程中我最想理解的角色。</p>
+                <p>于是半夜从床上爬起来打开软件开始做影心的模型。</p>
+
+                <h2 class="section-title">二、当前进展</h2>
+                <p><strong>阶段：高模初版（High-Poly Draft v1）— 尚未精修</strong></p>
+
+                <h2 class="section-title">三、后续计划</h2>
+                <h3>完整制作流程</h3>
+                <p>从高模到最终导入游戏，计划走完整个 3D 角色制作管线：</p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>步骤</th>
+                                <th>内容</th>
+                                <th>说明</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td><strong>高模精修</strong></td>
+                                <td>细化面部、服装、毛发等所有细节，打磨到成品级</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><strong>低模拓扑</strong></td>
+                                <td>基于高模制作低面数版本，控制面数适配游戏引擎</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><strong>UV 拆展</strong></td>
+                                <td>合理分 UV，注意接缝隐藏和空间利用率</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><strong>贴图烘焙</strong></td>
+                                <td>烘焙法线（Normal）、AO、曲率（Curvature）等贴图</td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><strong>材质贴图</strong></td>
+                                <td>制作 Diffuse / Normal / ORM 等贴图，还原皮甲、金属、肤色的质感</td>
+                            </tr>
+                            <tr>
+                                <td>6</td>
+                                <td><strong>绑骨蒙皮</strong></td>
+                                <td>骨骼绑定 + 权重刷涂，确保变形自然</td>
+                            </tr>
+                            <tr>
+                                <td>7</td>
+                                <td><strong>导入游戏</strong></td>
+                                <td>封装为 BG3 Mod 格式，测试实际效果</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div style="text-align: center;">
+                    <button class="back-btn" onclick="window.location.href='index.html'">← 返回首页</button>
+                </div>
+            </article>
+        </main>
+    </div>
+
+    <script>
+        // 自定义光标与拖尾
+        const cursor = document.querySelector('.custom-cursor');
+        const trails = [];
+        const MAX_TRAILS = 50;
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = e.clientX + 'px';
+            trail.style.top = e.clientY + 'px';
+            const size = Math.random() * 6 + 4;
+            trail.style.width = size + 'px';
+            trail.style.height = size + 'px';
+            document.body.appendChild(trail);
+            trails.push(trail);
+            if (trails.length > MAX_TRAILS) {
+                const old = trails.shift();
+                old.remove();
+            }
+            setTimeout(() => {
+                const idx = trails.indexOf(trail);
+                if (idx > -1) trails.splice(idx, 1);
+                trail.remove();
+            }, 600);
+        });
+
+        document.addEventListener('mousedown', () => cursor.classList.add('clicking'));
+        document.addEventListener('mouseup', () => cursor.classList.remove('clicking'));
+    </script>
+</body>
+</html>

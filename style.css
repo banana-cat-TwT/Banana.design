@@ -1,4 +1,4 @@
-﻿/* 基础样式重置 */
+/* 基础样式重置 */
 * {
     margin: 0;
     padding: 0;
@@ -3139,6 +3139,16 @@ nav ul li a:hover::after {
     background: radial-gradient(ellipse at top right, rgba(80, 80, 120, 0.4) 0%, transparent 50%),
                 radial-gradient(ellipse at bottom left, rgba(100, 60, 140, 0.3) 0%, transparent 50%);
     border-radius: 8px;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.character-card-shadowheart .character-back h3,
+.character-card-shadowheart .character-back h4,
+.character-card-shadowheart .character-back p,
+.character-card-shadowheart .character-back .character-detail-btn {
+    position: relative;
+    z-index: 2;
 }
 
 .character-card-shadowheart {
