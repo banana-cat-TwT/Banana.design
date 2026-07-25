@@ -1095,11 +1095,84 @@ function switchNewsTab(tab) {
     }
 }
 
+// ===== 新闻归档数据 =====
+const archiveData = {
+    ai: {
+        '2026-07-16': { preview: '苹果"Apple智能"完成国内备案、阿里全员禁用Claude Code、面壁智能半年融资超50亿...', cards: null },
+        '2026-07-17': { preview: 'WAIC 2026开幕、Kimi K3开源发布、Google Gemini 3.5 Pro、西门子Eigen工程智能体...', cards: null },
+        '2026-07-18': { preview: '腾讯Agent矩阵亮相WAIC、Kimi K3开源发布、具身智能进入长程任务时代、63.8%大模型企业转向Agent...', cards: null },
+        '2026-07-19': { preview: '腾讯发布具身智能基座模型与智能体、华为云发布AgentArts与openJiuwen、Claude Code登顶SWE-Bench...', cards: null },
+        '2026-07-20': { preview: 'WAIC 2026闭幕162亿签约、阿里Qwen3.8开源2.4万亿参数、GPT-5.6过度代理事件、MiniCPM-Robot端侧记忆...', cards: null },
+        '2026-07-21': { preview: 'Kimi K3算力告急暂停新用户、WAIC具身智能去表演化、工信部WG7数据工作组、智谱全国产芯片数据中心...', cards: null },
+        '2026-07-22': { preview: '文心助手登顶PinchBench、AI Agent支付基础设施临界点、黎曼动力Riemann-1.0登顶RoboCasa...', cards: null },
+        '2026-07-23': { preview: '中国团队1B参数模型登顶具身智能榜单、它石智航AWE 3.5、飞书aily升级、阿里真武超节点适配Qwen3.8、微盟星元内测...', cards: [
+            { title: '中国团队1B参数模型超越π0，登顶具身智能榜单', desc: '在主流具身智能benchmark上，中国团队仅用10亿参数小模型超越π0等头部方案，具身智能正在从"参数竞赛"进入"架构竞赛"。1B模型登顶说明"小而精+数据+架构创新"路线跑通，对算力有限的中小团队是好消息。', tags: ['具身智能', '1B参数', '架构竞赛'] },
+            { title: '它石智航AWE 3.5：具身原生大脑"Scaling全面释放"', desc: 'WAIC 2026现场它石智航展示"具身原生大脑AWE 3.5"，把多任务实战搬到产线。从"表演式demo"走向"多任务产线实战"，具身智能开始进入"工业可用"门槛。', tags: ['AWE 3.5', 'Scaling Law', '工业场景'] },
+            { title: '飞书aily升级：Agent进入"团队级"协作', desc: '飞书Agent产品"飞书aily"升级，能在用户授权范围内基于飞书消息、文档、日历等开展主动跟进任务，并与团队成员或其他智能体分工协作。单兵Agent→团队级Agent是2026年的明确趋势。', tags: ['飞书aily', '团队Agent', 'LUI'] },
+            { title: '阿里真武超节点适配Qwen3.8，国内首个跑2万亿参数模型', desc: '阿里真武M890超节点成功适配Qwen3.8，上线阿里云百炼平台提供推理服务，是国内首个成功运行超2万亿参数大模型的超节点。国产芯片第一次跑到2T级别推理。', tags: ['真武超节点', 'Qwen3.8', '2T参数'] },
+            { title: '微盟"星元"内测：从GUI转向LUI，"对话即经营"', desc: '微盟WAI改版为"微盟星元"，定位AI原生智能经营系统，交互从GUI转向LUI（自然语言对话）。把多年零售行业Know-how拆成可独立调用的Skill模块，Agent自行拆解任务和调度Skill。', tags: ['微盟星元', 'GUI→LUI', 'Agent Skill'] }
+        ]},
+        '2026-07-24': { preview: '腾讯混元合并LLM与多模态团队、星炽动力PULSE架构、杭叉LogiMind具身大模型、RSS 2026时间检验奖、UniWorld-View登顶WorldScore...', cards: [
+            { title: '腾讯混元组织架构升级：合并LLM与多模态团队', desc: '腾讯混元大模型团队进行组织架构调整，将LLM和多模态两个团队合并，由刘威统一负责。此举旨在统一技术路线，打通语言与视觉模型能力，为下一阶段多模态Agent应用铺路。', tags: ['腾讯混元', '组织架构', '多模态'] },
+            { title: '星炽动力发布PULSE架构：具身智能的新范式', desc: '星炽动力发布PULSE架构，面向具身智能的感知-理解-规划-执行全链路方案。PULSE强调"端到端可微分"，在仿真环境中实现从视觉输入到动作输出的完整闭环。', tags: ['星炽动力', 'PULSE', '具身智能'] },
+            { title: '杭叉集团发布LogiMind具身大模型，叉车智能升级', desc: '杭叉集团联合高校发布LogiMind具身大模型，专为物流仓储场景设计。模型在叉车操作、货物识别、路径规划等任务上达到工业级精度，已在多个仓库实地部署。', tags: ['杭叉', 'LogiMind', '工业部署'] },
+            { title: 'RSS 2026颁发时间检验奖：经典论文持续影响十年', desc: '机器人顶会RSS 2026颁发时间检验奖，表彰十年前发表的具身智能基础理论论文。获奖工作涉及机器人操作、运动规划等基础领域，至今仍是行业核心参考。', tags: ['RSS 2026', '时间检验奖', '机器人'] },
+            { title: '国产世界模型UniWorld-View登顶李飞飞团队WorldScore榜单', desc: '兔展智能联合北京大学、鹏城实验室研发的UniWorld-View登顶WorldScore世界模型榜单。支持单图3D生成与视频4D生成统一架构，已完成国产昇腾算力适配并全开源。', tags: ['UniWorld-View', '世界模型', '昇腾适配'] }
+        ]},
+        '2026-07-25': { preview: 'Claude Opus 5正式发布、吴恩达开源OpenWorker、UniWorld-View登顶世界模型榜单、RSS 2026具身智能观点、宇树王兴兴登时代封面...', cards: [
+            { title: 'Claude Opus 5正式发布：旗舰性能，半价成本', desc: 'Anthropic发布Claude Opus 5，在Frontier-Bench、CursorBench 3.2等基准上接近甚至超越旗舰模型Fable 5，但API价格仅为$5/$25每百万token，约为Fable 5的一半。Opus 5偏向编程专精，支持子智能体调度、多文件复杂重构。', tags: ['Claude Opus 5', '编程专精', '半价'] },
+            { title: '吴恩达开源桌面Agent「OpenWorker」：从聊天框到交付成果', desc: '吴恩达发布100%开源个人桌面AI Agent OpenWorker（MIT License），能跨文件、日历、Slack、GitHub、Jira等25+工具自主完成任务并交付成品。核心设计为本地优先、模型无关、隐私保护。', tags: ['OpenWorker', '桌面Agent', 'MIT开源'] },
+            { title: '国产世界模型UniWorld-View登顶李飞飞团队WorldScore榜单', desc: '兔展智能联合北京大学、鹏城实验室研发的UniWorld-View登顶WorldScore世界模型榜单。支持单图3D生成与视频4D生成统一架构，已完成国产昇腾算力适配并全开源。', tags: ['UniWorld-View', '世界模型', '昇腾适配'] },
+            { title: 'RSS 2026：Physical Intelligence称美国具身智能也未成熟', desc: '在机器人顶会RSS 2026上，Physical Intelligence及伯克利研究者表示：包括PI在内的北美头部具身智能公司同样离成熟很远，领域尚未出现真正奠基性工作。中国优势在硬件供应链、价格和交付能力。', tags: ['RSS 2026', 'Physical Intelligence', '具身智能'] },
+            { title: '宇树科技王兴兴登上《时代》杂志封面', desc: '宇树科技创始人兼CEO王兴兴与其载人机甲产品GD01共同登上《时代》杂志封面，标题为《机器人时代来临》。这是继8年前百度李彦宏之后再次有中国企业家登上该刊封面。', tags: ['宇树科技', '王兴兴', '时代封面'] }
+        ]}
+    },
+    game: {
+        '2026-07-16': { preview: '微软Xbox裁3200人、育碧裁员裁到大动脉、UE 5.8收官转向UE6...', cards: null },
+        '2026-07-17': { preview: '微软Xbox历史性重组、上半年裁员超5100人、暑期档新游激战、AI 3D建模工具价格战...', cards: null },
+        '2026-07-18': { preview: '微软Xbox裁3200人、索尼Bungie再裁员、暑期档新游激战、UE5.6正式发布、中国手游出海占全球41.6%...', cards: null },
+        '2026-07-19': { preview: '上半年游戏大厂裁员规模接近2025全年、AI+游戏成投融资最热风口、7月暑期档新游密集、UE5.8正式发布...', cards: null },
+        '2026-07-20': { preview: 'WAIC昆仑万维宣布世界模型元年、腾讯FF14停运、独立游戏Meccha Chameleon零宣发1500万份...', cards: null },
+        '2026-07-21': { preview: 'QuestMobile手游半年报AIGC渗透率38.7%、网易名越工作室解散、上半年50起游戏投融资...', cards: null },
+        '2026-07-22': { preview: 'Switch 2重大安全漏洞、国行Switch停运、B社辐射5与老滚6同引擎、FS社The Duskbloods NS2独占...', cards: null },
+        '2026-07-23': { preview: '黑神话：钟馗公开、7月版号193款过审、古剑41分钟实机、XBOX副总裁闪辞AI赛道、RTX Spark PC秋季上市...', cards: [
+            { title: '《黑神话：钟馗》正式公开，游戏科学不走续作路线', desc: '游戏科学正式公布新作《黑神话：钟馗》——而非《黑神话：悟空》续作。钟馗主题意味着游戏科学要走"中国志怪"系列，对3D角色资产方向：钟馗造型涉及复杂的中国传统服饰、纹样、神话形象设计。', tags: ['游戏科学', '钟馗', '中国志怪'] },
+            { title: '7月国产游戏版号公布！《影之刃零》等193款过审，含PS5版本', desc: '国家新闻出版署公布2026年7月国产游戏版号，193款游戏过审。《影之刃零》明确标注有PS5版本，这是首款获得PS5版号的国产买断制动作游戏，意味着索尼官方认证可进入全球主机市场。', tags: ['版号', '影之刃零', 'PS5'] },
+            { title: '《古剑》41分钟实机演示首曝，美术获好评玩法被批保守', desc: '烛龙《古剑》新作放出41分钟完整实机演示。美术表现获得一致好评，烛龙的中国风角色建模是行业标杆。项目临近发售，烛龙可能正在扩充3D美术团队。', tags: ['烛龙', '古剑', '中国风'] },
+            { title: 'XBOX工程副总裁两个月闪辞跳槽AI赛道', desc: 'Xbox工程副总裁在任命仅两个月后闪电辞职跳槽AI赛道，凸显游戏行业与AI行业人才争夺战加剧。国内厂商都在加大AI研发投入，人才竞争将更激烈。', tags: ['Xbox', '人才流失', 'AI赛道'] },
+            { title: 'RTX Spark PC秋季上市，1.7万起128G内存', desc: 'NVIDIA确认RTX Spark PC秋季上市，起售价1.7万元，配备128GB内存。对3D美术工作流：128G内存意味着Blender大场景、ZBrush高面数雕刻不再受内存瓶颈限制。', tags: ['NVIDIA', 'RTX Spark', '128G内存'] }
+        ]},
+        '2026-07-24': { preview: '索尼去实体争议发酵、龙之剑：觉醒曝光获好评、幻世录RE UI争议、虚幻5持续受青睐、硬件涨价延续...', cards: [
+            { title: '索尼去实体争议持续发酵，世嘉明确表态"不跟随"', desc: '索尼坚持2028年全面数字化引发争议，世嘉成为首家明确表态不跟随的大厂。对3D美术方向：实体版包装、艺术设定集、限定周边的设计需求不会消失，但会集中在头部作品。', tags: ['索尼', '去实体', '世嘉'] },
+            { title: '《龙之剑：觉醒》首曝实机，获海外媒体好评', desc: '国产单机ARPG《龙之剑：觉醒》首曝实机演示，画面表现和战斗系统获得海外媒体一致好评。游戏采用虚幻5引擎打造，中国风美术风格融合现代渲染技术，是近期备受关注的国产3A项目。', tags: ['龙之剑', '国产3A', '虚幻5'] },
+            { title: '国产《幻世录RE》UI争议：复古与现代化的取舍', desc: '《幻世录RE》公布后其UI设计引发玩家社区广泛讨论。部分玩家认为UI过于现代化失去原版韵味，另一些则认为适配新平台必须做出的改变。这场争议反映了经典IP重制中"复古vs现代化"的永恒难题。', tags: ['幻世录RE', 'UI争议', '重制'] },
+            { title: '虚幻5引擎持续受青睐，多款国产新作宣布采用', desc: '2026年多款国产游戏宣布采用虚幻5引擎开发，包括《龙之剑：觉醒》《影之刃零》等头部项目。UE5的Nanite和Lumen技术正在成为国产3A标配，对TA岗位需求持续走高。', tags: ['虚幻5', '国产3A', 'TA需求'] },
+            { title: '显卡/内存全线暴涨，硬件涨价潮延续至下半年', desc: '英伟达、AMD显卡价格全线上涨，DDR5内存暴涨潮持续。对3D美术工作流：本地装机性价比拐点远离普通用户，云算力价值进一步放大。', tags: ['硬件涨价', '显卡', 'DDR5'] }
+        ]},
+        '2026-07-25': { preview: '微软Xbox大裁员1600人、索尼去实体争议、战神劳菲官宣、B社放弃虚幻引擎、硬件涨价延续...', cards: [
+            { title: '微软Xbox大裁员1600人！B社全体系被波及', desc: '微软Xbox近期开启大范围裁员，合计裁撤1600名员工，波及Bethesda游戏工作室、ZeniMax全体系团队。B社官方确认《上古卷轴6》《辐射5》开发不受影响、按计划推进。', tags: ['微软', '裁员', 'B社'] },
+            { title: 'PS5数字版仅占27%，索尼仍执意2028年全面去实体', desc: '目前PS5用户中仅27%选择数字版，73%仍购入带光驱版本，但索尼仍坚持2028年起全面数字化。世嘉成为首家明确表态"不跟随"的大厂。', tags: ['索尼', '去实体', '世嘉'] },
+            { title: '索尼官宣《战神：劳菲》2027年2月16日发售', desc: '圣莫妮卡工作室确认《战神：劳菲》将于2027年2月16日登陆PS5，是系列正传首次更换可操控主角——全程扮演奎托斯的妻子劳菲。对3D角色方向：劳菲的角色建模是行业级标杆项目。', tags: ['战神', '圣莫妮卡', '换主角'] },
+            { title: '《上古6》《辐射5》官宣放弃虚幻引擎！确认使用自研Creation Engine 3', desc: 'Bethesda确认《辐射5》《上古卷轴6》将基于自研全新Creation Engine 3打造，而非虚幻引擎。头部3A厂商几乎都在用自研引擎——这是大厂的技术护城河。', tags: ['Creation Engine 3', '自研引擎', 'B社'] },
+            { title: '显卡/内存全线暴涨持续！高通承认骁龙8系列或面临两位数涨幅', desc: '英伟达、AMD显卡价格全线上涨，叠加DDR5内存暴涨潮，高通承认第六代骁龙8系列芯片成本上升显著。对3D美术工作流：本地装机性价比拐点远离普通用户，云算力价值进一步放大。', tags: ['硬件涨价', '显卡', 'DDR5'] }
+        ]}
+    }
+};
+
+// ===== 日历归档导航 =====
+let currentArchiveTab = 'ai';
+let currentArchiveDate = null;
+
 function showArchive() {
     const archiveModal = document.getElementById('archiveModal');
     if (archiveModal) {
         archiveModal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
+        currentArchiveTab = 'ai';
+        document.querySelector('.archive-tab:nth-child(1)').classList.add('active');
+        document.querySelector('.archive-tab:nth-child(2)').classList.remove('active');
+        backToCalendar();
+        renderCalendar('ai');
     }
 }
 
@@ -1112,29 +1185,136 @@ function closeArchive() {
 }
 
 function switchArchiveTab(tab) {
-    const aiArchive = document.getElementById('aiArchiveList');
-    const gameArchive = document.getElementById('gameArchiveList');
     const aiTab = document.querySelector('.archive-tab:nth-child(1)');
     const gameTab = document.querySelector('.archive-tab:nth-child(2)');
-    
+
     if (tab === 'ai') {
-        aiArchive.style.display = 'block';
-        gameArchive.style.display = 'none';
         aiTab.classList.add('active');
         gameTab.classList.remove('active');
     } else {
-        aiArchive.style.display = 'none';
-        gameArchive.style.display = 'block';
         aiTab.classList.remove('active');
         gameTab.classList.add('active');
     }
+    currentArchiveTab = tab;
+    backToCalendar();
+    renderCalendar(tab);
 }
 
 function loadArchiveDate(tab, date) {
-    closeArchive();
-    if (date === '2026-07-16') {
-        switchNewsTab(tab);
+    // Deprecated: calendar system handles date selection
+}
+
+function renderCalendar(category) {
+    const grid = document.getElementById('archiveCalendarGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    const year = 2026, month = 7;
+    const daysInMonth = 31;
+    const firstDay = new Date(year, month - 1, 1).getDay(); // 0=Sun
+    const startOffset = firstDay === 0 ? 6 : firstDay - 1; // Mon=0
+
+    // Empty cells before first day
+    for (let i = 0; i < startOffset; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'archive-calendar-cell empty';
+        grid.appendChild(cell);
     }
+
+    // Day cells
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `2026-07-${String(day).padStart(2, '0')}`;
+        const cell = document.createElement('div');
+        cell.className = 'archive-calendar-cell';
+        cell.textContent = day;
+
+        if (archiveData[category] && archiveData[category][dateStr]) {
+            cell.classList.add('has-data');
+            cell.onclick = () => selectArchiveDate(category, dateStr);
+        }
+
+        // Today highlight
+        const today = new Date();
+        const todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+        if (dateStr === todayStr) {
+            cell.classList.add('today');
+        }
+
+        grid.appendChild(cell);
+    }
+}
+
+function selectArchiveDate(category, dateStr) {
+    // Update selected state
+    document.querySelectorAll('.archive-calendar-cell.selected').forEach(c => c.classList.remove('selected'));
+    const cells = document.querySelectorAll('.archive-calendar-cell.has-data');
+    cells.forEach(c => {
+        const day = parseInt(c.textContent);
+        const cellDate = `2026-07-${String(day).padStart(2, '0')}`;
+        if (cellDate === dateStr) c.classList.add('selected');
+    });
+
+    currentArchiveDate = dateStr;
+
+    // Show detail view
+    document.getElementById('archiveCalendarWrapper').style.display = 'none';
+    const detail = document.getElementById('archiveNewsDetail');
+    detail.style.display = 'block';
+    document.getElementById('archiveNewsDateHeader').textContent = '📅 ' + dateStr;
+
+    const container = document.getElementById('archiveNewsCardsContainer');
+    container.innerHTML = '';
+
+    const data = archiveData[category] && archiveData[category][dateStr];
+    if (!data) {
+        container.innerHTML = '<div class="archive-news-preview-card"><span class="preview-label">暂无数据</span></div>';
+        return;
+    }
+
+    if (data.cards && data.cards.length > 0) {
+        data.cards.forEach((card, i) => {
+            container.appendChild(renderNewsCard(card, i + 1));
+        });
+    } else {
+        const previewCard = document.createElement('div');
+        previewCard.className = 'archive-news-preview-card';
+        previewCard.innerHTML = '<span class="preview-label">预览摘要</span><p class="preview-text">' + data.preview + '</p>';
+        container.appendChild(previewCard);
+    }
+}
+
+function backToCalendar() {
+    document.getElementById('archiveCalendarWrapper').style.display = 'block';
+    document.getElementById('archiveNewsDetail').style.display = 'none';
+    currentArchiveDate = null;
+}
+
+function navigateMonth(direction) {
+    // Placeholder for future month navigation
+    // Currently only July 2026 has data
+}
+
+function renderNewsCard(cardData, index) {
+    const card = document.createElement('div');
+    card.className = 'archive-news-card';
+
+    const tagsHtml = cardData.tags.map(t => '<span class="archive-news-card-tag">' + t + '</span>').join('');
+
+    card.innerHTML = '<div class="archive-news-card-header">' +
+        '<span class="archive-news-card-number">' + index + '</span>' +
+        '<h3>' + cardData.title + '</h3>' +
+        '</div>' +
+        '<p>' + cardData.desc + '</p>' +
+        '<div class="archive-news-card-tags">' + tagsHtml + '</div>';
+
+    return card;
+}
+
+function renderPreviewCard(previewText) {
+    const card = document.createElement('div');
+    card.className = 'archive-news-preview-card';
+    card.innerHTML = '<span class="preview-label">预览摘要</span><p class="preview-text">' + previewText + '</p>';
+    return card;
 }
 
 
