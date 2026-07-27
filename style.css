@@ -3415,6 +3415,16 @@ nav ul li a:hover::after {
     box-shadow: 0 20px 40px rgba(80, 80, 120, 0.8);
 }
 
+.character-card-shadowheart .character-detail-btn {
+    background: linear-gradient(135deg, #6b5b8a 0%, #8b7ba8 100%);
+    box-shadow: 0 4px 10px rgba(107, 91, 138, 0.4);
+}
+
+.character-card-shadowheart .character-detail-btn:hover {
+    background: linear-gradient(135deg, #8b7ba8 0%, #6b5b8a 100%);
+    box-shadow: 0 6px 15px rgba(107, 91, 138, 0.6);
+}
+
 .item-card-soul .item-front {
     background: transparent;
 }
