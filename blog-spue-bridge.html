@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SP-UE Bridge 桥接工具开发日志 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #1a1f2e, #222a3d, #2d3650);
+            cursor: none;
+        }
+
+        .blog-detail-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .blog-detail-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #a8b8d8;
+            text-shadow: 0 0 20px rgba(168, 184, 216, 0.4);
+        }
+
+        .blog-detail-subtitle {
+            font-size: 1rem;
+            color: #c8d4e8;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .blog-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(168, 184, 216, 0.2);
+            color: #a8b8d8;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(168, 184, 216, 0.3);
+        }
+
+        .blog-detail-content {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(168, 184, 216, 0.2);
+            color: #e0e6f0;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #FFC17A;
+            border-bottom: 1px solid rgba(255, 193, 122, 0.3);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .section-content {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-left: 3px solid #a8b8d8;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #e0e6f0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #5a6a8a, #7a8aaa);
+            color: #e0e6f0;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 1px solid rgba(168, 184, 216, 0.5);
+        }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(90, 106, 138, 0.4);
+        }
+
+        .highlight {
+            color: #FFC17A;
+            font-weight: bold;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(255, 193, 122, 0.9) 0%, rgba(168, 184, 216, 0.7) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            box-shadow: 0 0 10px rgba(255, 193, 122, 0.5);
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, rgba(168, 184, 216, 0.9) 0%, rgba(90, 106, 138, 0.5) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 0.6s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.2);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="blog-detail-container">
+        <div class="blog-detail-header">
+            <h1 class="blog-detail-title">SP-UE Bridge 桥接工具开发日志</h1>
+            <p class="blog-detail-subtitle">2026年7月 · 研究中（v0.1 初期开发）</p>
+            <div class="blog-tags">
+                <span class="blog-tag">Substance Painter</span>
+                <span class="blog-tag">Unreal Engine</span>
+                <span class="blog-tag">Python桥接</span>
+                <span class="blog-tag">工作流自动化</span>
+            </div>
+        </div>
+
+        <div class="blog-detail-content">
+            <h2 class="section-title">开发背景</h2>
+            <div class="section-content">
+                <p>在日常的3D美术工作流中，Substance Painter（SP）和Unreal Engine（UE）之间的材质资产同步是高频且繁琐的操作。每次在SP中完成材质绘制后，需要手动导出贴图、在UE中导入、重新连接材质节点、调整参数，流程重复且容易出错。</p>
+                <p>项目目标是开发一套纯本地离线的桥接工具，通过Python桥接服务实现两个软件的自动化通信，减少手动操作，提升日常工作效率。</p>
+            </div>
+
+            <h2 class="section-title">工具定位</h2>
+            <div class="section-content">
+                <p>SP-UE Bridge 是一款连接 <span class="highlight">Adobe Substance Painter 2021</span> 和 <span class="highlight">Unreal Engine 5.3</span> 的工作流自动化工具，核心功能包括：</p>
+                <ul>
+                    <li><span class="highlight">贴图自动导出：</span>根据配置规则，自动从SP导出BaseColor、Normal、Roughness等贴图；</li>
+                    <li><span class="highlight">资产自动同步：</span>将导出的贴图自动导入UE工程，并创建/更新材质资产；</li>
+                    <li><span class="highlight">材质节点映射：</span>配置SP贴图通道与UE材质节点的映射关系，自动完成节点连接；</li>
+                    <li><span class="highlight">实时同步：</span>开启后可自动检测SP材质变化并实时同步到UE，无需手动触发；</li>
+                    <li><span class="highlight">任务队列管理：</span>统一管理同步任务、日志记录和异常处理。</li>
+                </ul>
+                <p>整体架构采用 <span class="highlight">纯本地离线</span> 设计，不依赖任何云服务，所有功能在本地环境运行。</p>
+            </div>
+
+            <h2 class="section-title">技术架构</h2>
+            <div class="section-content">
+                <p>工具采用三层本地架构：</p>
+                <ul>
+                    <li><span class="highlight">Web前端：</span>基于 React + Vite + TypeScript，提供项目管理、连接监控、工作流配置、任务队列、日志查看等功能页面；</li>
+                    <li><span class="highlight">Python桥接服务：</span>使用 Python 3.9+ 实现，托管Web前端，同时与SP和UE通信，负责任务调度和数据管理；</li>
+                    <li><span class="highlight">SP/UE插件：</span>SP侧通过Python插件监听本地端口接收指令，UE侧通过Remote Execution协议远程调用Python脚本。</li>
+                </ul>
+                <p>通信流程：Web前端 → Python桥接服务 → SP Python插件（导出贴图）→ UE Remote Execution（导入贴图+创建材质）。</p>
+            </div>
+
+            <h2 class="section-title">当前进展</h2>
+            <div class="section-content">
+                <p><strong>版本：v0.1（初期开发中）</strong>，目前正在进行基础框架搭建。</p>
+                <p>已完成或正在进行的部分：</p>
+                <ul>
+                    <li><span class="highlight">1. Web前端基础框架：</span>项目管理、连接配置、工作流配置、任务队列、日志查看等核心页面已完成基础布局；</li>
+                    <li><span class="highlight">2. Python桥接服务骨架：</span>服务端基本结构搭建完成，包括SP客户端、UE客户端、任务运行器等模块；</li>
+                    <li><span class="highlight">3. SP插件框架：</span>Substance Painter侧的Python插件基础结构已搭建；</li>
+                    <li><span class="highlight">4. 设计文档：</span>完整的PRD需求文档和设计规范已整理，明确了功能边界和版本约束。</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">当前局限与待完善点</h2>
+            <div class="section-content">
+                <p>由于项目尚处于早期开发阶段，有不少需要后续推进的地方：</p>
+                <ul>
+                    <li><span class="highlight">1. 核心功能未实现：</span>贴图导出、资产同步、材质重连等核心自动化流程尚未完成；</li>
+                    <li><span class="highlight">2. 实时同步机制：</span>变化检测和自动同步触发逻辑需要实现和测试；</li>
+                    <li><span class="highlight">3. 版本兼容性：</span>目前仅针对SP 2021和UE 5.3特定版本，跨版本支持需后续适配；</li>
+                    <li><span class="highlight">4. 异常处理：</span>各种边界情况（连接断开、API错误、冲突处理等）的完善和测试；</li>
+                    <li><span class="highlight">5. 界面完善：</span>交互细节、状态反馈和用户体验需要打磨。</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">后续计划</h2>
+            <div class="section-content">
+                <p>后续开发计划大概分为以下几个方向：</p>
+                <ul>
+                    <li><span class="highlight">1. 实现核心同步流程：</span>优先打通"SP导出→UE导入→材质重连"的完整链路；</li>
+                    <li><span class="highlight">2. 完善实时同步：</span>实现变化检测和自动触发机制；</li>
+                    <li><span class="highlight">3. 优化用户体验：</span>完善Web界面交互，增加状态反馈和异常提示；</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">总结</h2>
+            <div class="section-content">
+                <p>SP-UE Bridge 目前还是初期开发阶段，主要完成了框架搭建和文档整理。作为日常材质工作流的自动化工具，它的目标很明确——减少SP和UE之间的手动同步操作，让美术同事能专注于材质创作本身。</p>
+                <p>后续核心功能逐步实现后，会大大改善SP-UE工作流的效率和稳定性。</p>
+            </div>
+        </div>
+
+        <center><a href="index.html#blog" class="btn-back">返回博客列表</a></center>
+    </div>
+
+    <script>
+        const cursor = document.createElement('div');
+        cursor.className = 'custom-cursor';
+        document.body.appendChild(cursor);
+
+        let trailCount = 0;
+        const maxTrails = 50;
+
+        function createTrail(x, y) {
+            if (trailCount >= maxTrails) return;
+
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            trail.style.width = Math.random() * 6 + 4 + 'px';
+            trail.style.height = trail.style.width;
+            document.body.appendChild(trail);
+
+            trailCount++;
+
+            setTimeout(() => {
+                trail.remove();
+                trailCount--;
+            }, 600);
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            createTrail(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('mousedown', function() {
+            cursor.classList.add('clicking');
+        });
+
+        document.addEventListener('mouseup', function() {
+            cursor.classList.remove('clicking');
+        });
+    </script>
+</body>
+</html>
