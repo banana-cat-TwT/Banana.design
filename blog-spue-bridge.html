@@ -232,6 +232,11 @@
                     <li><span class="highlight">4. 异常处理：</span>各种边界情况（连接断开、API错误、冲突处理等）的完善和测试；</li>
                     <li><span class="highlight">5. 界面完善：</span>交互细节、状态反馈和用户体验需要打磨。</li>
                 </ul>
+
+                <p style="margin-top: 1.5rem;"><strong>实际测试过程记录：</strong></p>
+                <p>下面是一次真实的联调测试截图，可以直观看到当前的实际进度与遇到的问题。图中 SP 侧贴图导出环节失败，原因是 UE 端的 Remote Execution 插件一直未能正常启动，导致 Python 桥接服务无法与 UE 建立通信。昨天主要花了时间在端口连通性测试上，排查 SP 插件监听端口与 UE 侧远程执行端口的握手问题。</p>
+                <img src="image/spue2.png" alt="SP-UE Bridge 联调测试过程截图" style="width: 100%; border-radius: 12px; margin: 1rem 0; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); border: 1px solid rgba(168, 184, 216, 0.2);">
+                <p class="video-caption" style="text-align: center; color: #a8b8d8; font-size: 0.9rem; margin-top: 0.5rem;">SP-UE Bridge 联调测试过程：SP 贴图导出失败，UE 插件未启动，正在排查插件连接的问题（2026年08月01日）</p>
             </div>
 
             <h2 class="section-title">后续计划</h2>
