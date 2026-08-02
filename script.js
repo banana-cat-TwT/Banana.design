@@ -1269,6 +1269,8 @@ const archiveData = {
 // ===== 日历归档导航 =====
 let currentArchiveTab = 'ai';
 let currentArchiveDate = null;
+let currentArchiveYear = 2026;
+let currentArchiveMonth = 7;
 
 function showArchive() {
     const archiveModal = document.getElementById('archiveModal');
@@ -1276,6 +1278,8 @@ function showArchive() {
         archiveModal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         currentArchiveTab = 'ai';
+        currentArchiveYear = 2026;
+        currentArchiveMonth = 7;
         document.querySelector('.archive-tab:nth-child(1)').classList.add('active');
         document.querySelector('.archive-tab:nth-child(2)').classList.remove('active');
         backToCalendar();
@@ -1316,10 +1320,20 @@ function renderCalendar(category) {
     if (!grid) return;
     grid.innerHTML = '';
 
-    const year = 2026, month = 7;
-    const daysInMonth = 31;
-    const firstDay = new Date(year, month - 1, 1).getDay(); // 0=Sun
-    const startOffset = firstDay === 0 ? 6 : firstDay - 1; // Mon=0
+    const year = currentArchiveYear;
+    const month = currentArchiveMonth;
+    const daysInMonth = new Date(year, month, 0).getDate();
+    const firstDay = new Date(year, month - 1, 1).getDay();
+    const startOffset = firstDay === 0 ? 6 : firstDay - 1;
+
+    // Update month label
+    document.getElementById('archiveMonthLabel').textContent = `${year}年${month}月`;
+
+    // Check if there's any data in adjacent months to enable navigation
+    const hasPrevMonth = hasDataInMonth(year, month - 1, category);
+    const hasNextMonth = hasDataInMonth(year, month + 1, category);
+    document.querySelector('.archive-month-btn.prev').disabled = !hasPrevMonth;
+    document.querySelector('.archive-month-btn.next').disabled = !hasNextMonth;
 
     // Empty cells before first day
     for (let i = 0; i < startOffset; i++) {
@@ -1330,7 +1344,7 @@ function renderCalendar(category) {
 
     // Day cells
     for (let day = 1; day <= daysInMonth; day++) {
-        const dateStr = `2026-07-${String(day).padStart(2, '0')}`;
+        const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         const cell = document.createElement('div');
         cell.className = 'archive-calendar-cell';
         cell.textContent = day;
@@ -1351,13 +1365,24 @@ function renderCalendar(category) {
     }
 }
 
+function hasDataInMonth(year, month, category) {
+    if (month < 1 || month > 12) return false;
+    const prefix = `${year}-${String(month).padStart(2, '0')}-`;
+    if (archiveData[category]) {
+        for (const key in archiveData[category]) {
+            if (key.startsWith(prefix)) return true;
+        }
+    }
+    return false;
+}
+
 function selectArchiveDate(category, dateStr) {
     // Update selected state
     document.querySelectorAll('.archive-calendar-cell.selected').forEach(c => c.classList.remove('selected'));
     const cells = document.querySelectorAll('.archive-calendar-cell.has-data');
     cells.forEach(c => {
         const day = parseInt(c.textContent);
-        const cellDate = `2026-07-${String(day).padStart(2, '0')}`;
+        const cellDate = `${currentArchiveYear}-${String(currentArchiveMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         if (cellDate === dateStr) c.classList.add('selected');
     });
 
@@ -1397,8 +1422,32 @@ function backToCalendar() {
 }
 
 function navigateMonth(direction) {
-    // Placeholder for future month navigation
-    // Currently only July 2026 has data
+    let newMonth = currentArchiveMonth + direction;
+    let newYear = currentArchiveYear;
+
+    if (newMonth < 1) {
+        newMonth = 12;
+        newYear--;
+    } else if (newMonth > 12) {
+        newMonth = 1;
+        newYear++;
+    }
+
+    currentArchiveYear = newYear;
+    currentArchiveMonth = newMonth;
+
+    // Switch to the tab that has data in the new month
+    const aiHasData = hasDataInMonth(newYear, newMonth, 'ai');
+    const gameHasData = hasDataInMonth(newYear, newMonth, 'game');
+    const targetCategory = gameHasData ? 'game' : (aiHasData ? 'ai' : currentArchiveTab);
+
+    // Update tab buttons
+    document.querySelectorAll('.archive-tab').forEach((tab, i) => {
+        tab.classList.toggle('active', (i === 0 && targetCategory === 'ai') || (i === 1 && targetCategory === 'game'));
+    });
+    currentArchiveTab = targetCategory;
+
+    renderCalendar(targetCategory);
 }
 
 function renderNewsCard(cardData, index) {
