@@ -55,14 +55,14 @@
             100% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
         }
 
-        /* ===== 两栏布局：左卡片 + 右详情（完全固定，不随缩放变动） ===== */
+        /* ===== 两栏布局：左卡片 + 右详情 ===== */
         .blog-layout {
             display: flex;
             gap: 2.5rem;
-            padding: 2.5rem 2rem;
+            padding: 2.5rem 3rem;
             align-items: flex-start;
-            width: 1200px;
-            min-width: 1200px;
+            width: 92%;
+            max-width: 1600px;
             margin: 0 auto;
         }
 
@@ -83,10 +83,12 @@
             border-radius: 0;
             border: none;
             box-shadow: none;
+            width: 100%;
         }
         .character-card-inner img {
-            width: 340px;
-            height: 500px;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 340/500;
             object-fit: cover;
             display: block;
             border-radius: 0;
@@ -310,7 +312,7 @@
                 <p>这是第一版人物构图，因为考虑到拓扑和绑定，所以构图和姿势比较基础。——2026年7月24日</p>
 
                 <div style="margin: 1.5rem 0; text-align: center;">
-                    <img src="image/shadowheart_724_draft_views.png" alt="影心7月24日初版生成三视图" style="max-width: 38%; height: auto; border-radius: 12px; box-shadow: 0 4px 20px rgba(139, 91, 122, 0.15);" oncontextmenu="return false;" draggable="false">
+                    <img src="image/shadowheart_724_draft_views.png" alt="影心7月24日初版生成三视图" style="max-width: 55%; height: auto; border-radius: 12px; box-shadow: 0 4px 20px rgba(139, 91, 122, 0.15); display: block; margin: 0 auto;" oncontextmenu="return false;" draggable="false">
                     <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.8rem;">7月24日初版生成三视图（正/侧/背）</p>
                 </div>
 
@@ -326,7 +328,7 @@
 
                 <p>今天居然已经8月3日了，距离初版高模生成（7月24日）已经一周快两周了，今天早上才正式进入高模人工修改阶段。这段时间虽然没在改模型，但并不是停摆，一直在搞提效工具、找参考图，把生产流程里反复消耗时间的环节自动化掉。</p>
 
-                <p>另一方面的现实原因是我的电脑配置没办法同时打开超大 ZBrush 文件和跑几个线程的东西，所以提效工具的开发和影心高模修改只能二选一，这段时间先做了工具。除此之外刚好这段时间深圳这边租的房子到期了，上周大部分时间都在搬家、寄快递、盘点剩下的预算、顺便帮房东带房客介绍房子...生活上的事占了不少精力。</p>
+                <p>另一方面的现实原因是我的电脑配置没办法同时打开超大 ZBrush 文件和跑几个线程的东西，所以提效工具的开发和影心高模修改只能二选一，这段时间先做了工具。除此之外刚好这段时间深圳这边租的房子到期了，上周大部分时间都在搬家、寄快递、盘点剩下的预算、顺便帮房东带房客介绍房子...生活上的事占了不少精力。其实生活预算也没剩多少可自由支配的了，大三大四到毕业的这段时间，花了太多钱在两地长期租房、来回机票、酒店、换电脑配置买新设备上。杭州深圳两地当天往返的日子，刚下飞机就要坐地铁去学校/公司的日子，也算是在7月彻底结束了。</p>
 
                 <p>不过虽然手没在动模型，脑子里一直在想影心要改的部分，搬家、跑代码、寄快递、跟各种人沟通的间隙都会反复思考需要调整的地方。今天早上正式开工，先把几个明显的问题修一下，下午再做其他事情。</p>
 
