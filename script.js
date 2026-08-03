@@ -2900,25 +2900,85 @@ function showDevToolsWarning() {
 
 // 页面失焦显示黑屏遮罩
 function setupBlurProtection() {
+    // visibilitychange：切标签页 / 最小化
     document.addEventListener('visibilitychange', function() {
         if (document.hidden) {
-            const overlay = document.createElement('div');
-            overlay.id = 'blur-overlay';
-            overlay.style.cssText = `
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: #000;
-                z-index: 99997;
-            `;
-            document.body.appendChild(overlay);
+            showScreenshotOverlay();
         } else {
-            const overlay = document.getElementById('blur-overlay');
-            if (overlay) {
-                document.body.removeChild(overlay);
-            }
+            hideScreenshotOverlay();
+        }
+    });
+    // window blur：切到其他窗口 / 激活截图工具（Win+Shift+S、Snipaste 等）
+    // 比 visibilitychange 更灵敏，覆盖同窗口内截图工具激活的场景
+    window.addEventListener('blur', function() {
+        showScreenshotOverlay();
+    });
+    window.addEventListener('focus', function() {
+        hideScreenshotOverlay();
+    });
+}
+
+// 显示截图遮罩
+function showScreenshotOverlay() {
+    if (document.getElementById('blur-overlay')) return;
+    const overlay = document.createElement('div');
+    overlay.id = 'blur-overlay';
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #000;
+        z-index: 99997;
+        pointer-events: none;
+    `;
+    document.body.appendChild(overlay);
+}
+
+// 隐藏截图遮罩
+function hideScreenshotOverlay() {
+    const overlay = document.getElementById('blur-overlay');
+    if (overlay) {
+        overlay.parentNode.removeChild(overlay);
+    }
+}
+
+// 清空剪贴板（PrintScreen 截图后图片会进入剪贴板，立即清空使其无法粘贴）
+function clearClipboard() {
+    try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(' ').catch(function(){});
+        }
+    } catch (e) {}
+    // 旧方法备用
+    try {
+        const ta = document.createElement('textarea');
+        ta.value = ' ';
+        ta.style.position = 'fixed';
+        ta.style.top = '-9999px';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+    } catch (e) {}
+}
+
+// 截屏防护：PrintScreen 按下时遮罩，松开时清空剪贴板
+function setupAntiScreenshot() {
+    // keydown：PrintScreen 按下立即遮罩（preventDefault 对系统键无效，但遮罩能盖住屏幕）
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'PrintScreen') {
+            showScreenshotOverlay();
+        }
+    });
+    // keyup：PrintScreen 松开后清空剪贴板（截图已进入剪贴板，清空使其无法粘贴）
+    document.addEventListener('keyup', function(e) {
+        if (e.key === 'PrintScreen') {
+            clearClipboard();
+            showCustomAlert('检测到截屏操作，剪贴板已清空');
+            // 延迟移除遮罩，避免连续截屏
+            setTimeout(hideScreenshotOverlay, 500);
         }
     });
 }
@@ -3063,6 +3123,7 @@ function initCopyrightProtection() {
     disableDrag();
     detectDevTools();
     setupBlurProtection();
+    setupAntiScreenshot();
     generateWatermark();
     setInterval(generateWatermark, CONFIG.watermarkInterval);
 }
