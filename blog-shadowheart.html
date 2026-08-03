@@ -24,6 +24,7 @@
             line-height: 1.8;
             min-height: 100vh;
             cursor: none;
+            overflow-x: auto;
         }
         .custom-cursor {
             width: 20px; height: 20px;
@@ -60,6 +61,7 @@
             gap: 2.5rem;
             padding: 2.5rem 2rem;
             align-items: flex-start;
+            min-width: 900px;
         }
 
         /* 左侧角色卡片（吸顶） */
@@ -84,6 +86,8 @@
         .character-card-inner img {
             width: 100%;
             height: auto;
+            max-height: 75vh;
+            object-fit: cover;
             display: block;
             border-radius: 16px 16px 0 0;
             border-bottom: 1px solid var(--border);
@@ -242,6 +246,7 @@
                 flex-direction: column;
                 padding: 1.2rem 1rem;
                 gap: 1.5rem;
+                min-width: 0;
             }
             .character-card {
                 flex: none;
