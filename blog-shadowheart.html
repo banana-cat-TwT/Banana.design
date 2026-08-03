@@ -55,20 +55,21 @@
             100% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
         }
 
-        /* ===== 两栏布局：左卡片 + 右详情 ===== */
+        /* ===== 两栏布局：左卡片 + 右详情（完全固定，不随缩放变动） ===== */
         .blog-layout {
             display: flex;
             gap: 2.5rem;
             padding: 2.5rem 2rem;
             align-items: flex-start;
-            min-width: 900px;
+            width: 1200px;
+            min-width: 1200px;
+            margin: 0 auto;
         }
 
-        /* 左侧角色卡片（吸顶） */
+        /* 左侧角色卡片（吸顶，固定尺寸） */
         .character-card {
-            flex: 0 1 340px;
-            max-width: 380px;
-            min-width: 280px;
+            flex: 0 0 340px;
+            width: 340px;
             height: auto !important;
             overflow: visible !important;
             position: sticky;
@@ -78,19 +79,17 @@
             transform: none !important;
         }
         .character-card-inner {
-            background: var(--card-bg);
-            border-radius: 16px;
-            border: 1px solid var(--border);
-            box-shadow: 0 6px 24px rgba(139, 91, 122, 0.10);
+            background: #ffffff;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
         }
         .character-card-inner img {
-            width: 100%;
-            height: auto;
-            max-height: 75vh;
+            width: 340px;
+            height: 500px;
             object-fit: cover;
             display: block;
-            border-radius: 16px 16px 0 0;
-            border-bottom: 1px solid var(--border);
+            border-radius: 0;
         }
         .character-card-info {
             padding: 1.6rem 1.4rem;
@@ -127,9 +126,9 @@
             font-weight: 500;
         }
 
-        /* 右侧详情内容 */
+        /* 右侧详情内容（固定占满剩余空间，不收缩） */
         .detail-content {
-            flex: 1;
+            flex: 1 0 0;
             min-width: 0;
             background: var(--card-bg);
             border-radius: 16px;
@@ -246,6 +245,7 @@
                 flex-direction: column;
                 padding: 1.2rem 1rem;
                 gap: 1.5rem;
+                width: 100%;
                 min-width: 0;
             }
             .character-card {
@@ -255,7 +255,8 @@
                 top: auto;
             }
             .character-card-inner img {
-                max-height: 420px;
+                width: 100%;
+                height: 420px;
                 object-fit: cover;
             }
             .detail-content { padding: 1.8rem 1.4rem; }
