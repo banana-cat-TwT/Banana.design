@@ -7,19 +7,20 @@
     <link rel="stylesheet" href="style.css">
     <style>
         :root {
-            --primary: #6366f1;
-            --secondary: #a5b4fc;
-            --accent: #818cf8;
-            --highlight: #f472b6;
-            --dark-bg: #1e1b4b;
-            --dark-bg-deep: #0f0d24;
-            --light-bg: #e0e7ff;
+            --primary: #6ba89a;
+            --secondary: #a8d0c5;
+            --accent: #8fc4b6;
+            --highlight: #e8a87c;
+            --bg: #f4f8f5;
+            --card-bg: #ffffff;
+            --text: #3a4a42;
+            --text-secondary: #7a8b82;
+            --border: #e0ece6;
         }
 
         body {
-            background: linear-gradient(180deg, var(--dark-bg) 0%, var(--dark-bg-deep) 100%);
-            background-attachment: fixed;
-            color: var(--light-bg);
+            background: var(--bg);
+            color: var(--text);
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             margin: 0;
             padding: 0;
@@ -33,8 +34,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(ellipse at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
-                        radial-gradient(ellipse at 80% 70%, rgba(244, 114, 182, 0.1) 0%, transparent 40%);
+            background: radial-gradient(ellipse at 20% 30%, rgba(107, 168, 154, 0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 70%, rgba(232, 168, 124, 0.06) 0%, transparent 40%);
             pointer-events: none;
             z-index: -1;
         }
@@ -55,19 +56,18 @@
         .blog-title {
             font-size: 2.5rem;
             margin-bottom: 1rem;
-            color: var(--highlight);
-            text-shadow: 0 0 20px rgba(244, 114, 182, 0.3);
+            color: var(--text);
         }
 
         .blog-subtitle {
             font-size: 1.2rem;
-            color: var(--secondary);
+            color: var(--text-secondary);
             margin-bottom: 1.5rem;
         }
 
         .blog-meta {
             font-size: 0.9rem;
-            color: var(--secondary);
+            color: var(--text-secondary);
             margin-bottom: 2rem;
         }
 
@@ -77,23 +77,23 @@
         }
 
         .blog-section {
-            background: rgba(30, 27, 75, 0.6);
+            background: var(--card-bg);
             border-radius: 15px;
             padding: 2rem;
             margin-bottom: 2rem;
-            border: 1px solid rgba(165, 180, 252, 0.2);
+            border: 1px solid var(--border);
         }
 
         .blog-section h3 {
-            color: var(--highlight);
+            color: var(--primary);
             margin-bottom: 1.5rem;
             font-size: 1.5rem;
-            border-bottom: 2px solid var(--primary);
+            border-bottom: 2px solid var(--secondary);
             padding-bottom: 0.5rem;
         }
 
         .blog-section h4 {
-            color: var(--secondary);
+            color: var(--text);
             margin-top: 1.5rem;
             margin-bottom: 0.8rem;
             font-size: 1.2rem;
@@ -107,24 +107,24 @@
         }
 
         .feature-item {
-            background: rgba(99, 102, 241, 0.1);
+            background: #f7fbf9;
             border-radius: 10px;
             padding: 1.5rem;
-            border: 1px solid rgba(99, 102, 241, 0.3);
+            border: 1px solid var(--border);
         }
 
         .feature-item h4 {
             margin-top: 0;
-            color: var(--secondary);
+            color: var(--primary);
         }
 
         .feature-item p {
-            color: var(--light-bg);
+            color: var(--text);
             font-size: 0.9rem;
         }
 
         .highlight-box {
-            background: rgba(244, 114, 182, 0.1);
+            background: #fef6f0;
             border-left: 4px solid var(--highlight);
             padding: 1rem 1.5rem;
             margin: 1.5rem 0;
@@ -138,7 +138,7 @@
         .btn-back {
             display: inline-block;
             padding: 0.75rem 1.5rem;
-            background: linear-gradient(145deg, var(--primary), #4f46e5);
+            background: var(--primary);
             color: white;
             text-decoration: none;
             border-radius: 50px;
@@ -150,8 +150,8 @@
 
         .btn-back:hover {
             transform: translateY(-3px);
-            background: linear-gradient(145deg, #4f46e5, #4338ca);
-            box-shadow: 0 10px 25px rgba(99, 102, 241, 0.4);
+            background: #5a9688;
+            box-shadow: 0 6px 20px rgba(107, 168, 154, 0.3);
         }
     </style>
 </head>
@@ -199,13 +199,13 @@
                 <h3>模型生成视频展示</h3>
                 <p>以下是使用Meshy平台进行3D模型生成的过程记录：</p>
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
-                    <div style="background: rgba(99, 102, 241, 0.1); border-radius: 10px; overflow: hidden; border: 1px solid rgba(99, 102, 241, 0.3);">
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
                         <video src="videos/hunyuan3D/hunyuan3D2.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto;">
                             您的浏览器不支持视频播放
                         </video>
                         <div style="padding: 1rem; text-align: center;">
-                            <h4 style="color: var(--secondary); margin-bottom: 0.5rem;">生成视频</h4>
-                            <p style="font-size: 0.9rem; color: var(--light-bg);">Meshy模型生成过程演示</p>
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">生成视频</h4>
+                            <p style="font-size: 0.9rem; color: var(--text);">Meshy模型生成过程演示</p>
                         </div>
                     </div>
                 </div>
@@ -223,31 +223,31 @@
                 <p>探索Meshy在写实人物生成方面的表现，进行了多个测试案例：</p>
                 
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
-                    <div style="background: rgba(99, 102, 241, 0.1); border-radius: 10px; overflow: hidden; border: 1px solid rgba(99, 102, 241, 0.3);">
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
                         <video src="videos/Meshy/laluo1.mp4" controls playsinline style="width: 100%; height: 200px; object-fit: cover;">
                             您的浏览器不支持视频播放
                         </video>
                         <div style="padding: 1rem;">
-                            <h4 style="color: var(--secondary); margin-bottom: 0.5rem;">拉罗写实半身像研究1</h4>
-                            <p style="font-size: 0.9rem; color: var(--light-bg);">写实风格半身像生成测试</p>
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">拉罗写实半身像研究1</h4>
+                            <p style="font-size: 0.9rem; color: var(--text);">写实风格半身像生成测试</p>
                         </div>
                     </div>
-                    <div style="background: rgba(99, 102, 241, 0.1); border-radius: 10px; overflow: hidden; border: 1px solid rgba(99, 102, 241, 0.3);">
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
                         <video src="videos/Meshy/laluo2.mp4" controls playsinline style="width: 100%; height: 200px; object-fit: cover;">
                             您的浏览器不支持视频播放
                         </video>
                         <div style="padding: 1rem;">
-                            <h4 style="color: var(--secondary); margin-bottom: 0.5rem;">拉罗写实半身像研究2</h4>
-                            <p style="font-size: 0.9rem; color: var(--light-bg);">写实风格半身像生成测试</p>
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">拉罗写实半身像研究2</h4>
+                            <p style="font-size: 0.9rem; color: var(--text);">写实风格半身像生成测试</p>
                         </div>
                     </div>
-                    <div style="background: rgba(99, 102, 241, 0.1); border-radius: 10px; overflow: hidden; border: 1px solid rgba(99, 102, 241, 0.3);">
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
                         <video src="videos/Meshy/MAIKE1.mp4" controls playsinline style="width: 100%; height: 200px; object-fit: cover;">
                             您的浏览器不支持视频播放
                         </video>
                         <div style="padding: 1rem;">
-                            <h4 style="color: var(--secondary); margin-bottom: 0.5rem;">麦克全身像研究</h4>
-                            <p style="font-size: 0.9rem; color: var(--light-bg);">写实风格全身像生成测试</p>
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">麦克全身像研究</h4>
+                            <p style="font-size: 0.9rem; color: var(--text);">写实风格全身像生成测试</p>
                         </div>
                     </div>
                 </div>
@@ -258,13 +258,13 @@
 
                 <h4>测试3：单图生成——奇幻鸟类</h4>
                 <p>距离上次使用Meshy已经是5月底的事情了，中间隔了好几个月。这次回来测试了单图生成功能，输入一张奇幻鸟类的参考图，观察生成速度和模型质量。</p>
-                <div style="background: rgba(99, 102, 241, 0.1); border-radius: 10px; overflow: hidden; border: 1px solid rgba(99, 102, 241, 0.3); max-width: 600px; margin: 1.5rem auto;">
+                <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); max-width: 600px; margin: 1.5rem auto;">
                     <video src="videos/Meshy/meshy.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto;">
                         您的浏览器不支持视频播放
                     </video>
                     <div style="padding: 1rem; text-align: center;">
-                        <h4 style="color: var(--secondary); margin-bottom: 0.5rem;">奇幻鸟类单图生成</h4>
-                        <p style="font-size: 0.9rem; color: var(--light-bg);">单图输入 → 3D模型生成过程</p>
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">奇幻鸟类单图生成</h4>
+                        <p style="font-size: 0.9rem; color: var(--text);">单图输入 → 3D模型生成过程</p>
                     </div>
                 </div>
 
@@ -274,13 +274,13 @@
 
                 <h4>测试4：同图跨期对比——卡通单图</h4>
                 <p>用同一张卡通单图分别在不同时期生成，对比模型质量的变化：</p>
-                <div style="background: rgba(99, 102, 241, 0.1); border-radius: 10px; overflow: hidden; border: 1px solid rgba(99, 102, 241, 0.3); max-width: 700px; margin: 1.5rem auto;">
+                <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); max-width: 700px; margin: 1.5rem auto;">
                     <video src="videos/Meshy/meshy2.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto;">
                         您的浏览器不支持视频播放
                     </video>
                     <div style="padding: 1rem; text-align: center;">
-                        <h4 style="color: var(--secondary); margin-bottom: 0.5rem;">同图跨期生成对比</h4>
-                        <p style="font-size: 0.9rem; color: var(--light-bg);">前段：8月生成（细节丰富但有拉伸变形） | 后段：4月7日生成（有棱角但基本形状正确）</p>
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">同图跨期生成对比</h4>
+                        <p style="font-size: 0.9rem; color: var(--text);">前段：8月生成（细节丰富但有拉伸变形） | 后段：4月7日生成（有棱角但基本形状正确）</p>
                     </div>
                 </div>
 
