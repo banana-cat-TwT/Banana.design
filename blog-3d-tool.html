@@ -164,9 +164,10 @@
     <div class="blog-detail-container">
         <div class="blog-detail-header">
             <h1 class="blog-detail-title">3D自动化基础工具开发日志</h1>
-            <p class="blog-detail-subtitle">2026年7月 · 研究中（v1.0初期原型）</p>
+            <p class="blog-detail-subtitle">2026年7月-8月 · 持续迭代中（v1.0 → v2.0 离线桌面版）</p>
             <div class="blog-tags">
-                <span class="blog-tag">Python</span>
+                <span class="blog-tag">Electron</span>
+                <span class="blog-tag">离线桌面化</span>
                 <span class="blog-tag">Blender脚本</span>
                 <span class="blog-tag">3ds Max脚本</span>
                 <span class="blog-tag">资产自动化</span>
@@ -183,34 +184,37 @@
 
             <h2 class="section-title">工具定位</h2>
             <div class="section-content">
-                <p>工具主要面向3D资产流水线的自动化处理，初步考虑覆盖以下两个DCC平台：</p>
+                <p>工具主要面向3D资产流水线的自动化处理，覆盖两个DCC平台，并支持一键执行：</p>
                 <ul>
-                    <li><span class="highlight">Blender Python API：</span>用于Blender端的资产自动化脚本生成与批量执行；</li>
-                    <li><span class="highlight">3ds Max MaxScript：</span>用于3ds Max端的资产自动化脚本生成与批量执行；</li>
+                    <li><span class="highlight">Blender Python API：</span>用于Blender端的资产自动化脚本生成与一键执行；</li>
+                    <li><span class="highlight">3ds Max MaxScript：</span>用于3ds Max端的资产自动化脚本生成与一键执行；</li>
                 </ul>
-                <p>整体采用可视化界面，方便非程序背景的美术同事直接使用。</p>
+                <p>整体采用可视化界面，支持离线桌面运行，方便非程序背景的美术同事直接使用。工具本身是「脚本生成+执行器」，不直接修改模型文件，保障资产安全。</p>
             </div>
 
             <h2 class="section-title">当前进展</h2>
             <div class="section-content">
-                <p><strong>版本：v1.0（初期原型）</strong>，研究了没几天，目前能用但是有些地方没修改完善。</p>
-                <p>已完成的基础框架内容如下：</p>
+                <p><strong>版本：v2.0（离线桌面版）</strong>，经历了从网页原型到桌面工具的一次完整迭代。</p>
+                <p>已完成的核心功能模块如下：</p>
                 <ul>
-                    <li><span class="highlight">1. 基础界面框架：</span>可视化操作界面，包含任务配置、目标选择等模块；</li>
-                    <li><span class="highlight">2. 脚本生成模块：</span>支持生成Blender Python和3ds Max MaxScript两种格式的自动化脚本；</li>
-                    <li><span class="highlight">3. 任务卡片式管理：</span>将不同的自动化操作以任务卡片形式组织，便于配置和预览；</li>
-                    <li><span class="highlight">4. 部分功能可用：</span>一些基础的资产自动化流程可以正常运行。</li>
+                    <li><span class="highlight">1. 可视化界面框架：</span>任务配置、目标选择、脚本预览等核心页面已完成，支持9类自动化任务（重命名/导入导出/材质/光滑组/法线/归零/单位/格式/转可编辑多边形）；</li>
+                    <li><span class="highlight">2. 双平台脚本生成：</span>支持生成 Blender Python 和 3ds Max MaxScript 两种格式的自动化脚本，可预览后复制使用；</li>
+                    <li><span class="highlight">3. 离线桌面化（v2.0 重大更新）：</span>双击即用、完全离线，无需联网；</li>
+                    <li><span class="highlight">4. Blender 一键执行：</span>工具可自动探测本机 Blender 路径，支持「指定文件」和「当前场景」两种执行模式，省去手动复制粘贴脚本的环节；</li>
+                    <li><span class="highlight">5. 3ds Max 一键执行：</span>同样支持自动探测本机 3ds Max 路径，提供「无界面批处理」和「界面执行」两种模式，脚本前后自动加载/保存文件，保障安全；</li>
+                    <li><span class="highlight">6. 执行日志与反馈：</span>一键执行面板底部有实时日志输出，成功/失败会有 toast 提示，方便排查问题。</li>
                 </ul>
             </div>
 
             <h2 class="section-title">当前局限与待完善点</h2>
             <div class="section-content">
-                <p>由于目前仍处于早期阶段，还有不少需要后续完善的地方：</p>
+                <p>目前工具已经覆盖了核心的脚本生成和一键执行功能，但仍有不少可以继续完善的地方：</p>
                 <ul>
-                    <li><span class="highlight">1. 用户体验：</span>界面交互和引导提示需要进一步优化；</li>
-                    <li><span class="highlight">2. 边界情况处理：</span>部分异常输入和特殊场景下的处理逻辑不够完善；</li>
-                    <li><span class="highlight">3. 功能模块：</span>还有一些想要的自动化功能没有开发完成；</li>
-                    <li><span class="highlight">4. 文档与使用说明：</span>缺少完整的使用文档和操作指引。</li>
+                    <li><span class="highlight">1. 首次打开 SmartScreen 警告：</span>由于没有代码签名证书，Windows 首次打开会提示安全警告，需要手动点「仍要运行」；</li>
+                    <li><span class="highlight">2. 3ds Max 破解版兼容性：</span>破解版在「无界面批处理」模式下可能弹激活窗，遇到时需切换到「界面执行」模式；</li>
+                    <li><span class="highlight">3. 执行前自动备份：</span>指定文件模式下可增加自动备份功能，防止误改原始文件；</li>
+                    <li><span class="highlight">4. 完全无人值守模式：</span>指定输入/输出目录，一键批量处理多个文件；</li>
+                    <li><span class="highlight">5. 更多 DCC 支持：</span>目前仅支持 Blender 和 3ds Max，后续可考虑扩展 Maya等平台。</li>
                 </ul>
             </div>
 
@@ -218,16 +222,17 @@
             <div class="section-content">
                 <p>后续开发计划大概分为以下几个方向：</p>
                 <ul>
-                    <li><span class="highlight">1. 优化现有功能：</span>修复不完善的地方，提升稳定性和交互体验；</li>
-                    <li><span class="highlight">2. 补充自动化工作流：</span>根据实际工作中遇到的需求，增加更多的自动化功能模块；</li>
-                    <li><span class="highlight">3. 完善文档：</span>整理使用说明和常见问题，方便后续使用和分享；</li>
+                    <li><span class="highlight">1. 增加执行前自动备份：</span>指定文件模式下自动复制一份备份文件再执行，防误改；</li>
+                    <li><span class="highlight">2. 完全无人值守模式：</span>支持指定输入/输出目录，一键批量处理多个文件；</li>
+                    <li><span class="highlight">3. 丰富自动化任务类型：</span>根据实际工作需求，继续增加更多的自动化功能模块；</li>
+                    <li><span class="highlight">4. 界面与体验优化：</span>打磨交互细节，增加状态反馈和引导提示。</li>
                 </ul>
             </div>
 
             <h2 class="section-title">总结</h2>
             <div class="section-content">
-                <p>3D自动化基础工具目前还是初期原型，能用但还有很多需要完善的地方。随着在实际工作中的使用和不断的功能补充，应该能逐步成为日常资产流水线中的得力助手。</p>
-                <p>后续开发进度会继续以研究日志的形式整理更新。</p>
+                <p>3D自动化基础工具已经从初期的网页原型发展为功能完整的离线桌面应用，覆盖了脚本生成、一键执行、双平台支持等核心能力。从v1.0到v2.0的迭代过程中，解决了白屏、离线化、路径探测等多个实际问题，工具的可用性和稳定性得到了显著提升。</p>
+                <p>后续会继续根据实际工作需求，补充更多自动化任务类型，优化用户体验，让工具逐步成为日常资产流水线中的得力助手。</p>
             </div>
         </div>
 
