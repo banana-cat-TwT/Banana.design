@@ -271,6 +271,22 @@
                 <div class="highlight-box">
                     <strong>体验感受：</strong>不得不说Meshy的生成速度比其他AI快很多，单图到3D的转换几乎是秒级完成的。虽然细节还有提升空间，但对于快速产出概念原型来说效率非常突出。
                 </div>
+
+                <h4>测试4：同图跨期对比——卡通单图</h4>
+                <p>用同一张卡通单图分别在不同时期生成，对比模型质量的变化：</p>
+                <div style="background: rgba(99, 102, 241, 0.1); border-radius: 10px; overflow: hidden; border: 1px solid rgba(99, 102, 241, 0.3); max-width: 700px; margin: 1.5rem auto;">
+                    <video src="videos/Meshy/meshy2.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto;">
+                        您的浏览器不支持视频播放
+                    </video>
+                    <div style="padding: 1rem; text-align: center;">
+                        <h4 style="color: var(--secondary); margin-bottom: 0.5rem;">同图跨期生成对比</h4>
+                        <p style="font-size: 0.9rem; color: var(--light-bg);">前段：8月生成（细节丰富但有拉伸变形） | 后段：4月7日生成（有棱角但基本形状正确）</p>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>对比分析：</strong>这次测试没有看到提升。8月生成的版本虽然细节更多，但属于"添油加醋"式的过度生成——原图没有的纹理和装饰被强行加上，且出现了明显的拉伸变形，形状严重偏离原图。4月7日的版本虽然棱角分明、细节粗糙，但基本形状和比例是对的，更贴近原图。结论是：Meshy的生成逻辑在这段时间里出现了退化，新版本倾向于添加大量无关细节，却丢失了最基础的形状还原能力。
+                </div>
             </div>
 
             <div class="blog-section">
