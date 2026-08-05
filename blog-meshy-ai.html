@@ -303,6 +303,42 @@
                 <div class="highlight-box">
                     <strong>体验感受：</strong>老实说 Meshy 的多部件拆分做得挺好的。模型分离合理，没有多余的切口，部件之间的边界处理干净。相对于 Tripo 和混元在拆分上经常让人两眼一黑的表现，Meshy 这一点明显更靠谱，是很适合用来做手办的工具。
                 </div>
+
+                <h4>测试6：单图生成低模拓扑测试</h4>
+                <p>这段视频是单图生成的低模拓扑测试，重点观察智能 topo 在不同面数设置下的实际表现。用的是4月份那张单图，这个月再次拿出来测试，但表面的坑洞问题依然存在——几个月过去了这部分一直没修。</p>
+                <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); max-width: 600px; margin: 1.5rem auto;">
+                    <video src="videos/Meshy/meshy4.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto;">
+                        您的浏览器不支持视频播放
+                    </video>
+                    <div style="padding: 1rem; text-align: center;">
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">单图生成低模拓扑测试</h4>
+                        <p style="font-size: 0.9rem; color: var(--text);">四次不同面数设置的实际生成对比</p>
+                    </div>
+                </div>
+
+                <p>四次测试的过程记录：</p>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <h4>第一次 · 标准模式</h4>
+                        <p>标准类型生成，三角面数 <strong>383,390</strong>。模型仍有棱角、坑坑洼洼，不符合卡通规范。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>第二次 · 智能 topo 8000</h4>
+                        <p>设置 8000 三角面，实际生成 <strong>8807</strong>，超面且有破面。布线不均匀，不符合横平竖直规范——卡通类型的圆形物体两条线之间应当平行。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>第三次 · 智能 topo 10000</h4>
+                        <p>设置 10000 三角面，实际生成 <strong>11081</strong>，超面。虽然没有破面，但布线和面依然不行。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>第四次 · 智能 topo 4000</h4>
+                        <p>设置 4000 三角面，实际生成 <strong>4408</strong>，依旧超面。这次圆形身体两条线之间距离 OK、保持平行，但出现了多余物体，并且跟头顶穿模——因为只用了一张图，所以不强求它对背面的理解正确。</p>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>结论：</strong>感觉所有 AI 生成平台都有这个问题——不管设置多少面，最后都会超出几百面。另外所有低模的布线都应当保持同一方向，除非项目规定的面数太少，才可以改静物的布线。
+                </div>
             </div>
 
             <div class="blog-section">
