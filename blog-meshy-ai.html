@@ -162,7 +162,6 @@
             <p class="blog-subtitle">探索Meshy平台在3D模型生成中的应用</p>
             <div class="blog-meta">
                 <span>发布日期：2026年5月12日</span> | 
-                <span>阅读次数：0</span> | 
                 <span>分类：大模型</span>
             </div>
         </div>
@@ -447,6 +446,36 @@
             </div>
 
             <div class="blog-section">
+                <h3>角色绑定功能</h3>
+                <p>Meshy 自带角色绑定功能，界面让我想起了 Mixamo 的智能绑定。</p>
+                <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); max-width: 600px; margin: 1.5rem auto;">
+                    <img src="image/meshy/meshy.png" alt="Meshy 角色绑定界面" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                    <div style="padding: 1rem; text-align: center;">
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Meshy 角色绑定</h4>
+                        <p style="font-size: 0.9rem; color: var(--text);">类似 Mixamo 的智能绑定界面</p>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <strong>对比 Mixamo：</strong>不过相比 Mixamo 的绑定，Meshy 可以调整肩和脚的定位点，在关节定位上比 Mixamo 多了一层可控性。
+                </div>
+
+                <h4>绑定后的动画测试</h4>
+                <p>绑定完成后试了好几个动作，用的是同一套模型，甚至是在 LOD 减面的情况下做的测试。</p>
+                <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); max-width: 600px; margin: 1.5rem auto;">
+                    <video src="videos/Meshy/meshy7.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto;">
+                        您的浏览器不支持视频播放
+                    </video>
+                    <div style="padding: 1rem; text-align: center;">
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">绑定后动画测试</h4>
+                        <p style="font-size: 0.9rem; color: var(--text);">多动作 · 同模型 · LOD 减面测试</p>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <strong>测试结果：</strong>绑定效果比混元好一点，前面的裙子没有出现穿模的情况，裙子模型表面也是光滑的。在 LOD 减面后依然能保持这种表现，说明绑定的稳定性不错。
+                </div>
+            </div>
+
+            <div class="blog-section">
                 <h3>技术优势与局限性</h3>
                 <h4>优势</h4>
                 <ul>
@@ -459,7 +488,7 @@
                 <h4>局限性</h4>
                 <ul>
                     <li>复杂模型细节还原度不足，精细度有待提升</li>
-                    <li>角色绑定和动画需要完全手动处理</li>
+                    <li>角色绑定虽有智能绑定功能，但动画仍需手动处理</li>
                     <li>生成结果随机性较大，可控性有限</li>
                     <li>材质表现较为基础，缺乏层次感</li>
                     <li>复杂结构的理解能力有限，容易出现几何错误</li>
