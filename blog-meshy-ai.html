@@ -339,6 +339,52 @@
                 <div class="highlight-box">
                     <strong>结论：</strong>感觉所有 AI 生成平台都有这个问题——不管设置多少面，最后都会超出几百面。另外所有低模的布线都应当保持同一方向，除非项目规定的面数太少，才可以改静物的布线。
                 </div>
+
+                <h4>测试7：高模生成上限对比（Meshy vs Tripo）</h4>
+                <p>用单图生成写实类人物时发现一个问题：Meshy 的高模生成上限只在 <strong>500,000</strong> 三角面左右，而 Tripo 的上限能到 <strong>19,859,413</strong>（约 2000 万）三角面。同一张图可能数值会有误差，但量级差距非常明显。</p>
+                <p>不过说真的，Meshy 的生成速度确实快——大概一分钟就能完成，而 Tripo 平时要等 300 到 400 秒左右。一个是面数上限低但出图快，一个是面数上限高但要等好几分钟，各有取舍。</p>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <video src="videos/Meshy/Meshy5.mp4" controls autoplay muted loop playsinline style="width: 100%; height: 200px; object-fit: cover;">
+                            您的浏览器不支持视频播放
+                        </video>
+                        <div style="padding: 1rem;">
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Meshy · 写实人物单图</h4>
+                            <p style="font-size: 0.9rem; color: var(--text);">高模上限约 50 万三角面</p>
+                        </div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <video src="videos/tripo/tripo.mp4" controls autoplay muted loop playsinline style="width: 100%; height: 200px; object-fit: cover;">
+                            您的浏览器不支持视频播放
+                        </video>
+                        <div style="padding: 1rem;">
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Tripo · 同图生成</h4>
+                            <p style="font-size: 0.9rem; color: var(--text);">上限约 1985 万三角面</p>
+                        </div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <video src="videos/tripo/tripo2.mp4" controls autoplay muted loop playsinline style="width: 100%; height: 200px; object-fit: cover;">
+                            您的浏览器不支持视频播放
+                        </video>
+                        <div style="padding: 1rem;">
+                            <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Tripo · 小鸡单图</h4>
+                            <p style="font-size: 0.9rem; color: var(--text);">面数同样在 2000 万左右</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); max-width: 600px; margin: 1.5rem auto;">
+                    <img src="image/meshy/meshy1.png" alt="Meshy 4408三角面小鸡蛋壳底部布线" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                    <div style="padding: 1rem; text-align: center;">
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Meshy · 4408 三角面小鸡</h4>
+                        <p style="font-size: 0.9rem; color: var(--text);">蛋壳底部布线和面正确</p>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>额外发现：</strong>不过这只小鸡的蛋壳还是有问题——不管是混元、Meshy 还是 Tripo，都没办法理解蛋壳是圆的，三家平台在这一点上的表现都不行。不过需要补充一点：上面测试6第四次那只 4408 三角面的小鸡，Meshy 的蛋壳底部布线和面确实是对的，这一点还是要客观说。
+                </div>
             </div>
 
             <div class="blog-section">
