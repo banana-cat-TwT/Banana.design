@@ -385,6 +385,61 @@
                 <div class="highlight-box">
                     <strong>额外发现：</strong>不过这只小鸡的蛋壳还是有问题——不管是混元、Meshy 还是 Tripo，都没办法理解蛋壳是圆的，三家平台在这一点上的表现都不行。不过需要补充一点：上面测试6第四次那只 4408 三角面的小鸡，Meshy 的蛋壳底部布线和面确实是对的，这一点还是要客观说。
                 </div>
+
+                <h4>测试8：控制变量公平对比（同 50 万面数上限）</h4>
+                <p>在想高模生成的上限面数是否会影响到 AI 生成模型的最终质量，所以为了公平起见，把 Tripo 的上限面数也设置成 50 万三角面，跟 Meshy 持平再对比一次。</p>
+                <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); max-width: 600px; margin: 1.5rem auto;">
+                    <video src="videos/tripo/tripo3.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto;">
+                        您的浏览器不支持视频播放
+                    </video>
+                    <div style="padding: 1rem; text-align: center;">
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Tripo · 50 万面数上限测试</h4>
+                        <p style="font-size: 0.9rem; color: var(--text);">设置为 50 万，实际一直往 49 万降</p>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>对比结论：</strong>我服了——Tripo 设置成 50 万结果一直往 49 万降。从 Tripo 三次的结果来看，老实说 Meshy 生成的脸会好看一点。在同等面数上限下，Meshy 在脸部表现上反而更占优。
+                </div>
+
+                <h4>测试9：同人物细节对比（Meshy vs Tripo）</h4>
+                <p>这是 Meshy 和 Tripo 生成相同人物的对比，重点观察对服装细节的理解差异。</p>
+                <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); max-width: 600px; margin: 1.5rem auto;">
+                    <video src="videos/Meshy/meshy6.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto;">
+                        您的浏览器不支持视频播放
+                    </video>
+                    <div style="padding: 1rem; text-align: center;">
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Meshy vs Tripo · 同人物对比</h4>
+                        <p style="font-size: 0.9rem; color: var(--text);">腰带、下摆包边、图案细节对比</p>
+                    </div>
+                </div>
+
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <h4>腰带形状</h4>
+                        <p>虽然 Meshy 相对模糊，但对腰带形状的理解是对的；Trio 这方面表现略逊。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>下摆包边</h4>
+                        <p>Meshy 的下摆包边是完整的；Trio 生成了三次还是少一段包边。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>下摆图案</h4>
+                        <p>Meshy 对下摆图案的理解只是一个圆环；Trio 把周围的小花纹也生成出来了，细节更丰富。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>鞋底</h4>
+                        <p>两者鞋底都是平整的，目前 AI 没怎么再犯鞋底多一块少一块的逻辑问题了。</p>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>关于金属装饰的建议：</strong>不太鼓励在整体造型阶段直接生成金属装饰，目前的处理方式还是层层拆分生成、再人工调整会规整一点。直接在整体阶段生成金属件，AI 的可控性还不够，容易出错。
+                </div>
+
+                <div class="highlight-box">
+                    <strong>整体评价：</strong>目前的生成结果，拿去打印出来涂装挺不错的，作为手办原型应该够用，剩下的靠后期上色补回来就行。
+                </div>
             </div>
 
             <div class="blog-section">
