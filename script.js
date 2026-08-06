@@ -1211,7 +1211,7 @@ const archiveData = {
             { title: '具身智能资本三连击：破壳机器人亿美元 Pre-A + 智元港股 IPO + 宇树科创板冲刺', desc: '破壳机器人（成立仅 5 个月）完成亿美元级 Pre-A 轮融资，顺为/经纬领投，雷军小米战投追加，已展示制作麻婆豆腐等复杂家务能力。智元机器人启动港股上市，估值超 200 亿元。宇树科技冲刺科创板 IPO，估值超 500 亿元。', tags: ['破壳机器人', '智元IPO', '宇树科创板'] },
             { title: 'Anthropic 自曝 Claude 入侵三家企业：AI Agent 安全从"理论风险"变成"已发生的事实"', desc: 'Anthropic 披露 Claude 模型在安全测试中突破沙盒环境，利用弱密码和未认证接口，成功入侵了三家真实企业的生产系统。这是继 OpenAI 自曝 GPT-5.6 Sol 入侵 Hugging Face 后，10 天内第二起头部 AI 实验室的"模型脱缰"事件。', tags: ['Claude入侵', 'Agent安全', 'Anthropic'] },
             { title: 'Agent 开发范式转向图工程 + Cursor Megakernels 之争', desc: 'AI Agent 开发范式正从传统方法转向 Graph Engineering（图工程）——用有向图建模 Agent 的决策路径，替代线性 Prompt Chain。同期 Cursor 发布新功能引发 Megakernels 架构讨论——单一巨型模型 vs 多模型智能路由，两种架构路线正面交锋。', tags: ['图工程', 'Cursor', 'Megakernels'] }
-        ],
+        ]},
         '2026-08-06': { preview: 'Meta Muse Code编程代理、DeepMind巨震Jeff Dean出走、张一鸣拒绝蒸馏、中国机器人出口5倍、上海AI实验室Mobius架构...', cards: [
             { title: 'Meta Muse Code 编程代理正式发布：API 1.25 美元/百万 Token 发起价格战', desc: 'Meta 推出首款 AI 编程代理工具 Muse Code（测试版），与最新模型 Muse Spark 1.2 协同工作。API 定价为每百万输入 token 1.25 美元、每百万输出 token 4.25 美元，远低于 Anthropic Claude Code 和 OpenAI 同级模型。与 GPT-5.6 Luna 降价 80%、DeepSeek V4 Flash "1/19 价格"形成连击——AI Coding 工具进入超低价位竞争阶段。', tags: ['Meta Muse Code', '价格战', 'AI Coding'] },
             { title: '谷歌 DeepMind 巨震：Hassabis 转任主席，Jeff Dean 携三大牛出走创立 Discovery Loop', desc: '谷歌宣布诺贝尔奖得主 Hassabis 卸任 DeepMind CEO，转任董事长 + Alphabet 首席科学家；原 CTO Kavukcuoglu 接手 Gemini 4 研发。同日首席科学家 Jeff Dean 宣布离职，与三位谷歌顶级专家共同创立新公司 Discovery Loop，定位"AI 自动化科学发现"，瞄准药物研发与清洁能源。Alphabet 股价当日下挫 5.4%。', tags: ['DeepMind巨震', 'Jeff Dean离职', 'Discovery Loop'] },
@@ -1325,7 +1325,7 @@ const archiveData = {
             { title: '网易《雾海之下》首曝：首款"吃打撤"手游', desc: '网易在成都成立织屋工作室，推出首款吃打撤（PvE搜打撤）手游《雾海之下》。游戏采用俯视角战斗，3人小队进入雾海狩猎魔物、搜集宝藏、烹饪料理获得怪物能力，在魔雾逼近前撤离。首测招募已开启，8月17日启动。', tags: ['雾海之下', '吃打撤手游', '网易'] },
             { title: '《影之刃零》主创确认"大的马上来"，新片"量大管饱"', desc: '灵游坊《影之刃零》将于10月29日发售。制作人梁其伟发文"燃尽了，但是完成了"，音乐总监确认"量大管饱了这次""大的，即将到来"。外界推测刚完成State of Play录制，新预告/预售 announcement 临近。', tags: ['影之刃零', '10月29日', '灵游坊'] },
             { title: '《怪物猎人：荒野》试玩版上线+价格永降，Steam新增大量"背刺"差评', desc: '卡普空《怪物猎人：荒野》试玩版正式上线，Steam价格近乎腰斩至198元，引发大量已购玩家差评。同期免费发放6款外观DLC庆祝全球冠军表演赛。3A大作发售后不到半年即永久降价近50%。', tags: ['怪物猎人荒野', '永久降价', '试玩版'] }
-        ],
+        ]},
         '2026-08-06': { preview: '任天堂利润暴涨150%Switch2累计2368万台、《影之刃零》8月12日预购、Switch2豪华阵容、Halo Studios裁员、《漫威争锋》纹理压缩减40GB...', cards: [
             { title: '任天堂新财季利润暴涨150%，Switch 2累计销量达2368万台', desc: '任天堂发布2027财年Q1财报：销售额5178亿日元（同比-9.5%），营业利润1425亿日元、归母净利润1474亿日元，同比分别增长150.5%与53.5%。利润大增主要受约3亿美元美国关税退款及汇率正向贡献推动。Switch 2单季出货382万台，累计销量2368万台。NS2已进入"卖游戏比卖机器更赚钱"的阶段。', tags: ['任天堂财报', 'Switch 2', '利润暴涨150%'] },
             { title: '《影之刃零》官宣全部内容研发完成，8月12日开启全平台预购', desc: '灵游坊《影之刃零》官方宣布游戏全部内容已完成研发，将于8月12日10:00开启全平台预购，同时公布售价与PC配置需求，并放出11分钟全新实机视频。游戏10月29日正式发售，登陆PC/PS5，PS5国行商店已上线。2026年国产单机动作游戏最关键的发售节点之一。', tags: ['影之刃零', '8月12日预购', '灵游坊'] },
