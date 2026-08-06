@@ -29,14 +29,14 @@
             min-height: 297mm;
             margin: 0 auto;
             background: #fffaf7;
-            padding: 8mm 10mm;
+            padding: 5mm 10mm;
             box-shadow: 0 0 30px rgba(0,0,0,0.1);
         }
 
         .header {
-            padding-bottom: 5px;
+            padding-bottom: 3px;
             border-bottom: 1.5px solid #f0d8c8;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
         }
 
         .header-title {
@@ -44,7 +44,7 @@
             font-size: 18px;
             font-weight: bold;
             color: #c97b5f;
-            margin-bottom: 5px;
+            margin-bottom: 3px;
             letter-spacing: 4px;
         }
 
@@ -66,20 +66,20 @@
 
         .header-contact-row {
             display: flex;
-            gap: 12px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
         .section {
-            margin-bottom: 4px;
+            margin-bottom: 3px;
         }
 
         .section-title {
             font-size: 12px;
             font-weight: bold;
             color: #c97b5f;
-            margin-bottom: 3px;
-            padding-bottom: 2px;
+            margin-bottom: 2px;
+            padding-bottom: 1px;
             border-bottom: 1.5px solid #f0d8c8;
             letter-spacing: 1px;
             display: flex;
@@ -96,7 +96,7 @@
         }
 
         .experience-item {
-            margin-bottom: 2px;
+            margin-bottom: 1px;
             position: relative;
             padding-left: 8px;
             border-left: 1.5px solid #f0d8c8;
@@ -106,7 +106,7 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: 1px;
+            margin-bottom: 0;
         }
 
         .experience-company {
@@ -131,7 +131,7 @@
         .experience-desc {
             font-size: 10px;
             color: #555;
-            line-height: 1.4;
+            line-height: 1.3;
         }
 
         .experience-desc ul {
@@ -177,13 +177,13 @@
         .hobby-list {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
+            gap: 6px;
         }
 
         .hobby-item {
             flex: 1;
             min-width: 130px;
-            padding: 6px 10px;
+            padding: 4px 8px;
             background: #fff;
             border-radius: 8px;
             border: 1px solid #f0d5c2;
@@ -193,13 +193,13 @@
             font-weight: 600;
             color: #c97b5f;
             font-size: 11px;
-            margin-bottom: 1px;
+            margin-bottom: 0;
         }
 
         .hobby-desc {
             font-size: 9px;
             color: #666;
-            line-height: 1.35;
+            line-height: 1.3;
         }
 
         @media print {
@@ -236,7 +236,7 @@
                             <span>📱 电话：19859256157</span>
                         </div>
                     </div>
-                    <div class="header-education" style="margin-top: 3px; padding-top: 3px; border-top: 1px solid #f0d8c8;">
+                    <div class="header-education" style="margin-top: 2px; padding-top: 2px; border-top: 1px solid #f0d8c8;">
                         <div class="experience-header">
                             <div class="experience-company">中国美术学院 · 动画与游戏学院</div>
                             <div class="experience-date">2022.09.01 - 2026.06.25</div>
@@ -318,14 +318,14 @@
 
             <div class="experience-item">
                 <div class="experience-header">
-                    <div class="experience-company">自动化资产质检（3ds Max + Python + AI）</div>
+                    <div class="experience-company">自动化资产质检</div>
                     <div class="experience-date">2026.03.27 - 2026.04</div>
                 </div>
                 <div class="experience-position">独立开发</div>
                 <div class="experience-desc">
                     <ul>
-                        <li>项目组采用多环节生产流程，初加工环节耗时较长且团队已有繁重任务量，多环节流程进一步增加了工作负担；针对多环节生产流程的效率痛点，接到资产需求后，制定统一美术规范辅助AI识别2D三视图以及3D模型的特征，输出CSV汇总表导入生成平台，用 Tripo等平台进行AI 3D生成，快速产出制作标准件同步下发供应商，实现AI精准建模与批量生成PBR全流程基础模型，有效减少初加工环节的个人精力投入，同时保持生产流程的准确性与效率。</li>
-                        <li>自主开发3ds Max Python脚本，批量统计模型顶点量、三角面、四边面数值，并检测模型破面情况，快速标记面数超标或存在破面问题的资产，搭建「脚本初筛+人工精细优化」流水线，项目后续延伸到批量导入导出与自动化命名等插件开发，推动从资产质检向全流程工具化演进。</li>
+                        <li>针对多环节生产流程效率痛点，制定统一美术规范辅助AI识别2D三视图与3D模型特征，输出汇总表导入Tripo等平台批量生成PBR基础模型，快速产出标准件同步下发供应商，有效减少初加工环节的个人精力投入。</li>
+                        <li>AI辅助开发3ds Max Python脚本，批量统计模型顶点量、三角面、四边面数值，并检测模型破面情况，快速标记面数超标或存在破面问题的资产，项目后续延伸到批量导入导出与自动化命名等插件开发，推动从资产质检向全流程工具化演进。</li>
                     </ul>
                 </div>
             </div>
@@ -402,7 +402,25 @@
                     <div class="experience-date">2025 - 2026</div>
                 </div>
                 <div class="experience-position">独立开发</div>
-                <div class="experience-desc">用AI辅助开发个人网站与交互桌宠系统（HTML/CSS/JS，含天气/IP定位/开场动画/资产库等）、轻量心理恐怖小程序等等，以及跨端素材管理工具板：因现有同类工具操作不便且曾任职公司限制员工安装软件而自主开发，面向设计师/开发者的手机与电脑双端互通白板，支持图片/视频/代码素材添加、复制粘贴与保存下载，可设置常驻屏幕置顶。</div>
+                <div class="experience-desc">
+                    <ul>
+                        <li>用AI辅助开发个人网站与交互桌宠系统、跨端素材管理白板（手机/电脑双端互通，支持图片/视频/代码素材添加与保存下载），解决曾任职公司限制安装软件的痛点。</li>
+                        <li>自学 Blender Python 自动化开发，针对实际工作流中高频痛点实践了多款效率工具，包括 Substance Painter 与 Unreal Engine 资产同步桥接工具、3D 软件弹窗屏蔽器、多功能批处理自动化等，显著降低重复性操作的时间成本。</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-title">游戏经历</div>
+            <div class="experience-item">
+                <div class="experience-header">
+                    <div class="experience-company">资深玩家 · 近20年游戏经验</div>
+                    <div class="experience-date">2007 - 至今</div>
+                </div>
+                <div class="experience-desc">
+                    涉猎面广， <strong>动作、射击、角色扮演、策略、模拟、卡牌、休闲、MOBA、体育、女性向、互动叙事、竞速、非对称对抗</strong> 等全品类，覆盖 PC / 主机 / 移动端多平台；丰富的游戏阅历为游戏开发提供了大量玩家视角与设计灵感，每年有空会参与 48 小时极限开发等 Game Jam 活动。
+                </div>
             </div>
         </div>
 
@@ -411,19 +429,19 @@
             <div class="hobby-list">
                 <div class="hobby-item">
                     <div class="hobby-name">🎮 游戏开发</div>
-                    <div class="hobby-desc">利用课余时间开发小型游戏，学习游戏引擎和游戏设计原理</div>
+                    <div class="hobby-desc">利用课余时间开发小型游戏，学习游戏引擎与设计原理</div>
                 </div>
                 <div class="hobby-item">
-                    <div class="hobby-name">🎬 看剧看电影打游戏</div>
-                    <div class="hobby-desc">通过游戏、影视作品感受不同的故事和世界观，为创作积累灵感</div>
-                </div>
-                <div class="hobby-item">
-                    <div class="hobby-name">🌍 旅游</div>
-                    <div class="hobby-desc">喜欢探索不同的地方，体验当地文化和风景，为创作寻找灵感</div>
+                    <div class="hobby-name">🎬 影视与旅行</div>
+                    <div class="hobby-desc">通过游戏、影视作品感受不同世界观，探索不同地方体验当地文化，为创作积累灵感</div>
                 </div>
                 <div class="hobby-item">
                     <div class="hobby-name">🤖 研究前沿科技</div>
-                    <div class="hobby-desc">关注AI、提效工具、游戏引擎等前沿技术发展，不断学习和探索新技术在创作中的应用</div>
+                    <div class="hobby-desc">关注AI、提效工具、游戏引擎等前沿技术发展，探索新技术在创作中的应用</div>
+                </div>
+                <div class="hobby-item">
+                    <div class="hobby-name">🎨 任何形式的创作</div>
+                    <div class="hobby-desc">3D角色制作是让我沉浸心流的方式，无论是纯艺、雕刻还是手工创作，都能让我静下心来全情投入；遇到感兴趣的主题，可连续数天甚至数月深耕同一作品</div>
                 </div>
             </div>
         </div>
