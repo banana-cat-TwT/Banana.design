@@ -1,0 +1,16 @@
+# 原始图片备份(压缩版在image/,防止原始大图重新进仓库)
+image_original/
+
+# IDE/工具缓存
+.workbuddy/
+__pycache__/
+*.pyc
+
+# 临时文件(压缩产物等)
+*.tmp
+*.tmp.*
+*.test.*
+
+# 系统文件
+.DS_Store
+Thumbs.db
