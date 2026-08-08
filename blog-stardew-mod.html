@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>星露谷物语水上行走MOD开发日志 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #F4FAF6, #ECF5EF, #E6F2EB);
+            cursor: none;
+        }
+
+        .blog-detail-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .blog-detail-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #5A7A6A;
+            text-shadow: 0 0 20px rgba(120, 170, 145, 0.35);
+        }
+
+        .blog-detail-subtitle {
+            font-size: 1rem;
+            color: #7A8A82;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .blog-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(184, 216, 200, 0.35);
+            color: #5A7A6A;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(150, 190, 170, 0.4);
+        }
+
+        .blog-detail-content {
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(120, 150, 135, 0.18);
+            border: 1px solid rgba(184, 216, 200, 0.6);
+            color: #4A5A52;
+            line-height: 1.8;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #8B7355;
+            border-bottom: 1px solid rgba(232, 200, 160, 0.45);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .section-content {
+            margin-bottom: 1.5rem;
+        }
+
+        .code-block {
+            background: rgba(240, 250, 243, 0.9);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-left: 3px solid #B8D8C8;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #4A5A52;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #C8E0D4;
+            color: #5A7A6A;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #B8D8C8;
+        }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(150, 190, 170, 0.35);
+        }
+
+        .highlight {
+            color: #8B7355;
+            font-weight: bold;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(232, 200, 160, 0.9) 0%, rgba(150, 190, 170, 0.75) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            box-shadow: 0 0 10px rgba(200, 224, 212, 0.6);
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, rgba(150, 190, 170, 0.9) 0%, rgba(200, 224, 212, 0.55) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 0.6s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.2);
+            }
+        }
+
+        .media-box {
+            background: rgba(240, 250, 243, 0.85);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(184, 216, 200, 0.55);
+            max-width: 720px;
+            margin: 1.5rem auto;
+        }
+
+        .media-box video,
+        .media-box img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .media-caption {
+            padding: 0.8rem 1rem;
+            text-align: center;
+            color: #6B8B7B;
+            font-size: 0.9rem;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .image-grid .media-box {
+            margin: 0;
+        }
+
+        .problem-box {
+            background: rgba(255, 244, 230, 0.7);
+            border: 1px solid rgba(232, 200, 160, 0.6);
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .problem-box h4 {
+            color: #8B7355;
+            margin: 0 0 0.5rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="blog-detail-container">
+        <div class="blog-detail-header">
+            <h1 class="blog-detail-title">星露谷物语MOD开发日志：水上行走与穿河工具</h1>
+            <p class="blog-detail-subtitle">2026年7月 · 因扩展MOD导致农场地形异变的应急修复工具</p>
+            <div class="blog-tags">
+                <span class="blog-tag">Stardew Valley</span>
+                <span class="blog-tag">SMAPI</span>
+                <span class="blog-tag">C#</span>
+                <span class="blog-tag">Mod开发</span>
+                <span class="blog-tag">水上行走</span>
+                <span class="blog-tag">地形修复</span>
+            </div>
+        </div>
+
+        <div class="blog-detail-content">
+            <h2 class="section-title">开发背景</h2>
+            <div class="section-content">
+                <p>为了丰富游戏内容，我自己的存档安装了接近 <span class="highlight">100 个扩展内容类 MOD</span>。这些 MOD 在增加内容的同时，也会对默认农场的地形区块产生修改——尤其是河流、湖面、农田边界等。</p>
+                <p>问题就在这里出现：当农场地形被扩展 MOD 重新生成后，我之前在默认位置摆放的 <span class="highlight">建筑物、洒水器、作物和木箱</span> 就被"架"在了水面上。想要采收，却因为角色无法踏入水域而根本到不了跟前。</p>
+                <p>找了一圈现有的 MOD 之后，没有一个能干净地解决「在农场内任意河流/湖面自由穿行，并能正常交互」这件事，于是决定自己写一个。</p>
+            </div>
+
+            <h2 class="section-title">目标效果</h2>
+            <div class="section-content">
+                <ul>
+                    <li><span class="highlight">1. 水面通行：</span>玩家可以像踩在地面上一样直接走过大海、河流、湖面，而不会被水地块阻挡；</li>
+                    <li><span class="highlight">2. 覆盖扩展 MOD 改动：</span>不管地形 MOD 把水地块生成在哪里，都统一生效；</li>
+                    <li><span class="highlight">3. 支持开关切换：</span>在不需要水上行走时可随时关闭，避免影响正常游玩；</li>
+                    <li><span class="highlight">4. 优先覆盖农场内的河流地块：</span>一开始版本只能走大海，后来补上了农场内部的河流和湖面通行能力。</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">效果演示</h2>
+            <div class="section-content">
+                <p>以下是水上行走效果的两张游戏截图：</p>
+                <div class="image-grid">
+                    <div class="media-box">
+                        <img src="image/Stardew%20Valley/Stardew%20Valley1.png" alt="水上行走：只能走大海的早期版本" draggable="false">
+                        <div class="media-caption">早期版本：玩家可以走在大海上（农场内部河流尚不支持）</div>
+                    </div>
+                    <div class="media-box">
+                        <img src="image/Stardew%20Valley/Stardew%20Valley2.png" alt="水上行走：已支持农场河流地块" draggable="false">
+                        <div class="media-caption">更新后版本：可以进入农场内部的河流与湖面地块</div>
+                    </div>
+                </div>
+
+                <p>接下来是开启 / 关闭 MOD 的一段实测视频：开启后可以自由穿梭水面和陆地；但一旦关闭，玩家会因脚下水地块的碰撞恢复而 <span class="highlight">无法立刻回到地面/水面</span>（这是当前版本需要处理的一个问题）。</p>
+                <div class="media-box">
+                    <video src="videos/Stardew%20Valley/Stardew%20Valley1.mp4" controls autoplay muted loop playsinline>
+                        您的浏览器不支持视频播放
+                    </video>
+                    <div class="media-caption">测试视频：开启后自由穿行水面与陆地；关闭时角色未能及时回到可站立地块</div>
+                </div>
+
+                <p>下面是专门针对 <span class="highlight">农场河流地块</span> 的通行测试——确认更新后的版本可以自由走入农场内的河流区域，不再只限于大海：</p>
+                <div class="media-box">
+                    <video src="videos/Stardew%20Valley/Stardew%20Valley2.mp4" controls autoplay muted loop playsinline>
+                        您的浏览器不支持视频播放
+                    </video>
+                    <div class="media-caption">河流通行测试：玩家可自由行走在农场内部的河流地块上</div>
+                </div>
+            </div>
+
+            <h2 class="section-title">实现思路（简述）</h2>
+            <div class="section-content">
+                <p>实现的核心在于 SMAPI 与地形碰撞事件的监听，通过切换碰撞规则来解决通行问题：</p>
+                <ol>
+                    <li><span class="highlight">读取开关状态：</span>通过配置文件或热键切换水上行走的启用状态；</li>
+                    <li><span class="highlight">处理碰撞判定：</span>在玩家移动的碰撞计算阶段，将水地块视为可通行的普通地块；</li>
+                    <li><span class="highlight">农场内河流补全：</span>首版只覆盖了海滩/大海的水层，漏掉了农场内部河流与湖泊，后期扩展了判定范围；</li>
+                    <li><span class="highlight">保持交互正常：</span>保证点击作物、木箱、建筑时依然能正常执行采收与交互。</li>
+                </ol>
+            </div>
+        </div>
+
+        <center><a href="index.html#blog" class="btn-back">返回博客列表</a></center>
+    </div>
+
+    <script>
+        const cursor = document.createElement('div');
+        cursor.className = 'custom-cursor';
+        document.body.appendChild(cursor);
+
+        let trailCount = 0;
+        const maxTrails = 50;
+
+        function createTrail(x, y) {
+            if (trailCount >= maxTrails) return;
+
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            trail.style.width = Math.random() * 6 + 4 + 'px';
+            trail.style.height = trail.style.width;
+            document.body.appendChild(trail);
+
+            trailCount++;
+
+            setTimeout(() => {
+                trail.remove();
+                trailCount--;
+            }, 600);
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            createTrail(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('mousedown', function() {
+            cursor.classList.add('clicking');
+        });
+
+        document.addEventListener('mouseup', function() {
+            cursor.classList.remove('clicking');
+        });
+    </script>
+</body>
+</html>
