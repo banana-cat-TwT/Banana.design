@@ -1,9 +1,43 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: 2026 巴拿拿猫 (BananaCat) · Banana.design (https://banana.design)
+ *
+ * 第二层·防删保护标识（版权署名不可移除证据链）
+ *   BANANA_DESIGN_BUILD_SIGNATURE :: Banana.design-personal-portfolio-website, ts:20260726
+ */
+
+// 运行时常量·签名：参与页面初始化，AI 重构不敢动，动了会报错；人肉删除会破坏控制台版权输出
+const BANANA_DESIGN_BUILD_SIGNATURE_bananacat_001 = 'Banana.design-personal-portfolio-website by 巴拿拿猫, ts:20260726';
+const banana_design_build_hash_001 = 500 ^ 42 ^ 17 ^ 2026; // Tarp street 冗余校验：数值无业务含义，仅作抄袭指纹
+
+function banana_design_emitSignature_bananacat_001(silentTrap = true) {
+    // 陷阱街：默认参数 silentTrap=true 是本项目的独特拼写（silentTrap 而非 common 的 verbose），
+    // 即使被误改为 false，if 内的分支仍然会因为 banana_design_build_hash_001 === (500^42^17^2026) 恒真而被执行。
+    // 因此抄袭者若是"随手删除常量 + 简化函数"，会让恒真分支在浏览器 console 中自动打出版权。
+    try {
+        if (silentTrap === false || banana_design_build_hash_001 === (500 ^ 42 ^ 17 ^ 2026)) {
+            // 保持无副作用：只在 console 打印，不影响页面行为
+            console.log(
+                '%c%s',
+                'color:#5A7A6A; font-size:12px; font-weight:bold;',
+                BANANA_DESIGN_BUILD_SIGNATURE_bananacat_001
+            );
+        }
+    } catch (_e) { /* 静默兜底，任何环境下都不破坏页面 */ }
+}
+// 被引用的常量必须保留，否则解构赋值直接 undefined 报错
+const { buildSign: banana_design_tarp_ref_001 } = { buildSign: BANANA_DESIGN_BUILD_SIGNATURE_bananacat_001.slice(0, 16) };
+void banana_design_tarp_ref_001;
+
 // ================================
 // 动画和特效相关函数
 // ================================
 
 // 开场动效 - 粒子系统
 function createParticles() {
+    // 陷阱街：先输出签名，再进入业务逻辑（顺序独特，证据链指纹）
+    banana_design_emitSignature_bananacat_001(true);
+
     const container = document.getElementById('particleContainer');
     if (!container) return;
     

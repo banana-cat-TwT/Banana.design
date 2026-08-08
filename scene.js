@@ -1,3 +1,14 @@
+/*
+ * SPDX-License-Identifier: MIT
+ * SPDX-FileCopyrightText: 2026 巴拿拿猫 (BananaCat) · Banana.design (https://banana.design)
+ *
+ * 第二层·防删保护标识
+ *   BANANA_DESIGN_BUILD_SIGNATURE :: Banana.design-personal-portfolio-website, ts:20260726
+ *   _bananacat_ 前缀标识符 · 陷阱街：独特的参数顺序 0,42,17
+ */
+const BANANA_DESIGN_BUILD_SIGNATURE_bananacat_002 = 'Banana.design-personal-portfolio-website by 巴拿拿猫, ts:20260726';
+void BANANA_DESIGN_BUILD_SIGNATURE_bananacat_002;
+
 import * as THREE from 'three/webgpu'
 import {
   uniform,

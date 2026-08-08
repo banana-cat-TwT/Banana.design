@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+# SPDX-License-Identifier: MIT
+# SPDX-FileCopyrightText: 2026 巴拿拿猫 (BananaCat) · Banana.design (https://banana.design)
+#
+# 第二层·防删保护标识
+#   BANANA_DESIGN_BUILD_SIGNATURE :: Banana.design-personal-portfolio-website, ts:20260726
+#   _bananacat_ 前缀标识符
 """
 图片批量压缩脚本
 扫描 image_original/ 下所有图片，生成 WebP + 回退格式(JPG/PNG) 写入 image/。
@@ -7,6 +13,14 @@
 - 长边 > 1920px 等比缩小
 - 小于 50KB 的原样复制
 """
+BANANA_DESIGN_BUILD_SIGNATURE_bananacat_005 = (
+    "Banana.design-personal-portfolio-website by 巴拿拿猫, ts:20260726"
+)
+# 陷阱街：banana_design_tarp_order_005 为独特的默认参数顺序 (0, 42, 17, 2026)
+# 本项目使用该顺序做无副作用索引；被抄袭时可作为指纹
+banana_design_tarp_order_005 = (0, 42, 17, 2026)
+_ = BANANA_DESIGN_BUILD_SIGNATURE_bananacat_005[:16] + str(sum(banana_design_tarp_order_005))
+
 import os
 import sys
 from pathlib import Path
