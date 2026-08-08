@@ -728,6 +728,85 @@
             </div>
 
             <div class="blog-section">
+                <h3>部件拆分与绘制区域功能测试</h3>
+                <p>这一组测试重点考察 Tripo 的部件拆分能力，以及最新更新的「部件绘制区域」功能。测试对象包括一只单图生成的卡通小鸡和一条飘带。</p>
+
+                <h4>一、卡通小鸡拆分测试</h4>
+                <p>先说小鸡本身——这只小鸡是单图生成的，整体还可以，表面没有坑坑洼洼的杂质，也没有添油加醋式的过度生成。但部件拆分真的不行。</p>
+                <div style="background: rgba(70, 122, 181, 0.45); border-radius: 10px; overflow: hidden; border: 1px solid rgba(56, 86, 120, 0.3); max-width: 700px; margin: 1.5rem auto;">
+                    <video src="videos/tripo/Tripo6.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto;">
+                        您的浏览器不支持视频播放
+                    </video>
+                    <div style="padding: 1rem; text-align: center;">
+                        <h4 style="color: #92bfd4; margin-bottom: 0.5rem;">Tripo · 卡通小鸡拆分测试</h4>
+                        <p style="font-size: 0.9rem; color: #7ee8fa;">小鸡本身生成质量尚可，但部件拆分表现不佳</p>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <strong>关于拆分的整体判断：</strong>其实我之前也有试过 Tripo 的部件拆分，正如之前我跟产品负责人交流的那样，我依然认为 Tripo 的部件拆分功能有待提升。虽然这只小鸡没有之前拆得那么乱七八糟，但大部分东西都会拆得跟下面这条飘带一样五马分尸。
+                </div>
+
+                <h4>二、飘带拆分测试（两次对比）</h4>
+                <p>下面是对同一条飘带做的两次拆分测试，一次精细拆分、一次粗略拆分，两次都没拆对。不过测试过程中发现 Tripo 居然更新了部件绘制区域的功能。</p>
+                <div style="background: rgba(70, 122, 181, 0.45); border-radius: 10px; overflow: hidden; border: 1px solid rgba(56, 86, 120, 0.3); max-width: 700px; margin: 1.5rem auto;">
+                    <video src="videos/tripo/Tripo7.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto;">
+                        您的浏览器不支持视频播放
+                    </video>
+                    <div style="padding: 1rem; text-align: center;">
+                        <h4 style="color: #92bfd4; margin-bottom: 0.5rem;">Tripo · 飘带精细拆分测试</h4>
+                        <p style="font-size: 0.9rem; color: #7ee8fa;">很糟糕，部件被拆得五马分尸</p>
+                    </div>
+                </div>
+                <div style="background: rgba(70, 122, 181, 0.45); border-radius: 10px; overflow: hidden; border: 1px solid rgba(56, 86, 120, 0.3); max-width: 700px; margin: 1.5rem auto;">
+                    <video src="videos/tripo/Tripo9.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto;">
+                        您的浏览器不支持视频播放
+                    </video>
+                    <div style="padding: 1rem; text-align: center;">
+                        <h4 style="color: #92bfd4; margin-bottom: 0.5rem;">Tripo · 飘带第二次粗略拆分测试</h4>
+                        <p style="font-size: 0.9rem; color: #7ee8fa;">换粗略模式重拆一次，依然没有拆对</p>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <strong>两次拆分的结果：</strong>精细拆分很糟糕，如果不信的话我还可以重新再拆一次；第二次换成粗略拆分，还是没有拆对。不过有个意外收获——发现 Tripo 居然更新了部件绘制区域的功能，接下来专门试了一下这个新功能。
+                </div>
+
+                <h4>三、人物多部件拆分测试</h4>
+                <p>再看一个人物多部件拆分的测试，用的是精细模式，但拆出来的效果并不理想。</p>
+                <div style="background: rgba(70, 122, 181, 0.45); border-radius: 10px; overflow: hidden; border: 1px solid rgba(56, 86, 120, 0.3); max-width: 700px; margin: 1.5rem auto;">
+                    <video src="videos/tripo/Tripo11.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto;">
+                        您的浏览器不支持视频播放
+                    </video>
+                    <div style="padding: 1rem; text-align: center;">
+                        <h4 style="color: #92bfd4; margin-bottom: 0.5rem;">Tripo · 人物多部件拆分测试（精细模式）</h4>
+                        <p style="font-size: 0.9rem; color: #7ee8fa;">连阴影部分都拆，裤衩也被拆得四分五裂</p>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <strong>拆分结果：</strong>精细模式下连阴影部分都被单独拆出来，完全不该拆的地方也拆了；裤衩更是被拆得四分五裂，根本没法直接使用。说明 Tripo 在人物类多部件拆分上，对「什么该拆、什么不该拆」的判断还不够准。
+                </div>
+
+                <h4>四、部件绘制区域功能试用</h4>
+                <p>接下来是试用 Tripo 新更新的部件绘制区域功能的测试视频，问题有点多：</p>
+                <div style="background: rgba(70, 122, 181, 0.45); border-radius: 10px; overflow: hidden; border: 1px solid rgba(56, 86, 120, 0.3); max-width: 700px; margin: 1.5rem auto;">
+                    <video src="videos/tripo/Tripo10.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto;">
+                        您的浏览器不支持视频播放
+                    </video>
+                    <div style="padding: 1rem; text-align: center;">
+                        <h4 style="color: #92bfd4; margin-bottom: 0.5rem;">Tripo · 部件绘制区域功能试用</h4>
+                        <p style="font-size: 0.9rem; color: #7ee8fa;">新功能试用，笔刷影响范围与炸开拆分均存在问题</p>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <strong>问题1：笔刷影响范围过大</strong><br>
+                    笔刷大小设置为 30 左右时，绘制背面会影响到正面的颜色区域；但缩小到个位数就不容易影响。说明笔刷的作用范围在正反面之间没有做有效的隔离。
+                </div>
+                <div class="highlight-box">
+                    <strong>问题2：炸开拆分与绘制区域不联动</strong><br>
+                    炸开拆分的部件时，绘制上去的新区域没办法随着指定颜色区域一起炸开，导致绘制结果和拆分结果对不上。
+                </div>
+            </div>
+
+            <div class="blog-section">
                 <h3>技术优势与局限性</h3>
                 <h4>优势</h4>
                 <ul>
@@ -761,7 +840,7 @@
 
             <div class="blog-section">
                 <h3>总结与展望</h3>
-                <p>Tripo3D作为AI辅助3D模型生成工具，在某些应用场景下展现出了一定的价值。然而在人物模型生成方面仍存在明显的局限性，生成的模型质量不稳定，结构问题突出。期待未来版本能在细节还原和结构准确性方面有所改进。</p>
+                <p>Tripo3D作为AI辅助3D模型生成工具，在某些应用场景下展现出了一定的价值。然而在拆分和拓扑方面仍存在明显的局限性，生成的模型质量不稳定，结构问题突出。期待未来版本能在细节还原和结构准确性方面有所改进。</p>
             </div>
 
             <div style="text-align: center;">
