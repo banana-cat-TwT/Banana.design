@@ -2876,8 +2876,8 @@ function switchCircuitCard(type) {
 // CONFIG
 const CONFIG = {
     geoApiUrl: '', // 留空使用默认 ipapi.co
-    siteName: '独行者作品站',
-    watermarkText: '独行者作品站',
+    siteName: 'BananaCat Portfolio',
+    watermarkText: 'BananaCat Portfolio',
     watermarkInterval: 30000 // 水印刷新间隔（毫秒）
 };
 
