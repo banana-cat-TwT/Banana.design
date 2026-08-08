@@ -156,6 +156,7 @@
 
         .video-showcase {
             display: grid;
+            align-items: start;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 1.5rem;
             margin-top: 1.5rem;
@@ -330,23 +331,17 @@
                 
                 <h4>灵鹿生成结果展示</h4>
                 <p>以下是灵鹿角色的生成图片和UV展开图：</p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+                <div style="display: grid; align-items: start; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
                     <div style="background: rgba(0, 120, 212, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(0, 212, 170, 0.3);">
-                        <div style="width: 100%; height: 250px; overflow: hidden; border-radius: 8px; margin-bottom: 0.5rem;">
-                            <img src="image/lu2.png" alt="灵鹿生成图片1" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
+                        <img src="image/lu2.png" alt="灵鹿生成图片1" style="width: 100%; height: auto; border-radius: 8px; display: block; margin-bottom: 0.5rem;">
                         <p style="text-align: center; color: var(--secondary); font-size: 0.9rem;">灵鹿生成结果 - 视角1</p>
                     </div>
                     <div style="background: rgba(0, 120, 212, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(0, 212, 170, 0.3);">
-                        <div style="width: 100%; height: 250px; overflow: hidden; border-radius: 8px; margin-bottom: 0.5rem;">
-                            <img src="image/lu3.png" alt="灵鹿生成图片2" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
+                        <img src="image/lu3.png" alt="灵鹿生成图片2" style="width: 100%; height: auto; border-radius: 8px; display: block; margin-bottom: 0.5rem;">
                         <p style="text-align: center; color: var(--secondary); font-size: 0.9rem;">灵鹿生成结果 - 视角2</p>
                     </div>
                     <div style="background: rgba(0, 120, 212, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(255, 99, 71, 0.3);">
-                        <div style="width: 100%; height: 250px; overflow: hidden; border-radius: 8px; margin-bottom: 0.5rem;">
-                            <img src="image/uv1.png" alt="灵鹿UV展开图" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
+                        <img src="image/uv1.png" alt="灵鹿UV展开图" style="width: 100%; height: auto; border-radius: 8px; display: block; margin-bottom: 0.5rem;">
                         <p style="text-align: center; color: #ff6347; font-size: 0.9rem;">UV展开图 - AI生成效果</p>
                     </div>
                 </div>
@@ -371,30 +366,24 @@
 
                 <h4>二、风格化角色模块：女骑士（卡通风格角色）</h4>
                 <p>针对风格化卡通角色进行了专项测试，探索Tripo3D在生成非写实风格角色方面的能力。通过调整提示词，生成了具有鲜明卡通风格的女性骑士角色模型。</p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+                <div style="display: grid; align-items: start; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
                     <div style="background: rgba(0, 120, 212, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(0, 212, 170, 0.3);">
-                        <div style="width: 100%; height: 300px; overflow: hidden; border-radius: 8px; margin-bottom: 0.5rem;">
-                            <img src="image/nvqishi1.png" alt="风格化卡通角色模型1" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
+                        <img src="image/nvqishi1.png" alt="风格化卡通角色模型1" style="width: 100%; height: auto; border-radius: 8px; display: block; margin-bottom: 0.5rem;">
                         <p style="text-align: center; color: var(--secondary); font-size: 0.9rem;">风格化骑士 - 正面视图</p>
                     </div>
                     <div style="background: rgba(0, 120, 212, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(0, 212, 170, 0.3);">
-                        <div style="width: 100%; height: 300px; overflow: hidden; border-radius: 8px; margin-bottom: 0.5rem;">
-                            <img src="image/nvqishi2.png" alt="风格化卡通角色模型2" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
+                        <img src="image/nvqishi2.png" alt="风格化卡通角色模型2" style="width: 100%; height: auto; border-radius: 8px; display: block; margin-bottom: 0.5rem;">
                         <p style="text-align: center; color: var(--secondary); font-size: 0.9rem;">风格化骑士 - 侧面视图</p>
                     </div>
                     <div style="background: rgba(0, 120, 212, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(0, 212, 170, 0.3);">
-                        <div style="width: 100%; height: 300px; overflow: hidden; border-radius: 8px; margin-bottom: 0.5rem;">
-                            <img src="image/nvqishi5.png" alt="风格化卡通角色模型T-Pose" style="width: 100%; height: 100%; object-fit: cover;">
-                        </div>
+                        <img src="image/nvqishi5.png" alt="风格化卡通角色模型T-Pose" style="width: 100%; height: auto; border-radius: 8px; display: block; margin-bottom: 0.5rem;">
                         <p style="text-align: center; color: var(--secondary); font-size: 0.9rem;">风格化骑士 - T-Pose版本</p>
                     </div>
                 </div>
                 
                 <h4>生成过程中出现的问题</h4>
                 <p>在生成女骑士模型过程中，也遇到了一些生成问题，如下所示：</p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+                <div style="display: grid; align-items: start; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
                     <div style="background: rgba(71, 184, 255, 0.2); border-radius: 10px; padding: 1rem; border: 1px solid rgba(255, 99, 71, 0.3);">
                         <img src="image/nvqishi3.png" alt="生成问题截图1" style="width: 100%; border-radius: 8px; margin-bottom: 0.5rem;">
                         <p style="text-align: center; color: #ff6347; font-size: 0.9rem;">生成问题 - 模型结构异常</p>
@@ -526,7 +515,7 @@
             <div class="blog-section">
                 <h3>Blender DCC 连接 Tripo 流程</h3>
                 <p>Tripo3D 提供了 Blender DCC 插件，可以直接在 Blender 中连接 Tripo 平台，省去网页端上传下载的繁琐步骤，实现从生成到编辑的无缝衔接：</p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+                <div style="display: grid; align-items: start; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
                     <div style="background: rgba(113, 189, 210, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(113, 189, 210, 0.2);">
                         <img src="image/tripo/Blender_DCC1.png" alt="Blender DCC连接步骤1" style="width: 100%; border-radius: 8px;">
                         <p style="text-align: center; color: #92bfd4; margin-top: 0.5rem; font-size: 0.9rem;">步骤一：安装并启动 DCC 插件</p>
@@ -550,7 +539,7 @@
                 <p>最近使用Tripo3D生成了一把步枪模型，设置面数为6000面（已经非常宽裕），但生成的低模拓扑存在严重问题，以下是详细分析：</p>
 
                 <h4>问题截图展示</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+                <div style="display: grid; align-items: start; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
                     <div style="background: rgba(71, 184, 255, 0.2); border-radius: 10px; padding: 1rem; border: 1px solid rgba(255, 99, 71, 0.3);">
                         <img src="image/tripo/屏幕截图 2026-07-16 205347.png" alt="低模问题1" style="width: 100%; border-radius: 8px;">
                         <p style="text-align: center; color: #ff6347; font-size: 0.9rem; margin-top: 0.5rem;">①</p>
@@ -624,7 +613,7 @@
 
                 <h4>金属头饰拓扑测试（新案例）</h4>
                 <p>针对Tripo3D的低模拓扑能力，进行了新一轮金属头饰模型的测试：</p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
+                <div style="display: grid; align-items: start; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; margin-top: 1.5rem;">
                     <div style="background: rgba(113, 189, 210, 0.1); border-radius: 10px; overflow: hidden; border: 1px solid rgba(113, 189, 210, 0.2);">
                         <video src="videos/tripo/tripo拓扑3.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto; object-fit: contain;">
                             您的浏览器不支持视频播放
@@ -642,7 +631,7 @@
                 </div>
 
                 <h4>问题截图展示</h4>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
+                <div style="display: grid; align-items: start; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.5rem;">
                     <div style="background: rgba(113, 189, 210, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(113, 189, 210, 0.2);">
                         <img src="image/tripo/影心头饰5000面拓扑/屏幕截图 2026-07-17 124710.png" alt="头饰拓扑截图1" style="width: 100%; border-radius: 8px;">
                         <p style="text-align: center; color: #92bfd4; margin-top: 0.5rem; font-size: 0.9rem;">①</p>
@@ -650,13 +639,8 @@
                     <div style="background: rgba(113, 189, 210, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(113, 189, 210, 0.2);">
                         <img src="image/tripo/影心头饰5000面拓扑/屏幕截图 2026-07-17 124715.png" alt="头饰拓扑截图2" style="width: 100%; border-radius: 8px;">
                         <p style="text-align: center; color: #92bfd4; margin-top: 0.5rem; font-size: 0.9rem;">②</p>
-                    </div>
                     <div style="background: rgba(113, 189, 210, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(113, 189, 210, 0.2);">
-                        <img src="image/tripo/影心头饰5000面拓扑/屏幕截图 2026-07-17 124721.png" alt="头饰拓扑截图3" style="width: 100%; border-radius: 8px;">
-                        <p style="text-align: center; color: #92bfd4; margin-top: 0.5rem; font-size: 0.9rem;">③</p>
-                    </div>
-                    <div style="background: rgba(113, 189, 210, 0.1); border-radius: 10px; padding: 1rem; border: 1px solid rgba(113, 189, 210, 0.2);">
-                        <img src="image/tripo/影心头饰5000面拓扑/屏幕截图 2026-07-17 124739.png" alt="头饰拓扑截图4" style="width: 100%; border-radius: 8px;">
+                        <img src="image/tripo/影心头饰5000面拓扑/屏幕截图 2026-07-17 124739.png" alt="头饰拓扑截图3" style="width: 100%; border-radius: 8px;">
                         <p style="text-align: center; color: #92bfd4; margin-top: 0.5rem; font-size: 0.9rem;">④</p>
                     </div>
                 </div>
