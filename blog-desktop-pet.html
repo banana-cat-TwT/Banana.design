@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>个人网站桌宠系统开发日志 - 巴拿拿猫的小窝</title>
+    <title>个人网站与电脑桌面桌宠系统制作日志 - 巴拿拿猫的小窝</title>
     <style>
         /* 全局样式 */
         * {
@@ -18,6 +18,51 @@
             color: #5B2A35;
             background: linear-gradient(135deg, #FFE4E6 0%, #FFB6C1 50%, #FFC0CB 100%);
             min-height: 100vh;
+            cursor: none;
+        }
+        
+        * { cursor: none !important; }
+        
+        /* 糖果粉自定义光标 */
+        .custom-cursor {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 18px;
+            height: 18px;
+            background: radial-gradient(circle at 30% 30%, #FFC0CB 0%, #FF85C0 55%, #FF69B4 100%);
+            border: 2px solid #fff;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99999;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 10px rgba(255, 105, 180, 0.6), 0 0 24px rgba(255, 182, 193, 0.45);
+            transition: width 0.15s ease, height 0.15s ease, box-shadow 0.15s ease;
+        }
+        
+        .custom-cursor.hover {
+            width: 30px;
+            height: 30px;
+            box-shadow: 0 0 14px rgba(255, 105, 180, 0.8), 0 0 34px rgba(255, 182, 193, 0.6);
+        }
+        
+        /* 糖果粉光标拖尾 */
+        .cursor-trail {
+            position: fixed;
+            width: 12px;
+            height: 12px;
+            background: radial-gradient(circle at 40% 40%, #FF9FCB 0%, #FF6FAE 55%, #F14894 100%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 99998;
+            transform: translate(-50%, -50%);
+            animation: trailFadeCandy 650ms ease-out forwards;
+            box-shadow: 0 0 6px rgba(255, 105, 180, 0.55);
+        }
+        
+        @keyframes trailFadeCandy {
+            0% { opacity: 0.75; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.15); }
         }
         
         /* 导航栏 */
@@ -195,6 +240,17 @@
                 display: none;
             }
         }
+        
+        /* 视频嵌入 */
+        .blog-content video.demo-video {
+            width: 50%;
+            height: auto;
+            display: block;
+            margin: 1rem auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 14px rgba(255, 105, 180, 0.25);
+            background: #000;
+        }
     </style>
 </head>
 <body>
@@ -219,10 +275,9 @@
     
     <main class="container blog-detail">
         <div class="blog-header">
-            <h1 class="blog-title">个人网站桌宠系统开发日志</h1>
+            <h1 class="blog-title">个人网站与电脑桌面桌宠系统制作日志</h1>
             <div class="blog-meta">
                 <span>发布日期：2026年4月19日</span> | 
-                <span>阅读次数：0</span>
             </div>
         </div>
         
@@ -281,40 +336,26 @@
             <p>在特定节日（如春节、圣诞节等），行为会穿上节日服装，营造节日氛围。</p>
             
             <h2>技术实现</h2>
-            
-            <h3>HTML结构</h3>
-            <div class="code-block">
-&lt;div class="desk-pet" id="deskPet"&gt;
-    &lt;div class="pet-sprite" id="petSprite"&gt;
-        &lt;img src="images/zhuochong/眼镜男-正面idle.png" alt="桌宠" id="petImage"&gt;
-    &lt;/div&gt;
-    &lt;div class="pet-bubble" id="petBubble"&gt;
-        &lt;span class="bubble-text" id="bubbleText"&gt;你好&lt;/span&gt;
-    &lt;/div&gt;
-    &lt;div class="pet-controls" id="petControls"&gt;
-        &lt;button class="control-btn" id="pinBtn" title="固定位置"&gt;📌&lt;/button&gt;
-        &lt;button class="control-btn" id="followBtn" title="跟随滚动"&gt;🔄&lt;/button&gt;
-        &lt;button class="control-btn" id="hideBtn" title="隐藏"&gt;🙈&lt;/button&gt;
-    &lt;/div&gt;
-&lt;/div&gt;
-            </div>
-            
-            <h3>CSS样式</h3>
-            <p>使用CSS实现桌宠的动画效果和样式，包括悬浮、点击、移动等状态的视觉反馈。</p>
-            
-            <h3>JavaScript功能</h3>
-            <p>通过JavaScript实现桌宠的各种互动功能，包括：</p>
+            <p>桌宠的网页版通过 HTML、CSS 与 JavaScript 组合完成，桌面版在此基础上做了独立封装。整体围绕以下几个核心功能模块展开：</p>
             <ul>
-                <li>时间判断和状态切换</li>
-                <li>鼠标事件监听和处理</li>
-                <li>随机情绪生成</li>
-                <li>页面导航检测</li>
-                <li>好感度系统</li>
-                <li>天气和节日特性</li>
+                <li><strong>时间感知</strong>：依据时段切换桌宠状态与台词。</li>
+                <li><strong>鼠标交互</strong>：响应停留、点击与拖拽，桌宠会朝向鼠标并做出动作。</li>
+                <li><strong>随机情绪</strong>：定时触发开心、疲惫、无聊、兴奋等情绪及对应行为。</li>
+                <li><strong>页面导航对话</strong>：根据所在页面切换对话内容。</li>
+                <li><strong>睡眠与唤醒</strong>：深夜自动入睡，可点击唤醒。</li>
+                <li><strong>控制按钮</strong>：固定位置、跟随滚动、隐藏三种操控。</li>
+                <li><strong>好感度系统</strong>：互动累积好感，解锁新动作与对话。</li>
+                <li><strong>天气与节日</strong>：模拟天气反应，特定节日更换外观。</li>
             </ul>
             
+            <h2>电脑桌面版演示</h2>
+            <p>除了在网站内嵌入的网页版之外，也制作了独立运行的电脑桌宠桌面版本。下面是桌面版本的运行效果演示：</p>
+            <video class="demo-video" autoplay muted loop playsinline controls preload="metadata">
+                <source src="videos/zhuochong1.mp4" type="video/mp4">
+                您的浏览器不支持视频播放。
+            </video>
+            
             <h2>开发心得</h2>
-            <p>开发行为系统的过程中，我学习了很多关于前端互动和动画的知识。通过这个项目，我不仅提高了自己的JavaScript编程能力，还学会了如何设计和实现一个完整的互动系统。</p>
             <p>桌宠系统的开发让我意识到，一个好的用户体验不仅仅是功能的实现，更是细节的打磨。从桌宠的每一个动作、每一个表情，到与用户的每一次互动，都需要精心设计，才能给用户带来愉悦的体验。</p>
             <p>未来，我计划继续完善桌宠系统，添加更多的动画效果和互动功能，让它成为网站的一个亮点。</p>
         </div>
@@ -327,5 +368,58 @@
             <p>&copy; 2026 巴拿拿猫的小窝</p>
         </div>
     </footer>
+
+    <!-- 自定义光标 -->
+    <div class="custom-cursor" id="customCursor"></div>
+
+    <script>
+        // ===== 糖果粉自定义光标 + 拖尾 =====
+        (function () {
+            const cursorEl = document.getElementById('customCursor');
+            if (!cursorEl) return;
+            let lastX = 0, lastY = 0, lastTrailTime = 0;
+            const TRAIL_INTERVAL = 16; // 约 60fps，拖尾不过密
+            const TRAIL_GAP = 6;      // 鼠标移动至少 6px 才出一个拖尾
+
+            function createTrail(x, y) {
+                const t = document.createElement('div');
+                t.className = 'cursor-trail';
+                t.style.left = x + 'px';
+                t.style.top = y + 'px';
+                document.body.appendChild(t);
+                setTimeout(() => { t.remove(); }, 700);
+            }
+
+            document.addEventListener('mousemove', function (e) {
+                const x = e.clientX;
+                const y = e.clientY;
+                cursorEl.style.left = x + 'px';
+                cursorEl.style.top = y + 'px';
+                const now = Date.now();
+                const dx = x - lastX, dy = y - lastY;
+                if (now - lastTrailTime >= TRAIL_INTERVAL && (dx * dx + dy * dy) >= TRAIL_GAP * TRAIL_GAP) {
+                    createTrail(x, y);
+                    lastX = x; lastY = y; lastTrailTime = now;
+                }
+            }, { passive: true });
+
+            // 悬停交互元素时光标放大
+            document.querySelectorAll('a, button, .control-btn, input, textarea, select, [role="button"]').forEach(function (el) {
+                el.addEventListener('mouseenter', function () { cursorEl.classList.add('hover'); });
+                el.addEventListener('mouseleave', function () { cursorEl.classList.remove('hover'); });
+            });
+
+            // 触屏隐藏
+            if (window.matchMedia && window.matchMedia('(pointer: coarse)').matches) {
+                cursorEl.style.display = 'none';
+                document.body.style.cursor = '';
+                document.documentElement.style.cursor = '';
+                try {
+                    const all = document.querySelectorAll('*');
+                    for (let i = 0; i < all.length; i++) all[i].style.cursor = '';
+                } catch (e) {}
+            }
+        })();
+    </script>
 </body>
 </html>
