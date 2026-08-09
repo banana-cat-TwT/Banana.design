@@ -220,6 +220,9 @@
     </style>
 </head>
 <body>
+    <!-- Watermark Canvas -->
+    <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.03;"></canvas>
+
     <div class="blog-detail-container">
         <div class="blog-detail-header">
             <h1 class="blog-detail-title">星露谷物语MOD开发日志：水上行走与穿河工具</h1>
@@ -301,6 +304,33 @@
 
         <center><a href="index.html#blog" class="btn-back">返回博客列表</a></center>
     </div>
+
+        // ===== 水印 =====
+        function generateWatermark() {
+            const canvas = document.getElementById('watermark-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const text = 'BananaCat Portfolio | ' + new Date().toLocaleDateString();
+            ctx.font = '24px Arial';
+            ctx.fillStyle = '#000';
+            ctx.globalAlpha = 0.5;
+            const spacing = 120;
+            const rotation = -Math.PI / 8;
+            for (let x = -200; x < canvas.width + 200; x += spacing) {
+                for (let y = -200; y < canvas.height + 200; y += spacing) {
+                    ctx.save();
+                    ctx.translate(x, y);
+                    ctx.rotate(rotation);
+                    ctx.fillText(text, 0, 0);
+                    ctx.restore();
+                }
+            }
+        }
+        generateWatermark();
+        setInterval(generateWatermark, 30000);
+        window.addEventListener('resize', generateWatermark);
 
     <script>
         const cursor = document.createElement('div');

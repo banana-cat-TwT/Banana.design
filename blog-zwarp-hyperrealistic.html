@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>zbrush zwarp超写实人物制作流程日志 - 我的作品集</title>
+    <title>ZBrush 功能日志合集 - 巴拿拿猫的个人网站</title>
     <link rel="stylesheet" href="style.css">
     <style>
         :root {
@@ -176,6 +176,124 @@
             }
         }
 
+        .chapter-title {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin: 2.5rem 0 1.5rem 0;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid rgba(60, 169, 201, 0.5);
+            text-align: center;
+        }
+
+        .chapter-title:first-of-type {
+            margin-top: 0;
+        }
+
+        /* 左侧章节导览 */
+        .toc-sidebar {
+            position: fixed;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+            width: 220px;
+            max-height: 70vh;
+            overflow-y: auto;
+            background: rgba(49, 84, 130, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 12px;
+            padding: 1.2rem 1rem;
+            border: 1px solid rgba(60, 169, 201, 0.3);
+            z-index: 100;
+            font-size: 0.85rem;
+            line-height: 1.5;
+        }
+
+        .toc-title {
+            color: var(--primary);
+            font-size: 0.95rem;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(60, 169, 201, 0.3);
+            text-align: center;
+        }
+
+        .toc-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .toc-sidebar .toc-chapter {
+            margin-bottom: 0.6rem;
+        }
+
+        .toc-sidebar .toc-chapter > a {
+            color: var(--primary);
+            font-weight: bold;
+            text-decoration: none;
+            display: block;
+            padding: 0.3rem 0.5rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .toc-sidebar .toc-chapter > a:hover,
+        .toc-sidebar .toc-chapter > a.active {
+            background: rgba(60, 169, 201, 0.2);
+            color: #fff;
+        }
+
+        .toc-sidebar .toc-sub {
+            padding-left: 0.8rem;
+            margin-top: 0.2rem;
+        }
+
+        .toc-sidebar .toc-sub li {
+            margin: 0.15rem 0;
+        }
+
+        .toc-sidebar .toc-sub a {
+            color: var(--light-bg-soft);
+            opacity: 0.75;
+            text-decoration: none;
+            display: block;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+        }
+
+        .toc-sidebar .toc-sub a:hover,
+        .toc-sidebar .toc-sub a.active {
+            opacity: 1;
+            background: rgba(60, 169, 201, 0.15);
+            color: var(--primary);
+        }
+
+        .toc-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .toc-sidebar::-webkit-scrollbar-thumb {
+            background: rgba(60, 169, 201, 0.4);
+            border-radius: 2px;
+        }
+
+        /* 主内容左移，给侧边栏留位置 */
+        @media (min-width: 1200px) {
+            .blog-detail-container {
+                margin-left: 260px;
+                max-width: calc(100% - 280px);
+            }
+        }
+
+        @media (max-width: 1199px) {
+            .toc-sidebar {
+                display: none;
+            }
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -201,19 +319,48 @@
     </style>
 </head>
 <body>
+    <!-- Watermark Canvas -->
+    <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.03;"></canvas>
+
     <div class="custom-cursor" id="customCursor"></div>
+
+    <aside class="toc-sidebar">
+        <div class="toc-title">章节导览</div>
+        <ul>
+            <li class="toc-chapter">
+                <a href="#chapter1" data-target="chapter1">第一章 ZWarp 超写实人物制作</a>
+                <ul class="toc-sub">
+                    <li><a href="#sec-1-0" data-target="sec-1-0">1.0 概述</a></li>
+                    <li><a href="#sec-1-1" data-target="sec-1-1">1.1 前期准备工作</a></li>
+                    <li><a href="#sec-1-2" data-target="sec-1-2">1.2 模型准备阶段</a></li>
+                    <li><a href="#sec-1-3" data-target="sec-1-3">1.3 zwarp插件使用流程</a></li>
+                    <li><a href="#sec-1-4" data-target="sec-1-4">1.4 投射后调整与优化</a></li>
+                    <li><a href="#sec-1-5" data-target="sec-1-5">1.5 常见问题与解决方案</a></li>
+                </ul>
+            </li>
+            <li class="toc-chapter">
+                <a href="#chapter2" data-target="chapter2">第二章 MicroPoly 功能演示</a>
+                <ul class="toc-sub">
+                    <li><a href="#sec-2-1" data-target="sec-2-1">2.1 功能演示</a></li>
+                </ul>
+            </li>
+        </ul>
+    </aside>
+
     <div class="blog-detail-container">
 
         <div class="blog-content">
-            <section class="blog-section">
-                <h3>zbrush zwarp超写实人物制作概述</h3>
+            <h2 class="chapter-title" id="chapter1">第一章 ZWarp 超写实人物制作流程</h2>
+
+            <section class="blog-section" id="sec-1-0">
+                <h3>1.0 概述</h3>
                 <p>这篇日志记录了我2024年使用zbrush的zwarp插件制作超写实人物的完整流程。zwarp是一个强大的贴图投射工具，可以将高精度的超写实拍图直接投射到3d模型表面，大大提升人物的真实感和细节表现。</p>
             </section>
 
-            <section class="blog-section">
-                <h3>一、前期准备工作</h3>
-                
-                <h4>1.1 超写实贴图资源准备</h4>
+            <section class="blog-section" id="sec-1-1">
+                <h3>1.1 前期准备工作</h3>
+
+                <h4>1.1.1 超写实贴图资源准备</h4>
                 <p>在开始使用zwarp进行投射之前，首先需要准备好高质量的超写实贴图资源，这是整个流程的基础！</p>
                 
                 <div class="highlight-box">
@@ -227,7 +374,7 @@
                     </ul>
                 </div>
 
-                <h4>1.2 贴图质量要求</h4>
+                <h4>1.1.2 贴图质量要求</h4>
                 <table>
                     <tr><th>贴图属性</th><th>推荐规格</th></tr>
                     <tr><td>分辨率</td><td>4k (4096x4096) 或更高</td></tr>
@@ -240,10 +387,10 @@
                 </div>
             </section>
 
-            <section class="blog-section">
-                <h3>二、模型准备阶段</h3>
-                
-                <h4>2.1 基础模型选择</h4>
+            <section class="blog-section" id="sec-1-2">
+                <h3>1.2 模型准备阶段</h3>
+
+                <h4>1.2.1 基础模型选择</h4>
                 <ul class="step-list">
                     <li>选择面数合适的基础模型</li>
                     <li>确保模型uv已经展开好，没有拉伸和重叠</li>
@@ -264,10 +411,10 @@
                 </ul>
             </section>
 
-            <section class="blog-section">
-                <h3>三、zwarp插件使用流程</h3>
-                
-                <h4>3.1 zwarp插件安装与基本设置</h4>
+            <section class="blog-section" id="sec-1-3">
+                <h3>1.3 zwarp插件使用流程</h3>
+
+                <h4>1.3.1 zwarp插件安装与基本设置</h4>
                 <ul class="step-list">
                     <li>将zwarp插件文件放到zbrush插件目录</li>
                     <li>启动zbrush，在插件菜单中找到zwarp</li>
@@ -275,7 +422,7 @@
                     <li>根据需要调整插件的基础设置</li>
                 </ul>
 
-                <h4>3.2 导入贴图资源</h4>
+                <h4>1.3.2 导入贴图资源</h4>
                 <ul class="step-list">
                     <li>在zwarp面板中导入准备好的超写实贴图</li>
                     <li>确保贴图方向正确，没有颠倒</li>
@@ -283,7 +430,7 @@
                     <li>可以先导入颜色贴图作为预览参考</li>
                 </ul>
 
-                <h4>3.3 模型与贴图对齐</h4>
+                <h4>1.3.3 模型与贴图对齐</h4>
                 <ul class="step-list">
                     <li>将模型调整到合适的视角</li>
                     <li>使用zwarp的对齐工具匹配模型和贴图</li>
@@ -314,10 +461,10 @@
                 </div>
             </section>
 
-            <section class="blog-section">
-                <h3>四、投射后调整与优化</h3>
-                
-                <h4>4.1 检查投射效果</h4>
+            <section class="blog-section" id="sec-1-4">
+                <h3>1.4 投射后调整与优化</h3>
+
+                <h4>1.4.1 检查投射效果</h4>
                 <ul class="step-list">
                     <li>从不同视角观察模型，看贴图是否正确</li>
                     <li>检查关键区域（面部、手部）的细节</li>
@@ -333,7 +480,7 @@
                     <li>添加一些手工雕刻的细节，增加真实感</li>
                 </ul>
 
-                <h4>4.3 贴图导出与后续</h4>
+                <h4>1.4.3 贴图导出与后续</h4>
                 <ul class="step-list">
                     <li>确认效果满意后，导出投射好的贴图</li>
                     <li>可以导出不同通道的贴图</li>
@@ -342,8 +489,8 @@
                 </ul>
             </section>
 
-            <section class="blog-section">
-                <h3>五、常见问题与解决方案</h3>
+            <section class="blog-section" id="sec-1-5">
+                <h3>1.5 常见问题与解决方案</h3>
                 
                 <table>
                     <tr><th>问题</th><th>解决方案</th></tr>
@@ -359,28 +506,16 @@
                 </div>
             </section>
 
-            <section class="blog-section">
-                <h3>六、个人心得与总结</h3>
-                
-                <h4>6.1 zwarp使用心得</h4>
-                <p>使用zwarp插件制作超写实人物，让我深刻体会到了工具的重要性。相比传统的手工绘制，投射贴图的方式效率提升太多了！</p>
-                
-                <ul class="step-list">
-                    <li>准备工作比操作更重要，贴图质量决定最终效果</li>
-                    <li>好的基础模型能让投射事半功倍</li>
-                    <li>不要完全依赖自动投射，手工调整很重要</li>
-                    <li>多练习，找到最适合自己的参数组合</li>
-                </ul>
+            <h2 class="chapter-title" id="chapter2">第二章 MicroPoly 功能演示</h2>
 
-                <h4>6.2 给初学者的建议</h4>
-                <div class="highlight-box">
-                    <strong>我的建议：</strong><br>
-                    <ul style="margin-top: 10px; padding-left: 20px;">
-                        <li>先从简单的模型开始练习，熟悉zwarp的基本操作</li>
-                        <li>不要一开始就追求完美，先完成再优化</li>
-                        <li>多做测试，了解不同参数的影响</li>
-                        <li>记录自己的工作流程，形成个人经验</li>
-                    </ul>
+            <section class="blog-section" id="sec-2-1">
+                <h3>2.1 功能演示</h3>
+                <p>之前发现身边一些朋友不知道 ZBrush 的 MicroPoly 这个小功能，所以录个视频快速讲一下。功能位置：<strong>Tool → Geometry → Modifier → MicroPoly</strong>。</p>
+
+                <div style="background: rgba(49, 84, 130, 0.4); border-radius: 12px; overflow: hidden; border: 1px solid rgba(60, 169, 201, 0.4); margin: 1.5rem 0;">
+                    <video src="videos/zbrush/MicroPoly1.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto; display: block;">
+                        您的浏览器不支持视频播放
+                    </video>
                 </div>
             </section>
 
@@ -390,7 +525,80 @@
         </div>
     </div>
 
+        // ===== 水印 =====
+        function generateWatermark() {
+            const canvas = document.getElementById('watermark-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const text = 'BananaCat Portfolio | ' + new Date().toLocaleDateString();
+            ctx.font = '24px Arial';
+            ctx.fillStyle = '#000';
+            ctx.globalAlpha = 0.5;
+            const spacing = 120;
+            const rotation = -Math.PI / 8;
+            for (let x = -200; x < canvas.width + 200; x += spacing) {
+                for (let y = -200; y < canvas.height + 200; y += spacing) {
+                    ctx.save();
+                    ctx.translate(x, y);
+                    ctx.rotate(rotation);
+                    ctx.fillText(text, 0, 0);
+                    ctx.restore();
+                }
+            }
+        }
+        generateWatermark();
+        setInterval(generateWatermark, 30000);
+        window.addEventListener('resize', generateWatermark);
+
     <script>
+        // ===== 章节导览：滚动高亮 + 平滑跳转 =====
+        (function() {
+            const tocLinks = document.querySelectorAll('.toc-sidebar a[data-target]');
+            const sections = [];
+
+            tocLinks.forEach(link => {
+                const target = document.getElementById(link.dataset.target);
+                if (target) sections.push({ el: target, link: link });
+            });
+
+            // 平滑滚动（带偏移，避免标题被侧边栏遮挡）
+            tocLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.getElementById(this.dataset.target);
+                    if (target) {
+                        const offset = 20;
+                        const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                        window.scrollTo({ top: top, behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // 滚动时高亮当前章节
+            function updateActive() {
+                let activeIdx = 0;
+                const scrollPos = window.scrollY + 100;
+                for (let i = 0; i < sections.length; i++) {
+                    if (sections[i].el.offsetTop <= scrollPos) {
+                        activeIdx = i;
+                    }
+                }
+                sections.forEach((s, i) => {
+                    if (i === activeIdx) {
+                        s.link.classList.add('active');
+                    } else {
+                        s.link.classList.remove('active');
+                    }
+                });
+            }
+
+            window.addEventListener('scroll', updateActive);
+            window.addEventListener('load', updateActive);
+        })();
+
+        // ===== 原有：自定义光标 =====
         const cursor = document.getElementById('customCursor');
         let trailCount = 0;
         const maxTrails = 20;

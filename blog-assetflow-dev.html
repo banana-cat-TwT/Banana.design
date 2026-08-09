@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AssetFlow 引擎资产提效工具开发日志 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #F4F8FB, #ECF2F6, #E6EDF2);
+            cursor: none;
+        }
+
+        .blog-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .blog-detail-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #4A6B8A;
+            text-shadow: 0 0 20px rgba(100, 140, 180, 0.3);
+        }
+
+        .blog-detail-subtitle {
+            font-size: 1rem;
+            color: #7A8A9A;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .blog-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(180, 200, 220, 0.35);
+            color: #4A6B8A;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(150, 180, 210, 0.4);
+        }
+
+        .blog-detail-content {
+            background: rgba(255, 255, 255, 0.75);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(100, 130, 160, 0.15);
+            border: 1px solid rgba(180, 200, 220, 0.6);
+            color: #4A5A6A;
+            line-height: 1.8;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #5A7A9A;
+            border-bottom: 1px solid rgba(150, 180, 210, 0.45);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .section-content {
+            margin-bottom: 1.5rem;
+        }
+
+        .pain-point {
+            background: rgba(255, 244, 240, 0.7);
+            border: 1px solid rgba(230, 180, 160, 0.5);
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .pain-point h4 {
+            color: #8B6545;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .pain-point p {
+            margin: 0.3rem 0;
+        }
+
+        .module-card {
+            background: rgba(240, 248, 252, 0.85);
+            border-radius: 10px;
+            padding: 1.2rem;
+            margin: 1rem 0;
+            border-left: 3px solid #8BB8D8;
+        }
+
+        .module-card h4 {
+            color: #4A6B8A;
+            margin: 0 0 0.5rem 0;
+        }
+
+        .progress-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 0.5rem;
+        }
+
+        .progress-done {
+            background: rgba(120, 200, 150, 0.3);
+            color: #3A7A5A;
+            border: 1px solid rgba(100, 180, 130, 0.5);
+        }
+
+        .progress-doing {
+            background: rgba(255, 200, 120, 0.3);
+            color: #8B6A35;
+            border: 1px solid rgba(230, 180, 100, 0.5);
+        }
+
+        .progress-todo {
+            background: rgba(200, 200, 200, 0.3);
+            color: #6A6A6A;
+            border: 1px solid rgba(180, 180, 180, 0.5);
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #C8DCE8;
+            color: #4A6B8A;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #B8C8D8;
+        }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(150, 180, 210, 0.35);
+        }
+
+        .highlight {
+            color: #5A7A9A;
+            font-weight: bold;
+        }
+
+        .warning-box {
+            background: rgba(255, 248, 230, 0.8);
+            border: 1px solid rgba(230, 200, 120, 0.6);
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+            color: #6A5530;
+            font-size: 0.9rem;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(180, 210, 240, 0.9) 0%, rgba(140, 180, 220, 0.75) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            box-shadow: 0 0 10px rgba(180, 210, 240, 0.6);
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: radial-gradient(circle, rgba(140, 180, 220, 0.9) 0%, rgba(180, 210, 240, 0.55) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 0.6s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.2); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Watermark Canvas -->
+    <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.03;"></canvas>
+
+    <div class="blog-detail-container">
+        <div class="blog-detail-header">
+            <h1 class="blog-detail-title">AssetFlow 引擎资产提效工具开发日志</h1>
+            <p class="blog-detail-subtitle">2026年8月9日 · 游戏自研引擎多分支资产一体化轻量化提效工具</p>
+            <div class="blog-tags">
+                <span class="blog-tag">工具开发</span>
+                <span class="blog-tag">引擎提效</span>
+                <span class="blog-tag">资产管线</span>
+                <span class="blog-tag">Git多分支</span>
+                <span class="blog-tag">AI辅助开发</span>
+                <span class="blog-tag">独立开发</span>
+            </div>
+        </div>
+
+        <div class="blog-detail-content">
+            <h2 class="section-title">写在前面</h2>
+            <div class="section-content">
+                <p>做这个工具的念头其实由来已久。之前项目里那些<span class="highlight">加载过慢、频繁闪退</span>的问题实在太离谱，严重拖慢所有制作人员的效率，但一直没有人站出来解决，也没人想过要去解决，大家只是抱怨着、忍受着这些痛苦。我当时也有想法，但因为不会实现，就一直只是停留在"想着"。</p>
+                <p>直到 <span class="highlight">AI coding 普及</span>，我才真正有能力去动手解决制作过程中的这些痛点，这也是这个工具之所以现在才做的原因。</p>
+                <p>复盘之后发现，很多问题其实是<span class="highlight">行业通病</span>，并非某家公司的专属难题。于是决定把当时没来得及做的提效思路，做成一个独立工具AssetFlow。</p>
+                <p>这篇日志只记录<span class="highlight">痛点复盘、产品定位、模块规划和当前进度</span>。</p>
+            </div>
+
+            <h2 class="section-title">痛点复盘）</h2>
+            <div class="section-content">
+                <p>以下是自研引擎团队普遍会遇到的三类痛点，也是这个工具要解决的核心问题：</p>
+
+                <div class="pain-point">
+                    <h4>1. 引擎启动与加载痛点</h4>
+                    <p>· 半自定义引擎依赖命令行 + 文件启动，无可视化封装，操作繁琐；</p>
+                    <p>· 资产全量加载约几十万组，即便硬件配置充足也要耗一整天，开工即晚间；</p>
+                    <p>· 引擎稳定性差，闪退/黑屏/死机频发，单次重启排查耗时约 2 小时起步；</p>
+                    <p>· 无轻量化封装、无分批预加载，只能全量灌入，容错率极低。</p>
+                </div>
+
+                <div class="pain-point">
+                    <h4>2. Git 多仓库多分支协作痛点</h4>
+                    <p>· 多独立仓库架构，每轮迭代全量下载，无增量同步，重复无效流量大；</p>
+                    <p>· 切换分支无独立资源缓存隔离，版本错乱、覆盖、缺失频发；</p>
+                    <p>· 大批量资产拉取/推送缓慢，常导致一次开工延后 2～3 天，倘若天天重新加载引擎，后果不堪设想；</p>
+                    <p>· 原生工作流未做分支适配优化，封装软件无法适配多分支资源逻辑。</p>
+                </div>
+
+                <div class="pain-point">
+                    <h4>3. 团队流程弊端</h4>
+                    <p>· 岗位分工割裂，无人统筹整条资产管线优化，问题长期搁置；</p>
+                    <p>· 优先级以版本上线、Bug 修复为主，流程提效永久后置；</p>
+                    <p>· 仅有 AI 代码 Bug 预警工具，美术资产管线零自动化。</p>
+                </div>
+            </div>
+
+            <h2 class="section-title">产品定位</h2>
+            <div class="section-content">
+                <p>AssetFlow 定位为<span class="highlight">游戏自研引擎多分支资产一体化轻量化提效工具</span>，完全AI辅助开发，所有问题、需求、优化思路均为研发痛点。</p>
+                <p>目标：砍掉无效加载、重启、资源同步的全部浪费时间，整体团队生产产能提升 <span class="highlight">40%</span>。</p>
+            </div>
+
+            <h2 class="section-title">模块规划</h2>
+            <div class="section-content">
+                <div class="module-card">
+                    <h4>模块一：轻量化可视化引擎封装 <span class="progress-badge progress-doing">开发中</span></h4>
+                    <p>· 桌面可视化一键启动，替代命令行繁琐启动方式；</p>
+                    <p>· 资产分批分时预加载，替代全量灌入，降低负载、减少闪退；</p>
+                    <p>· 崩溃日志自动捕获，缩短排查重启耗时；</p>
+                    <p>· <span class="highlight">加载断点续传 / 崩溃自恢复</span>；</p>
+                    <p>· 交互式按需加载（勾选子集先开工，其余后台续载）；</p>
+                    <p>· 离线预热调度（下班后台预热，早上零等待进入）。</p>
+                </div>
+
+                <div class="module-card">
+                    <h4>模块二：多 Git 仓库多分支增量同步 & 资源隔离 <span class="progress-badge progress-todo">待开发</span></h4>
+                    <p>· 多 Git 仓库批量统一管理，增量同步（仅同步分支变更文件）；</p>
+                    <p>· 每条分支独立本地缓存目录，切换分支自动匹配对应资源；</p>
+                    <p>· 后台预同步调度，规避上班集中加载卡顿。</p>
+                </div>
+
+                <div class="module-card">
+                    <h4>模块三：轻量化 AI 自动化辅助 <span class="progress-badge progress-todo">待开发</span></h4>
+                    <p>· 本地轻量化资产异常检测（缺失/格式错误/加载异常）；</p>
+                    <p>· 适配美术资产管线的自动侦测、提醒。</p>
+                </div>
+            </div>
+
+            <h2 class="section-title">当前进度</h2>
+            <div class="section-content">
+                <p><span class="highlight">2026年8月9日</span>，模块一的 A 层（加载断点续传 / 崩溃自恢复）原型已<span class="highlight">跑通验证</span>。</p>
+                <p>用纯本地自制测试仓库和合成素材验证了核心链路：把全量加载拆成可记录进度的队列，崩了能从断点续载，把"闪退重来一整天"压缩为"重启续载分钟级"。这一层是整个工具的地基，跑通后后续的按需加载、离线预热都是在它之上叠加增益。</p>
+                <p>接下来会验证真实引擎侧的"可分批喂入、可中断、可查询状态"加载接口,是下一步的核心工作。</p>
+            </div>
+
+            <h2 class="section-title">开发模式</h2>
+            <div class="section-content">
+                <p>延续之前 AI 驱动产品实践的开发模式：<span class="highlight">需求拆解 → AI 生成实现 → 测试反馈 → 迭代优化</span>。本人负责需求定义、架构设计、测试验证与迭代把控，AI 负责大框架代码生成；针对参数调整、数值配置等小范围修改可独立完成。</p>
+            </div>
+
+        </div>
+
+        <center><a href="index.html#blog" class="btn-back">返回博客列表</a></center>
+    </div>
+
+    <script>
+        // ===== 水印 =====
+        function generateWatermark() {
+            const canvas = document.getElementById('watermark-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const text = 'BananaCat Portfolio | ' + new Date().toLocaleDateString();
+            ctx.font = '24px Arial';
+            ctx.fillStyle = '#000';
+            ctx.globalAlpha = 0.5;
+            const spacing = 120;
+            const rotation = -Math.PI / 8;
+            for (let x = -200; x < canvas.width + 200; x += spacing) {
+                for (let y = -200; y < canvas.height + 200; y += spacing) {
+                    ctx.save();
+                    ctx.translate(x, y);
+                    ctx.rotate(rotation);
+                    ctx.fillText(text, 0, 0);
+                    ctx.restore();
+                }
+            }
+        }
+        generateWatermark();
+        setInterval(generateWatermark, 30000);
+        window.addEventListener('resize', generateWatermark);
+
+        // ===== 自定义光标 =====
+        const cursor = document.createElement('div');
+        cursor.className = 'custom-cursor';
+        document.body.appendChild(cursor);
+
+        let trailCount = 0;
+        const maxTrails = 50;
+
+        function createTrail(x, y) {
+            if (trailCount >= maxTrails) return;
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            trail.style.width = Math.random() * 6 + 4 + 'px';
+            trail.style.height = trail.style.width;
+            document.body.appendChild(trail);
+            trailCount++;
+            setTimeout(() => {
+                trail.remove();
+                trailCount--;
+            }, 600);
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            createTrail(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('mousedown', function() {
+            cursor.classList.add('clicking');
+        });
+
+        document.addEventListener('mouseup', function() {
+            cursor.classList.remove('clicking');
+        });
+    </script>
+</body>
+</html>
