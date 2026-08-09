@@ -386,6 +386,7 @@
         <a href="index.html" class="back-link">← 返回首页</a>
     </div>
 
+    <script>
         // ===== 水印 =====
         function generateWatermark() {
             const canvas = document.getElementById('watermark-canvas');
@@ -412,6 +413,7 @@
         generateWatermark();
         setInterval(generateWatermark, 30000);
         window.addEventListener('resize', generateWatermark);
+    </script>
 
     <script>
         // 自定义光标

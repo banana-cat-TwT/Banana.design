@@ -249,6 +249,7 @@
         <center><a href="index.html#blog" class="btn-back">返回博客列表</a></center>
     </div>
 
+        <script>
         // ===== 水印 =====
         function generateWatermark() {
             const canvas = document.getElementById('watermark-canvas');
@@ -275,6 +276,7 @@
         generateWatermark();
         setInterval(generateWatermark, 30000);
         window.addEventListener('resize', generateWatermark);
+        </script>
 
     <script>
         const cursor = document.createElement('div');

@@ -671,6 +671,7 @@ ssh -L 8081:localhost:8081 root@xxx.autodl.pro -p &lt;SSH端口&gt;</pre>
         </div>
     </div>
 
+        <script>
         // ===== 水印 =====
         function generateWatermark() {
             const canvas = document.getElementById('watermark-canvas');
@@ -697,6 +698,7 @@ ssh -L 8081:localhost:8081 root@xxx.autodl.pro -p &lt;SSH端口&gt;</pre>
         generateWatermark();
         setInterval(generateWatermark, 30000);
         window.addEventListener('resize', generateWatermark);
+        </script>
 
     <script>
         const cursor = document.querySelector('.custom-cursor');
