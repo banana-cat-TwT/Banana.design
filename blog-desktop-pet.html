@@ -251,6 +251,31 @@
             box-shadow: 0 4px 14px rgba(255, 105, 180, 0.25);
             background: #000;
         }
+
+        /* 两个演示视频并排 */
+        .demo-video-row {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem auto;
+            justify-content: center;
+            align-items: stretch;
+        }
+        .demo-video-row .demo-video {
+            flex: 1 1 0;
+            width: 100%;
+            max-width: 50%;
+            margin: 0;
+        }
+        @media (max-width: 720px) {
+            .demo-video-row {
+                flex-direction: column;
+                align-items: center;
+            }
+            .demo-video-row .demo-video {
+                max-width: 100%;
+                width: 100%;
+            }
+        }
     </style>
 </head>
 <body>
@@ -350,10 +375,16 @@
             
             <h2>电脑桌面版演示</h2>
             <p>除了在网站内嵌入的网页版之外，也制作了独立运行的电脑桌宠桌面版本。下面是桌面版本的运行效果演示：</p>
-            <video class="demo-video" autoplay muted loop playsinline controls preload="metadata">
-                <source src="videos/zhuochong1.mp4" type="video/mp4">
-                您的浏览器不支持视频播放。
-            </video>
+            <div class="demo-video-row">
+                <video class="demo-video" autoplay muted loop playsinline controls preload="metadata">
+                    <source src="videos/zhuochong1.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+                <video class="demo-video" autoplay muted loop playsinline controls preload="metadata">
+                    <source src="videos/zhuochong2.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放。
+                </video>
+            </div>
             
             <h2>开发心得</h2>
             <p>桌宠系统的开发让我意识到，一个好的用户体验不仅仅是功能的实现，更是细节的打磨。从桌宠的每一个动作、每一个表情，到与用户的每一次互动，都需要精心设计，才能给用户带来愉悦的体验。</p>
