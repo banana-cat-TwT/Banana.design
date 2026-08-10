@@ -2917,6 +2917,79 @@ function switchCircuitCard(type) {
     if (readMore) readMore.href = data.link;
 }
 
+// 大一综合记录卡片切换函数
+function switchFineArtCard(type) {
+    const card = document.getElementById('fineart-card');
+    if (!card) return;
+
+    // 生成紫色渐变占位图（无现成封面时使用，与卡片粉紫配色一致）
+    function placeholder(label) {
+        const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='400' height='220'>" +
+            "<defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>" +
+            "<stop offset='0' stop-color='#5C4F7E'/><stop offset='1' stop-color='#8E7BB5'/>" +
+            "</linearGradient></defs>" +
+            "<rect width='400' height='220' fill='url(#g)'/>" +
+            "<text x='50%' y='50%' font-size='30' font-weight='bold' fill='#D8CFE8' " +
+            "text-anchor='middle' dominant-baseline='middle' font-family='sans-serif'>" + label + "</text></svg>";
+        return 'data:image/svg+xml;utf8,' + encodeURIComponent(svg);
+    }
+
+    const cardData = {
+        fineart: {
+            image: 'image/_R140098.JPG',
+            date: '2026年5月12日',
+            title: '大一阶段与本科前的综合记录',
+            desc: '整理了2022-2023年阶段的主要作品和创作感悟，包括绘画基础、传统艺术、数字绘画和艺术理论等内容，包含纯艺课程（综合材料/立绘/InDesign/AE/剪辑）+ 2D动画工具探索（Live2D/Spine/VRoid Studio 核心流程与经验）+ 3D初学，完整记录2022-2023年从纯艺到3D的创作路径。',
+            link: 'blog-fine-art.html'
+        },
+        live2d: {
+            image: placeholder('Live2D'),
+            date: '2026年5月12日',
+            title: 'Live2D 制作日志',
+            desc: '2023年春节期间接触 Live2D Cubism，为个人 OC 角色制作2D全身动态模型。将2D角色立绘拆分为多个独立图层部件，再添加网格、变形器与参数驱动，实现呼吸、眨眼、头部转动等动态效果，输出可动动态图。',
+            link: 'blog-live2d.html'
+        },
+        spine: {
+            image: placeholder('Spine'),
+            date: '2026年5月12日',
+            title: 'Spine 制作日志',
+            desc: '2023年6月起接触 Spine，源于组队做游戏的需求。自学并为 OC 角色绑定骨骼动画，同时尝试场景动态的骨骼绑定。偏向2D游戏动画，帧动画+骨骼动画为主，后因转向3D工作流停止。',
+            link: 'blog-spine.html'
+        },
+        vroid: {
+            image: placeholder('VRoid'),
+            date: '2026年5月12日',
+            title: 'VRoid Studio 制作日志',
+            desc: '2024年4月起出于兴趣尝试 VRoid Studio，用来制作 OC 小人。利用软件内置模板与自定义素材组合角色形象，完成骨骼绑定后导出为 VRM 格式，再导入 Blender 进行后续调整。',
+            link: 'blog-vroid.html'
+        }
+    };
+
+    const data = cardData[type];
+    if (!data) return;
+
+    // 更新图片
+    const img = card.querySelector('.blog-image img');
+    if (img) {
+        img.src = data.image;
+        img.alt = data.title;
+    }
+
+    // 更新日期
+    const dateSpan = card.querySelector('.blog-date');
+    if (dateSpan) dateSpan.textContent = data.date;
+
+    // 更新标题和描述
+    const h3 = card.querySelector('h3');
+    const p = card.querySelector('p');
+    if (h3) h3.textContent = data.title;
+    if (p) p.textContent = data.desc;
+
+    // 更新阅读全文链接
+    const readMore = card.querySelector('.read-more');
+    if (readMore) readMore.href = data.link;
+}
+
 // ================================
 // 版权保护功能
 // ================================
