@@ -5345,8 +5345,9 @@ nav ul li a:hover::after {
 
 .blog-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 380px));
     gap: 2rem;
+    justify-content: start;
 }
 
 .blog-card {
@@ -9039,8 +9040,9 @@ footer {
     }
 
     .blog-container {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(150px, 220px));
         gap: 1rem;
+        justify-content: start;
     }
 
     .work-image {
@@ -9096,8 +9098,9 @@ footer {
     }
 
     .blog-container {
-        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(140px, 200px));
         gap: 0.75rem;
+        justify-content: start;
     }
 
     .game-item {
