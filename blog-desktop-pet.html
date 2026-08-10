@@ -370,6 +370,29 @@
             </ul>
             <p>这意味着桌宠不再只是按预设台词循环播报，而是能够针对你说的每一句话给出专属回应，真正实现"养一个会聊天的桌宠"。</p>
 
+            <h4>实时对话演示</h4>
+            <p>下方视频演示了与桌宠进行自然语言实时对话的实际效果，可直接听到桌宠的回复内容：</p>
+            <video id="aiChatDemo" class="demo-video" autoplay muted controls loop preload="auto" style="max-width: 720px; margin: 1rem auto; display: block; border-radius: 12px; box-shadow: 0 6px 20px rgba(0,0,0,0.3);">
+                <source src="videos/Zhuochong3.mp4" type="video/mp4">
+                您的浏览器不支持视频播放，请使用现代浏览器。
+            </video>
+            <p style="text-align: center; color: #888; font-size: 0.9rem; margin-top: 0.5rem; margin-bottom: 1.5rem;">▲ 桌宠 AI 大模型实时对话演示（点击视频可取消静音）</p>
+            <script>
+                (function() {
+                    var v = document.getElementById('aiChatDemo');
+                    if (!v) return;
+                    v.muted = true;
+                    v.play().catch(function(){});
+                    v.addEventListener('click', function() {
+                        v.muted = !v.muted;
+                        if (!v.muted) { v.loop = false; v.play().catch(function(){}); }
+                    });
+                    v.addEventListener('volumechange', function() {
+                        if (!v.muted) { v.loop = false; }
+                    });
+                })();
+            </script>
+
             <h2>技术实现</h2>
             <p>桌宠的网页版通过 HTML、CSS 与 JavaScript 组合完成，桌面版在此基础上做了独立封装。整体围绕以下几个核心功能模块展开：</p>
             <ul>
