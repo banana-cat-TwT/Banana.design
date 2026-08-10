@@ -5744,6 +5744,8 @@ nav ul li a:hover::after {
     line-height: 1.6;
     flex: 1;
     transition: all 0.3s ease;
+    word-wrap: break-word;
+    word-break: break-all;
 }
 
 .blog-card:hover p {

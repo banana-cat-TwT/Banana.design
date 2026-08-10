@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>弹窗管家 PopupGuard 开发日志 - 我的作品集</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary: #A89BC9;
+            --secondary: #C9BDD9;
+            --accent: #7A6B9E;
+            --highlight: #8E7BB5;
+            --highlight-bright: #B5A3D9;
+            --highlight-glow: rgba(142, 123, 181, 0.3);
+            --dark-bg: #2B2840;
+            --dark-bg-deep: #1F1D30;
+            --light-bg: #C9BDD9;
+            --light-bg-soft: #D8CFE8;
+            --text-soft: #4A4060;
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--dark-bg) 0%, var(--dark-bg-deep) 100%);
+            background-attachment: fixed;
+            color: var(--light-bg-soft);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            cursor: none;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: -10%;
+            width: 120%;
+            height: 100%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(142, 123, 181, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(168, 155, 201, 0.08) 0%, transparent 40%),
+                        radial-gradient(ellipse at 50% 50%, rgba(142, 123, 181, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(180deg, transparent 0%, rgba(142, 123, 181, 0.03) 20%, transparent 40%),
+                linear-gradient(0deg, transparent 0%, rgba(168, 155, 201, 0.03) 20%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .blog-detail-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 2rem 4rem;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+        }
+
+        .blog-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .blog-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--highlight-bright);
+            letter-spacing: 2px;
+            text-shadow: 0 0 12px var(--highlight-glow);
+        }
+
+        .blog-subtitle {
+            font-size: 1.2rem;
+            color: #C9BDD9;
+            margin-bottom: 20px;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #C9BDD9;
+            justify-content: center;
+        }
+
+        .blog-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        .blog-section {
+            background: linear-gradient(135deg, rgba(201, 189, 217, 0.88) 0%, rgba(168, 155, 201, 0.82) 100%);
+            border: 1px solid rgba(142, 123, 181, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow:
+                0 4px 20px rgba(0, 0, 0, 0.25),
+                0 0 30px rgba(142, 123, 181, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(142, 123, 181, 0.6), transparent);
+        }
+
+        .blog-section::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 50% 0%, rgba(142, 123, 181, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .blog-content h2 {
+            color: #2D2645;
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            font-size: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .blog-content h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--highlight) 0%, var(--primary) 100%);
+            border-radius: 2px;
+        }
+
+        .blog-content h3 {
+            color: #2D2645;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            padding-left: 12px;
+            border-left: 4px solid var(--highlight);
+        }
+
+        .blog-content h4 {
+            color: var(--accent);
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .blog-content p {
+            margin-bottom: 20px;
+            color: var(--text-soft);
+        }
+
+        .blog-content ul,
+        .blog-content ol {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            color: var(--text-soft);
+        }
+
+        .blog-content li {
+            margin-bottom: 10px;
+        }
+
+        .blog-content strong {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .blog-content em {
+            color: var(--accent);
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        .blog-content a {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+
+        .blog-content code {
+            background: rgba(31, 29, 48, 0.6);
+            color: #D8CFE8;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: Consolas, 'Courier New', monospace;
+            font-size: 0.92em;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(122, 107, 158, 0.25) 0%, rgba(142, 123, 181, 0.15) 100%);
+            border-left: 4px solid var(--highlight);
+            padding: 18px 22px;
+            margin: 18px 0;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 0 20px rgba(142, 123, 181, 0.1);
+            color: var(--text-soft);
+        }
+
+        .challenge-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .challenge-table th,
+        .challenge-table td {
+            border-bottom: 1px solid rgba(142, 123, 181, 0.2);
+            padding: 14px 16px;
+            text-align: left;
+            color: var(--text-soft);
+        }
+
+        .challenge-table th {
+            background: rgba(142, 123, 181, 0.15);
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .challenge-table tr:nth-child(even) {
+            background: rgba(142, 123, 181, 0.05);
+        }
+
+        .challenge-table tr:hover {
+            background: rgba(142, 123, 181, 0.1);
+            transform: scale(1.01);
+        }
+
+        .challenge-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .demo-video {
+            width: 100%;
+            max-width: 720px;
+            height: auto;
+            display: block;
+            margin: 1rem auto;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 24px rgba(142, 123, 181, 0.2);
+            background: #000;
+            border: 1px solid rgba(142, 123, 181, 0.3);
+        }
+
+        .video-caption {
+            text-align: center;
+            color: #C9BDD9;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.85;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--highlight) 0%, var(--accent) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 1rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .center-btn {
+            text-align: center;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            background-image: url('image/guangb.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(142, 123, 181, 0.8) 0%, rgba(122, 107, 158, 0.4) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 0.8s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                cursor: auto;
+            }
+
+            .blog-detail-container {
+                padding: 1rem;
+            }
+
+            .blog-title {
+                font-size: 1.5rem;
+            }
+
+            .blog-subtitle {
+                font-size: 1rem;
+            }
+
+            .blog-meta {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .blog-section {
+                padding: 15px;
+            }
+
+            .blog-content h2 {
+                font-size: 1.3rem;
+            }
+
+            .blog-content h3 {
+                font-size: 1.1rem;
+            }
+
+            .blog-content {
+                font-size: 1rem;
+            }
+
+            .challenge-table {
+                font-size: 0.85rem;
+            }
+
+            .challenge-table th,
+            .challenge-table td {
+                padding: 8px 5px;
+            }
+
+            .back-link {
+                width: 100%;
+                text-align: center;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Watermark Canvas -->
+    <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.03;"></canvas>
+
+    <div class="blog-detail-container">
+        <div class="blog-header">
+            <h1 class="blog-title">弹窗管家 PopupGuard 开发日志</h1>
+            <p class="blog-subtitle">3D 创作软件启动弹窗自动拦截工具</p>
+            <div class="blog-meta">
+                <span>2026年7月</span>
+                <span>分类：工具开发</span>
+            </div>
+        </div>
+
+        <div class="blog-content">
+            <div class="blog-section">
+                <div class="info-box">
+                    <strong>工具名称</strong>：弹窗管家 PopupGuard<br>
+                    <strong>记录日期</strong>：2026年7月
+                </div>
+
+                <h2>一、开发背景</h2>
+                <p>做 3D 创作时，几款常用软件每次启动都会弹出一堆「每日提示」「欢迎」「更新」「试用许可」「新闻教程」窗口，天天点关闭很烦。市面上的弹窗拦截工具大多是<strong>全局钩子</strong>，容易误关软件自身的初始化窗口导致闪退，不敢用在自己工作流里。</p>
+                <p>于是写了一个<strong>只做精确匹配、只关窗口不杀进程</strong>的小工具，按「进程名 + 窗口标题关键词」命中即关，把粗暴的全局拦截收窄到白名单规则内，安全可控。</p>
+            </div>
+
+            <div class="blog-section">
+                <h2>二、视频演示</h2>
+                <p>下方视频演示了 PopupGuard 的运行界面与弹窗拦截实际效果。</p>
+                <video class="demo-video" controls autoplay muted loop preload="metadata">
+                    <source src="videos/弹窗拦截1.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放，请使用现代浏览器。
+                </video>
+                <p class="video-caption">▲ PopupGuard 运行演示：规则配置、启动守护与弹窗自动关闭</p>
+            </div>
+
+            <div class="blog-section">
+                <h2>三、核心功能</h2>
+
+                <h3>3.1 规则驱动</h3>
+                <p>工具预置了几款常见 3D 创作软件的启动弹窗规则，关键词覆盖中英文多版本，开箱即用。想拦别的软件，自己加一条规则即可。</p>
+
+                <h3>3.2 规则可编辑、可共享</h3>
+                <p>规则表格支持双击直接编辑、添加、删除。还支持<strong>导出导入规则文件</strong>：你把关键词补全后导出发给同事，对方导入即生效，再补充自己遇到的弹窗导出给下一个人，逐步沉淀出一份团队规则库。</p>
+
+                <div class="info-box">
+                    <strong>跨版本天然兼容</strong>：与软件版本无关，中英文混杂、新旧版本并存的场景下都能用。
+                </div>
+            </div>
+
+            <div class="blog-section">
+                <h2>四、安全边界</h2>
+                <ul>
+                    <li><strong>只监控规则里列出的进程</strong>，不碰其他程序</li>
+                    <li><strong>只关窗口不杀进程</strong>，软件本身正常运行</li>
+                    <li><strong>不做全局钩子</strong>，避免误关软件初始化窗口导致闪退</li>
+                    <li><strong>关键词子串匹配</strong>，写得越精确越不容易误关</li>
+                </ul>
+
+                <div class="info-box">
+                    <strong>设计取舍</strong>：之所以不做全局钩子、不改用杀进程这种处理方法，是因为 3D 软件启动时的初始化窗口和弹窗在 Win32 层面长得很像，全局拦截容易删错。
+                </div>
+            </div>
+        </div>
+
+        <div class="center-btn">
+            <a href="index.html#blog" class="back-link">返回首页</a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
