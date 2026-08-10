@@ -6,125 +6,417 @@
     <title>VRoid Studio制作日志 - 我的作品集</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        body {
-            background: linear-gradient(180deg, #2d1f3d 0%, #4a2c6a 100%);
-            color: #e0e0e0;
-            min-height: 100vh;
-            font-family: 'Microsoft YaHei', sans-serif;
+        :root {
+            --primary: #A794C1;
+            --secondary: #E7D5E5;
+            --accent: #7A6090;
+            --highlight: #CE7692;
+            --highlight-bright: #E9AEC1;
+            --highlight-glow: rgba(206, 118, 146, 0.3);
+            --dark-bg: #2A1F3A;
+            --dark-bg-deep: #1F1530;
+            --light-bg: #E7D5E5;
+            --light-bg-soft: #F0E6F5;
         }
-        
+
+        body {
+            background: linear-gradient(180deg, var(--dark-bg) 0%, var(--dark-bg-deep) 100%);
+            background-attachment: fixed;
+            color: var(--light-bg-soft);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            cursor: none;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: -10%;
+            width: 120%;
+            height: 100%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(206, 118, 146, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(167, 148, 193, 0.08) 0%, transparent 40%),
+                        radial-gradient(ellipse at 50% 50%, rgba(206, 118, 146, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(180deg, transparent 0%, rgba(206, 118, 146, 0.03) 20%, transparent 40%),
+                linear-gradient(0deg, transparent 0%, rgba(167, 148, 193, 0.03) 20%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
         .blog-detail-container {
             max-width: 900px;
             margin: 0 auto;
             padding: 2rem;
+            position: relative;
+            z-index: 1;
         }
-        
-        .blog-detail-header {
+
+        .blog-header {
+            margin-bottom: 40px;
             text-align: center;
-            margin-bottom: 3rem;
         }
-        
-        .blog-detail-title {
+
+        .blog-title {
             font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #ec4899;
-            text-shadow: 0 0 10px rgba(236, 72, 153, 0.5);
-        }
-        
-        .blog-detail-meta {
-            font-size: 1rem;
-            color: #ec4899;
-            margin-bottom: 2rem;
-        }
-        
-        .blog-content {
-            background: rgba(45, 31, 61, 0.9);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 2px solid rgba(236, 72, 153, 0.3);
-        }
-        
-        .section-title {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            color: #ec4899;
-            border-bottom: 2px solid rgba(236, 72, 153, 0.5);
-            padding-bottom: 0.5rem;
-        }
-        
-        .subsection-title {
-            font-size: 1.2rem;
-            margin-top: 1.5rem;
-            margin-bottom: 1rem;
-            color: #f472b6;
-        }
-        
-        .info-box {
-            background: rgba(236, 72, 153, 0.1);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            border-left: 3px solid #ec4899;
-            font-style: italic;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 1.5rem;
-            font-size: 0.9rem;
-        }
-        
-        th, td {
-            border: 1px solid rgba(236, 72, 153, 0.3);
-            padding: 0.75rem;
-            text-align: left;
-        }
-        
-        th {
-            background: rgba(236, 72, 153, 0.2);
-            color: #f472b6;
-        }
-        
-        pre {
-            background: #2d1f3d;
-            border-radius: 8px;
-            padding: 1rem;
-            overflow-x: auto;
-            border: 1px solid rgba(236, 72, 153, 0.3);
-            font-size: 0.85rem;
-        }
-        
-        .btn-back {
-            display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background: rgba(236, 72, 153, 0.3);
-            color: #fff;
-            text-decoration: none;
-            border-radius: 50px;
             font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--highlight);
+            letter-spacing: 2px;
+            text-shadow: 0 0 12px var(--highlight-glow);
+        }
+
+        .blog-subtitle {
+            font-size: 1.2rem;
+            color: #E7D5E5;
+            margin-bottom: 20px;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #E7D5E5;
+            justify-content: center;
+        }
+
+        .blog-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        .blog-section {
+            background: linear-gradient(135deg, rgba(199, 170, 217, 0.88) 0%, rgba(167, 148, 193, 0.82) 100%);
+            border: 1px solid rgba(206, 118, 146, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow:
+                0 4px 20px rgba(0, 0, 0, 0.25),
+                0 0 30px rgba(206, 118, 146, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(206, 118, 146, 0.6), transparent);
+        }
+
+        .blog-section::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 50% 0%, rgba(206, 118, 146, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .blog-content h2 {
+            color: #3D2A4F;
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            font-size: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .blog-content h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--highlight) 0%, var(--primary) 100%);
+            border-radius: 2px;
+        }
+
+        .blog-content h3 {
+            color: #3D2A4F;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            padding-left: 12px;
+            border-left: 4px solid var(--highlight);
+        }
+
+        .blog-content h4 {
+            color: var(--highlight);
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .blog-content p {
+            margin-bottom: 20px;
+            color: #3D2A4F;
+        }
+
+        .blog-content ul,
+        .blog-content ol {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            color: #3D2A4F;
+        }
+
+        .blog-content li {
+            margin-bottom: 10px;
+        }
+
+        .blog-content strong {
+            color: var(--highlight);
+            font-weight: bold;
+        }
+
+        .blog-content em {
+            color: var(--highlight);
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        .blog-content a {
+            color: var(--accent);
+            text-decoration: underline;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(122, 96, 144, 0.25) 0%, rgba(206, 118, 146, 0.15) 100%);
+            border-left: 4px solid var(--highlight);
+            padding: 18px 22px;
+            margin: 18px 0;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 0 20px rgba(206, 118, 146, 0.1);
+            color: #3D2A4F;
+        }
+
+        .challenge-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 20px 0;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .challenge-table th,
+        .challenge-table td {
+            border-bottom: 1px solid rgba(206, 118, 146, 0.2);
+            padding: 14px 16px;
+            text-align: left;
+            color: #3D2A4F;
+        }
+
+        .challenge-table th {
+            background: rgba(206, 118, 146, 0.15);
+            color: var(--highlight);
+            font-weight: bold;
+        }
+
+        .challenge-table tr:nth-child(even) {
+            background: rgba(206, 118, 146, 0.05);
+        }
+
+        .challenge-table tr:hover {
+            background: rgba(206, 118, 146, 0.1);
+            transform: scale(1.01);
+        }
+
+        .challenge-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        pre {
+            background: rgba(31, 21, 48, 0.6);
+            border-radius: 10px;
+            padding: 16px;
+            overflow-x: auto;
+            border: 1px solid rgba(206, 118, 146, 0.25);
+            font-size: 0.85rem;
+            color: #E7D5E5;
+            margin: 18px 0;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--highlight) 0%, var(--accent) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
             transition: all 0.3s ease;
-            margin-top: 3rem;
-            border: 2px solid rgba(236, 72, 153, 0.5);
+            font-weight: bold;
+            font-size: 1rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
         }
-        
-        .btn-back:hover {
-            transform: translateY(-3px);
-            background: rgba(236, 72, 153, 0.5);
-            box-shadow: 0 10px 25px rgba(236, 72, 153, 0.4);
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
         }
-        
+
         .center-btn {
             text-align: center;
         }
-        
-        ul {
-            padding-left: 1.5rem;
+
+        .related-logs {
+            background: linear-gradient(135deg, rgba(122, 96, 144, 0.2) 0%, rgba(167, 148, 193, 0.12) 100%);
+            border: 1px solid rgba(206, 118, 146, 0.25);
+            border-radius: 16px;
+            padding: 22px 25px;
+            margin-bottom: 30px;
         }
-        
-        li {
-            margin-bottom: 0.5rem;
+
+        .related-logs h3 {
+            color: var(--highlight);
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .related-logs ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .related-logs li {
+            margin-bottom: 10px;
+        }
+
+        .related-logs a {
+            display: block;
+            color: #E7D5E5;
+            text-decoration: none;
+            padding: 8px 12px;
+            border-left: 3px solid var(--highlight);
+            border-radius: 0 8px 8px 0;
+            transition: all 0.3s ease;
+        }
+
+        .related-logs a:hover {
+            background: rgba(206, 118, 146, 0.15);
+            color: var(--highlight-bright);
+            transform: translateX(5px);
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            background-image: url('image/guangb.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(206, 118, 146, 0.8) 0%, rgba(122, 96, 144, 0.4) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 0.8s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                cursor: auto;
+            }
+
+            .blog-detail-container {
+                padding: 1rem;
+            }
+
+            .blog-title {
+                font-size: 1.5rem;
+            }
+
+            .blog-subtitle {
+                font-size: 1rem;
+            }
+
+            .blog-meta {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .blog-section {
+                padding: 15px;
+            }
+
+            .blog-content h2 {
+                font-size: 1.3rem;
+            }
+
+            .blog-content h3 {
+                font-size: 1.1rem;
+            }
+
+            .blog-content {
+                font-size: 1rem;
+            }
+
+            .challenge-table {
+                font-size: 0.85rem;
+            }
+
+            .challenge-table th,
+            .challenge-table td {
+                padding: 8px 5px;
+            }
+
+            .back-link {
+                width: 100%;
+                text-align: center;
+                padding: 10px;
+            }
         }
     </style>
 </head>
@@ -133,105 +425,116 @@
     <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.03;"></canvas>
 
     <div class="blog-detail-container">
-        <div class="blog-detail-header">
-            <h1 class="blog-detail-title">VRoid Studio 制作日志</h1>
-            <div class="blog-detail-meta">发布日期：2026年5月12日 | 分类：3D角色</div>
+        <div class="blog-header">
+            <h1 class="blog-title">VRoid Studio 制作日志</h1>
+            <p class="blog-subtitle">3D 虚拟角色拼装与 VRM 导出</p>
+            <div class="blog-meta">
+                <span>2026年5月12日</span>
+                <span>分类：3D角色</span>
+            </div>
         </div>
-        
+
         <div class="blog-content">
-            <div class="info-box">
-                <strong>制作软件</strong>：VRoid Studio（Steam 免费版）<br>
-                <strong>后续处理</strong>：Blender（VRM Add-on 插件）<br>
-                <strong>使用时段</strong>：2024年4月 — 约1个月（断续使用）<br>
-                <strong>记录日期</strong>：2026年5月12日
+            <div class="blog-section">
+                <div class="info-box">
+                    <strong>制作软件</strong>：VRoid Studio（Steam 免费版）<br>
+                    <strong>后续处理</strong>：Blender（VRM Add-on 插件）<br>
+                    <strong>使用时段</strong>：2024年4月 — 约1个月（断续使用）<br>
+                    <strong>记录日期</strong>：2026年5月12日
+                </div>
+
+                <h2>一、项目概述</h2>
+                <p>2024年4月起出于兴趣尝试 VRoid Studio，主要用来制作 <strong>OC（Original Character）小人</strong>。非持续性项目，属于业余探索性质，偶尔打开软件拼装角色。利用软件内置模板与自定义素材组合角色形象，完成骨骼绑定后导出为 VRM 格式，再导入 Blender 进行后续调整。</p>
             </div>
 
-            <h2 class="section-title">一、项目概述</h2>
-            <p>2024年4月起出于兴趣尝试 VRoid Studio，主要用来制作 <strong>OC（Original Character）小人</strong>。非持续性项目，属于业余探索性质，偶尔打开软件拼装角色。利用软件内置模板与自定义素材组合角色形象，完成骨骼绑定后导出为 VRM 格式，再导入 Blender 进行后续调整。</p>
+            <div class="blog-section">
+                <h2>二、时间线</h2>
+                <table class="challenge-table">
+                    <tr><th>时间</th><th>事件</th></tr>
+                    <tr><td>2024年4月</td><td>于 Steam 下载 VRoid Studio，开始尝试制作 OC 角色</td></tr>
+                    <tr><td>2024年4月—5月</td><td>断续使用约1个月，期间拼装了若干 OC 小人</td></tr>
+                    <tr><td>2024年5月后</td><td>停止使用，未再持续深入</td></tr>
+                </table>
+                <p><strong>使用性质</strong>：兴趣驱动、业余探索，非正式项目。主要用于 OC 角色外观拼装，未涉及复杂的自定义素材导入或直播驱动流程。</p>
+            </div>
 
-            <h2 class="section-title">二、时间线</h2>
-            <table>
-                <tr><th>时间</th><th>事件</th></tr>
-                <tr><td>2024年4月</td><td>于 Steam 下载 VRoid Studio，开始尝试制作 OC 角色</td></tr>
-                <tr><td>2024年4月—5月</td><td>断续使用约1个月，期间拼装了若干 OC 小人</td></tr>
-                <tr><td>2024年5月后</td><td>停止使用，未再持续深入</td></tr>
-            </table>
-            <p><strong>使用性质</strong>：兴趣驱动、业余探索，非正式项目。主要用于 OC 角色外观拼装，未涉及复杂的自定义素材导入或直播驱动流程。</p>
+            <div class="blog-section">
+                <h2>三、制作流程</h2>
 
-            <h2 class="section-title">三、制作流程</h2>
+                <h3>3.1 软件安装与初始设置</h3>
+                <table class="challenge-table">
+                    <tr><th>步骤</th><th>说明</th></tr>
+                    <tr><td>下载安装</td><td>Steam 搜索「VRoid Studio」，免费下载安装</td></tr>
+                    <tr><td>语言设置</td><td>启动后可在设置中切换为中文界面</td></tr>
+                    <tr><td>账号注册</td><td>如需使用 VRoid Hub 分享社区，需注册账号（导出本地文件不需要）</td></tr>
+                </table>
 
-            <h3 class="subsection-title">3.1 软件安装与初始设置</h3>
-            <table>
-                <tr><th>步骤</th><th>说明</th></tr>
-                <tr><td>下载安装</td><td>Steam 搜索「VRoid Studio」，免费下载安装</td></tr>
-                <tr><td>语言设置</td><td>启动后可在设置中切换为中文界面</td></tr>
-                <tr><td>账号注册</td><td>如需使用 VRoid Hub 分享社区，需注册账号（导出本地文件不需要）</td></tr>
-            </table>
+                <h3>3.2 角色创建——预制模板拼装</h3>
+                <p>VRoid Studio 采用<strong>模块化拼装</strong>思路，角色由以下独立部件组合而成：</p>
+                <table class="challenge-table">
+                    <tr><th>模块</th><th>可调内容</th><th>说明</th></tr>
+                    <tr><td>脸型</td><td>脸部轮廓、五官比例、眼睛细节</td><td>捏脸系统，支持滑块微调</td></tr>
+                    <tr><td>发型</td><td>前发、后发、侧发、呆毛等</td><td>内置大量发型模板，可调颜色与发梢渐变</td></tr>
+                    <tr><td>身体</td><td>身高、体型、四肢比例</td><td>整体骨架比例调整</td></tr>
+                    <tr><td>服装</td><td>上衣、下装、鞋子、外套</td><td>内置服装库，支持自定义导入</td></tr>
+                    <tr><td>配饰</td><td>眼镜、耳饰、帽子等</td><td>丰富的小物件装饰</td></tr>
+                </table>
+                <p><strong>核心思路</strong>：先选模板 → 滑块微调 → 换色/换材质 → 拼装完成</p>
 
-            <h3 class="subsection-title">3.2 角色创建——预制模板拼装</h3>
-            <p>VRoid Studio 采用<strong>模块化拼装</strong>思路，角色由以下独立部件组合而成：</p>
-            <table>
-                <tr><th>模块</th><th>可调内容</th><th>说明</th></tr>
-                <tr><td>脸型</td><td>脸部轮廓、五官比例、眼睛细节</td><td>捏脸系统，支持滑块微调</td></tr>
-                <tr><td>发型</td><td>前发、后发、侧发、呆毛等</td><td>内置大量发型模板，可调颜色与发梢渐变</td></tr>
-                <tr><td>身体</td><td>身高、体型、四肢比例</td><td>整体骨架比例调整</td></tr>
-                <tr><td>服装</td><td>上衣、下装、鞋子、外套</td><td>内置服装库，支持自定义导入</td></tr>
-                <tr><td>配饰</td><td>眼镜、耳饰、帽子等</td><td>丰富的小物件装饰</td></tr>
-            </table>
-            <p><strong>核心思路</strong>：先选模板 → 滑块微调 → 换色/换材质 → 拼装完成</p>
+                <h3>3.3 自定义模型导入</h3>
+                <p>在预制模板基础上，可以将自己制作的模型素材导入 VRoid Studio：</p>
+                <table class="challenge-table">
+                    <tr><th>导入类型</th><th>支持格式</th><th>导入路径</th></tr>
+                    <tr><td>自定义发型</td><td>.vroidhair / .glb</td><td>发型编辑器 → 导入</td></tr>
+                    <tr><td>自定义服装</td><td>.vroidwear / .glb</td><td>服装编辑器 → 导入</td></tr>
+                    <tr><td>自定义配饰</td><td>.glb</td><td>配饰编辑器 → 导入</td></tr>
+                </table>
+                <p><strong>注意</strong>：导入的自定义模型需提前做好UV展开和材质分配，否则在 VRoid 中无法正确显示贴图。</p>
 
-            <h3 class="subsection-title">3.3 自定义模型导入</h3>
-            <p>在预制模板基础上，可以将自己制作的模型素材导入 VRoid Studio：</p>
-            <table>
-                <tr><th>导入类型</th><th>支持格式</th><th>导入路径</th></tr>
-                <tr><td>自定义发型</td><td>.vroidhair / .glb</td><td>发型编辑器 → 导入</td></tr>
-                <tr><td>自定义服装</td><td>.vroidwear / .glb</td><td>服装编辑器 → 导入</td></tr>
-                <tr><td>自定义配饰</td><td>.glb</td><td>配饰编辑器 → 导入</td></tr>
-            </table>
-            <p><strong>注意</strong>：导入的自定义模型需提前做好UV展开和材质分配，否则在 VRoid 中无法正确显示贴图。</p>
+                <h3>3.4 骨骼绑定（软件内自动完成）</h3>
+                <p>VRoid Studio <strong>内置自动骨骼绑定系统</strong>，创建角色时自动执行以下流程：</p>
+                <ol>
+                    <li><strong>人形骨骼生成</strong>：根据角色身高体型自动适配 Humanoid 骨骼</li>
+                    <li><strong>权重自动分配</strong>：皮肤蒙皮权重自动计算</li>
+                    <li><strong>表情BlendShape生成</strong>：内置标准表情组（喜、怒、哀、惊等）</li>
+                    <li><strong>视线/手指骨骼</strong>：眼球视线控制器 + 手指独立骨骼</li>
+                </ol>
+                <p><strong>整个骨骼绑定过程无需手动操作，软件自动完成。这是 VRoid Studio 的核心优势之一——零门槛完成绑定。</strong></p>
 
-            <h3 class="subsection-title">3.4 骨骼绑定（软件内自动完成）</h3>
-            <p>VRoid Studio <strong>内置自动骨骼绑定系统</strong>，创建角色时自动执行以下流程：</p>
-            <ol>
-                <li><strong>人形骨骼生成</strong>：根据角色身高体型自动适配 Humanoid 骨骼</li>
-                <li><strong>权重自动分配</strong>：皮肤蒙皮权重自动计算</li>
-                <li><strong>表情BlendShape生成</strong>：内置标准表情组（喜、怒、哀、惊等）</li>
-                <li><strong>视线/手指骨骼</strong>：眼球视线控制器 + 手指独立骨骼</li>
-            </ol>
-            <p><strong>整个骨骼绑定过程无需手动操作，软件自动完成。这是 VRoid Studio 的核心优势之一——零门槛完成绑定。</strong></p>
+                <h3>3.5 导出 VRM 格式</h3>
+                <p>角色制作完成后导出流程：</p>
+                <ol>
+                    <li>点击主界面「导出」按钮</li>
+                    <li>选择导出类型：<strong>VRM 格式（.vrm）</strong></li>
+                    <li>填写模型信息（模型名、作者名、使用许可条款）</li>
+                    <li>勾选「允许二次加工」等许可选项</li>
+                    <li>选择保存路径，确认导出</li>
+                </ol>
+                <p><strong>关于格式</strong>：VRM 是基于 glTF 2.0 的扩展格式，专为3D虚拟角色设计，包含骨骼、表情、材质等元数据。与 GLB 同属 glTF 生态，但 VRM 额外携带了人形骨骼映射和表情数据。</p>
 
-            <h3 class="subsection-title">3.5 导出 VRM 格式</h3>
-            <p>角色制作完成后导出流程：</p>
-            <ol>
-                <li>点击主界面「导出」按钮</li>
-                <li>选择导出类型：<strong>VRM 格式（.vrm）</strong></li>
-                <li>填写模型信息（模型名、作者名、使用许可条款）</li>
-                <li>勾选「允许二次加工」等许可选项</li>
-                <li>选择保存路径，确认导出</li>
-            </ol>
-            <p><strong>关于格式</strong>：VRM 是基于 glTF 2.0 的扩展格式，专为3D虚拟角色设计，包含骨骼、表情、材质等元数据。与 GLB 同属 glTF 生态，但 VRM 额外携带了人形骨骼映射和表情数据。</p>
+                <h3>3.6 导入 Blender 后续调整</h3>
 
-            <h3 class="subsection-title">3.6 导入 Blender 后续调整</h3>
+                <h4>前置准备：安装 VRM 插件</h4>
+                <ol>
+                    <li>打开 Blender → 编辑 → 设置 → 插件 → 安装</li>
+                    <li>下载 <a href="https://extensions.blender.org/add-ons/vrm/" target="_blank">VRM Add-on for Blender</a></li>
+                    <li>安装并启用插件</li>
+                </ol>
 
-            <h4 style="color: #f472b6; margin-top: 1rem;">前置准备：安装 VRM 插件</h4>
-            <ol>
-                <li>打开 Blender → 编辑 → 设置 → 插件 → 安装</li>
-                <li>下载 <a href="https://extensions.blender.org/add-ons/vrm/" target="_blank">VRM Add-on for Blender</a></li>
-                <li>安装并启用插件</li>
-            </ol>
+                <h4>导入与调整流程</h4>
+                <table class="challenge-table">
+                    <tr><th>步骤</th><th>操作</th><th>说明</th></tr>
+                    <tr><td>导入VRM</td><td>文件 → 导入 → VRM</td><td>插件会自动解析骨骼与材质</td></tr>
+                    <tr><td>检查骨骼</td><td>切换至姿态模式</td><td>确认 Humanoid 骨骼映射正确</td></tr>
+                    <tr><td>调整材质</td><td>查看 MToon 着色器</td><td>VRM 使用 MToon 渲染，Blender 中需对应调整</td></tr>
+                    <tr><td>修改模型</td><td>进入编辑模式</td><td>对拓扑/布线进行微调</td></tr>
+                    <tr><td>重新导出</td><td>文件 → 导出 → VRM</td><td>调整后可重新导出为 VRM</td></tr>
+                </table>
+            </div>
 
-            <h4 style="color: #f472b6; margin-top: 1rem;">导入与调整流程</h4>
-            <table>
-                <tr><th>步骤</th><th>操作</th><th>说明</th></tr>
-                <tr><td>导入VRM</td><td>文件 → 导入 → VRM</td><td>插件会自动解析骨骼与材质</td></tr>
-                <tr><td>检查骨骼</td><td>切换至姿态模式</td><td>确认 Humanoid 骨骼映射正确</td></tr>
-                <tr><td>调整材质</td><td>查看 MToon 着色器</td><td>VRM 使用 MToon 渲染，Blender 中需对应调整</td></tr>
-                <tr><td>修改模型</td><td>进入编辑模式</td><td>对拓扑/布线进行微调</td></tr>
-                <tr><td>重新导出</td><td>文件 → 导出 → VRM</td><td>调整后可重新导出为 VRM</td></tr>
-            </table>
-
-            <h2 class="section-title">四、文件格式流转图</h2>
-            <pre>
+            <div class="blog-section">
+                <h2>四、文件格式流转图</h2>
+                <pre>
 VRoid Studio
     │
     ├── 自定义素材 (.glb) ──→ 导入到 VRoid
@@ -246,35 +549,50 @@ VRoid Studio
            继续调整        重新导出
            (拓扑/材质)    (.vrm / .glb)
 </pre>
+            </div>
 
-            <h2 class="section-title">五、注意事项与经验总结</h2>
-            <table>
-                <tr><th>要点</th><th>说明</th></tr>
-                <tr><td>自定义素材需提前规范</td><td>导入前确认模型UV、法线、材质球命名规范，避免 VRoid 内显示异常</td></tr>
-                <tr><td>VRM ≠ GLB</td><td>VRM 是 glTF 扩展格式，含骨骼映射/表情元数据，直接改后缀名无效</td></tr>
-                <tr><td>骨骼绑定不可手动干预</td><td>VRoid 自动绑定，如需自定义骨骼需导入 Blender 后操作</td></tr>
-                <tr><td>材质差异</td><td>VRoid 使用 MToon 着色器，Blender 默认 EEVEE/Cycles 渲染效果不同，需手动适配</td></tr>
-                <tr><td>导出前备份</td><td>VRoid 项目文件和导出的 VRM 分开保存，方便后续迭代修改</td></tr>
-                <tr><td>许可条款务必填写</td><td>导出 VRM 时必须选择使用许可，否则部分平台无法使用</td></tr>
-            </table>
+            <div class="blog-section">
+                <h2>五、注意事项与经验总结</h2>
+                <table class="challenge-table">
+                    <tr><th>要点</th><th>说明</th></tr>
+                    <tr><td>自定义素材需提前规范</td><td>导入前确认模型UV、法线、材质球命名规范，避免 VRoid 内显示异常</td></tr>
+                    <tr><td>VRM ≠ GLB</td><td>VRM 是 glTF 扩展格式，含骨骼映射/表情元数据，直接改后缀名无效</td></tr>
+                    <tr><td>骨骼绑定不可手动干预</td><td>VRoid 自动绑定，如需自定义骨骼需导入 Blender 后操作</td></tr>
+                    <tr><td>材质差异</td><td>VRoid 使用 MToon 着色器，Blender 默认 EEVEE/Cycles 渲染效果不同，需手动适配</td></tr>
+                    <tr><td>导出前备份</td><td>VRoid 项目文件和导出的 VRM 分开保存，方便后续迭代修改</td></tr>
+                    <tr><td>许可条款务必填写</td><td>导出 VRM 时必须选择使用许可，否则部分平台无法使用</td></tr>
+                </table>
+            </div>
 
-            <h2 class="section-title">六、后续可拓展方向</h2>
-            <ul>
-                <li><input type="checkbox" disabled> 利用 Blender 重新拓扑优化模型面数</li>
-                <li><input type="checkbox" disabled> 在 Blender 中烘焙 MToon → PBR 材质转换</li>
-                <li><input type="checkbox" disabled> 制作自定义 BlendShape 表情追加到 VRM</li>
-                <li><input type="checkbox" disabled> 接入 Unity（UniVRM）用于实时驱动/直播</li>
-                <li><input type="checkbox" disabled> 如有需要可重新拾起，作为毕设中风格化角色制作的参考对照</li>
-            </ul>
+            <div class="blog-section">
+                <h2>六、后续可拓展方向</h2>
+                <ul>
+                    <li><input type="checkbox" disabled> 利用 Blender 重新拓扑优化模型面数</li>
+                    <li><input type="checkbox" disabled> 在 Blender 中烘焙 MToon → PBR 材质转换</li>
+                    <li><input type="checkbox" disabled> 制作自定义 BlendShape 表情追加到 VRM</li>
+                    <li><input type="checkbox" disabled> 接入 Unity（UniVRM）用于实时驱动/直播</li>
+                    <li><input type="checkbox" disabled> 如有需要可重新拾起，作为毕设中风格化角色制作的参考对照</li>
+                </ul>
 
-            <p style="text-align: center; color: #888; margin-top: 2rem;">*日志创建时间：2026-05-12 | 使用时段：2024年4月*</p>
+                <p style="text-align: center; color: #7A6090; margin-top: 2rem;">*日志创建时间：2026-05-12 | 使用时段：2024年4月*</p>
+            </div>
+
+            <div class="related-logs">
+                <h3>📎 相关日志</h3>
+                <ul>
+                    <li><a href="blog-live2d.html">Live2D 制作日志 →</a></li>
+                    <li><a href="blog-spine.html">Spine 制作日志 →</a></li>
+                    <li><a href="blog-fine-art.html">大一阶段与本科前的综合记录 →</a></li>
+                    <li><a href="blog-graduation-project.html">毕业设计：三维全流程和二维两个媒介结合 →</a></li>
+                </ul>
+            </div>
         </div>
-        
+
         <div class="center-btn">
-            <a href="index.html#blog" class="btn-back">← 返回开发日志</a>
+            <a href="index.html#blog" class="back-link">← 返回开发日志</a>
         </div>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
 </html>
