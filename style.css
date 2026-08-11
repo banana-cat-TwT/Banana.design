@@ -5934,7 +5934,7 @@ nav ul li a:hover::after {
     margin: 0;
 }
 
-.experience-description .hl {
+.hl {
     background: linear-gradient(180deg, transparent 55%, rgba(255, 200, 90, 0.35) 55%);
     color: #FFD78A;
     font-weight: 600;
@@ -5943,7 +5943,7 @@ nav ul li a:hover::after {
     white-space: nowrap;
 }
 
-.experience-description .hl-strong {
+.hl-strong {
     color: #FFD78A;
     font-weight: 700;
     white-space: nowrap;
@@ -6096,6 +6096,16 @@ nav ul li a:hover::after {
 
 .thesis-description {
     font-style: italic;
+    line-height: 1.8;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+}
+
+/* 论文概要里的高亮内容较长时允许换行，否则 nowrap 会导致撑破容器、行高错乱 */
+.thesis-description .hl,
+.thesis-description .hl-strong {
+    white-space: normal;
 }
 
 @media (max-width: 768px) {
