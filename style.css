@@ -5934,6 +5934,21 @@ nav ul li a:hover::after {
     margin: 0;
 }
 
+.experience-description .hl {
+    background: linear-gradient(180deg, transparent 55%, rgba(255, 200, 90, 0.35) 55%);
+    color: #FFD78A;
+    font-weight: 600;
+    padding: 0 3px;
+    border-radius: 2px;
+    white-space: nowrap;
+}
+
+.experience-description .hl-strong {
+    color: #FFD78A;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
 .hobby-item {
     width: 100%;
     margin-bottom: 0;
