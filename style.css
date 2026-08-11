@@ -5989,6 +5989,94 @@ nav ul li a:hover::after {
     border-top: 1px solid #2a2a2a;
 }
 
+.thesis-toggle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0.5rem 0;
+    transition: all 0.2s ease;
+    user-select: none;
+    gap: 0.3rem;
+}
+
+.thesis-toggle:hover {
+    opacity: 0.85;
+}
+
+.thesis-toggle h5 {
+    margin: 0;
+    text-align: center;
+}
+
+.thesis-arrow-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0.5rem 0 0.3rem;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    z-index: 10;
+    transition: margin-top 0.4s ease;
+}
+
+/* 收起时三角形上移，覆盖在渐变遮罩与淡出文字之上（最顶层） */
+.thesis-info.collapsed .thesis-arrow-wrap {
+    margin-top: -30px;
+}
+
+/* 钝角倒三角形：底边 96px / 高 30px → 顶角约 116°（钝角） */
+.thesis-arrow {
+    width: 0;
+    height: 0;
+    border-left: 48px solid transparent;
+    border-right: 48px solid transparent;
+    border-top: 30px solid rgba(255, 140, 66, 0.6);
+    flex-shrink: 0;
+    display: inline-block;
+    transition: border-top-color 0.3s ease, transform 0.3s ease;
+    filter: drop-shadow(0 2px 6px rgba(255, 140, 66, 0.35));
+}
+
+.thesis-arrow:hover {
+    animation: thesisArrowBounce 0.6s ease infinite;
+    border-top-color: rgba(255, 140, 66, 0.85);
+}
+
+@keyframes thesisArrowBounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+}
+
+.thesis-body {
+    max-height: 5000px;
+    overflow: hidden;
+    transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.3s ease;
+    opacity: 1;
+    margin-top: 0.8rem;
+    position: relative;
+}
+
+.thesis-info.collapsed .thesis-body {
+    max-height: 96px;
+    opacity: 1;
+    margin-top: 0.8rem;
+}
+
+/* 收起时的底部渐变遮罩，让露出的部分自然淡出 */
+.thesis-info.collapsed .thesis-body::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 40px;
+    background: linear-gradient(to bottom, transparent, #1e1e1e 90%);
+    pointer-events: none;
+}
+
 .thesis-info h5 {
     font-size: 1rem;
     color: #ff8c42;
