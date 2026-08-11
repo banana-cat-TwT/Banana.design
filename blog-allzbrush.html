@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="巴拿拿猫 (BananaCat)">
+    <meta name="copyright" content="2026 巴拿拿猫 (BananaCat) · Banana.design">
+    <meta name="license" content="MIT">
+    <meta name="banana-design-build-signature" content="bananacat_001">
+    <title>多版本 DCC 启动器 · ZBrush 版 开发日志 - 我的作品集</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary: #C9A897;
+            --secondary: #D8BFA8;
+            --accent: #8E6B4E;
+            --highlight: #B58A6B;
+            --highlight-bright: #D9B58A;
+            --highlight-glow: rgba(181, 138, 107, 0.3);
+            --dark-bg: #2E2820;
+            --dark-bg-deep: #1F1B15;
+            --light-bg: #D8BFA8;
+            --light-bg-soft: #E8D8C8;
+            --text-soft: #4A3A2A;
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--dark-bg) 0%, var(--dark-bg-deep) 100%);
+            background-attachment: fixed;
+            color: var(--light-bg-soft);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            cursor: none;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: -10%;
+            width: 120%;
+            height: 100%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(181, 138, 107, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(201, 168, 151, 0.08) 0%, transparent 40%),
+                        radial-gradient(ellipse at 50% 50%, rgba(181, 138, 107, 0.05) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(180deg, transparent 0%, rgba(181, 138, 107, 0.03) 20%, transparent 40%),
+                linear-gradient(0deg, transparent 0%, rgba(201, 168, 151, 0.03) 20%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .blog-detail-container {
+            width: 100%;
+            max-width: 100%;
+            margin: 0;
+            padding: 2rem 4rem;
+            box-sizing: border-box;
+            position: relative;
+            z-index: 1;
+        }
+
+        .blog-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .blog-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--highlight-bright);
+            letter-spacing: 2px;
+            text-shadow: 0 0 12px var(--highlight-glow);
+        }
+
+        .blog-subtitle {
+            font-size: 1.2rem;
+            color: #D8BFA8;
+            margin-bottom: 20px;
+        }
+
+        .blog-meta {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #D8BFA8;
+            justify-content: center;
+        }
+
+        .blog-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        .blog-section {
+            background: linear-gradient(135deg, rgba(216, 191, 168, 0.88) 0%, rgba(201, 168, 151, 0.82) 100%);
+            border: 1px solid rgba(181, 138, 107, 0.2);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow:
+                0 4px 20px rgba(0, 0, 0, 0.25),
+                0 0 30px rgba(181, 138, 107, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(181, 138, 107, 0.6), transparent);
+        }
+
+        .blog-section::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 50% 0%, rgba(181, 138, 107, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .blog-content h2 {
+            color: #2D2418;
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            font-size: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .blog-content h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--highlight) 0%, var(--primary) 100%);
+            border-radius: 2px;
+        }
+
+        .blog-content h3 {
+            color: #2D2418;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            padding-left: 12px;
+            border-left: 4px solid var(--highlight);
+        }
+
+        .blog-content p {
+            margin-bottom: 20px;
+            color: var(--text-soft);
+        }
+
+        .blog-content ul,
+        .blog-content ol {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            color: var(--text-soft);
+        }
+
+        .blog-content li {
+            margin-bottom: 10px;
+        }
+
+        .blog-content strong {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(142, 107, 78, 0.25) 0%, rgba(181, 138, 107, 0.15) 100%);
+            border-left: 4px solid var(--highlight);
+            padding: 18px 22px;
+            margin: 18px 0;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 0 20px rgba(181, 138, 107, 0.1);
+            color: var(--text-soft);
+        }
+
+        .demo-video {
+            width: 100%;
+            max-width: 720px;
+            height: auto;
+            display: block;
+            margin: 1rem auto;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 24px rgba(181, 138, 107, 0.2);
+            background: #000;
+            border: 1px solid rgba(181, 138, 107, 0.3);
+        }
+
+        .video-caption {
+            text-align: center;
+            color: #D8BFA8;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.85;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--highlight) 0%, var(--accent) 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 1rem;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .center-btn {
+            text-align: center;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            background-image: url('image/guangb.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(181, 138, 107, 0.8) 0%, rgba(142, 107, 78, 0.4) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 0.8s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3);
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                cursor: auto;
+            }
+
+            .blog-detail-container {
+                padding: 1rem;
+            }
+
+            .blog-title {
+                font-size: 1.5rem;
+            }
+
+            .blog-subtitle {
+                font-size: 1rem;
+            }
+
+            .blog-meta {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .blog-section {
+                padding: 15px;
+            }
+
+            .blog-content h2 {
+                font-size: 1.3rem;
+            }
+
+            .blog-content h3 {
+                font-size: 1.1rem;
+            }
+
+            .blog-content {
+                font-size: 1rem;
+            }
+
+            .back-link {
+                width: 100%;
+                text-align: center;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Watermark Canvas -->
+    <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.03;"></canvas>
+
+    <div class="blog-detail-container">
+        <div class="blog-header">
+            <h1 class="blog-title">多版本 DCC 启动器 · ZBrush 版 开发日志</h1>
+            <p class="blog-subtitle">把多个 ZBrush 版本收进一个窗口统一管理</p>
+            <div class="blog-meta">
+                <span>2026年8月</span>
+                <span>分类：工具开发</span>
+                <span>版本：v1 测试版</span>
+            </div>
+        </div>
+
+        <div class="blog-content">
+            <div class="blog-section">
+                <div class="info-box">
+                    <strong>工具名称</strong>：多版本 DCC 启动器（ZBrush 版）<br>
+                    <strong>记录日期</strong>：2026年8月
+                </div>
+
+                <h2>一、开发背景</h2>
+                <p>做 3D 创作时，电脑上经常同时装着多个 ZBrush 版本——新版本功能强，旧版本兼容老工程文件和插件。问题是：每个版本一个快捷方式堆在桌面，想开哪个版本得在一堆图标里找，还经常点错；想看某个版本装在哪、清理旧版本时也得手动翻文件夹。</p>
+                <p>于是写了一个<strong>多版本统一入口</strong>的小工具，把机器上所有 ZBrush 版本收进一个窗口，双击即开，桌面不再一堆快捷方式。这是多版本 DCC 统一管理系列的第一站，先从 ZBrush 跑通流程，后续会扩展到其他 DCC 软件。</p>
+            </div>
+
+            <div class="blog-section">
+                <h2>二、视频演示</h2>
+                <p>下方视频是多版本启动器第一版的运行演示，展示了版本列表、启动与最近打开等基础交互。</p>
+                <video class="demo-video" controls autoplay muted loop preload="metadata">
+                    <source src="videos/ALLZBRUSH1.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放，请使用现代浏览器。
+                </video>
+                <p class="video-caption">▲ 多版本启动器 v1 运行演示：版本列表、启动、最近打开记录</p>
+            </div>
+
+            <div class="blog-section">
+                <h2>三、核心功能</h2>
+
+                <h3>3.1 一个窗口管所有版本</h3>
+                <p>启动后自动列出检测到的全部 ZBrush 版本，每个版本一张卡片，显示版本名与安装路径。点<strong>启动</strong>直接打开该版本，点<strong>打开文件夹</strong>定位安装目录，不用再去桌面找快捷方式或翻资源管理器。</p>
+
+                <h3>3.2 自动检测 + 手动添加</h3>
+                <p>工具会自动扫描机器上已安装的 ZBrush 版本。如果装在比较偏的路径没被扫到，可以<strong>手动选一下对应的主程序</strong>加进来，下次打开会自动记住。这样不管版本装在哪、写没写注册表，都能统一管起来。</p>
+
+                <h3>3.3 最近打开记录</h3>
+                <p>常用版本会被记到<strong>最近打开</strong>一栏，一键再开，不用每次在完整列表里翻。记录可以随时清空。</p>
+            </div>
+
+            <div class="blog-section">
+                <h2>四、关于第一版的取舍</h2>
+                <ul>
+                    <li><strong>先只放两个版本</strong>：第一版测试只加进了两个 ZBrush 版本，没一次性把所有版本全塞进去。一次性加载太多版本会让机器吃不消，也看不出工具在版本数量增多后的表现，所以先小批量跑通再说。</li>
+                    <li><strong>先做 ZBrush</strong>：不同 DCC 软件的版本管理方式差别不小，第一版只针对 ZBrush 把流程跑通、把交互定下来，后续再按软件特性逐个适配，避免一上来铺太大收不住。</li>
+                    <li><strong>测试优先</strong>：这一版主要验证「统一入口 + 自动检测 + 手动补充」这条路线本身能不能跑顺，功能先做最小可用，不急着堆特性。</li>
+                </ul>
+
+                <div class="info-box">
+                    <strong>下一步方向</strong>：等两个版本的稳定性验证完，会逐步加入更多 ZBrush 版本，并把同一套思路迁移到其他 DCC 软件，最终做成一个能统一管理多种 DCC 多个版本的入口。
+                </div>
+            </div>
+        </div>
+
+        <div class="center-btn">
+            <a href="index.html#blog" class="back-link">返回首页</a>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
