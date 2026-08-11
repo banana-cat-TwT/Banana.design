@@ -6104,8 +6104,17 @@ nav ul li a:hover::after {
 
 /* 论文概要里的高亮内容较长时允许换行，否则 nowrap 会导致撑破容器、行高错乱 */
 .thesis-description .hl,
-.thesis-description .hl-strong {
+.thesis-description .hl-strong,
+#aboutDetailsContent .hl,
+#aboutDetailsContent .hl-strong {
     white-space: normal;
+}
+
+#aboutDetailsContent {
+    line-height: 1.8;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
 }
 
 @media (max-width: 768px) {
