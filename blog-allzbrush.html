@@ -11,21 +11,21 @@
     <link rel="stylesheet" href="style.css">
     <style>
         :root {
-            --primary: #C9A897;
-            --secondary: #D8BFA8;
-            --accent: #8E6B4E;
-            --highlight: #B58A6B;
-            --highlight-bright: #D9B58A;
-            --highlight-glow: rgba(181, 138, 107, 0.3);
-            --dark-bg: #2E2820;
-            --dark-bg-deep: #1F1B15;
-            --light-bg: #D8BFA8;
-            --light-bg-soft: #E8D8C8;
-            --text-soft: #4A3A2A;
+            --primary: #5A8B72;
+            --secondary: #7BA890;
+            --accent: #3F6B56;
+            --highlight: #5A8B72;
+            --highlight-bright: #3F6B56;
+            --highlight-glow: rgba(90, 139, 114, 0.18);
+            --dark-bg: #F8F9F6;
+            --dark-bg-deep: #EFF1EC;
+            --light-bg: #2C3E35;
+            --light-bg-soft: #3A4A42;
+            --text-soft: #4A5A52;
         }
 
         body {
-            background: linear-gradient(180deg, var(--dark-bg) 0%, var(--dark-bg-deep) 100%);
+            background: #F8F9F6;
             background-attachment: fixed;
             color: var(--light-bg-soft);
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -43,9 +43,8 @@
             left: -10%;
             width: 120%;
             height: 100%;
-            background: radial-gradient(ellipse at 30% 20%, rgba(181, 138, 107, 0.1) 0%, transparent 50%),
-                        radial-gradient(ellipse at 70% 80%, rgba(201, 168, 151, 0.08) 0%, transparent 40%),
-                        radial-gradient(ellipse at 50% 50%, rgba(181, 138, 107, 0.05) 0%, transparent 60%);
+            background: radial-gradient(ellipse at 30% 20%, rgba(90, 139, 114, 0.06) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(123, 168, 144, 0.05) 0%, transparent 40%);
             pointer-events: none;
             z-index: -1;
         }
@@ -58,8 +57,7 @@
             width: 100%;
             height: 100%;
             background:
-                linear-gradient(180deg, transparent 0%, rgba(181, 138, 107, 0.03) 20%, transparent 40%),
-                linear-gradient(0deg, transparent 0%, rgba(201, 168, 151, 0.03) 20%, transparent 40%);
+                linear-gradient(180deg, transparent 0%, rgba(255, 255, 255, 0.4) 100%);
             pointer-events: none;
             z-index: -1;
         }
@@ -85,12 +83,12 @@
             margin-bottom: 20px;
             color: var(--highlight-bright);
             letter-spacing: 2px;
-            text-shadow: 0 0 12px var(--highlight-glow);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
         }
 
         .blog-subtitle {
             font-size: 1.2rem;
-            color: #D8BFA8;
+            color: var(--secondary);
             margin-bottom: 20px;
         }
 
@@ -99,7 +97,7 @@
             gap: 20px;
             margin-bottom: 30px;
             font-size: 14px;
-            color: #D8BFA8;
+            color: var(--secondary);
             justify-content: center;
         }
 
@@ -110,14 +108,14 @@
         }
 
         .blog-section {
-            background: linear-gradient(135deg, rgba(216, 191, 168, 0.88) 0%, rgba(201, 168, 151, 0.82) 100%);
-            border: 1px solid rgba(181, 138, 107, 0.2);
+            background: #FFFFFF;
+            border: 1px solid rgba(90, 139, 114, 0.18);
             border-radius: 16px;
             padding: 25px;
             margin-bottom: 30px;
             box-shadow:
-                0 4px 20px rgba(0, 0, 0, 0.25),
-                0 0 30px rgba(181, 138, 107, 0.08);
+                0 2px 12px rgba(90, 139, 114, 0.06),
+                0 1px 3px rgba(0, 0, 0, 0.03);
             position: relative;
             overflow: hidden;
         }
@@ -129,7 +127,7 @@
             left: 0;
             right: 0;
             height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(181, 138, 107, 0.6), transparent);
+            background: linear-gradient(90deg, transparent, rgba(90, 139, 114, 0.5), transparent);
         }
 
         .blog-section::after {
@@ -139,12 +137,12 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(ellipse at 50% 0%, rgba(181, 138, 107, 0.06) 0%, transparent 50%);
+            background: radial-gradient(ellipse at 50% 0%, rgba(90, 139, 114, 0.03) 0%, transparent 50%);
             pointer-events: none;
         }
 
         .blog-content h2 {
-            color: #2D2418;
+            color: var(--accent);
             margin-top: 0;
             margin-bottom: 20px;
             padding-bottom: 10px;
@@ -165,7 +163,7 @@
         }
 
         .blog-content h3 {
-            color: #2D2418;
+            color: var(--accent);
             margin-top: 20px;
             margin-bottom: 15px;
             font-size: 1.2rem;
@@ -195,12 +193,12 @@
         }
 
         .info-box {
-            background: linear-gradient(135deg, rgba(142, 107, 78, 0.25) 0%, rgba(181, 138, 107, 0.15) 100%);
+            background: #F2F7F4;
             border-left: 4px solid var(--highlight);
             padding: 18px 22px;
             margin: 18px 0;
             border-radius: 0 12px 12px 0;
-            box-shadow: 0 0 20px rgba(181, 138, 107, 0.1);
+            box-shadow: 0 1px 4px rgba(90, 139, 114, 0.06);
             color: var(--text-soft);
         }
 
@@ -211,14 +209,14 @@
             display: block;
             margin: 1rem auto;
             border-radius: 12px;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4), 0 0 24px rgba(181, 138, 107, 0.2);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(90, 139, 114, 0.08);
             background: #000;
-            border: 1px solid rgba(181, 138, 107, 0.3);
+            border: 1px solid rgba(90, 139, 114, 0.2);
         }
 
         .video-caption {
             text-align: center;
-            color: #D8BFA8;
+            color: var(--secondary);
             font-size: 0.9rem;
             margin-top: 0.5rem;
             margin-bottom: 1.5rem;
@@ -228,19 +226,20 @@
         .back-link {
             display: inline-block;
             padding: 12px 24px;
-            background: linear-gradient(135deg, var(--highlight) 0%, var(--accent) 100%);
-            color: white;
+            background: var(--highlight);
+            color: #FFFFFF;
             text-decoration: none;
             border-radius: 25px;
             transition: all 0.3s ease;
             font-weight: bold;
             font-size: 1rem;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 2px 8px rgba(90, 139, 114, 0.2);
         }
 
         .back-link:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 12px rgba(90, 139, 114, 0.3);
+            background: var(--accent);
         }
 
         .center-btn {
@@ -268,7 +267,7 @@
             position: fixed;
             width: 10px;
             height: 10px;
-            background: radial-gradient(circle, rgba(181, 138, 107, 0.8) 0%, rgba(142, 107, 78, 0.4) 50%, transparent 70%);
+            background: radial-gradient(circle, rgba(90, 139, 114, 0.6) 0%, rgba(63, 107, 86, 0.3) 50%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 999998;
@@ -343,7 +342,7 @@
             <div class="blog-meta">
                 <span>2026年8月</span>
                 <span>分类：工具开发</span>
-                <span>版本：v1 测试版</span>
+                <span>版本：v2 测试中</span>
             </div>
         </div>
 
@@ -361,12 +360,22 @@
 
             <div class="blog-section">
                 <h2>二、视频演示</h2>
-                <p>下方视频是多版本启动器第一版的运行演示，展示了版本列表、启动与最近打开等基础交互。</p>
+
+                <h3>2.1 第一版测试：两版本最小验证</h3>
+                <p>第一版只加进了两个 ZBrush 版本，验证「统一入口 + 自动检测 + 手动补充」这条路线本身能不能跑顺，以及版本列表、启动、最近打开等基础交互。</p>
                 <video class="demo-video" controls autoplay muted loop preload="metadata">
                     <source src="videos/ALLZBRUSH1.mp4" type="video/mp4">
                     您的浏览器不支持视频播放，请使用现代浏览器。
                 </video>
-                <p class="video-caption">▲ 多版本启动器 v1 运行演示：版本列表、启动、最近打开记录</p>
+                <p class="video-caption">▲ v1 测试演示：两版本基础流程跑通</p>
+
+                <h3>2.2 第二版测试：双数版本批量验证</h3>
+                <p>第一版跑通后，第二版开始往上加量——这一轮主要测<strong>所有双数版本</strong>的 ZBrush 能不能被正常识别和启动，看工具在版本数量明显增多后的表现：列表加载是否还稳、启动是否还准、有没有出现误识别或漏识别。</p>
+                <video class="demo-video" controls autoplay muted loop preload="metadata">
+                    <source src="videos/ALLZBRUSH2.mp4" type="video/mp4">
+                    您的浏览器不支持视频播放，请使用现代浏览器。
+                </video>
+                <p class="video-caption">▲ v2 测试演示：双数版本批量识别与启动验证</p>
             </div>
 
             <div class="blog-section">
@@ -383,15 +392,16 @@
             </div>
 
             <div class="blog-section">
-                <h2>四、关于第一版的取舍</h2>
+                <h2>四、关于测试节奏的取舍</h2>
                 <ul>
-                    <li><strong>先只放两个版本</strong>：第一版测试只加进了两个 ZBrush 版本，没一次性把所有版本全塞进去。一次性加载太多版本会让机器吃不消，也看不出工具在版本数量增多后的表现，所以先小批量跑通再说。</li>
-                    <li><strong>先做 ZBrush</strong>：不同 DCC 软件的版本管理方式差别不小，第一版只针对 ZBrush 把流程跑通、把交互定下来，后续再按软件特性逐个适配，避免一上来铺太大收不住。</li>
-                    <li><strong>测试优先</strong>：这一版主要验证「统一入口 + 自动检测 + 手动补充」这条路线本身能不能跑顺，功能先做最小可用，不急着堆特性。</li>
+                    <li><strong>v1 先只放两个版本</strong>：第一版测试只加进了两个 ZBrush 版本，没一次性把所有版本全塞进去。一次性加载太多版本会让机器吃不消，也看不出工具在版本数量增多后的表现，所以先小批量跑通再说。</li>
+                    <li><strong>v2 改成双数版本批量测</strong>：第一版路线跑通后，第二版开始往上加量，但没一次性把全部版本全塞进去，而是<strong>只挑双数版本</strong>。这样既能验证版本数量明显增多时的稳定性，又把测试样本控制在机器能吃得消的范围内，万一出问题也好定位是哪个版本。</li>
+                    <li><strong>先做 ZBrush</strong>：不同 DCC 软件的版本管理方式差别不小，前两版只针对 ZBrush 把流程跑通、把交互定下来，后续再按软件特性逐个适配，避免一上来铺太大收不住。</li>
+                    <li><strong>测试优先</strong>：两版都主要验证「统一入口 + 自动检测 + 手动补充」这条路线在版本数量从少到多时的稳定性，功能先做最小可用，不急着堆特性。</li>
                 </ul>
 
                 <div class="info-box">
-                    <strong>下一步方向</strong>：等两个版本的稳定性验证完，会逐步加入更多 ZBrush 版本，并把同一套思路迁移到其他 DCC 软件，最终做成一个能统一管理多种 DCC 多个版本的入口。
+                    <strong>下一步方向</strong>：等双数版本验证完，会把剩余的单数版本也补上做全量测试，之后再把同一套思路迁移到其他 DCC 软件，最终做成一个能统一管理多种 DCC 多个版本的入口。
                 </div>
             </div>
         </div>
