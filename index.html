@@ -225,12 +225,14 @@
 
         <section id="news" class="parallax-section" style="background: #0a0a0a;">
             <div class="news-content">
-                <h2 class="elastic-element">📰 每日新闻 | 2026-08-12</h2>
+                <h2 class="elastic-element">📰 每日新闻 | 2026-08-13</h2>
                 <div class="news-tabs elastic-element">
                     <button class="news-tab active" onclick="switchNewsTab('ai')">🤖 AI</button>
                     <button class="news-tab" onclick="switchNewsTab('game')">🎮 游戏</button>
+                    <button class="news-tab" onclick="switchNewsTab('video')">🎬 往期视频</button>
                     <button class="news-tab" onclick="showArchive()">📜 往期回顾</button>
                 </div>
+                <p id="videoDisclaimer" style="display: none; font-size: 0.75rem; color: rgba(255, 255, 255, 0.45); margin: 0.5rem 0 1.5rem; text-align: center; font-style: italic;">温馨提示：往期视频按个人兴趣收藏整理，不代表任何立场或排名，未能收录的作品敬请谅解。</p>
                 
                 <div class="news-slider-wrapper elastic-element" id="aiNewsSection">
                     <button class="news-slider-btn prev-btn" onclick="slideNews('ai', -1)">←</button>
@@ -238,12 +240,12 @@
                         <div class="news-card news-card-1 elastic-element">
                             <div class="news-number">①</div>
                             <div class="news-info">
-                                <h3>原阿里千问技术负责人林俊旸官宣创业：Pragmatik Labs 估值 20 亿美元，押注"数字+物理"双世界 Agent</h3>
-                                <p>93 年最年轻 P10 林俊旸（p7k）3 月离职阿里后沉淀 5 个月，8/12 凌晨官宣落地上海创办 Pragmatik Labs（语用科技）。天使轮估值 20 亿美元（约 135 亿人民币），高榕创投 + 红杉中国共同领投，腾讯 + 上海未来产业基金跟投，形成"国资+大厂+风投"三方联投格局。方向明确：数字 Agent + 物理 Agent（具身智能）+ 长程探索三位一体——横跨数字世界与物理世界的下一代智能体。中国具身/Agent 创业潮在 8 月被推上"原阿里技术一号位+腾讯/红杉/高榕联投"的口碑高位。</p>
+                                <h3>DeepSeek V4 Pro 正式版突袭发布：1M 上下文 + Agent 能力逼近 Claude Fable 5</h3>
+                                <p>DeepSeek V4 Pro 正式版无预告突袭发布，支持 1M 上下文 + 384K 最大输出，面向 Agent 开发场景，配套 JSON Output、Tool Calls 等能力，兼容 OpenAI 和 Anthropic API。官方评测显示智能体性能接近 Claude Fable 5，与 Opus-4.8 互有胜负。价格方面，缓存未命中输入 3 元/百万 Token，输出成本倍数从行业常见的 5 倍压至 2 倍——用其生成复杂代码、长篇报告或让 Agent 后台持续运作时花费大幅降低。与 xAI 8/11 发布的 Grok 4.6（1.5T 参数）参数规模相近、均聚焦 AI Agent 赛道，被业内人士称为 AI 模型的"斩杀线"时刻。</p>
                                 <div class="news-tags">
-                                    <span class="tag">Pragmatik Labs</span>
-                                    <span class="tag">林俊旸</span>
-                                    <span class="tag">双世界Agent</span>
+                                    <span class="tag">DeepSeek</span>
+                                    <span class="tag">V4 Pro</span>
+                                    <span class="tag">1M上下文</span>
                                 </div>
                             </div>
                         </div>
@@ -251,12 +253,12 @@
                         <div class="news-card news-card-2 elastic-element">
                             <div class="news-number">②</div>
                             <div class="news-info">
-                                <h3>SpaceX AI Grok Bot 正式推出：Cursor 600 亿收购后首款"数字同事"产品，月费 120 美元</h3>
-                                <p>SpaceX AI 8/12 正式推出 Grok Bot，这是 SpaceX 以 600 亿美元收购 Cursor 母公司 Anysphere 后的第一个整合落地产品。定位"全天候数字同事/AI 员工团队"，可登录、跨应用、跨网站、跨工具执行任务，用户离机也能继续工作。定价每月 120 美元，初期面向 SuperGrok Heavy / Cursor Ultra / Cursor Premium Teams 订阅用户开放，Windows + iOS 首发。内部代号 "Sand"，Cursor 旧品牌将逐步淡出，未来大概率挂 Grok 名号。对国产 AI Coding 玩家意味着：未来不是"和 Cursor 竞争"，而是"和 SpaceX+xAI 整个生态体竞争"。</p>
+                                <h3>Anthropic 洽谈 60 亿美元收购 Decart AI：上市前最大一笔扩容</h3>
+                                <p>据彭博社 8/13 报道，Anthropic 正洽谈以约 60 亿美元（约 405 亿人民币）收购英伟达投资的 AI 初创公司 Decart AI。若交易完成，这将是 Anthropic 迄今最大一笔收购。Decart 的核心业务并非训练通用大语言模型，而是提高 AI 模型在不同芯片上的运行效率，同时开发实时生成式视频和世界模型。其技术可帮助 Anthropic 在现有算力基础设施上消化更多需求，缓解当前算力紧张局面。这笔收购发生在 Anthropic 筹备大规模 IPO 的关键节点——买芯片效率优化公司比直接买卡更快。</p>
                                 <div class="news-tags">
-                                    <span class="tag">Grok Bot</span>
-                                    <span class="tag">SpaceX</span>
-                                    <span class="tag">数字同事</span>
+                                    <span class="tag">Anthropic</span>
+                                    <span class="tag">Decart AI</span>
+                                    <span class="tag">60亿收购</span>
                                 </div>
                             </div>
                         </div>
@@ -264,12 +266,12 @@
                         <div class="news-card news-card-3 elastic-element">
                             <div class="news-number">③</div>
                             <div class="news-info">
-                                <h3>第四届上海具身智能机器人产业展览会今日开幕：400+ 品牌 / 5 万人 / 8/12-14 上海新国际博览中心</h3>
-                                <p>继 8/10 宇树 IPO 打新之后，8/12-14 的上海具身展是具身赛道"超级月"的第二把火。400+ 品牌参展、50,000+ 名观众、20+ 专业采购团——国内规模最大的具身智能专项展。主题"具身之光，智塑未来"，四大展区：整机机器人 / 核心零部件（关节·灵巧手·传感器·芯片）/ 大模型与操作系统 / 场景化解决方案（工业·服务·特种·医疗）。宇树科技、云深处、优必选等整机厂 + 锋龙股份、巨轮智能、科力尔等伺服/减速器厂商 + 多模态感知算法公司同台。8/19-23 北京世界机器人大会、8/22-26 第二届世界人形机器人大会将接续——整个 8 月是具身赛道的"集中 emit 周"。</p>
+                                <h3>腾讯 Q2 财报：514 亿算力采购 + WorkBuddy 月访问 2000 万居市场第一</h3>
+                                <p>腾讯公布 2026 年 Q2 财报，营收 2047.9 亿元（同比 +11%），AI 成为主线。资本支出（含预付款）超 527 亿元，其中算力预付款 514 亿；研发投入 272.8 亿元，同比 +35%。Hunyuan-3 已发布并开源，刘炽平确认 Hunyuan-4"将更大"。WorkBuddy 月访问量 2000 万次，居市场第一；微信 AI 助手"小微"开启灰度测试，微信月活 14 亿+。刘炽平表示：若将新购算力对外出租"几乎立即"可收回折旧成本甚至获得超 30% 利润，但腾讯选择将大部分算力用于自研模型和 AI 应用。</p>
                                 <div class="news-tags">
-                                    <span class="tag">具身智能展</span>
-                                    <span class="tag">宇树</span>
-                                    <span class="tag">上海</span>
+                                    <span class="tag">腾讯</span>
+                                    <span class="tag">WorkBuddy</span>
+                                    <span class="tag">算力采购</span>
                                 </div>
                             </div>
                         </div>
@@ -277,12 +279,12 @@
                         <div class="news-card news-card-4 elastic-element">
                             <div class="news-number">④</div>
                             <div class="news-info">
-                                <h3>DeepSeek 开设"DeepSeek Harness 团队"独立公众号：从"卖 Token"转向"卖 Agent 操作系统"</h3>
-                                <p>8/11 完成微信注册、8/12 持续被多家财经媒体头条转载。北京深度求索公司新设独立公众号"DeepSeek Harness 团队"，独立于 DeepSeek 集团主公众号运营。Harness = 封装在底层大模型与上层 Agent 之间的"中间调度适配层"——DeepSeek 正名入局"Agent 框架层"赛道。6 月底负责人崔添翼已在社交平台发文："团队目标宏大、工作繁重、人员紧缺，每天都在面试"——确认这是新成立部门而非预研。叠加 DeepSeek 上调 API 定价（已具议价权）——中国 AI 头部公司正集体从"卖 Token 转向卖 Agent 操作系统"。</p>
+                                <h3>自变量机器人直播创纪录：1 小时 1816 件分拣超 Figure AI 45%，成本降 70%</h3>
+                                <p>深圳自变量机器人 8/12 下午进行了一场持续 1 小时的物流分拣直播：一台搭载双机械臂和标准夹爪的机器人，在全程无人工干预下，对大小/形状/材质/重量完全随机的真实物流包裹连续作业，完成 1816 件/小时有效分拣，准确率超 98%。对比 Figure 03 此前 200 小时不间断测试留下的 1248 件/小时标杆，效率提升约 45%，硬件成本降低 70%。核心技术为自研 WALL-B 世界统一模型，融合视觉、语言、触觉与动作感知，支持实时环境理解和零样本泛化。8/13 新浪财经发表深度分析，将此事称为"具身智能的 DeepSeek 时刻"。</p>
                                 <div class="news-tags">
-                                    <span class="tag">DeepSeek</span>
-                                    <span class="tag">Harness</span>
-                                    <span class="tag">Agent框架层</span>
+                                    <span class="tag">自变量机器人</span>
+                                    <span class="tag">WALL-B</span>
+                                    <span class="tag">具身智能</span>
                                 </div>
                             </div>
                         </div>
@@ -290,12 +292,12 @@
                         <div class="news-card news-card-5 elastic-element">
                             <div class="news-number">⑤</div>
                             <div class="news-info">
-                                <h3>OpenAI 发布 GPT-5.6-Cyber 网络安全专用模型，高危任务 95% 完成率，挖到 Chrome V8 漏洞</h3>
-                                <p>8/11 OpenAI 发布 GPT-5.6-Cyber 网络安全专用模型，高危任务完成率达 95%，已成功挖到 Chrome V8 漏洞。这是 OpenAI 继通用模型后向垂直安全领域的深入布局，AI 在网络安全攻防两端的能力快速提升。对 AI Coding 玩家意味着：安全审计自动化成为新方向，模型能力从"写代码"扩展到"找漏洞/修漏洞"，安全工程领域出现 AI 原生工作流的可能性正在增大。</p>
+                                <h3>近 30 家高校联合发布首个 Agent 记忆榜单 AML：MemoraX 58.0 分居首</h3>
+                                <p>国内外近 30 所高校与研究机构联合发布 Agent Memory Leaderboard（AML）——业内首个关注 Agent 记忆系统的机制级榜单。发起方包括清华、北大、人大、上海交大、浙大、复旦、中科大、南大、上海人工智能实验室、中科院自动化所，海外包括牛津大学、南洋理工等。AML 整合 PersonaMem、LoCoMo、LongMemEval 等十余个公开数据集并新增代码记忆评测。文本赛道结果：商业榜 MemoraX 58.0 分居首，开源榜 InvMem 45.1 分第一。Agent 记忆是 AI Coding 工具从"单次任务"走向"长期协作"的核心瓶颈，AML 的发布标志着 Agent 记忆系统从"各自声称"进入"统一基准评测"阶段。</p>
                                 <div class="news-tags">
-                                    <span class="tag">OpenAI</span>
-                                    <span class="tag">GPT-5.6-Cyber</span>
-                                    <span class="tag">网络安全</span>
+                                    <span class="tag">AML</span>
+                                    <span class="tag">MemoraX</span>
+                                    <span class="tag">Agent记忆</span>
                                 </div>
                             </div>
                         </div>
@@ -309,12 +311,12 @@
                         <div class="news-card news-card-1 elastic-element">
                             <div class="news-number">①</div>
                             <div class="news-info">
-                                <h3>《影之刃零》预购开启即登顶 Steam 全球热销榜，标准版 268 元 / 豪华版 328 元</h3>
-                                <p>灵游坊《影之刃零》今日上午 10:00 开启全平台预购，同步公开 11 分钟全新实机演示。国区标准版 268 元，豪华版 328 元（与《黑神话：悟空》同价，被玩家称为"国产 3A 标杆价"），国区定价为全球最低区。预购开启后迅速登顶 Steam 国区及全球畅销榜榜首。PC 配置最低 GTX 1060，推荐 RTX 3060Ti 可 2K 60 帧。平台 PC + PS5，PS5 主机端限时独占一年，10 月 29 日发售。继《黑神话：悟空》后国产 3A 单机的又一个里程碑时刻，162 万愿望单断层第一说明海外市场认可度极高。</p>
+                                <h3>腾讯 Q2 财报：游戏收入 659 亿撑起基本盘，AI 资本开支 528 亿创历史新高</h3>
+                                <p>腾讯 8/12 盘后发布 2026 年 Q2 财报：营收 2047.85 亿元（同比 +11%），游戏业务收入 659 亿元；但 AI 基础设施投入剧增——资本开支 527.8 亿元（同比 +176%，上半年累计 847.2 亿），自由现金流转负至 -138 亿元（剔除算力采购预付款则为 +376 亿）。马化腾在财报电话会点赞《洛克王国：世界》，并称"AI 投入回报空间已现"。游戏依然是现金牛，AI 是烧钱机器，"双轨叙事"下腾讯的财务结构正在被 AI 重写。</p>
                                 <div class="news-tags">
-                                    <span class="tag">影之刃零</span>
-                                    <span class="tag">灵游坊</span>
-                                    <span class="tag">Steam登顶</span>
+                                    <span class="tag">腾讯</span>
+                                    <span class="tag">Q2财报</span>
+                                    <span class="tag">游戏659亿</span>
                                 </div>
                             </div>
                         </div>
@@ -322,12 +324,13 @@
                         <div class="news-card news-card-2 elastic-element">
                             <div class="news-number">②</div>
                             <div class="news-info">
-                                <h3>甄子丹深度参与《影之刃零》：饰演主角父亲 + 担任武术指导 + 全程动捕</h3>
-                                <p>国际动作巨星甄子丹自 2023 年起担任《影之刃零》监制，饰演关键角色"暗魔天堡之主：魔渊"（主角父亲），并完成面部与动作捕捉。非简单挂名——定期开会深度参与开发，甄家班全程参与动作设计。外媒称相当于"基努·里维斯演《赛博朋克 2077》"。部分玩家质疑明星参演，但被多数玩家炮轰"不了解就别喷"。好莱坞级明星深度参与游戏开发（非简单脸模授权），在国内 3A 游戏中尚属首次，对国产动作游戏开发流程有标杆意义。</p>
+                                <h3>《影之刃零》预购首日登顶全球畅销榜，预估销量破 65 万</h3>
+                                <p>《影之刃零》8/12 开启全平台预售（Steam/WeGame 国区 268 元/豪华 328 元），首日战报喜人：全球畅销榜第 1，第三方预估销量已破 65 万。今日持续霸屏：外网盛赞主角性能"终于不是类魂滚来滚去"、老戴评价"国产武侠的全新可能性"、极难模式被曝"无法背板、堪比格斗游戏"，甄子丹本人也出镜寄语。国产单机 3A 的预售爆发力再次得到验证，10 月 29 日发售前的宣发节奏密集而有效。</p>
+                                <p style="margin-top: 0.6rem;"><a href="https://www.bilibili.com/video/BV1Hmuv68EWW/?share_source=copy_web&vd_source=5f8e45cbfd1be614025127ea459f9ce3" target="_blank" rel="noopener" style="color: #64ffda; text-decoration: underline;">▶ 观看《影之刃零》11 分钟实机预告视频</a></p>
                                 <div class="news-tags">
-                                    <span class="tag">甄子丹</span>
-                                    <span class="tag">动捕</span>
-                                    <span class="tag">武术指导</span>
+                                    <span class="tag">影之刃零</span>
+                                    <span class="tag">预购首日</span>
+                                    <span class="tag">全球第一</span>
                                 </div>
                             </div>
                         </div>
@@ -335,12 +338,12 @@
                         <div class="news-card news-card-3 elastic-element">
                             <div class="news-number">③</div>
                             <div class="news-info">
-                                <h3>WeGame 千万以内零分成 + 京东/海信深度合作，《影之刃零》宣发阵容拉满</h3>
-                                <p>WeGame 启动客户端直接播放实机演示，千万流水以内零分成（与《黑神话：悟空》同等待遇）；京东联手推出实体礼盒，8 月 14 日公开；海信推出《影之刃零》专属画质定制电视；PS 中国官方宣传影之刃零，国产游戏首次获得 PS 官方专场待遇；8 月 18 日将开启索尼专属直播。国产 3A 的宣发已从"游戏圈"扩展到全产业链——电商平台、硬件厂商、主机平台方全部入局。WeGame 千万以内零分成政策持续加码，对中小开发商有实质激励作用，说明国产 3A 的产业链生态正在成熟。</p>
+                                <h3>中国游戏首次 PS 发布会专场！《影之刃零》8 月 18 日专属 State of Play</h3>
+                                <p>索尼 PlayStation 官方宣布，将于北京时间 8 月 18 日上午 10 点为《影之刃零》举办专属 State of Play 发布会——这是国产游戏首次获得 PS 专场待遇，预计带来近 20 分钟全新实机内容，试玩版或同步揭晓。此前《影之刃零》还传出 PS5 首发无实体版的猜测（呼应索尼 2028 年取消实体盘的路线）。索尼为单一第三方国产游戏开专场发布会史无前例，标志着国产单机在主机市场的分量质变。</p>
                                 <div class="news-tags">
-                                    <span class="tag">WeGame</span>
-                                    <span class="tag">京东</span>
-                                    <span class="tag">海信</span>
+                                    <span class="tag">影之刃零</span>
+                                    <span class="tag">State of Play</span>
+                                    <span class="tag">PS专场</span>
                                 </div>
                             </div>
                         </div>
@@ -348,12 +351,12 @@
                         <div class="news-card news-card-4 elastic-element">
                             <div class="news-number">④</div>
                             <div class="news-info">
-                                <h3>《黑神话：悟空》全平台七折新史低，标准版 187.6 元</h3>
-                                <p>《黑神话：悟空》在 PS Store、微软商店、Steam、Epic、WeGame 全平台开启限时七折促销。标准版 187.6 元（原 268 元），为本作全新史低；港服同步新史低 208.6 港币。时间窗口与影之刃零预购同日，玩家戏称"钱包双杀"。黑神话发售后近两年首次大力度打折，选择与影之刃零预购同日并非巧合——国产 3A 形成"前作打折带新作预购"的协同效应。268 元定价经两年市场检验后降至 187.6 元，说明国产 3A 的价格曲线正在建立可预测的模型。</p>
+                                <h3>DOTA2 TI2026 今日上海开赛！时隔 7 年 TI 重回中国</h3>
+                                <p>第十五届 DOTA2 国际邀请赛（TI2026）8/13-23 日在上海举办，今日上午 10 点小组赛开战。16 支全球战队参赛，3 支中国队伍主场作战（XG/TR/VG），门票 6 月开售当天即抢光。上海成为西雅图之外全球唯一两度承办 TI 的城市。TI 时隔 7 年重返中国是电竞行业标志性事件，赛事带动上海电竞产业与观赛经济，也印证国内电竞生态的复苏与资本信心。</p>
                                 <div class="news-tags">
-                                    <span class="tag">黑神话悟空</span>
-                                    <span class="tag">七折</span>
-                                    <span class="tag">史低</span>
+                                    <span class="tag">TI2026</span>
+                                    <span class="tag">上海</span>
+                                    <span class="tag">电竞</span>
                                 </div>
                             </div>
                         </div>
@@ -361,17 +364,23 @@
                         <div class="news-card news-card-5 elastic-element">
                             <div class="news-number">⑤</div>
                             <div class="news-info">
-                                <h3>《艾尔登法环：褪色者版》新预告，8 月 28 日登陆 Switch 2</h3>
-                                <p>《艾尔登法环：褪色者版》今日公开全新预告视频，8 月 28 日正式登陆 Switch 2 平台。首次将完整版老头环搬上掌机平台，Switch 2 的第三方 3A 阵容持续加强。老头环上掌机意味着 Switch 2 的硬件性能已能满足开放世界大作需求，对 Switch 2 生态的吸引力有实质提升。这是 Switch 2 阵容扩张的又一重要节点，对掌机市场格局和第三方 3A 移植业务都有深远影响。</p>
+                                <h3>9-10 月发售日历出炉：二十余款大作扎堆"档期太挤"</h3>
+                                <p>玩家整理 2026 年 9-10 月游戏发售日历引发热议，二十余款作品集中上线。《羊蹄山之魂 完整版》10 月 1 日发售，支持实体版、封面首曝（收录新 DLC"弦续关原"+ 生存模式"无尽追缉"）；《鬼武者：剑之道》9 月 4 日发售，官方确认"绝非魂游、纯粹的动作游戏"；《大侠立志传：侠道相逢》8 月 19 日全球发售；《仁王 3》DLC 同日解锁；《洛奇英雄传：反抗命运》定档 2027 年；《暗黑血统 4》发售窗口锁定 2028 年 3 月前。下半年档期密度极高，大作正面撞车将直接考验玩家钱包与厂商宣发节奏。</p>
                                 <div class="news-tags">
-                                    <span class="tag">艾尔登法环</span>
-                                    <span class="tag">Switch 2</span>
-                                    <span class="tag">掌机</span>
+                                    <span class="tag">发售日历</span>
+                                    <span class="tag">羊蹄山之魂</span>
+                                    <span class="tag">鬼武者</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <button class="news-slider-btn next-btn" onclick="slideNews('game', 1)">→</button>
+                </div>
+
+                <div class="news-slider-wrapper elastic-element" id="videoSection" style="display: none;">
+                    <button class="news-slider-btn prev-btn" onclick="slideNews('video', -1)">←</button>
+                    <div class="news-container" id="videoContainer"></div>
+                    <button class="news-slider-btn next-btn" onclick="slideNews('video', 1)">→</button>
                 </div>
             </div>
         </section>

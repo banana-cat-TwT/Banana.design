@@ -167,6 +167,10 @@ li, span, a, td, th {
     overflow: hidden;
 }
 
+#news.parallax-section {
+    overflow: visible;
+}
+
 .parallax-bg {
     position: absolute;
     top: 0;
@@ -1191,11 +1195,11 @@ nav ul li a:hover::after {
 }
 
 .news-slider-btn.prev-btn {
-    left: 0;
+    left: 5px;
 }
 
 .news-slider-btn.next-btn {
-    right: 0;
+    right: 5px;
 }
 
 .news-card {

@@ -1100,9 +1100,12 @@ function slideWorks(direction) {
 }
 
 function slideNews(tab, direction) {
-    const newsContainer = document.getElementById(tab === 'ai' ? 'aiNewsContainer' : 'gameNewsContainer');
+    let containerId = 'gameNewsContainer';
+    if (tab === 'ai') containerId = 'aiNewsContainer';
+    else if (tab === 'video') containerId = 'videoContainer';
+    const newsContainer = document.getElementById(containerId);
     if (!newsContainer) return;
-    
+
     const scrollAmount = 380;
     newsContainer.scrollBy({
         left: scrollAmount * direction,
@@ -1110,31 +1113,77 @@ function slideNews(tab, direction) {
     });
 }
 
+// ===== 往期视频板块 =====
+const videoArchiveData = [
+    { bvid: 'BV1Hmuv68EWW', title: '《影之刃零》11分钟实机预告', desc: '预购开启同步公开的全新实机演示', date: '2026-08-12' },
+    { bvid: 'BV1nGNd6gEig', title: '【IGN】《古剑》41分钟实机演示', desc: '烛龙《古剑》新作41分钟完整实机演示，美术表现获一致好评', date: '2026-07-23' },
+    { bvid: 'BV1TJE862ESA', title: '《女神异闻录４ Revival》预购宣传片', desc: 'Atlus经典JRPG重制版，画面全面升级、首次加入中文配音', date: '2026-06-08' },
+    { bvid: 'BV1heVpzvEKp', title: '【IGN】《GTA6》全新预告', desc: 'Rockstar《GTA6》全新预告片公开， Vice City 再度登场', date: '2025-05-06' },
+];
+
+function renderVideoArchive() {
+    const container = document.getElementById('videoContainer');
+    if (!container) return;
+    container.innerHTML = videoArchiveData.map(function(v, i) {
+        const numList = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩'];
+        return '<div class="news-card elastic-element">' +
+            '<div style="aspect-ratio: 16/9; width: 100%; overflow: hidden; border-radius: 8px 8px 0 0; position: relative;">' +
+            '<iframe src="https://player.bilibili.com/player.html?bvid=' + v.bvid + '&page=1&high_quality=1&danmaku=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>' +
+            '</div>' +
+            '<div class="news-info">' +
+            '<div style="font-size: 0.9rem; color: rgb(255, 159, 67); font-weight: bold; margin-bottom: 0.5rem;">' + numList[i] + ' · ' + v.date + '</div>' +
+            '<h3>' + v.title + '</h3>' +
+            '<p>' + v.desc + '</p>' +
+            '<div class="news-tags">' +
+            '<span class="tag">🎬 实机预告</span>' +
+            '<a class="tag" href="https://www.bilibili.com/video/' + v.bvid + '/" target="_blank" rel="noopener" style="text-decoration:none;">🔊 B站（有声）</a>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+    }).join('');
+}
+
+function slideVideo(direction) {
+    const container = document.getElementById('videoContainer');
+    if (!container) return;
+    container.scrollBy({ left: 380 * direction, behavior: 'smooth' });
+}
+
 function switchNewsTab(tab) {
     const aiSection = document.getElementById('aiNewsSection');
     const gameSection = document.getElementById('gameNewsSection');
+    const videoSection = document.getElementById('videoSection');
     const aiTab = document.querySelector('.news-tab:nth-child(1)');
     const gameTab = document.querySelector('.news-tab:nth-child(2)');
-    const archiveTab = document.querySelector('.news-tab:nth-child(3)');
-    
+    const videoTab = document.querySelector('.news-tab:nth-child(3)');
+    const archiveTab = document.querySelector('.news-tab:nth-child(4)');
+    const disclaimer = document.getElementById('videoDisclaimer');
+
+    aiSection.style.display = 'none';
+    gameSection.style.display = 'none';
+    if (videoSection) videoSection.style.display = 'none';
+    aiTab.classList.remove('active');
+    gameTab.classList.remove('active');
+    if (videoTab) videoTab.classList.remove('active');
+    if (archiveTab) archiveTab.classList.remove('active');
+    if (disclaimer) disclaimer.style.display = 'none';
+
     if (tab === 'ai') {
         aiSection.style.display = 'block';
-        gameSection.style.display = 'none';
         aiTab.classList.add('active');
-        gameTab.classList.remove('active');
-        archiveTab.classList.remove('active');
-        setTimeout(() => {
-            aiSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 50);
-    } else {
-        aiSection.style.display = 'none';
+        setTimeout(() => { aiSection.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 50);
+    } else if (tab === 'game') {
         gameSection.style.display = 'block';
-        aiTab.classList.remove('active');
         gameTab.classList.add('active');
-        archiveTab.classList.remove('active');
-        setTimeout(() => {
-            gameSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        }, 50);
+        setTimeout(() => { gameSection.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 50);
+    } else if (tab === 'video') {
+        renderVideoArchive();
+        if (videoSection) {
+            videoSection.style.display = 'block';
+            videoTab.classList.add('active');
+            if (disclaimer) disclaimer.style.display = 'block';
+            setTimeout(() => { videoSection.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 50);
+        }
     }
 }
 
@@ -1295,6 +1344,13 @@ const archiveData = {
             { title: 'DeepSeek 开设"DeepSeek Harness 团队"独立公众号：从"卖 Token"转向"卖 Agent 操作系统"', desc: '8/11 完成微信注册、8/12 持续被多家财经媒体头条转载。北京深度求索公司新设独立公众号"DeepSeek Harness 团队"，独立于 DeepSeek 集团主公众号运营。Harness = 封装在底层大模型与上层 Agent 之间的"中间调度适配层"——DeepSeek 正名入局"Agent 框架层"赛道。6 月底负责人崔添翼已在社交平台发文："团队目标宏大、工作繁重、人员紧缺，每天都在面试"——确认这是新成立部门而非预研。叠加 DeepSeek 上调 API 定价（已具议价权）——中国 AI 头部公司正集体从"卖 Token 转向卖 Agent 操作系统"。', tags: ['DeepSeek', 'Harness', 'Agent框架层'] },
             { title: 'OpenAI 发布 GPT-5.6-Cyber 网络安全专用模型，高危任务 95% 完成率，挖到 Chrome V8 漏洞', desc: '8/11 OpenAI 发布 GPT-5.6-Cyber 网络安全专用模型，高危任务完成率达 95%，已成功挖到 Chrome V8 漏洞。这是 OpenAI 继通用模型后向垂直安全领域的深入布局，AI 在网络安全攻防两端的能力快速提升。对 AI Coding 玩家意味着：安全审计自动化成为新方向，模型能力从"写代码"扩展到"找漏洞/修漏洞"，安全工程领域出现 AI 原生工作流的可能性正在增大。', tags: ['OpenAI', 'GPT-5.6-Cyber', '网络安全'] }
         ]},
+        '2026-08-13': { preview: 'DeepSeek V4 Pro正式版1M上下文Agent逼近Claude Fable5、Anthropic 60亿收购Decart AI推理效率、腾讯Q2 514亿算力采购WorkBuddy月访问2000万第一、自变量机器人1816件/小时超Figure45%成本降70%、近30高校首发Agent记忆榜单AML MemoraX居首...', cards: [
+            { title: 'DeepSeek V4 Pro 正式版突袭发布：1M 上下文 + Agent 能力逼近 Claude Fable 5', desc: 'DeepSeek V4 Pro 正式版无预告突袭发布，支持 1M 上下文 + 384K 最大输出，面向 Agent 开发场景，配套 JSON Output、Tool Calls 等能力，兼容 OpenAI 和 Anthropic API。官方评测显示智能体性能接近 Claude Fable 5，与 Opus-4.8 互有胜负。价格方面，缓存未命中输入 3 元/百万 Token，输出成本倍数从行业常见的 5 倍压至 2 倍——用其生成复杂代码、长篇报告或让 Agent 后台持续运作时花费大幅降低。与 xAI 8/11 发布的 Grok 4.6（1.5T 参数）参数规模相近、均聚焦 AI Agent 赛道，被业内人士称为 AI 模型的"斩杀线"时刻。', tags: ['DeepSeek', 'V4 Pro', '1M上下文'] },
+            { title: 'Anthropic 洽谈 60 亿美元收购 Decart AI：上市前最大一笔扩容', desc: '据彭博社 8/13 报道，Anthropic 正洽谈以约 60 亿美元（约 405 亿人民币）收购英伟达投资的 AI 初创公司 Decart AI。若交易完成，这将是 Anthropic 迄今最大一笔收购。Decart 的核心业务并非训练通用大语言模型，而是提高 AI 模型在不同芯片上的运行效率，同时开发实时生成式视频和世界模型。其技术可帮助 Anthropic 在现有算力基础设施上消化更多需求，缓解当前算力紧张局面。这笔收购发生在 Anthropic 筹备大规模 IPO 的关键节点——买芯片效率优化公司比直接买卡更快。', tags: ['Anthropic', 'Decart AI', '60亿收购'] },
+            { title: '腾讯 Q2 财报：514 亿算力采购 + WorkBuddy 月访问 2000 万居市场第一', desc: '腾讯公布 2026 年 Q2 财报，营收 2047.9 亿元（同比 +11%），AI 成为主线。资本支出（含预付款）超 527 亿元，其中算力预付款 514 亿；研发投入 272.8 亿元，同比 +35%。Hunyuan-3 已发布并开源，刘炽平确认 Hunyuan-4"将更大"。WorkBuddy 月访问量 2000 万次，居市场第一；微信 AI 助手"小微"开启灰度测试，微信月活 14 亿+。刘炽平表示：若将新购算力对外出租"几乎立即"可收回折旧成本甚至获得超 30% 利润，但腾讯选择将大部分算力用于自研模型和 AI 应用。', tags: ['腾讯', 'WorkBuddy', '算力采购'] },
+            { title: '自变量机器人直播创纪录：1 小时 1816 件分拣超 Figure AI 45%，成本降 70%', desc: '深圳自变量机器人 8/12 下午进行了一场持续 1 小时的物流分拣直播：一台搭载双机械臂和标准夹爪的机器人，在全程无人工干预下，对大小/形状/材质/重量完全随机的真实物流包裹连续作业，完成 1816 件/小时有效分拣，准确率超 98%。对比 Figure 03 此前 200 小时不间断测试留下的 1248 件/小时标杆，效率提升约 45%，硬件成本降低 70%。核心技术为自研 WALL-B 世界统一模型，融合视觉、语言、触觉与动作感知，支持实时环境理解和零样本泛化。8/13 新浪财经发表深度分析，将此事称为"具身智能的 DeepSeek 时刻"。', tags: ['自变量机器人', 'WALL-B', '具身智能'] },
+            { title: '近 30 家高校联合发布首个 Agent 记忆榜单 AML：MemoraX 58.0 分居首', desc: '国内外近 30 所高校与研究机构联合发布 Agent Memory Leaderboard（AML）——业内首个关注 Agent 记忆系统的机制级榜单。发起方包括清华、北大、人大、上海交大、浙大、复旦、中科大、南大、上海人工智能实验室、中科院自动化所，海外包括牛津大学、南洋理工等。AML 整合 PersonaMem、LoCoMo、LongMemEval 等十余个公开数据集并新增代码记忆评测。文本赛道结果：商业榜 MemoraX 58.0 分居首，开源榜 InvMem 45.1 分第一。Agent 记忆是 AI Coding 工具从"单次任务"走向"长期协作"的核心瓶颈，AML 的发布标志着 Agent 记忆系统从"各自声称"进入"统一基准评测"阶段。', tags: ['AML', 'MemoraX', 'Agent记忆'] }
+        ]},
     },
     game: {
         '2026-07-16': { preview: '微软Xbox裁3200人、育碧裁员裁到大动脉、UE 5.8收官转向UE6...', cards: null },
@@ -1450,6 +1506,13 @@ const archiveData = {
             { title: 'WeGame 千万以内零分成 + 京东/海信深度合作，《影之刃零》宣发阵容拉满', desc: 'WeGame 启动客户端直接播放实机演示，千万流水以内零分成（与《黑神话：悟空》同等待遇）；京东联手推出实体礼盒，8 月 14 日公开；海信推出《影之刃零》专属画质定制电视；PS 中国官方宣传影之刃零，国产游戏首次获得 PS 官方专场待遇；8 月 18 日将开启索尼专属直播。国产 3A 的宣发已从"游戏圈"扩展到全产业链——电商平台、硬件厂商、主机平台方全部入局。WeGame 千万以内零分成政策持续加码，对中小开发商有实质激励作用，说明国产 3A 的产业链生态正在成熟。', tags: ['WeGame', '京东', '海信'] },
             { title: '《黑神话：悟空》全平台七折新史低，标准版 187.6 元', desc: '《黑神话：悟空》在 PS Store、微软商店、Steam、Epic、WeGame 全平台开启限时七折促销。标准版 187.6 元（原 268 元），为本作全新史低；港服同步新史低 208.6 港币。时间窗口与影之刃零预购同日，玩家戏称"钱包双杀"。黑神话发售后近两年首次大力度打折，选择与影之刃零预购同日并非巧合——国产 3A 形成"前作打折带新作预购"的协同效应。268 元定价经两年市场检验后降至 187.6 元，说明国产 3A 的价格曲线正在建立可预测的模型。', tags: ['黑神话悟空', '七折', '史低'] },
             { title: '《艾尔登法环：褪色者版》新预告，8 月 28 日登陆 Switch 2', desc: '《艾尔登法环：褪色者版》今日公开全新预告视频，8 月 28 日正式登陆 Switch 2 平台。首次将完整版老头环搬上掌机平台，Switch 2 的第三方 3A 阵容持续加强。老头环上掌机意味着 Switch 2 的硬件性能已能满足开放世界大作需求，对 Switch 2 生态的吸引力有实质提升。这是 Switch 2 阵容扩张的又一重要节点，对掌机市场格局和第三方 3A 移植业务都有深远影响。', tags: ['艾尔登法环', 'Switch 2', '掌机'] }
+        ]},
+        '2026-08-13': { preview: '腾讯Q2游戏收入659亿AI资本开支528亿、影之刃零预购首日全球第一预估65万、影之刃零8/18专属State of Play国产首次PS专场、DOTA2 TI2026上海开赛时隔7年重回中国、9-10月二十余款大作扎堆发售...', cards: [
+            { title: '腾讯 Q2 财报：游戏收入 659 亿撑起基本盘，AI 资本开支 528 亿创历史新高', desc: '腾讯 8/12 盘后发布 2026 年 Q2 财报：营收 2047.85 亿元（同比 +11%），游戏业务收入 659 亿元；但 AI 基础设施投入剧增——资本开支 527.8 亿元（同比 +176%，上半年累计 847.2 亿），自由现金流转负至 -138 亿元（剔除算力采购预付款则为 +376 亿）。马化腾在财报电话会点赞《洛克王国：世界》，并称"AI 投入回报空间已现"。游戏依然是现金牛，AI 是烧钱机器，"双轨叙事"下腾讯的财务结构正在被 AI 重写。', tags: ['腾讯', 'Q2财报', '游戏659亿'] },
+            { title: '《影之刃零》预购首日登顶全球畅销榜，预估销量破 65 万', desc: '《影之刃零》8/12 开启全平台预售（Steam/WeGame 国区 268 元/豪华 328 元），首日战报喜人：全球畅销榜第 1，第三方预估销量已破 65 万。今日持续霸屏：外网盛赞主角性能"终于不是类魂滚来滚去"、老戴评价"国产武侠的全新可能性"、极难模式被曝"无法背板、堪比格斗游戏"，甄子丹本人也出镜寄语。国产单机 3A 的预售爆发力再次得到验证，10 月 29 日发售前的宣发节奏密集而有效。', tags: ['影之刃零', '预购首日', '全球第一'] },
+            { title: '中国游戏首次 PS 发布会专场！《影之刃零》8 月 18 日专属 State of Play', desc: '索尼 PlayStation 官方宣布，将于北京时间 8 月 18 日上午 10 点为《影之刃零》举办专属 State of Play 发布会——这是国产游戏首次获得 PS 专场待遇，预计带来近 20 分钟全新实机内容，试玩版或同步揭晓。此前《影之刃零》还传出 PS5 首发无实体版的猜测（呼应索尼 2028 年取消实体盘的路线）。索尼为单一第三方国产游戏开专场发布会史无前例，标志着国产单机在主机市场的分量质变。', tags: ['影之刃零', 'State of Play', 'PS专场'] },
+            { title: 'DOTA2 TI2026 今日上海开赛！时隔 7 年 TI 重回中国', desc: '第十五届 DOTA2 国际邀请赛（TI2026）8/13-23 日在上海举办，今日上午 10 点小组赛开战。16 支全球战队参赛，3 支中国队伍主场作战（XG/TR/VG），门票 6 月开售当天即抢光。上海成为西雅图之外全球唯一两度承办 TI 的城市。TI 时隔 7 年重返中国是电竞行业标志性事件，赛事带动上海电竞产业与观赛经济，也印证国内电竞生态的复苏与资本信心。', tags: ['TI2026', '上海', '电竞'] },
+            { title: '9-10 月发售日历出炉：二十余款大作扎堆"档期太挤"', desc: '玩家整理 2026 年 9-10 月游戏发售日历引发热议，二十余款作品集中上线。《羊蹄山之魂 完整版》10 月 1 日发售，支持实体版、封面首曝（收录新 DLC"弦续关原"+ 生存模式"无尽追缉"）；《鬼武者：剑之道》9 月 4 日发售，官方确认"绝非魂游、纯粹的动作游戏"；《大侠立志传：侠道相逢》8 月 19 日全球发售；《仁王 3》DLC 同日解锁；《洛奇英雄传：反抗命运》定档 2027 年；《暗黑血统 4》发售窗口锁定 2028 年 3 月前。下半年档期密度极高，大作正面撞车将直接考验玩家钱包与厂商宣发节奏。', tags: ['发售日历', '羊蹄山之魂', '鬼武者'] }
         ]}
     }
 };
