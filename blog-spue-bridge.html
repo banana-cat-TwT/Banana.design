@@ -189,6 +189,7 @@
             <div class="section-content">
                 <p>在日常的3D美术工作流中，Substance Painter（SP）和Unreal Engine（UE）之间的材质资产同步是高频且繁琐的操作。每次在SP中完成材质绘制后，需要手动导出贴图、在UE中导入、重新连接材质节点、调整参数，流程重复且容易出错。</p>
                 <p>做这个工具的初衷其实很简单，我自己在熟悉这套流程的时候，强烈感觉到这一步真的没必要，非常浪费大家的制作时间。它不光是耗时间的问题，更消耗心力，是一种纯粹的重复性劳动。不管是我自己，还是身边的朋友、同事，我发现大家在这一步上都会特别受影响，怎么说呢，很影响心态，让人泄气。本来在SP里把材质做出来是有成就感的，结果一到了同步这步就开始磨人，做着做着热情就被消耗掉了。尤其是在商业游戏项目里，材质制作本身就是一个不断来回的过程——大家商量的想法会变，资产规范、命名规则、通道映射这些也会跟着调整。而且更离谱的是，这种改不是只改一次就定了，它是一直在变、要改好几次，你得跟着他们每一次调整的方案反复去改同一个东西，今天按这套规则同步完，明天又来一版新规则，后天可能再调一次，来回拉扯没完没了。这种反复的突发性返工比单纯重复更让人烦，因为你知道这些功夫本来是可以省掉的。所以才想把它自动化掉，让这一步不再成为拖累心态的环节，规则变了也能快速重跑一遍，而不是手动一点点改。</p>
+                <p>还有一个更具体的问题一直卡着我，就是颜色对不上。SP 里调好的材质导进 UE 就是会偏色，两边色彩空间和色调映射不一样，要反复在 SP 和 UE 之间来回调整才能对上。每次都得导一次看一次，发现偏了再回 SP 改，改完再导一次再看，来回折腾好几轮。所以后来最想要的就是两件事，一是能快速把文件导进去，不用再手动走那一长串流程，二是能实时同步看到两边颜色的对比，SP 这边一改 UE 那边立刻就能看到，色差当场就能发现当场解决。</p>
                 <p>项目目标是开发一套纯本地离线的桥接工具，通过Python桥接服务实现两个软件的自动化通信，减少手动操作，提升日常工作效率。</p>
             </div>
 
@@ -234,48 +235,56 @@
                 <p class="video-caption" style="text-align: center; color: #a8b8d8; font-size: 0.9rem; margin-top: 0.5rem;">SP-UE Bridge 工具界面展示（项目管理/连接配置/任务队列等核心页面）</p>
             </div>
 
-            <h2 class="section-title">当前局限与待完善点</h2>
+            <h2 class="section-title">测试与验证记录</h2>
             <div class="section-content">
-                <p>由于项目尚处于早期开发阶段，有不少需要后续推进的地方：</p>
+                <p>经过持续调试，核心同步流程已经跑通，下面是目前的功能实现情况和验证记录。</p>
+
+                <p style="margin-top: 1.5rem;"><strong>已实现功能</strong></p>
                 <ul>
-                    <li><span class="highlight">1. 核心功能未实现：</span>贴图导出、资产同步、材质重连等核心自动化流程尚未完成；</li>
-                    <li><span class="highlight">2. 实时同步机制：</span>变化检测和自动同步触发逻辑需要实现和测试；</li>
-                    <li><span class="highlight">3. 版本兼容性：</span>目前仅针对SP 2021和UE 5.3特定版本，跨版本支持需后续适配；</li>
-                    <li><span class="highlight">4. 异常处理：</span>各种边界情况（连接断开、API错误、冲突处理等）的完善和测试；</li>
-                    <li><span class="highlight">5. 界面完善：</span>交互细节、状态反馈和用户体验需要打磨。</li>
+                    <li><span class="highlight">1. 贴图自动导出</span>已跑通，根据配置规则自动从 SP 导出 BaseColor、Normal、Roughness 等贴图；</li>
+                    <li><span class="highlight">2. 资产自动同步</span>已跑通，导出的贴图自动导入 UE 工程并创建或更新材质资产；</li>
+                    <li><span class="highlight">3. 材质节点映射</span>已跑通，SP 贴图通道与 UE 材质节点的映射关系自动完成节点连接；</li>
+                    <li><span class="highlight">4. 实时同步</span>已跑通，开启后自动检测 SP 材质变化并实时同步到 UE，无需手动触发。</li>
                 </ul>
 
-                <p style="margin-top: 1.5rem;"><strong>实际测试过程记录：</strong></p>
-                <p>下面是一次真实的联调测试截图，可以直观看到当前的实际进度与遇到的问题。图中 SP 侧贴图导出环节失败，原因是 UE 端的 Remote Execution 插件一直未能正常启动，导致 Python 桥接服务无法与 UE 建立通信。昨天主要花了时间在端口连通性测试上，排查 SP 插件监听端口与 UE 侧远程执行端口的握手问题。</p>
+                <p style="margin-top: 1.5rem;"><strong>待完善部分</strong></p>
+                <ul>
+                    <li><span class="highlight">1. 版本兼容性</span>目前仅针对 SP 2021 和 UE 5.3 特定版本，跨版本支持需后续适配；</li>
+                    <li><span class="highlight">2. 异常处理</span>各种边界情况（连接断开、API 错误、冲突处理等）的完善和测试；</li>
+                    <li><span class="highlight">3. 界面完善</span>交互细节、状态反馈和用户体验需要打磨。</li>
+                </ul>
+
+                <p style="margin-top: 1.5rem;"><strong>开发过程记录</strong></p>
+                <p>下面是早期一次真实的联调测试截图，可以直观看到当时的进度与遇到的问题。图中 SP 侧贴图导出环节失败，原因是 UE 端的 Remote Execution 插件一直未能正常启动，导致 Python 桥接服务无法与 UE 建立通信。当时主要花了时间在端口连通性测试上，排查 SP 插件监听端口与 UE 侧远程执行端口的握手问题。该问题已在后续调试中解决。</p>
                 <img src="image/spue2.png" alt="SP-UE Bridge 联调测试过程截图" style="width: 100%; border-radius: 12px; margin: 1rem 0; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); border: 1px solid rgba(168, 184, 216, 0.2);">
-                <p class="video-caption" style="text-align: center; color: #a8b8d8; font-size: 0.9rem; margin-top: 0.5rem;">SP-UE Bridge 联调测试过程：SP 贴图导出失败，UE 插件未启动，正在排查插件连接的问题（2026年08月01日）</p>
+                <p class="video-caption" style="text-align: center; color: #a8b8d8; font-size: 0.9rem; margin-top: 0.5rem;">SP-UE Bridge 早期联调测试，SP 贴图导出失败、UE 插件未启动，该问题已解决（2026年08月01日）</p>
 
-                <p style="margin-top: 1.5rem;">更新一张最新的测试过程截图，可以看到 UESP 工具的实际运行状态和界面反馈：</p>
-                <img src="image/spue3.png" alt="UESP 工具最新测试过程截图" style="width: 100%; border-radius: 12px; margin: 1rem 0; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); border: 1px solid rgba(168, 184, 216, 0.2);">
-                <p class="video-caption" style="text-align: center; color: #a8b8d8; font-size: 0.9rem; margin-top: 0.5rem;">UESP 工具最新测试过程截图（2026年08月01日）</p>
+                <p style="margin-top: 1.5rem;">另一张测试过程截图，可以看到 UESP 工具的实际运行状态和界面反馈。</p>
+                <img src="image/spue3.png" alt="UESP 工具测试过程截图" style="width: 100%; border-radius: 12px; margin: 1rem 0; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); border: 1px solid rgba(168, 184, 216, 0.2);">
+                <p class="video-caption" style="text-align: center; color: #a8b8d8; font-size: 0.9rem; margin-top: 0.5rem;">UESP 工具测试过程截图（2026年08月01日）</p>
 
-                <p style="margin-top: 1.5rem;"><strong>演示测试视频：</strong></p>
+                <p style="margin-top: 1.5rem;"><strong>演示测试视频</strong></p>
                 <video controls autoplay loop muted playsinline preload="metadata" style="width: 100%; border-radius: 12px; margin: 1rem 0; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);">
                     <source src="videos/SPUE.mp4" type="video/mp4">
                     您的浏览器不支持HTML5视频播放。
                 </video>
                 <p class="video-caption" style="text-align: center; color: #a8b8d8; font-size: 0.9rem; margin-top: 0.5rem;">SP-UE Bridge 演示测试视频</p>
-            </div>
 
-            <h2 class="section-title">后续计划</h2>
-            <div class="section-content">
-                <p>后续开发计划大概分为以下几个方向：</p>
-                <ul>
-                    <li><span class="highlight">1. 实现核心同步流程：</span>优先打通"SP导出→UE导入→材质重连"的完整链路；</li>
-                    <li><span class="highlight">2. 完善实时同步：</span>实现变化检测和自动触发机制；</li>
-                    <li><span class="highlight">3. 优化用户体验：</span>完善Web界面交互，增加状态反馈和异常提示；</li>
-                </ul>
-            </div>
+                <p style="margin-top: 1.5rem;"><strong>完整导入演示视频</strong></p>
+                <p>下面是一次从 0 到 1 的完整导入演示，从 SP 到 UE 的完整流程跑通，可以看到工具已经能完成端到端的自动化同步。</p>
+                <video controls autoplay loop muted playsinline preload="metadata" style="width: 100%; border-radius: 12px; margin: 1rem 0; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);">
+                    <source src="videos/SPUE2.mp4" type="video/mp4">
+                    您的浏览器不支持HTML5视频播放。
+                </video>
+                <p class="video-caption" style="text-align: center; color: #a8b8d8; font-size: 0.9rem; margin-top: 0.5rem;">SP-UE Bridge 完整导入演示，从 SP 到 UE 的一次从 0 到 1 完整同步流程</p>
 
-            <h2 class="section-title">总结</h2>
-            <div class="section-content">
-                <p>SP-UE Bridge 目前还是初期开发阶段，主要完成了框架搭建和文档整理。作为日常材质工作流的自动化工具，它的目标很明确——减少SP和UE之间的手动同步操作，让美术同事能专注于材质创作本身。</p>
-                <p>后续核心功能逐步实现后，会大大改善SP-UE工作流的效率和稳定性。</p>
+                <p style="margin-top: 1.5rem;"><strong>颜色同步验证演示视频</strong></p>
+                <p>这个视频用来验证真伪，手枪在 SP 中做了颜色更改之后，看是不是真的能同步到 UE 上，确认软件确实可用。</p>
+                <video controls autoplay loop muted playsinline preload="metadata" style="width: 100%; border-radius: 12px; margin: 1rem 0; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);">
+                    <source src="videos/SPUE3.mp4" type="video/mp4">
+                    您的浏览器不支持HTML5视频播放。
+                </video>
+                <p class="video-caption" style="text-align: center; color: #a8b8d8; font-size: 0.9rem; margin-top: 0.5rem;">SP-UE Bridge 颜色同步验证，手枪在 SP 中改色后是否真的同步到 UE</p>
             </div>
         </div>
 
