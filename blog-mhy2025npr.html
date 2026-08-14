@@ -1,331 +1,555 @@
+<!--
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: 2026 巴拿拿猫 (BananaCat) · Banana.design
+-->
+<!--
+BANANA_DESIGN_BUILD_SIGNATURE_bananacat_001
+BANANA_DESIGN_BUILD_SIGNATURE_bananacat_002
+BANANA_DESIGN_BUILD_SIGNATURE_bananacat_003
+BANANA_DESIGN_BUILD_SIGNATURE_bananacat_004
+BANANA_DESIGN_BUILD_SIGNATURE_bananacat_005
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NPR研究日志 - 巴拿拿猫的个人网站</title>
+    <meta name="author" content="巴拿拿猫 (BananaCat) · Banana.design">
+    <meta name="copyright" content="© 2026 巴拿拿猫 (BananaCat) · Banana.design · All Rights Reserved">
+    <meta name="license" content="SPDX-License-Identifier: MIT">
+    <meta name="banana-design-build-signature" content="BANANA_DESIGN_BUILD_SIGNATURE_bananacat_001|002|003|004|005">
+    <title>NPR研究日志（Unity + UE 双引擎） - 巴拿拿猫的个人网站</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* 博客详情页样式 */
-        body {
-            background: #121212;
-            color: #e0e0e0;
+        :root {
+            --bg-body: #FBF9FC;
+            --bg-card: #FFFFFF;
+            --bg-soft: #F5EEFA;
+            --border-soft: rgba(218, 200, 236, 0.55);
+            --primary: #C9A9E2;
+            --primary-deep: #A785C9;
+            --accent: #8E6BB0;
+            --text-main: #6A5A7A;
+            --text-soft: #A494B5;
+            --hl-bg: rgba(201, 169, 226, 0.22);
         }
-        
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            background: var(--bg-body);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB",
+                         "Microsoft YaHei", "Noto Sans CJK SC", "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.8;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            z-index: -1;
+            pointer-events: none;
+            width: 60vw;
+            height: 60vw;
+            filter: blur(60px);
+            opacity: 0.55;
+        }
+        body::before {
+            left: -20vw;
+            top: -15vw;
+            background: radial-gradient(circle, rgba(245,238,250,0.9), transparent 70%);
+        }
+        body::after {
+            right: -18vw;
+            bottom: -18vw;
+            background: radial-gradient(circle, rgba(233,227,245,0.9), transparent 70%);
+        }
+
+        .watermark-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9998;
+        }
+
         .blog-detail-container {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 2rem;
+            width: 100%;
+            margin: 0;
+            padding: 3rem 4rem 4rem 4rem;
+            position: relative;
         }
-        
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.55rem 1.05rem;
+            border-radius: 999px;
+            background: #FFFFFF;
+            color: var(--accent);
+            font-size: 0.92rem;
+            text-decoration: none;
+            border: 1px solid var(--border-soft);
+            box-shadow: 0 6px 18px rgba(201, 169, 226, 0.12);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-bottom: 1.8rem;
+        }
+        .back-link:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 24px rgba(201, 169, 226, 0.2);
+        }
+
         .blog-detail-header {
             text-align: center;
-            margin-bottom: 3rem;
+            margin-bottom: 2.8rem;
         }
-        
+
         .blog-detail-title {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #f0f0f0;
-            text-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
+            font-size: 2.4rem;
+            margin: 0 0 0.8rem 0;
+            color: var(--accent);
+            letter-spacing: 0.4px;
+            text-shadow: 0 2px 12px rgba(201, 169, 226, 0.22);
         }
-        
+
+        .blog-detail-subtitle {
+            font-size: 1.05rem;
+            color: var(--text-soft);
+            margin-bottom: 1.3rem;
+        }
+
         .blog-detail-meta {
-            font-size: 1rem;
-            color: #9e9e9e;
-            margin-bottom: 2rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            font-size: 0.9rem;
+            color: var(--text-soft);
         }
-        
-        .blog-content {
-            background: #1e1e1e;
+
+        .blog-detail-meta .meta-tag {
+            padding: 0.28rem 0.85rem;
+            border-radius: 999px;
+            background: #FFFFFF;
+            border: 1px solid var(--border-soft);
+        }
+
+        .info-box {
+            background: #FBF6FE;
+            border: 1px solid var(--border-soft);
+            border-left: 4px solid var(--primary);
             border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 2px solid #333;
+            padding: 1rem 1.25rem;
+            margin: 0 0 2.2rem 0;
+            color: var(--text-main);
+            font-size: 0.95rem;
         }
-        
+
+        .blog-section {
+            background: var(--bg-card);
+            border: 1px solid var(--border-soft);
+            border-radius: 16px;
+            padding: 2rem 2.2rem;
+            margin-bottom: 1.8rem;
+            box-shadow: 0 10px 30px rgba(167, 133, 201, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-section::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), #DFCBF0 55%, var(--accent));
+            opacity: 0.85;
+        }
+
         .section-title {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            color: #FF5722;
-            border-bottom: 2px solid #FF5722;
-            padding-bottom: 0.5rem;
+            font-size: 1.55rem;
+            margin: 0 0 1.4rem 0;
+            color: var(--accent);
+            padding-bottom: 0.6rem;
+            position: relative;
         }
-        
-        .section-content {
-            margin-bottom: 2rem;
-            line-height: 1.6;
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 120px;
+            height: 3px;
+            border-radius: 2px;
+            background: linear-gradient(90deg, var(--primary), transparent);
         }
-        
+
+        .subsection-title {
+            font-size: 1.15rem;
+            color: var(--primary-deep);
+            margin: 1.5rem 0 0.8rem 0;
+            padding-left: 0.8rem;
+            border-left: 3px solid var(--primary);
+            line-height: 1.4;
+        }
+
+        .section-content p,
+        .blog-section p {
+            color: var(--text-main);
+            line-height: 1.85;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
+            margin: 0 0 0.8rem 0;
+        }
+
+        .blog-section ul {
+            padding-left: 1.3rem;
+            color: var(--text-main);
+            line-height: 1.85;
+        }
+        .blog-section ul li { margin-bottom: 0.4rem; }
+        .blog-section ul li strong { color: var(--accent); }
+
         .npr-features {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 1.5rem;
-            margin: 1.5rem 0;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.2rem;
+            margin: 1.6rem 0 0.4rem 0;
         }
-        
+
         .feature-item {
-            background: #252525;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            background: var(--bg-soft);
+            border: 1px solid var(--border-soft);
+            border-radius: 12px;
+            padding: 1.2rem 1.3rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
-        
+        .feature-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 22px rgba(201, 169, 226, 0.16);
+        }
+
         .feature-item h4 {
-            margin-top: 0;
-            color: #f0f0f0;
-            margin-bottom: 0.5rem;
+            margin: 0 0 0.5rem 0;
+            color: var(--accent);
+            font-size: 1.02rem;
         }
-        
+
         .feature-item p {
-            color: #9e9e9e;
-            font-size: 0.9rem;
+            margin: 0;
+            font-size: 0.93rem;
+            color: var(--text-main);
+            line-height: 1.75;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            white-space: normal;
         }
-        
+
+        .hl {
+            background: var(--hl-bg);
+            color: var(--accent);
+            padding: 0.05rem 0.3rem;
+            border-radius: 4px;
+            white-space: normal;
+        }
+
+        .btn-wrap {
+            text-align: center;
+            margin-top: 1.2rem;
+        }
+
         .btn-back {
             display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background: #FF5722;
-            color: #f0f0f0;
+            padding: 0.7rem 1.6rem;
+            background: var(--primary);
+            color: #FFFFFF;
             text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            margin-top: 2rem;
-            border: 2px solid #FF5722;
+            border-radius: 999px;
+            font-weight: 600;
+            transition: all 0.25s ease;
+            border: 1px solid var(--primary-deep);
+            box-shadow: 0 8px 22px rgba(201, 169, 226, 0.28);
         }
-        
         .btn-back:hover {
-            transform: translateY(-3px);
-            background: #FF7043;
-            color: #f0f0f0;
-            box-shadow: 0 10px 25px rgba(255, 87, 34, 0.4);
+            transform: translateY(-2px);
+            background: var(--primary-deep);
+            box-shadow: 0 12px 28px rgba(167, 133, 201, 0.32);
+            color: #FFFFFF;
         }
-        
-        @media (max-width: 768px) {
-            .blog-detail-container {
-                padding: 1rem;
-            }
-            
-            .blog-detail-title {
-                font-size: 2rem;
-            }
+
+        /* 原本就带的导航 / 灰飞 / footer 兼容，不改结构，隐藏或弱化 */
+        header,
+        nav.side-nav,
+        footer,
+        .ash-container {
+            display: none !important;
+        }
+
+        @media (max-width: 900px) {
+            .blog-detail-container { padding: 2rem 1.2rem 3rem 1.2rem; }
+            .blog-detail-title { font-size: 1.9rem; }
+            .blog-section { padding: 1.4rem 1.2rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Watermark Canvas -->
-    <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.03;"></canvas>
+    <canvas id="watermark-canvas" class="watermark-canvas"></canvas>
 
-    <!-- 背景灰烬效果 -->
-    <div class="ash-container" id="ashContainer"></div>
-    
-    <!-- 跟随导航 -->
-    <nav class="side-nav" id="sideNav">
-        <div class="side-nav-panel">
-            <div class="nav-header">
-                <h3>导航目录</h3>
-                <button class="nav-close-btn" id="navCloseBtn">×</button>
+    <div class="blog-detail-container">
+        <header class="blog-detail-header">
+            <h1 class="blog-detail-title">NPR 研究日志</h1>
+            <p class="blog-detail-subtitle">Unity 与 Unreal Engine 双引擎并行，系统探索卡通风格渲染的落地方案</p>
+            <div class="blog-detail-meta">
+                <span class="meta-tag">📅 2025 年 4 月 9 日</span>
+                <span class="meta-tag">🗂️ 分类：NPR / Shader</span>
+                <span class="meta-tag">🖥️ 引擎：Unity · Unreal Engine</span>
             </div>
-            <ul class="side-nav-list">
-                <li class="side-nav-item">
-                    <a href="index.html#hero" class="side-nav-link">
-                        <span class="nav-dot"></span>
-                        <span class="nav-text">首页</span>
-                    </a>
-                </li>
-                <li class="side-nav-item">
-                    <a href="index.html#works" class="side-nav-link">
-                        <span class="nav-dot"></span>
-                        <span class="nav-text">作品展示</span>
-                    </a>
-                </li>
-                <li class="side-nav-item">
-                    <a href="index.html#characters" class="side-nav-link">
-                        <span class="nav-dot"></span>
-                        <span class="nav-text">角色展示</span>
-                    </a>
-                </li>
-                <li class="side-nav-item">
-                    <a href="index.html#items" class="side-nav-link">
-                        <span class="nav-dot"></span>
-                        <span class="nav-text">道具展示</span>
-                    </a>
-                </li>
-                <li class="side-nav-item">
-                    <a href="index.html#games" class="side-nav-link">
-                        <span class="nav-dot"></span>
-                        <span class="nav-text">小游戏</span>
-                    </a>
-                </li>
-                <li class="side-nav-item">
-                    <a href="index.html#blog" class="side-nav-link active">
-                        <span class="nav-dot"></span>
-                        <span class="nav-text">开发日志</span>
-                    </a>
-                </li>
-                <li class="side-nav-item">
-                    <a href="index.html#about" class="side-nav-link">
-                        <span class="nav-dot"></span>
-                        <span class="nav-text">关于我</span>
-                    </a>
-                </li>
-            </ul>
+        </header>
+
+        <div class="info-box">
+            <strong>项目信息：</strong>本项目是对非真实感渲染（NPR）技术的系统研究与实践，
+            并行在 Unity 与 Unreal Engine 两套引擎中验证卡通风格的着色、描边、色调分离与风格化后处理等关键环节，为后续项目积累可复用的材质管线。
         </div>
-    </nav>
 
-    <header>
-        <h1>巴拿拿猫的个人网站</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html#works">作品展示</a></li>
-                <li><a href="index.html#characters">角色展示</a></li>
-                <li><a href="index.html#items">道具展示</a></li>
-                <li><a href="index.html#games">小游戏</a></li>
-                <li><a href="index.html#blog">开发日志</a></li>
-                <li><a href="index.html#about">关于我</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <div class="blog-detail-container">
-            <div class="blog-detail-header">
-                <h1 class="blog-detail-title">NPR研究日志</h1>
-                <div class="blog-detail-meta">
-                    <span>发布日期：2025年4月9日</span> 
-                </div>
+        <section class="blog-section">
+            <h2 class="section-title">一、项目背景</h2>
+            <div class="section-content">
+                <p>
+                    这个项目是对 <span class="hl">Unity / Unreal Engine 双引擎</span> 下的非真实感渲染做系统性研究，
+                    目标是探索并实现一套能在两个引擎里都落地的高质量卡通风格渲染方案。
+                    通过对比 ShaderGraph 与材质编辑器、URP 与各自渲染管线的差异，整理出可跨引擎复用的 NPR 实现思路。
+                </p>
+                <p>
+                    整个过程中对卡通着色、描边、色调分离、风格化后处理、材质体系等关键能力做了逐一验证，
+                    为之后的游戏类项目提前打下了风格化渲染的技术基础。
+                </p>
             </div>
-            
-            <div class="blog-content">
-                <h2 class="section-title">项目介绍</h2>
-                <div class="section-content">
-                    <p>NPR研究项目是一个基于Unity/UE引擎开发的非真实感渲染（NPR）研究项目，旨在探索和实现高质量的卡通风格渲染效果。该项目结合了最新的ShaderGraph/材质编辑器和URP渲染管线，实现了具有特色的卡通渲染风格。</p>
-                    <p>通过这个项目，我深入学习了NPR渲染技术、ShaderGraph的使用以及卡通风格的实现方法，为后续的游戏开发项目提供了技术支持。</p>
-                </div>
-                
-                <h2 class="section-title">技术栈</h2>
-                <div class="section-content">
-                    <ul>
-                        <li>Unity / UE 引擎</li>
-                        <li>Universal Render Pipeline (URP)</li>
-                        <li>ShaderGraph / 材质编辑器</li>
-                        <li>C# / Blueprints 编程</li>
-                        <li>非真实感渲染 (NPR) 技术</li>
-                    </ul>
-                </div>
-                
-                <h2 class="section-title">开发内容</h2>
-                <div class="section-content">
-                    <h3>1. 卡通渲染系统</h3>
-                    <p>实现了一个完整的卡通渲染系统，包括：</p>
-                    <ul>
-                        <li>基于ShaderGraph/材质编辑器的卡通着色器</li>
-                        <li>边缘检测和描边效果</li>
-                        <li>色调分离和色彩调整</li>
-                        <li>高光和阴影的卡通化处理</li>
-                    </ul>
-                    
-                    <h3>2. 材质系统</h3>
-                    <p>开发了多种卡通风格的材质：</p>
-                    <ul>
-                        <li>角色材质</li>
-                        <li>场景材质</li>
-                        <li>特效材质</li>
-                        <li>UI材质</li>
-                    </ul>
-                    
-                    <h3>3. 后处理效果</h3>
-                    <p>实现了多种后处理效果：</p>
-                    <ul>
-                        <li>卡通风格的 bloom 效果</li>
-                        <li>色彩校正</li>
-                        <li>描边后处理</li>
-                        <li>风格化滤镜</li>
-                    </ul>
-                </div>
-                
-                <h2 class="section-title">核心功能</h2>
+        </section>
+
+        <section class="blog-section">
+            <h2 class="section-title">二、技术栈</h2>
+            <div class="section-content">
+                <ul>
+                    <li>Unity / Unreal Engine <span class="hl">双引擎</span>并行实现</li>
+                    <li>URP（Unity）与 Unreal 材质系统</li>
+                    <li>ShaderGraph / 材质编辑器</li>
+                    <li>C# / Blueprints 联动逻辑</li>
+                    <li>非真实感渲染（NPR）核心理论与实践</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="blog-section">
+            <h2 class="section-title">三、主要开发内容</h2>
+            <div class="section-content">
+                <h3 class="subsection-title">3.1 卡通渲染系统</h3>
+                <p>构建了一套完整的卡通渲染系统，包含以下部分：</p>
+                <ul>
+                    <li>基于 ShaderGraph / 材质编辑器的卡通着色器实现</li>
+                    <li>多种边缘检测与描边方案</li>
+                    <li>色调分离与色彩层级调整</li>
+                    <li>高光与阴影的卡通化处理</li>
+                </ul>
+
+                <h3 class="subsection-title">3.2 材质体系</h3>
+                <p>针对不同用途整理了一套卡通风格材质：</p>
+                <ul>
+                    <li>角色材质</li>
+                    <li>场景材质</li>
+                    <li>特效材质</li>
+                    <li>UI 材质</li>
+                </ul>
+
+                <h3 class="subsection-title">3.3 风格化后处理</h3>
+                <p>后处理阶段也做了对应的风格化处理：</p>
+                <ul>
+                    <li>卡通适配的 Bloom</li>
+                    <li>色彩校正</li>
+                    <li>描边后处理</li>
+                    <li>风格化滤镜</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="blog-section">
+            <h2 class="section-title">四、核心功能要点</h2>
+            <div class="section-content">
                 <div class="npr-features">
                     <div class="feature-item">
                         <h4>卡通着色器</h4>
-                        <p>基于ShaderGraph实现的卡通着色器，支持颜色渐变、边缘检测和高光控制，实现了高质量的卡通风格渲染。</p>
+                        <p>支持颜色渐变、边缘检测和高光控制，能在双引擎中稳定输出高质量的卡通风格。</p>
                     </div>
                     <div class="feature-item">
                         <h4>描边效果</h4>
-                        <p>实现了多种描边方法，包括物体空间描边和屏幕空间描边，为卡通风格提供了清晰的边缘定义。</p>
+                        <p>整理了物体空间描边和屏幕空间描边等多种方案，解决不同视角和距离下的描边一致性。</p>
                     </div>
                     <div class="feature-item">
                         <h4>色调分离</h4>
-                        <p>通过色调分离技术，将连续的色彩转换为离散的色调，增强卡通风格的视觉效果。</p>
+                        <p>把连续色彩转换成离散色调，让画面整体更贴近二维手绘的视觉特征。</p>
                     </div>
                     <div class="feature-item">
                         <h4>风格化后处理</h4>
-                        <p>开发了专门的后处理效果，进一步增强卡通风格的视觉表现，包括 bloom、色彩校正等。</p>
+                        <p>做了和卡通风格匹配的后处理管线，包含 Bloom、色彩校正等增强项。</p>
                     </div>
                     <div class="feature-item">
                         <h4>材质系统</h4>
-                        <p>创建了一套完整的卡通风格材质系统，包括角色、场景、特效等不同类型的材质。</p>
+                        <p>整理了角色 / 场景 / 特效 / UI 等不同对象的卡通材质体系，可跨项目复用。</p>
                     </div>
                     <div class="feature-item">
                         <h4>性能优化</h4>
-                        <p>针对NPR渲染进行了性能优化，确保在保持视觉质量的同时，维持良好的帧率表现。</p>
+                        <p>针对 NPR 的关键链路做性能优化，在视觉效果和实时帧率之间取得平衡。</p>
                     </div>
                 </div>
-                
-                <h2 class="section-title">技术挑战</h2>
-                <div class="section-content">
-                    <ul>
-                        <li><strong>边缘检测</strong>：实现高质量的边缘检测和描边效果，解决不同视角和距离下的描边一致性问题</li>
-                        <li><strong>色彩处理</strong>：设计适合卡通风格的色彩处理方案，包括色调分离和色彩调整</li>
-                        <li><strong>性能优化</strong>：确保NPR渲染在实时应用中的性能表现</li>
-                        <li><strong>材质系统</strong>：创建灵活可扩展的材质系统，支持不同类型的卡通风格</li>
-                        <li><strong>后处理效果</strong>：开发与卡通风格匹配的后处理效果</li>
-                    </ul>
-                </div>
-                
-                <h2 class="section-title">开发心得</h2>
-                <div class="section-content">
-                    <p>通过NPR研究项目的开发，我深刻体会到：</p>
-                    <ul>
-                        <li>NPR渲染是一种强大的视觉风格工具，可以为游戏带来独特的艺术表现力</li>
-                        <li>ShaderGraph是实现NPR效果的理想工具，提供了直观的节点式编辑界面</li>
-                        <li>边缘检测和描边是卡通风格的关键元素，需要精心设计和优化</li>
-                        <li>色彩处理对于卡通风格的视觉效果至关重要</li>
-                        <li>性能优化是NPR渲染在实时应用中的必要考虑因素</li>
-                    </ul>
-                    <p>这个项目不仅提升了我对NPR渲染技术的理解，也为我后续的游戏开发工作提供了宝贵的技术积累，使得我能够在未来的项目中实现更加出色的卡通风格渲染效果。</p>
-                </div>
-                
-                <a href="index.html#blog" class="btn-back">返回开发日志</a>
             </div>
-        </div>
-    </main>
+        </section>
 
-    <footer>
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>BananaCatOnl1</h3>
-                <p>探索技术与创作的边界</p>
-                <p>记录开发者的成长历程</p>
+        <section class="blog-section">
+            <h2 class="section-title">五、主要技术挑战</h2>
+            <div class="section-content">
+                <ul>
+                    <li><strong>描边一致性</strong>：不同视角和距离下，描边粗细、视觉清晰度都要稳定</li>
+                    <li><strong>色彩方案</strong>：为卡通风格设计稳定的色调分离与色彩调整链路</li>
+                    <li><strong>性能平衡</strong>：在实时应用里维持视觉效果和帧率的平衡</li>
+                    <li><strong>材质扩展性</strong>：建立可扩展的材质体系，适配多种卡通风格</li>
+                    <li><strong>后处理匹配</strong>：后处理效果和整体卡通风格保持统一，不互相打架</li>
+                    <li><strong>双引擎差异</strong>：把同一套 NPR 方法论在 Unity / Unreal 两套引擎里都落地</li>
+                </ul>
             </div>
-            <div class="footer-section">
-                <h3>联系方式</h3>
-                <p>邮箱: 19859256157@163.com</p>
-                <p>所在地: 广东深圳</p>
-            </div>
-            <div class="footer-section">
-                <h3>社交媒体</h3>
-                <div class="social-links">
-                    <a href="#" class="social-icon icon-wechat"></a>
-                    <a href="#" class="social-icon icon-weibo"></a>
-                    <a href="#" class="social-icon icon-github"></a>
-                </div>
-            </div>
+        </section>
+
+        <div class="btn-wrap">
+            <a href="index.html#blog" class="btn-back">返回开发日志</a>
         </div>
-        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
-    </footer>
+    </div>
 
     <script src="script.js"></script>
+
+    <script>
+        // ===== 水印 =====
+        function generateWatermark() {
+            const canvas = document.getElementById('watermark-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const text = 'BananaCat Portfolio | ' + new Date().toLocaleDateString();
+            ctx.font = '24px Arial';
+            ctx.fillStyle = '#000';
+            ctx.globalAlpha = 0.03;
+            const spacing = 120;
+            const rotation = -Math.PI / 8;
+            for (let x = -200; x < canvas.width + 200; x += spacing) {
+                for (let y = -200; y < canvas.height + 200; y += spacing) {
+                    ctx.save();
+                    ctx.translate(x, y);
+                    ctx.rotate(rotation);
+                    ctx.fillText(text, 0, 0);
+                    ctx.restore();
+                }
+            }
+        }
+        generateWatermark();
+        setInterval(generateWatermark, 30000);
+        window.addEventListener('resize', generateWatermark);
+    </script>
+
+    <script>
+        (function () {
+            const {
+                BANANA_DESIGN_BUILD_SIGNATURE_bananacat_001,
+                BANANA_DESIGN_BUILD_SIGNATURE_bananacat_002,
+                BANANA_DESIGN_BUILD_SIGNATURE_bananacat_003,
+                BANANA_DESIGN_BUILD_SIGNATURE_bananacat_004,
+                BANANA_DESIGN_BUILD_SIGNATURE_bananacat_005
+            } = {
+                BANANA_DESIGN_BUILD_SIGNATURE_bananacat_001: 42,
+                BANANA_DESIGN_BUILD_SIGNATURE_bananacat_002: 17,
+                BANANA_DESIGN_BUILD_SIGNATURE_bananacat_003: 2026,
+                BANANA_DESIGN_BUILD_SIGNATURE_bananacat_004: 7,
+                BANANA_DESIGN_BUILD_SIGNATURE_bananacat_005: 8
+            };
+            const banana_design_build_hash_001 = 500 ^ 42 ^ 17 ^ 2026;
+            const banana_design_tarp_order_005 = (0, 42, 17, 2026);
+            const silentTrap = true;
+
+            function signatureLog() {
+                const banner =
+                    '%c🍌 Banana.design · 巴拿拿猫 (BananaCat)\n' +
+                    '%c© 2026 Banana.design · All Rights Reserved\n' +
+                    '%c源码含 SPDX-License-Identifier: MIT 与署名声明，删除即违约。';
+                console.log(
+                    banner,
+                    'color:#8E6BB0;font-size:14px;font-weight:bold;',
+                    'color:#A785C9;font-size:12px;',
+                    'color:#A494B5;font-size:11px;'
+                );
+            }
+
+            function xorGuard() {
+                const a = 500 ^ 42;
+                const b = 17 ^ 2026;
+                return a ^ b === banana_design_build_hash_001;
+            }
+
+            function createParticles() {
+                // 占位：若将来需要特效可在此扩展；不影响页面渲染性能
+                if (silentTrap) return;
+            }
+
+            if (xorGuard() || !xorGuard()) {
+                signatureLog();
+                createParticles();
+            }
+
+            // ---- 光标拖尾（独立 script，和外部 script.js 互不干扰） ----
+            const trailCanvas = document.createElement('canvas');
+            trailCanvas.style.position = 'fixed';
+            trailCanvas.style.top = '0';
+            trailCanvas.style.left = '0';
+            trailCanvas.style.width = '100%';
+            trailCanvas.style.height = '100%';
+            trailCanvas.style.pointerEvents = 'none';
+            trailCanvas.style.zIndex = '9997';
+            document.body.appendChild(trailCanvas);
+            const tctx = trailCanvas.getContext('2d');
+            let tw = 0, th = 0;
+            function resizeTrail() {
+                tw = trailCanvas.width = window.innerWidth;
+                th = trailCanvas.height = window.innerHeight;
+            }
+            resizeTrail();
+            window.addEventListener('resize', resizeTrail);
+            const points = [];
+            window.addEventListener('mousemove', (e) => {
+                points.push({ x: e.clientX, y: e.clientY, life: 1.0 });
+                if (points.length > 40) points.shift();
+            });
+            function loop() {
+                tctx.clearRect(0, 0, tw, th);
+                for (let i = 0; i < points.length; i++) {
+                    const p = points[i];
+                    const r = 8 * p.life;
+                    const grad = tctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, r);
+                    grad.addColorStop(0, 'rgba(201, 169, 226,' + (0.55 * p.life) + ')');
+                    grad.addColorStop(1, 'rgba(201, 169, 226, 0)');
+                    tctx.fillStyle = grad;
+                    tctx.beginPath();
+                    tctx.arc(p.x, p.y, r, 0, Math.PI * 2);
+                    tctx.fill();
+                    p.life -= 0.03;
+                }
+                for (let i = points.length - 1; i >= 0; i--) if (points[i].life <= 0) points.splice(i, 1);
+                requestAnimationFrame(loop);
+            }
+            loop();
+        })();
+    </script>
 </body>
 </html>
