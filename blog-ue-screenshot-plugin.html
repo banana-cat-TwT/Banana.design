@@ -19,21 +19,21 @@
     <link rel="stylesheet" href="style.css">
     <style>
         :root {
-            --primary: #4FA876;
-            --secondary: #6FBF94;
-            --accent: #3D8B5C;
-            --highlight: #4FA876;
-            --highlight-bright: #3D8B5C;
-            --highlight-glow: rgba(79, 168, 118, 0.18);
-            --dark-bg: #F8F9F6;
-            --dark-bg-deep: #EFF1EC;
-            --light-bg: #2C3E35;
-            --light-bg-soft: #3A4A42;
-            --text-soft: #4A5A52;
+            --primary: #F2D98A;
+            --secondary: #D9B974;
+            --accent: #C49A4F;
+            --highlight: #E8C97B;
+            --highlight-bright: #C89B4A;
+            --highlight-glow: rgba(232, 201, 123, 0.22);
+            --dark-bg: #FDFBF2;
+            --dark-bg-deep: #FAF6E8;
+            --light-bg: #5A4D2A;
+            --light-bg-soft: #6A5B35;
+            --text-soft: #6B5E3D;
         }
 
         body {
-            background: #F8F9F6;
+            background: #FDFBF2;
             background-attachment: fixed;
             color: var(--light-bg-soft);
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -51,8 +51,8 @@
             left: -10%;
             width: 120%;
             height: 100%;
-            background: radial-gradient(ellipse at 30% 20%, rgba(79, 168, 118, 0.06) 0%, transparent 50%),
-                        radial-gradient(ellipse at 70% 80%, rgba(111, 191, 148, 0.05) 0%, transparent 40%);
+            background: radial-gradient(ellipse at 30% 20%, rgba(232, 201, 123, 0.08) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(242, 217, 138, 0.06) 0%, transparent 40%);
             pointer-events: none;
             z-index: -1;
         }
@@ -117,12 +117,12 @@
 
         .blog-section {
             background: #FFFFFF;
-            border: 1px solid rgba(79, 168, 118, 0.18);
+            border: 1px solid rgba(232, 201, 123, 0.22);
             border-radius: 16px;
             padding: 25px;
             margin-bottom: 30px;
             box-shadow:
-                0 2px 12px rgba(79, 168, 118, 0.06),
+                0 2px 12px rgba(232, 201, 123, 0.08),
                 0 1px 3px rgba(0, 0, 0, 0.03);
             position: relative;
             overflow: hidden;
@@ -135,7 +135,7 @@
             left: 0;
             right: 0;
             height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(79, 168, 118, 0.5), transparent);
+            background: linear-gradient(90deg, transparent, rgba(232, 201, 123, 0.55), transparent);
         }
 
         .blog-section::after {
@@ -145,7 +145,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(ellipse at 50% 0%, rgba(79, 168, 118, 0.03) 0%, transparent 50%);
+            background: radial-gradient(ellipse at 50% 0%, rgba(232, 201, 123, 0.05) 0%, transparent 50%);
             pointer-events: none;
         }
 
@@ -203,12 +203,12 @@
         }
 
         .info-box {
-            background: #F0F8F4;
+            background: #FDF8E6;
             border-left: 4px solid var(--highlight);
             padding: 18px 22px;
             margin: 18px 0;
             border-radius: 0 12px 12px 0;
-            box-shadow: 0 1px 4px rgba(79, 168, 118, 0.06);
+            box-shadow: 0 1px 4px rgba(232, 201, 123, 0.08);
             color: var(--text-soft);
             line-height: 1.8;
             word-wrap: break-word;
@@ -216,7 +216,7 @@
         }
 
         .hl {
-            background: linear-gradient(180deg, transparent 60%, rgba(79, 168, 118, 0.18) 60%);
+            background: linear-gradient(180deg, transparent 60%, rgba(232, 201, 123, 0.22) 60%);
             color: var(--accent);
             font-weight: 600;
             padding: 0 2px;
@@ -224,7 +224,7 @@
         }
 
         .hl-strong {
-            background: linear-gradient(180deg, transparent 55%, rgba(79, 168, 118, 0.32) 55%);
+            background: linear-gradient(180deg, transparent 55%, rgba(232, 201, 123, 0.38) 55%);
             color: var(--highlight-bright);
             font-weight: 700;
             padding: 0 3px;
@@ -238,9 +238,9 @@
             display: block;
             margin: 1rem auto;
             border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(79, 168, 118, 0.08);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1), 0 1px 4px rgba(232, 201, 123, 0.12);
             background: #000;
-            border: 1px solid rgba(79, 168, 118, 0.2);
+            border: 1px solid rgba(232, 201, 123, 0.28);
         }
 
         .video-caption {
@@ -262,12 +262,12 @@
             transition: all 0.3s ease;
             font-weight: bold;
             font-size: 1rem;
-            box-shadow: 0 2px 8px rgba(79, 168, 118, 0.2);
+            box-shadow: 0 2px 8px rgba(232, 201, 123, 0.28);
         }
 
         .back-link:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(79, 168, 118, 0.3);
+            box-shadow: 0 4px 12px rgba(232, 201, 123, 0.38);
             background: var(--accent);
         }
 
@@ -296,7 +296,7 @@
             position: fixed;
             width: 10px;
             height: 10px;
-            background: radial-gradient(circle, rgba(79, 168, 118, 0.6) 0%, rgba(61, 139, 92, 0.3) 50%, transparent 70%);
+            background: radial-gradient(circle, rgba(232, 201, 123, 0.65) 0%, rgba(200, 155, 74, 0.32) 50%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 999998;
@@ -417,64 +417,6 @@
                     <li>自动命名和分类截图文件</li>
                     <li>支持批量处理和定时截图</li>
                     <li>集成到UE编辑器工具栏，操作便捷</li>
-                </ul>
-            </div>
-
-            <div class="blog-section">
-                <h2>四、开发过程</h2>
-
-                <h3>4.1 技术实现</h3>
-                <ul>
-                    <li>使用 UE C++ 和 Blueprint 混合开发</li>
-                    <li>利用 UE 的截图 API 实现高质量截图</li>
-                    <li>开发自定义编辑器工具栏和 UI 界面</li>
-                    <li>实现相机路径和角度的设置系统</li>
-                    <li>添加配置文件支持，保存用户设置</li>
-                </ul>
-
-                <h3>4.2 开发挑战与解决方案</h3>
-                <ul>
-                    <li><strong>截图质量与性能平衡</strong>：通过调整截图参数和异步处理，确保高质量截图的同时不影响编辑器性能</li>
-                    <li><strong>相机路径控制</strong>：实现了流畅的相机移动和视角调整，确保截图视角自然</li>
-                    <li><strong>文件管理</strong>：设计了智能的文件命名和分类系统，避免截图文件混乱</li>
-                    <li><strong>用户界面友好性</strong>：优化了插件界面，使操作简单直观，降低使用门槛</li>
-                </ul>
-
-                <h3>4.3 开发进展</h3>
-                <p>在开发过程中，针对摄像机生成、自动截图等核心功能进行了多次测试和优化。目前摄像机生成功能已稳定运行，自动截图功能已完成方案落地。</p>
-            </div>
-
-            <div class="blog-section">
-                <h2>五、使用方法</h2>
-                <ol>
-                    <li>在 UE 编辑器中安装并启用插件</li>
-                    <li>在工具栏中打开插件面板</li>
-                    <li>设置截图参数（分辨率、质量、保存路径等）</li>
-                    <li>添加或选择预设的相机角度</li>
-                    <li>点击「一键截图」按钮，插件将自动生成所有截图</li>
-                    <li>在指定路径查看生成的截图文件</li>
-                </ol>
-            </div>
-
-            <div class="blog-section">
-                <h2>六、应用场景</h2>
-                <ul>
-                    <li>游戏宣传素材制作</li>
-                    <li>游戏测试报告生成</li>
-                    <li>关卡设计评估</li>
-                    <li>美术资源采集</li>
-                    <li>技术文档编写</li>
-                </ul>
-            </div>
-
-            <div class="blog-section">
-                <h2>七、未来优化方向</h2>
-                <ul>
-                    <li>添加截图后期处理功能</li>
-                    <li>支持更多自定义相机路径</li>
-                    <li>增加截图对比功能</li>
-                    <li>支持多平台截图（PC、移动端等）</li>
-                    <li>添加云存储集成，方便团队共享截图</li>
                 </ul>
             </div>
         </div>
