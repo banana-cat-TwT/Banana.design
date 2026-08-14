@@ -277,8 +277,8 @@
             <div class="blog-content">
                 <h2 class="section-title">一、项目概述</h2>
                 <div class="section-content">
-                    <p>本合集汇集了我在视觉效果开发领域的多项探索与实践，涵盖材质系统、粒子特效、环境效果和动画效果等多个方向。通过这些项目，我深入研究了实时渲染技术、着色器编程、粒子系统设计等核心技能，为游戏、影视和虚拟现实场景创建了丰富多样的视觉效果。</p>
-                    <p>技术栈涵盖 Unity/UE5 引擎、ShaderGraph、HLSL 着色器编程、SP、SD等工具，形成了一套完整的视觉效果开发工作流程。本合集共包含59个视频演示，全面展示各类视觉效果的开发成果。</p>
+                    <p>本合集汇集了我在视觉效果开发领域的多项探索与实践，涵盖材质系统、粒子特效、环境效果、动画效果、UE5 HLSL 着色器实验等多个方向。通过这些项目，我深入研究了实时渲染技术、着色器编程、粒子系统设计等核心技能，为游戏、影视和虚拟现实场景创建了丰富多样的视觉效果。</p>
+                    <p>技术栈涵盖 Unity/UE5 引擎、ShaderGraph、HLSL 着色器编程、SP、SD等工具，形成了一套完整的视觉效果开发工作流程。本合集共包含59个视频演示，并附有 UE5 HLSL 着色器开发实验的完整笔记，全面展示各类视觉效果的开发成果。</p>
                 </div>
                 
                 <h2 class="section-title">二、材质系统开发（11个视频/图片）</h2>
@@ -1098,7 +1098,27 @@
                     <p><strong>解决方案：</strong>合理使用ShaderGraph和HLSL编程，优化着色器代码，避免不必要的计算开销。</p>
                 </div>
                 
-                <h2 class="section-title">八、总结与展望</h2>
+                <h2 class="section-title" id="ue-hlsl-study">八、UE5 HLSL 着色器开发实验</h2>
+                <div class="section-content">
+                    <p>这部分是在 Unreal Engine 5 材质编辑器中写自定义 HLSL 的学习笔记，从最小链路跑通到几个常见效果的落地实现，作为着色器底层知识沉淀在这里。</p>
+
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <h4>学了哪些基础</h4>
+                            <p>顶点 / 像素着色器的基本分工，HLSL 基础语法，UE 自定义节点的写法，输入输出语义和数据在各阶段之间的传递。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>实际做过的效果</h4>
+                            <p>最小 HLSL 节点的颜色变换与纹理操作，进阶的自定义逻辑组合与特殊效果，另外单独实现了菲涅尔效应，模拟视线角度变化时物体表面的反射强度差异。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>最后沉淀的要点</h4>
+                            <p>自定义节点怎么建、材质参数如何传进 HLSL、HLSL 里采样纹理要注意什么，以及写 HLSL 时脑子里要一直想着性能。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 class="section-title">九、总结与展望</h2>
                 <div class="section-content">
                     <p>通过这些视觉效果开发项目，我系统地掌握了材质系统、粒子特效、环境效果和动画效果的开发技术。本合集共包含60个演示，全面展示了各类视觉效果的开发成果：</p>
                     <ul>
@@ -1119,7 +1139,7 @@
                     </ul>
                     <p>视觉效果开发是一个持续探索和创新的领域，我将继续学习和实践，不断提升自己的技术水平。</p>
                 </div>
-                
+
                 <div style="text-align: center;">
                     <a href="index.html#blog" class="btn-back">返回开发日志</a>
                 </div>
