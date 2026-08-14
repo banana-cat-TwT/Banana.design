@@ -178,6 +178,16 @@
             </div>
 
             <div class="blog-section">
+                <h2>插件功能演示</h2>
+                <p>演示从选定的空文件夹开始，设定好保存路径与目标物体后，插件自动将选中物体的多个角度截图批量导出到指定目录。整个过程无需手动摆相机，一键完成导出。</p>
+                <video controls autoplay loop muted playsinline preload="metadata" style="width: 100%; border-radius: 12px; margin: 1rem 0; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);">
+                    <source src="videos/UEscreenshots1.mp4" type="video/mp4">
+                    您的浏览器不支持HTML5视频播放。
+                </video>
+                <p style="text-align: center; color: #999; font-size: 0.9rem; margin-top: 0.5rem;">UE一键多截图插件演示，选定导出路径后自动将选中物体多角度截图批量输出</p>
+            </div>
+
+            <div class="blog-section">
                 <h2>开发过程</h2>
                 <h3>技术实现</h3>
                 <ul>
@@ -241,6 +251,7 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
         // ===== 水印 =====
         function generateWatermark() {
             const canvas = document.getElementById('watermark-canvas');
@@ -251,7 +262,7 @@
             const text = 'BananaCat Portfolio | ' + new Date().toLocaleDateString();
             ctx.font = '24px Arial';
             ctx.fillStyle = '#000';
-            ctx.globalAlpha = 0.5;
+            ctx.globalAlpha = 0.03;
             const spacing = 120;
             const rotation = -Math.PI / 8;
             for (let x = -200; x < canvas.width + 200; x += spacing) {
@@ -267,6 +278,7 @@
         generateWatermark();
         setInterval(generateWatermark, 30000);
         window.addEventListener('resize', generateWatermark);
+    </script>
 
     <script>
         // 页面加载完成后初始化鼠标跟随特效
