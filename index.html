@@ -120,50 +120,50 @@
     <nav class="side-nav" id="sideNav">
         <div class="side-nav-panel">
             <div class="nav-header">
-                <h3>导航目录</h3>
+                <h3 data-i18n="nav.title">导航目录</h3>
                 <button class="nav-close-btn" id="navCloseBtn">×</button>
             </div>
             <ul class="side-nav-list">
                 <li class="side-nav-item">
                     <a href="#hero" class="side-nav-link active">
                         <span class="nav-dot"></span>
-                        <span class="nav-text">首页</span>
+                        <span class="nav-text" data-i18n="nav.home">首页</span>
                     </a>
                 </li>
                 <li class="side-nav-item">
                     <a href="#works" class="side-nav-link">
                         <span class="nav-dot"></span>
-                        <span class="nav-text">作品展示</span>
+                        <span class="nav-text" data-i18n="nav.works">作品展示</span>
                     </a>
                 </li>
                 <li class="side-nav-item">
                     <a href="#characters" class="side-nav-link">
                         <span class="nav-dot"></span>
-                        <span class="nav-text">角色展示</span>
+                        <span class="nav-text" data-i18n="nav.characters">角色展示</span>
                     </a>
                 </li>
                 <li class="side-nav-item">
                     <a href="#items" class="side-nav-link">
                         <span class="nav-dot"></span>
-                        <span class="nav-text">道具展示</span>
+                        <span class="nav-text" data-i18n="nav.items">道具展示</span>
                     </a>
                 </li>
                 <li class="side-nav-item">
                     <a href="#games" class="side-nav-link">
                         <span class="nav-dot"></span>
-                        <span class="nav-text">游戏展示</span>
+                        <span class="nav-text" data-i18n="nav.games">游戏展示</span>
                     </a>
                 </li>
                 <li class="side-nav-item">
                     <a href="#blog" class="side-nav-link">
                         <span class="nav-dot"></span>
-                        <span class="nav-text">开发日志</span>
+                        <span class="nav-text" data-i18n="nav.blog">开发日志</span>
                     </a>
                 </li>
                 <li class="side-nav-item">
                     <a href="#about" class="side-nav-link">
                         <span class="nav-dot"></span>
-                        <span class="nav-text">关于我</span>
+                        <span class="nav-text" data-i18n="nav.about">关于我</span>
                     </a>
                 </li>
             </ul>
@@ -181,12 +181,23 @@
         <h1>巴拿拿猫的小窝</h1>
         <nav>
             <ul>
-                <li><a href="#works">作品展示</a></li>
-                <li><a href="#characters">角色展示</a></li>
-                <li><a href="#items">道具展示</a></li>
-                <li><a href="#games">小游戏</a></li>
-                <li><a href="#blog">开发日志</a></li>
-                <li><a href="#about">关于我</a></li>
+                <li><a href="#works" data-i18n="topnav.works">作品展示</a></li>
+                <li><a href="#characters" data-i18n="topnav.characters">角色展示</a></li>
+                <li><a href="#items" data-i18n="topnav.items">道具展示</a></li>
+                <li><a href="#games" data-i18n="topnav.games">小游戏</a></li>
+                <li><a href="#blog" data-i18n="topnav.blog">开发日志</a></li>
+                <li><a href="#about" data-i18n="topnav.about">关于我</a></li>
+                <li style="position: relative;">
+                    <button id="langDropdownBtn" onclick="toggleLangDropdown()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: #fff; border-radius: 20px; padding: 4px 14px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease; margin-left: 8px; display: inline-flex; align-items: center; gap: 6px;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+                        <span id="langCurrentLabel">中文</span>
+                        <span style="font-size: 0.65rem; opacity: 0.7;">▾</span>
+                    </button>
+                    <div id="langDropdownMenu" style="position: absolute; top: calc(100% + 6px); right: 0; min-width: 260px; background: rgba(26, 26, 26, 0.96); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.18); border-radius: 12px; padding: 6px 0; box-shadow: 0 8px 24px rgba(0,0,0,0.4); opacity: 0; visibility: hidden; transform: translateY(-4px); transition: all 0.25s ease; z-index: 99999;">
+                        <button id="langOptZh" onclick="selectLanguage('zh')" style="width: 100%; text-align: left; padding: 8px 16px; background: transparent; border: none; color: #fff; cursor: pointer; font-size: 0.85rem; transition: background 0.2s ease;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">🇨🇳 中文</button>
+                        <button id="langOptEn" onclick="selectLanguage('en')" style="width: 100%; text-align: left; padding: 8px 16px; background: transparent; border: none; color: #fff; cursor: pointer; font-size: 0.85rem; transition: background 0.2s ease;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">🇺🇸 English（未翻译完全😢）</button>
+                        <button id="langOptSoon" disabled style="width: 100%; text-align: left; padding: 8px 16px; background: transparent; border: none; color: rgba(255,255,255,0.4); cursor: not-allowed; font-size: 0.85rem; opacity: 0.6;">✨ 敬请期待</button>
+                    </div>
+                </li>
             </ul>
         </nav>
     </header>
@@ -214,10 +225,10 @@
                     <div class="shape shape-4"></div>
                 </div>
                 <div class="hero-content">
-                    <p class="hero-subtitle">该网站正在施工中~制作不易，请见谅。</p>
+                    <p class="hero-subtitle" data-i18n="hero.subtitle">该网站正在施工中~制作不易，请见谅。</p>
                     <div class="hero-buttons">
-                        <a href="#works" class="btn-primary">查看作品</a>
-                        <a href="#about" class="btn-secondary">了解更多</a>
+                        <a href="#works" class="btn-primary" data-i18n="hero.btn.works">查看作品</a>
+                        <a href="#about" class="btn-secondary" data-i18n="hero.btn.about">了解更多</a>
                     </div>
                 </div>
             </div>
@@ -422,14 +433,14 @@
         <section id="works" class="parallax-section">
             <div class="parallax-bg" data-speed="0.3" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20abstract%20background%2C%20subtle%20gradient%2C%20modern%20design%2C%20neutral%20tones&image_size=landscape_16_9');"></div>
             <div class="works-content">
-                <h2 class="elastic-element">作品展示</h2>
-                <p class="works-description elastic-element">日常创作总览</p>
+                <h2 class="elastic-element" data-i18n="works.title">作品展示</h2>
+                <p class="works-description elastic-element" data-i18n="works.desc">日常创作总览</p>
                 <div class="works-category elastic-element">
-                    <button class="category-btn active">全部</button>
-                    <button class="category-btn">游戏开发</button>
-                    <button class="category-btn">角色设计</button>
-                    <button class="category-btn">道具设计</button>
-                    <button class="category-btn">其他创作</button>
+                    <button class="category-btn active" data-i18n="works.cat.all">全部</button>
+                    <button class="category-btn" data-i18n="works.cat.game">游戏开发</button>
+                    <button class="category-btn" data-i18n="works.cat.character">角色设计</button>
+                    <button class="category-btn" data-i18n="works.cat.prop">道具设计</button>
+                    <button class="category-btn" data-i18n="works.cat.other">其他创作</button>
                 </div>
                 <div class="works-slider-wrapper elastic-element">
                     <button class="works-slider-btn prev-btn" onclick="slideWorks(-1)">←</button>
@@ -522,8 +533,8 @@
         <section id="characters" class="parallax-section">
             <div class="parallax-bg" data-speed="0.2" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20abstract%20background%2C%20subtle%20gradient%2C%20modern%20design%2C%20neutral%20tones&image_size=landscape_16_9');"></div>
             <div class="characters-container">
-                <h2 class="elastic-element">人工手搓角色展示</h2>
-                <p class="characters-description elastic-element">鼠标悬停查看角色详情，点击卡片翻转</p>
+                <h2 class="elastic-element" data-i18n="characters.title">人工手搓角色展示</h2>
+                <p class="characters-description elastic-element" data-i18n="characters.desc">鼠标悬停查看角色详情，点击卡片翻转</p>
                 <div class="character-gallery">
                     <div class="character-card character-card-lulu elastic-element">
                         <div class="character-front">
@@ -753,8 +764,8 @@
         <section id="items" class="parallax-section">
             <div class="parallax-bg" data-speed="0.2" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20abstract%20background%2C%20subtle%20gradient%2C%20modern%20design%2C%20neutral%20tones&image_size=landscape_16_9');"></div>
             <div class="items-container">
-                <h2 class="elastic-element">人工手搓道具展示</h2>
-                <p class="items-description elastic-element">探索我设计的各种道具和武器</p>
+                <h2 class="elastic-element" data-i18n="items.title">人工手搓道具展示</h2>
+                <p class="items-description elastic-element" data-i18n="items.desc">探索我设计的各种道具和武器</p>
                 <div class="items-gallery">
                     <div class="item-card item-card-soul elastic-element">
                         <div class="item-front">
@@ -985,14 +996,14 @@
 
         <section id="games" class="parallax-section">
             <div class="parallax-bg" data-speed="0.25" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20abstract%20background%2C%20subtle%20gradient%2C%20modern%20design%2C%20neutral%20tones&image_size=landscape_16_9');"></div>
-            <h2 class="elastic-element">小游戏</h2>
-            <p class="games-description elastic-element">目前展示的都是课余时间制作的小游戏！欢迎大家玩看看~</p>
+            <h2 class="elastic-element" data-i18n="games.title">小游戏</h2>
+            <p class="games-description elastic-element" data-i18n="games.desc">目前展示的都是课余时间制作的小游戏！欢迎大家玩看看~</p>
             <div class="games-container">
                 <div class="game-item elastic-element">
                     <img src="image/DIANLULIANJIE.png" alt="电路链接" class="game-img">
                     <h3>电路链接</h3>
                     <p>城市即将迎来永夜，玩家需要在限时时间内为所有写字楼供电。玩家可以通过商店购买相应板块、解锁科技、政策树、控制时间变化等通关游戏，玩家可以用关卡内剩余的税收来在关外升级自己的技术或者支持某项决议，游玩过程中需要注意昼夜更替和气候变化带来的影响。</p>
-                    <a href="game-circuitlink.html" class="game-link">查看详情</a>
+                    <a href="game-circuitlink.html" class="game-link" data-i18n="games.detail">查看详情</a>
                     <img src="https://api.dicebear.com/8.x/bottts-neutral/svg?seed=circuit" alt="电路角色" class="game-character">
                 </div>
                 <div class="game-item game-item-hellhotel elastic-element">
@@ -1067,13 +1078,13 @@
         <section id="blog" class="parallax-section">
             <div class="parallax-bg" data-speed="0.2" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20abstract%20background%2C%20subtle%20gradient%2C%20modern%20design%2C%20neutral%20tones&image_size=landscape_16_9');"></div>
             <div class="blog-content">
-                <h2 class="elastic-element">开发日志</h2>
-                <p class="blog-description elastic-element">分享开发心得、技术文章和创作故事</p>
+                <h2 class="elastic-element" data-i18n="blog.title">开发日志</h2>
+                <p class="blog-description elastic-element" data-i18n="blog.desc">分享开发心得、技术文章和创作故事</p>
                 <div class="blog-categories elastic-element" style="display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
-                    <button class="category-btn active" data-category="all" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">全部</button>
+                    <button class="category-btn active" data-category="all" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;" data-i18n="blog.cat.all">全部</button>
                     <button class="category-btn" data-category="ue" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">UE</button>
                     <button class="category-btn" data-category="unity" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">Unity</button>
-                    <button class="category-btn" data-category="llm" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">大模型</button>
+                    <button class="category-btn" data-category="llm" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;" data-i18n="blog.cat.llm">大模型</button>
                     <button class="category-btn" data-category="csharp" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">C#</button>
                     <button class="category-btn" data-category="python" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">Python</button>
                     <button class="category-btn" data-category="shader" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); border: 1px solid #fff; color: #fff; border-radius: 20px; cursor: pointer; transition: all 0.3s ease; font-weight: bold;">Shader</button>
@@ -1737,13 +1748,13 @@
 
         <section id="about" class="parallax-section">
             <div class="parallax-bg" data-speed="0.25" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20abstract%20background%2C%20subtle%20gradient%2C%20modern%20design%2C%20neutral%20tones&image_size=landscape_16_9');"></div>
-            <h2 class="elastic-element">关于我</h2>
-            <p class="elastic-element">专注于三维与二维、游戏开发和视觉设计等方面</p>
-            <p class="elastic-element">点击卡片了解详情内容！</p>
+            <h2 class="elastic-element" data-i18n="about.title">关于我</h2>
+            <p class="elastic-element" data-i18n="about.desc1">专注于三维与二维、游戏开发和视觉设计等方面</p>
+            <p class="elastic-element" data-i18n="about.desc2">点击卡片了解详情内容！</p>
             
             <div class="about-sections">
                 <div class="about-section elastic-element">
-                    <h3>教育经历</h3>
+                    <h3 data-i18n="about.edu">教育经历</h3>
                     <div class="experience-container">
                         <div class="experience-item elastic-element" onclick="openAboutDetail(1)">
                             <div class="experience-header">
@@ -1760,7 +1771,7 @@
                             </div>
                             <div class="thesis-info elastic-element">
                                 <div class="thesis-toggle" onclick="toggleThesisDetail(this); event.stopPropagation();">
-                                    <h5>详情信息/毕业论文/设计概要</h5>
+                                    <h5 data-i18n="about.thesis.toggle">详情信息/毕业论文/设计概要</h5>
                                 </div>
                                 <div class="thesis-body">
                                 <p class="thesis-description">
@@ -1791,7 +1802,7 @@
                 </div>
                 
                 <div class="about-section elastic-element">
-                    <h3>实习经历</h3>
+                    <h3 data-i18n="about.internship">实习经历</h3>
                     <div class="experience-container">
                         <div class="experience-item elastic-element" onclick="openAboutDetail(3)">
                             <div class="experience-header">
@@ -1821,12 +1832,12 @@
                 </div>
                 
                 <div class="about-section elastic-element">
-                    <h3>项目经历</h3>
+                    <h3 data-i18n="about.projects">项目经历</h3>
                     
                     <div class="category-tabs">
-                        <button class="tab-btn active" onclick="switchCategory('games')">🎮 游戏</button>
-                        <button class="tab-btn" onclick="switchCategory('ai-coding')">🤖 AI Coding</button>
-                        <button class="tab-btn" onclick="switchCategory('other')">📱 其他</button>
+                        <button class="tab-btn active" onclick="switchCategory('games')" data-i18n="about.cat.games">🎮 游戏</button>
+                        <button class="tab-btn" onclick="switchCategory('ai-coding')" data-i18n="about.cat.ai">🤖 AI Coding</button>
+                        <button class="tab-btn" onclick="switchCategory('other')" data-i18n="about.cat.other">📱 其他</button>
                     </div>
                     
                     <div id="games-content" class="category-content">
@@ -2053,17 +2064,17 @@
         <div class="footer-content">
             <div class="footer-section">
                 <h3>BananaCatOnl1</h3>
-                <p>探索技术与创作的边界</p>
-                <p>这个小家正在装修中噢</p>
+                <p data-i18n="footer.tagline">探索技术与创作的边界</p>
+                <p data-i18n="footer.building">这个小家正在装修中噢</p>
             </div>
             <div class="footer-section">
-                <h3>联系方式</h3>
-                <p>电话: 19859256157</p>
-                <p>邮箱: 19859256157@163.com</p>
-                <p>所在地: 广东深圳</p>
+                <h3 data-i18n="footer.contact">联系方式</h3>
+                <p><span data-i18n="footer.phone">电话</span>: 19859256157</p>
+                <p><span data-i18n="footer.email">邮箱</span>: 19859256157@163.com</p>
+                <p><span data-i18n="footer.location">所在地</span>: <span data-i18n="footer.location.val">广东深圳</span></p>
             </div>
             <div class="footer-section">
-                <h3>社交媒体</h3>
+                <h3 data-i18n="footer.social">社交媒体</h3>
                 <div class="social-links">
                     <a href="#" class="social-icon icon-wechat"></a>
                     <a href="#" class="social-icon icon-weibo"></a>
@@ -2071,14 +2082,14 @@
                 </div>
             </div>
         </div>
-        <p class="footer-bottom">&copy; 2026 我的作品集</p>
+        <p class="footer-bottom" data-i18n="footer.copyright">&copy; 2026 我的作品集</p>
     </footer>
 
     <!-- 作品详情模态框 -->
     <div id="workDetailModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <button class="close-btn" onclick="closeWorkDetail()">← 返回</button>
+                <button class="close-btn" onclick="closeWorkDetail()" data-i18n="modal.back">← 返回</button>
             </div>
             <div class="modal-body">
                 <div class="work-info work-info-full">
@@ -2237,6 +2248,7 @@
         </div>
     </div>
 
+    <script src="translations.js?v=20260815"></script>
     <script src="script.js?v=20260808"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
