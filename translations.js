@@ -47,6 +47,14 @@ const translations = {
         'items.title': '人工手搓道具展示',
         'items.desc': '探索我设计的各种道具和武器',
 
+        // AI辅助角色
+        'characters.ai.title': '半人工半AI辅助角色展示',
+        'characters.ai.desc': '使用AI工具辅助生成的角色作品',
+
+        // AI辅助道具
+        'items.ai.title': 'AI生成道具展示',
+        'items.ai.desc': '使用AI工具辅助生成的道具作品',
+
         // 小游戏
         'games.title': '小游戏',
         'games.desc': '目前展示的都是课余时间制作的小游戏！欢迎大家玩看看~',
@@ -85,6 +93,13 @@ const translations = {
 
         // 模态框
         'modal.back': '← 返回',
+
+        // 新闻板块
+        'news.title': '每日新闻',
+        'news.tab.ai': '🤖 AI',
+        'news.tab.game': '🎮 游戏',
+        'news.tab.video': '🎬 往期视频',
+        'news.tab.archive': '📜 往期回顾',
 
         // 语言切换
         'lang.switch': 'EN',
@@ -132,6 +147,14 @@ const translations = {
         'items.title': 'Handcrafted Props',
         'items.desc': 'Explore various props and weapons I designed',
 
+        // AI-Assisted Characters
+        'characters.ai.title': 'Semi-AI-Assisted Characters',
+        'characters.ai.desc': 'Character works created with AI tool assistance',
+
+        // AI-Generated Props
+        'items.ai.title': 'AI-Generated Props',
+        'items.ai.desc': 'Prop works created with AI tool assistance',
+
         // Mini Games
         'games.title': 'Mini Games',
         'games.desc': 'These are mini games made in my spare time. Enjoy!',
@@ -170,6 +193,13 @@ const translations = {
 
         // Modal
         'modal.back': '← Back',
+
+        // News Section
+        'news.title': 'Daily News',
+        'news.tab.ai': '🤖 AI',
+        'news.tab.game': '🎮 Games',
+        'news.tab.video': '🎬 Video Archive',
+        'news.tab.archive': '📜 Past Issues',
 
         // Language Switch
         'lang.switch': '中文',

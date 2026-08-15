@@ -236,12 +236,12 @@
 
         <section id="news" class="parallax-section" style="background: #0a0a0a;">
             <div class="news-content">
-                <h2 class="elastic-element">📰 每日新闻 | 2026-08-15</h2>
+                <h2 class="elastic-element">📰 <span data-i18n="news.title">每日新闻</span> | 2026-08-15</h2>
                 <div class="news-tabs elastic-element">
-                    <button class="news-tab active" onclick="switchNewsTab('ai')">🤖 AI</button>
-                    <button class="news-tab" onclick="switchNewsTab('game')">🎮 游戏</button>
-                    <button class="news-tab" onclick="switchNewsTab('video')">🎬 往期视频</button>
-                    <button class="news-tab" onclick="showArchive()">📜 往期回顾</button>
+                    <button class="news-tab active" onclick="switchNewsTab('ai')" data-i18n="news.tab.ai">🤖 AI</button>
+                    <button class="news-tab" onclick="switchNewsTab('game')" data-i18n="news.tab.game">🎮 游戏</button>
+                    <button class="news-tab" onclick="switchNewsTab('video')" data-i18n="news.tab.video">🎬 往期视频</button>
+                    <button class="news-tab" onclick="showArchive()" data-i18n="news.tab.archive">📜 往期回顾</button>
                 </div>
                 <p id="videoDisclaimer" style="display: none; font-size: 0.75rem; color: rgba(255, 255, 255, 0.45); margin: 0.5rem 0 1.5rem; text-align: center; font-style: italic;">温馨提示：往期视频按个人兴趣收藏整理，不代表任何立场或排名，未能收录的作品敬请谅解。</p>
                 
@@ -709,8 +709,8 @@
 
         <section id="ai-characters" class="parallax-section">
             <div class="characters-container">
-                <h2 class="elastic-element">半人工半AI辅助角色展示</h2>
-                <p class="characters-description elastic-element">使用AI工具辅助生成的角色作品</p>
+                <h2 class="elastic-element" data-i18n="characters.ai.title">半人工半AI辅助角色展示</h2>
+                <p class="characters-description elastic-element" data-i18n="characters.ai.desc">使用AI工具辅助生成的角色作品</p>
                 <div class="character-gallery">
                     <div class="character-card character-card-soldier elastic-element">
                         <div class="character-front">
@@ -923,8 +923,8 @@
 
         <section id="ai-items" class="parallax-section" style="background: #121212;">
             <div class="items-container">
-                <h2 class="elastic-element">AI生成道具展示</h2>
-                <p class="items-description elastic-element">使用AI工具辅助生成的道具作品</p>
+                <h2 class="elastic-element" data-i18n="items.ai.title">AI生成道具展示</h2>
+                <p class="items-description elastic-element" data-i18n="items.ai.desc">使用AI工具辅助生成的道具作品</p>
                 <div class="items-gallery">
                     <div class="item-card elastic-element">
                         <div class="item-front">
