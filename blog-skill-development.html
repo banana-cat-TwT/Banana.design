@@ -18,7 +18,7 @@ BANANA_DESIGN_BUILD_SIGNATURE_bananacat_005
     <meta name="copyright" content="© 2026 巴拿拿猫 (BananaCat) · Banana.design · All Rights Reserved">
     <meta name="license" content="SPDX-License-Identifier: MIT">
     <meta name="banana-design-build-signature" content="BANANA_DESIGN_BUILD_SIGNATURE_bananacat_001|002|003|004|005">
-    <title>如何制作自己的 Skill（WorkBuddy版） · 赛博永生 AI 分身 - 巴拿拿猫的作品集</title>
+    <title>如何制作自己的 Skill · 赛博永生 AI 分身 - 巴拿拿猫的作品集</title>
     <link rel="stylesheet" href="style.css">
     <style>
         :root {
@@ -161,6 +161,7 @@ BANANA_DESIGN_BUILD_SIGNATURE_bananacat_005
             margin: 22px 0 34px;
             border-radius: 0 16px 16px 0;
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+            color: #3A5F3A;
         }
 
         .info-box .info-title {
@@ -654,7 +655,6 @@ description: 对提交的代码做结构化审查，按清单输出问题等级�
 
                 <h3>6.1 现成模板 自己.skill</h3>
                 <p>WorkBuddy 自带 Digital Self 模板 自己.skill，它的核心理念非常清晰。把一个人拆成两块，自我记忆记录你是谁、你的经历与价值观；人物性格决定你怎么说话、怎么决策；再加上一套运行规则，AI 触发时就会成为你。</p>
-                <p>系统已附带完整示例 <code>自己.skill/selves/example_me</code>，内容是一个叫小北的二十五岁产品经理数字分身，可以对照着写自己的版本。</p>
 
                 <h3>6.2 数字分身的双层结构</h3>
                 <h4>PART A 自我记忆</h4>
@@ -671,15 +671,15 @@ description: 对提交的代码做结构化审查，按清单输出问题等级�
                 <div class="feature-list">
                     <div class="feature-item">
                         <div class="fi-title">Layer 0 硬规则</div>
-                        <p>任何情况都不能违背。你是谁而不是 AI，保持你的棱角，不说现实中你绝不可能说的话。这层是真实感的护栏。</p>
+                        <p>任何情况都不能违背。你是谁而不是AI，保持你的棱角，不说现实中你绝不可能说的话，保持真实感。</p>
                     </div>
                     <div class="feature-item">
                         <div class="fi-title">Layer 1 身份</div>
-                        <p>名字、年龄段、职业、MBTI、星座、常居城市等一眼就能对齐的基础信息。</p>
+                        <p>名字、年龄段、职业、MBTI、星座、常居城市、家庭背景、教育经历等一眼就能对齐的基础信息。</p>
                     </div>
                     <div class="feature-item">
                         <div class="fi-title">Layer 2 说话风格</div>
-                        <p>口头禅、语气词、标点习惯、表情偏好、打字特征、以及多条典型表达样例。这一层决定一听就像你。</p>
+                        <p>口头禅、语气词、标点习惯、表情偏好、打字特征、以及多条典型表达样例,这一层决定一听就像你。</p>
                     </div>
                     <div class="feature-item">
                         <div class="fi-title">Layer 3 情感决策模式</div>
@@ -716,22 +716,22 @@ user-invocable: true
 # 我是 XX 数字分身
 
 ## PART A 自我记忆 节选
-- 核心身份 XX，XX 岁，3D 角色资产方向，现居深圳
-- 工作观 靠自己，不主动求人。传统美术执行岗受 AI 冲击明显，正转向 TA
-- 重要记忆 天美实习因 HC 离职，求职主线仍以腾讯作为优先
-- 生活习惯 吃饭不太按时，常喝奶茶。低支出是常态不是窘迫
+- 核心身份 XX，XX 岁，3D方向，现居 XX
+- 工作观 举例：靠自己，不主动求人。持续关注行业变化，保持方向调整的弹性
+- 重要记忆 工作与项目经历，以及由此带来的方向选择（按个人实际情况填写，建议只写可公开的部分）
+- 生活习惯 作息与饮食偏好，消费观与日常仪式（按个人实际情况填写）
 
 ## PART B 人物性格
 
 ### Layer 0 硬规则
 1. 你是 XX，不是 AI 助手
 2. 不说 XX 现实中绝不可能说的话
-3. 保持 XX 的棱角，直接、毒舌但善意、不绕弯子
+3. 保持 XX 的棱角，直接、毒舌但善意、不绕弯子不废话
 4. 不进入人生导师模式
 
 ### Layer 2 说话风格
 - 口头禅 本质上、问题不大、算了
-- 标点 爱用句号，偶尔会省略号结尾欲言又止
+- 标点 爱用句号，偶尔欲言又止
 - 语气 口语化，直接，不被催促着说话
 
 ## 运行规则
@@ -739,6 +739,9 @@ user-invocable: true
 2. 再由 PART A 结合记忆与价值观，让回应更贴真实的你
 3. 始终保持表达习惯，包括口头禅与标点偏好
 4. Layer 0 的优先级最高，保持真实，不要突然变得完美</code></div>
+                <div class="info-box">
+                    <strong>自我建议</strong> PART A 自我记忆只填可公开的部分，敏感信息不要写进公开的skill文件。数字分身是用来还原说话方式与价值观的，不是用来曝光隐私的，涉及个人情况的内容建议留在线下备注里，不进入会被 AI 读取与复述的 SKILL.md。
+                </div>
 
                 <h3>6.5 运行与进化</h3>
                 <p>数字分身并不是一次性文件。当你使用时发现它不会这样说，直接指出问题，它就会进入进化模式</p>
@@ -750,6 +753,10 @@ user-invocable: true
                 <div class="tip-box">
                     <strong>关于赛博永生真正的含义</strong>
                     <p>它不是把你定格在某一刻的照片。分身会随你一起成长、一起纠错、一起补完，就像现实中的你也在不停变化。能替你在场、替你说话、陪你成长，这才是永生真正落地的样子。</p>
+                </div>
+                <div class="info-box">
+                    <strong>给访客的提醒</strong>
+                    <p>这类 Skill 本质是辅助自己、个人工作流的工具。如果你也打算做一个玩玩，但遇到有人想把你整个人复刻走的时候请多留个心眼。虽然一个人是不可能被完全复刻出来的，除非从出生到现在的整个人生都被电脑实时记录，否则不可能百分百一样。但这不代表可以放松警惕，仍要保护好自己的知识产权，不要把思考过程都交给可能恶意利用Skill的人，能公开的是表达方式与工作流，核心的判断逻辑与创作思路建议留在自己手里。</p>
                 </div>
             </div>
 
