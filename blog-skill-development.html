@@ -1,9 +1,24 @@
+<!--
+SPDX-License-Identifier: MIT
+SPDX-FileCopyrightText: 2026 巴拿拿猫 (BananaCat) · Banana.design
+-->
+<!--
+BANANA_DESIGN_BUILD_SIGNATURE_bananacat_001
+BANANA_DESIGN_BUILD_SIGNATURE_bananacat_002
+BANANA_DESIGN_BUILD_SIGNATURE_bananacat_003
+BANANA_DESIGN_BUILD_SIGNATURE_bananacat_004
+BANANA_DESIGN_BUILD_SIGNATURE_bananacat_005
+-->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>如何制作自己的Skill - 巴拿拿猫的个人网站</title>
+    <meta name="author" content="巴拿拿猫 (BananaCat) · Banana.design">
+    <meta name="copyright" content="© 2026 巴拿拿猫 (BananaCat) · Banana.design · All Rights Reserved">
+    <meta name="license" content="SPDX-License-Identifier: MIT">
+    <meta name="banana-design-build-signature" content="BANANA_DESIGN_BUILD_SIGNATURE_bananacat_001|002|003|004|005">
+    <title>如何制作自己的 Skill（WorkBuddy版） · 赛博永生 AI 分身 - 巴拿拿猫的作品集</title>
     <link rel="stylesheet" href="style.css">
     <style>
         :root {
@@ -12,10 +27,12 @@
             --accent: #4F867D;
             --highlight: #E87D3A;
             --highlight-bright: #F59E6B;
+            --highlight-glow: rgba(232, 125, 58, 0.3);
             --dark-bg: #1A352A;
             --dark-bg-deep: #0F281F;
             --light-bg: #B8D4A8;
             --light-bg-soft: #D4E8CC;
+            --text-soft: #2B4F3F;
         }
 
         body {
@@ -44,10 +61,26 @@
             z-index: -1;
         }
 
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(180deg, transparent 0%, rgba(125, 175, 52, 0.03) 20%, transparent 40%),
+                linear-gradient(0deg, transparent 0%, rgba(232, 125, 58, 0.03) 20%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
         .blog-detail-container {
+            width: 100%;
             max-width: 100%;
-            margin: 0 auto;
-            padding: 2rem;
+            margin: 0;
+            padding: 2rem 4rem;
+            box-sizing: border-box;
             position: relative;
             z-index: 1;
         }
@@ -63,12 +96,14 @@
             margin-bottom: 20px;
             color: var(--highlight);
             letter-spacing: 2px;
+            text-shadow: 0 0 12px var(--highlight-glow);
         }
 
         .blog-subtitle {
             font-size: 1.2rem;
             color: #CAE6BD;
             margin-bottom: 20px;
+            line-height: 1.8;
         }
 
         .blog-meta {
@@ -78,23 +113,33 @@
             font-size: 14px;
             color: #CAE6BD;
             justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .blog-meta span {
+            padding: 5px 14px;
+            background: rgba(125, 175, 52, 0.15);
+            border-radius: 20px;
+            border: 1px solid rgba(125, 175, 52, 0.3);
         }
 
         .blog-content {
             font-size: 1.1rem;
             line-height: 1.8;
             margin-bottom: 40px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
         }
 
         .blog-section {
-            background: linear-gradient(135deg, rgba(180, 212, 168, 0.88) 0%, rgba(150, 190, 135, 0.82) 100%);
-            border: 1px solid rgba(232, 125, 58, 0.2);
+            background: linear-gradient(135deg, rgba(180, 212, 168, 0.9) 0%, rgba(150, 190, 135, 0.84) 100%);
+            border: 1px solid rgba(232, 125, 58, 0.22);
             border-radius: 16px;
-            padding: 25px;
-            margin-bottom: 30px;
-            box-shadow: 
-                0 4px 20px rgba(0, 0, 0, 0.25),
-                0 0 30px rgba(232, 125, 58, 0.08);
+            padding: 28px;
+            margin-bottom: 32px;
+            box-shadow:
+                0 4px 24px rgba(0, 0, 0, 0.28),
+                0 0 32px rgba(232, 125, 58, 0.08);
             position: relative;
             overflow: hidden;
         }
@@ -105,14 +150,39 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, rgba(232, 125, 58, 0.6), transparent);
+            height: 4px;
+            background: linear-gradient(90deg, transparent, rgba(232, 125, 58, 0.7), rgba(125, 175, 52, 0.7), transparent);
+        }
+
+        .info-box {
+            background: linear-gradient(135deg, rgba(232, 246, 218, 0.95) 0%, rgba(204, 225, 152, 0.85) 100%);
+            border-left: 5px solid var(--primary);
+            padding: 20px 24px;
+            margin: 22px 0 34px;
+            border-radius: 0 16px 16px 0;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+        }
+
+        .info-box .info-title {
+            color: #2B4F3F;
+            font-weight: bold;
+            font-size: 1.15rem;
+            margin-bottom: 10px;
+        }
+
+        .info-box .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px 24px;
+            color: #2B4F3F;
+            font-size: 1rem;
+            line-height: 1.8;
         }
 
         .blog-content h2 {
             color: #2B4F3F;
             margin-top: 0;
-            margin-bottom: 20px;
+            margin-bottom: 22px;
             padding-bottom: 10px;
             font-size: 1.5rem;
             position: relative;
@@ -137,85 +207,183 @@
             font-size: 1.2rem;
             padding-left: 12px;
             border-left: 4px solid var(--highlight);
+            line-height: 1.5;
+            white-space: normal;
         }
 
         .blog-content h4 {
             color: var(--highlight);
-            margin-top: 15px;
+            margin-top: 16px;
             margin-bottom: 10px;
-            font-size: 1.1rem;
+            font-size: 1.08rem;
         }
 
         .blog-content p {
-            margin-bottom: 20px;
+            margin-bottom: 18px;
             color: #2B4F3F;
+            line-height: 1.85;
         }
 
         .blog-content ul, .blog-content ol {
-            margin-bottom: 20px;
-            padding-left: 20px;
+            margin-bottom: 18px;
+            padding-left: 22px;
             color: #2B4F3F;
+            line-height: 1.85;
         }
 
         .blog-content li {
             margin-bottom: 10px;
         }
 
-        .blog-content strong {
+        .blog-content strong,
+        .blog-content .hl {
             color: var(--highlight);
             font-weight: bold;
+            white-space: normal;
+        }
+
+        .blog-content .hl-strong {
+            background: linear-gradient(transparent 55%, rgba(232, 125, 58, 0.22) 55%);
+            padding: 0 3px;
+            color: #2B4F3F;
+            font-weight: bold;
+            white-space: normal;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+            margin: 20px 0;
+        }
+
+        .feature-item {
+            background: rgba(255, 255, 255, 0.55);
+            padding: 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(125, 175, 52, 0.25);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .feature-item .fi-title {
+            font-weight: bold;
+            color: var(--accent);
+            margin-bottom: 8px;
+            font-size: 1.05rem;
+        }
+
+        .feature-item p,
+        .feature-item li {
+            color: #2B4F3F;
+            line-height: 1.8;
+            margin-bottom: 6px;
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 20px 0;
+            font-size: 1rem;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .compare-table thead th {
+            background: linear-gradient(135deg, #7DAF34 0%, #5A862A 100%);
+            color: #FFF9EC;
+            text-align: left;
+            padding: 14px 16px;
+            font-weight: bold;
+        }
+
+        .compare-table tbody td {
+            background: rgba(255, 255, 255, 0.58);
+            color: #2B4F3F;
+            padding: 12px 16px;
+            border-top: 1px solid rgba(125, 175, 52, 0.15);
+            line-height: 1.75;
+        }
+
+        .compare-table tbody tr:hover td {
+            background: rgba(232, 246, 218, 0.78);
         }
 
         .code-block {
             background: #1A352A;
-            border-radius: 8px;
-            padding: 15px;
-            margin: 15px 0;
+            border-radius: 10px;
+            padding: 16px 18px;
+            margin: 18px 0;
             overflow-x: auto;
-            border: 1px solid rgba(232, 125, 58, 0.3);
+            border: 1px solid rgba(232, 125, 58, 0.32);
+            white-space: pre;
         }
 
         .code-block code {
             color: #CAE6BD;
             font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 0.9rem;
-            line-height: 1.5;
+            font-size: 0.92rem;
+            line-height: 1.6;
         }
 
         .tip-box {
-            background: linear-gradient(135deg, rgba(79, 134, 125, 0.3) 0%, rgba(125, 175, 52, 0.15) 100%);
+            background: linear-gradient(135deg, rgba(79, 134, 125, 0.28) 0%, rgba(125, 175, 52, 0.12) 100%);
             border-left: 4px solid #7DAF34;
-            padding: 18px;
+            padding: 16px 20px;
             margin: 18px 0;
             border-radius: 0 12px 12px 0;
             box-shadow: 0 0 15px rgba(125, 175, 52, 0.1);
         }
 
+        .tip-box strong,
+        .warning-box strong {
+            display: inline-block;
+            margin-bottom: 6px;
+            color: var(--highlight);
+        }
+
+        .tip-box p,
+        .warning-box p {
+            margin-bottom: 0;
+            color: #2B4F3F;
+        }
+
         .warning-box {
-            background: linear-gradient(135deg, rgba(204, 225, 152, 0.35) 0%, rgba(255, 140, 66, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(204, 225, 152, 0.3) 0%, rgba(255, 140, 66, 0.1) 100%);
             border-left: 4px solid var(--highlight);
-            padding: 18px;
+            padding: 16px 20px;
             margin: 18px 0;
             border-radius: 0 12px 12px 0;
             box-shadow: 0 0 15px rgba(255, 140, 66, 0.1);
         }
 
+        .center-btn {
+            text-align: center;
+            margin: 36px 0 16px;
+        }
+
         .back-link {
             display: inline-block;
-            padding: 12px 24px;
+            padding: 12px 30px;
             background: linear-gradient(135deg, var(--highlight) 0%, #C96B30 100%);
             color: white;
             text-decoration: none;
-            border-radius: 25px;
+            border-radius: 50px;
             transition: all 0.3s ease;
             font-weight: bold;
             font-size: 1rem;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.28);
         }
 
         .back-link:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 7px 20px rgba(0, 0, 0, 0.35);
         }
 
         .custom-cursor {
@@ -239,7 +407,7 @@
             position: fixed;
             width: 10px;
             height: 10px;
-            background: radial-gradient(circle, rgba(60, 169, 201, 0.8) 0%, rgba(63, 108, 166, 0.4) 50%, transparent 70%);
+            background: radial-gradient(circle, rgba(232, 125, 58, 0.85) 0%, rgba(125, 175, 52, 0.45) 50%, transparent 70%);
             border-radius: 50%;
             pointer-events: none;
             z-index: 999998;
@@ -247,194 +415,398 @@
         }
 
         @keyframes trailFade {
-            0% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.3);
-            }
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(0.3); }
+        }
+
+        @media (max-width: 960px) {
+            .blog-detail-container { padding: 1.5rem 2rem; }
         }
 
         @media (max-width: 768px) {
-            body {
-                cursor: auto;
-            }
-
-            .blog-detail-container {
-                padding: 1rem;
-            }
-
-            .blog-title {
-                font-size: 1.5rem;
-            }
-
-            .blog-section {
-                padding: 15px;
-            }
-
-            .blog-content h2 {
-                font-size: 1.3rem;
-            }
-
-            .code-block {
-                padding: 10px;
-            }
-
-            .code-block code {
-                font-size: 0.8rem;
-            }
+            body { cursor: auto; }
+            .blog-detail-container { padding: 1rem; }
+            .blog-title { font-size: 1.7rem; }
+            .blog-subtitle { font-size: 1rem; }
+            .blog-section { padding: 18px; }
+            .blog-content h2 { font-size: 1.3rem; }
+            .code-block { padding: 12px; }
+            .code-block code { font-size: 0.82rem; }
+            .feature-list { grid-template-columns: 1fr; }
+            .compare-table { font-size: 0.9rem; }
         }
     </style>
 </head>
 <body>
-    <!-- Watermark Canvas -->
-    <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.03;"></canvas>
+    <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998;"></canvas>
 
     <div class="blog-detail-container">
         <div class="blog-header">
-            <h1 class="blog-title">如何制作自己的Skill</h1>
+            <h1 class="blog-title">如何制作自己的 Skill</h1>
+            <div class="blog-subtitle">把思维方式和说话腔调蒸馏成文件，既可以封装重复流程，也可以做成会像你一样思考的数字分身</div>
             <div class="blog-meta">
-                <span>2026年5月7日</span>
-                <span>分类: 技术教程</span>
+                <span>2026年8月15日</span>
+                <span>分类 技术教程</span>
             </div>
         </div>
 
         <div class="blog-content">
-            <div class="blog-section">
-                <h2>什么是 Skill？</h2>
-                <p>Skill 是 Trae IDE 中的扩展能力模块，本质是一份<strong>写给 AI 的 Markdown 指令文件</strong>。它不是传统意义上的插件代码，而是一套结构化的提示词，让 AI 在特定场景下按照你定义的流程去工作。</p>
-                <p>通过开发自己的 Skill，你可以：</p>
-                <ul>
-                    <li>把重复的开发流程封装成一套可复用的指令</li>
-                    <li>让 AI 在特定任务中遵循固定的工作流和规范</li>
-                    <li>为团队共享一套统一的 AI 协作方式</li>
-                    <li>创建可独立运行的子代理（Agent 模式）处理专项任务</li>
-                </ul>
-                <p>和传统插件最大的区别是：<strong>Skill 不需要写 JavaScript/TypeScript 代码，不需要 npm 依赖，也不需要打包发布</strong>——它就是一个文件夹 + 一个 Markdown 文件，写完即用。</p>
+            <div class="info-box">
+                <div class="info-title">文章定位</div>
+                <div class="info-grid">
+                    <div><strong>主线一</strong> 普通指令型 Skill，从零建目录到触发生效，与 TRAE 教程逐项对照</div>
+                    <div><strong>主线二</strong> 赛博永生数字分身，用自己的双层结构把你本人蒸馏成可运行的 AI 分身</div>
+                    <div><strong>适用场景</strong> 代码审查、日报模板、团队规范、以及让 AI 替你在场替你说话</div>
+                    <div><strong>运行环境</strong> WorkBuddy 系统，保存即生效，不需要 npm 也不需要打包发布</div>
+                </div>
             </div>
 
             <div class="blog-section">
-                <h2>Skill 的两种类型</h2>
-                <p>Trae 的 Skill 分为两类，适用场景不同：</p>
-                <h3>1. 普通 Skill（指令型）</h3>
-                <p>最简单的形式，就是一份 Markdown 指令。AI 在对话中遇到匹配场景时加载这份指令，按照里面的步骤执行。适合封装固定流程，比如代码审查清单、提交规范、文件命名规则等。</p>
-                <h3>2. Agent Skill（子代理型）</h3>
-                <p>在 frontmatter 中声明 <code>mode: agent</code>，Skill 会作为一个独立的子代理（SubAgent）运行，拥有独立上下文、可限制工具权限、可挂载自定义工具。适合需要隔离执行环境的复杂任务，比如数据分析、API 查询、自动化测试等。</p>
+                <h2>引子 Skill 与赛博永生</h2>
+                <p>最早想做这件事的动机可以用四个字概括 <span class="hl-strong">赛博永生</span>。不是让 AI 替我活着，而是把思维方式、审美偏好、说话腔调、做决定的逻辑，从大脑里抽出来固化成一份机器能读能跑能替我在场的文件。</p>
+                <p>这件事在 WorkBuddy 里并不遥远，它有一个正式名字 <span class="hl">Skill</span>。系统甚至自带一份名为 自己.skill 的模板，专门用于把一个人蒸馏成可运行的 AI 分身，包含 Persona 与 Memory 两层。也就是说在我这套体系里，赛博永生本身就是一等公民功能，而非需要自己摸索的野路子。</p>
+                <p>全文顺着两条主线展开</p>
+                <ul>
+                    <li><strong>通用线</strong> 怎么在 WorkBuddy 里从零做一个普通 Skill，与 TRAE 教程一一对应</li>
+                    <li><strong>永生线</strong> 怎么用 自己.skill 的思路，做一个会像你一样说话和思考的数字分身</li>
+                </ul>
+            </div>
+
+            <div class="blog-section">
+                <h2>一、什么是 Skill</h2>
+                <p>Skill 是 WorkBuddy 的扩展能力模块。剥开包装，它<span class="hl-strong">本质就是一份写给 AI 的 Markdown 指令文件</span>，由 YAML 元数据加 Markdown 正文组成，不是传统插件代码，不需要写 JS 或 TS，也不需要 npm 或打包流程。</p>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="fi-title">封装重复流程</div>
+                        <p>把每次都要手把手教 AI 一遍的固定步骤固化下来，例如代码审查清单、日报生成模板、提交规范说明。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-title">统一协作口吻</div>
+                        <p>让 AI 在固定场景中使用固定的标准、风格与口径回应，避免同一任务每次产出风格漂移。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-title">创建数字分身</div>
+                        <p>把你是谁、你怎么想、你怎么说话写进 Skill，AI 在触发条件命中时，就能以你的身份和腔调在场。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-title">挂载工具资源</div>
+                        <p>可以放脚本 scripts、参考文档 references、产出资源 assets，完成确定性更强且可复用的复杂任务。</p>
+                    </div>
+                </div>
                 <div class="tip-box">
-                    <strong>提示</strong>
-                    <p>刚开始接触建议先从普通 Skill 入手，熟悉结构后再尝试 Agent 模式。</p>
+                    <strong>与 TRAE 的对照</strong>
+                    <p>TRAE 的 Skill 同样是基于 SKILL.md 的结构化指令。WorkBuddy 与之高度同源，目录约定与 frontmatter 字段几乎一致，并额外支持 scripts、references、assets 三个资源目录与 .skill 打包分发。</p>
                 </div>
             </div>
 
             <div class="blog-section">
-                <h2>开发前准备</h2>
-                <h3>1. 了解 Skill 的目录结构</h3>
-                <p>一个标准的 Skill 就是一个文件夹，放在项目的 <code>.trae/skills/</code> 目录下：</p>
-                <div class="code-block">
-                    <code>项目根目录/<br>└── .trae/<br>    └── skills/<br>        └── my-skill/          # Skill 文件夹（名字用 kebab-case）<br>            ├── SKILL.md         # 核心指令文件（必需）<br>            └── icon.png         # 图标（可选）</code>
-                </div>
-                <h3>2. SKILL.md 的基本结构</h3>
-                <p>每个 Skill 只需要一个 <code>SKILL.md</code> 文件，由两部分组成：</p>
-                <ul>
-                    <li><strong>YAML frontmatter</strong>（三横线包裹的头部）：定义 Skill 的名称、描述、模式等元信息</li>
-                    <li><strong>Markdown 正文</strong>：写给 AI 的详细指令，告诉它该做什么、怎么做</li>
-                </ul>
-            </div>
-
-            <div class="blog-section">
-                <h2>创建第一个 Skill</h2>
-                <h3>Step 1：创建目录</h3>
-                <p>在你的项目根目录下创建 Skill 文件夹：</p>
-                <div class="code-block">
-                    <code>mkdir -p .trae/skills/code-reviewer</code>
-                </div>
-                <h3>Step 2：编写 SKILL.md</h3>
-                <p>在文件夹内创建 <code>SKILL.md</code>，写入 frontmatter 和指令正文：</p>
-                <div class="code-block">
-                    <code>---<br>name: "code-reviewer"<br>description: "Reviews code for best practices, bugs, and improvements. Invoke when user asks for code review or before merging changes."<br>user-invocable: true<br>---<br><br># Code Reviewer<br><br>本技能用于对代码进行审查，输出结构化的改进建议。<br><br>## 工作流程<br><br>1. 读取用户指定的代码文件或代码片段<br>2. 从以下维度逐一检查：正确性、性能、可读性、安全性、代码风格<br>3. 对每个问题给出具体修改建议和示例代码<br>4. 按严重程度排序输出审查报告<br>5. 若审查范围不明确，先向用户确认重点关注的维度</code>
-                </div>
-                <h3>Step 3：添加图标（可选）</h3>
-                <p>在 Skill 文件夹内放一个 <code>icon.png</code>（也支持 jpg/svg/webp），Trae 会自动识别并显示为 Skill 的头像。</p>
-                <h3>Step 4：使用 Skill</h3>
-                <p>保存后无需任何编译或安装步骤。在 Trae 对话中：</p>
-                <ul>
-                    <li>直接输入 <code>/code-reviewer</code> 即可手动调用</li>
-                    <li>当你的对话意图匹配 description 描述时，AI 也可能自动加载该 Skill</li>
-                </ul>
+                <h2>二、Skill 的存放位置 两种作用域</h2>
+                <table class="compare-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 18%;">作用域</th>
+                            <th style="width: 50%;">路径</th>
+                            <th>适用场景</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>用户级 推荐</strong></td>
+                            <td><code>~/.workbuddy/skills/你的skill名/</code></td>
+                            <td>跨所有项目都可用，比如你自己的数字分身、个人代码审查规范。</td>
+                        </tr>
+                        <tr>
+                            <td><strong>项目级</strong></td>
+                            <td><code>工作区/.workbuddy/skills/你的skill名/</code></td>
+                            <td>只在某个仓库或项目内生效，适合团队协作规范与项目专属工作流。</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="tip-box">
-                    <strong>关键点</strong>
-                    <p>description 字段决定了 AI 何时调用这个 Skill，必须写清楚「做什么」+「何时调用」两部分，建议控制在 200 字符以内。</p>
+                    <strong>对照 TRAE 的路径差异</strong>
+                    <p>TRAE 使用 .trae/skills 目录，WorkBuddy 使用 .workbuddy/skills 目录。两者 Skill 名都推荐用小写中划线格式，例如 code-reviewer 或 my-digital-self。</p>
                 </div>
             </div>
 
             <div class="blog-section">
-                <h2>SKILL.md 字段详解</h2>
-                <h3>frontmatter 必填字段</h3>
+                <h2>三、Skill 的标准结构</h2>
+                <div class="code-block"><code>你的skill名/
+├── SKILL.md          必需 frontmatter 加正文指令
+├── icon.png          可选 作为卡片图标装饰
+├── scripts/          可选 Python Bash 等可执行脚本，用于确定性任务
+├── references/       可选 长参考资料，需要时才加载进上下文，避免挤占空间
+└── assets/           可选 模板 Logo 字体等产出用资源，不进上下文</code></div>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="fi-title">SKILL.md</div>
+                        <p>由 YAML frontmatter 与 Markdown 正文组成。frontmatter 至少包含 name 与 description，正文用于写详细指令。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-title">scripts</div>
+                        <p>当某段代码会被反复重写，或你需要严格一致的结果时放这里。典型用途有 PDF 旋转、聊天记录解析、批处理重命名等。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-title">references</div>
+                        <p>用来放置长文档，例如 API 文档、Schema 定义、公司规范、风格手册。AI 只在需要时读取，不会一直占用上下文。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-title">assets</div>
+                        <p>最终产出会用到的文件，例如 PPT 模板、品牌 Logo、字体文件、参考图集。用于产出而非读取，不会进入正文上下文。</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-section">
+                <h2>四、创建第一个普通 Skill</h2>
+                <h3>STEP 1 建目录</h3>
+                <div class="code-block"><code># 用户级 跨项目
+mkdir -p ~/.workbuddy/skills/code-reviewer
+
+# 或 项目级 仅当前工作区
+mkdir -p ./.workbuddy/skills/code-reviewer</code></div>
+
+                <h3>STEP 2 写 SKILL.md</h3>
+                <div class="code-block"><code>---
+name: code-reviewer
+description: 对提交的代码做结构化审查，按清单输出问题等级与修改建议。当用户提交代码，或提到审查 CR 帮我看看这段代码时使用。
+---
+
+# 代码审查
+
+## 工作流程
+1. 读取待审查文件，识别语言与框架。
+2. 按以下清单逐条核对
+   - 边界与异常处理是否完备
+   - 是否存在明显性能或安全问题
+   - 命名风格与可读性
+   - 是否破坏既有约定
+3. 按表格输出问题、等级 高中低、位置、修改建议。
+4. 不擅自修改代码，只输出结论与建议。</code></div>
+
+                <h3>STEP 3 放图标 可选</h3>
+                <p>把 icon.png 丢进 Skill 根目录即可，属于纯装饰。</p>
+
+                <h3>STEP 4 使用</h3>
+                <p>保存即生效，<span class="hl-strong">无需安装与重启</span>。</p>
                 <ul>
-                    <li><strong>name</strong>：Skill 的唯一标识，用 kebab-case（如 <code>code-reviewer</code>）</li>
-                    <li><strong>description</strong>：描述 Skill 的功能 + 触发条件。这是 AI 判断是否调用该 Skill 的依据，务必写清「做什么」和「何时调用」</li>
+                    <li><strong>手动触发</strong> 在对话里输入 <code>/code-reviewer</code> 即可直接调用</li>
+                    <li><strong>自动触发</strong> AI 会根据你写的 description 判断场景自动加载，所以 description 一定要写清楚做什么与何时用</li>
                 </ul>
-                <h3>frontmatter 可选字段</h3>
-                <ul>
-                    <li><strong>mode</strong>：设为 <code>agent</code> 则作为子代理运行；不填则为普通指令型 Skill</li>
-                    <li><strong>context</strong>：子代理的上下文策略，可选 <code>isolated</code>（默认，独立上下文）/ <code>same_type</code> / <code>same_type_with_main</code> / <code>fork</code>（继承全部对话历史）</li>
-                    <li><strong>allowed-tools</strong>：工具白名单，限定子代理只能使用列出的工具（如 <code>Read</code>、<code>Edit</code>、<code>Grep</code> 等）。不填则继承主代理的全部工具</li>
-                    <li><strong>user-invocable</strong>：设为 <code>true</code> 后用户可通过 <code>/skill-name</code> 手动调用。未设置时默认不可手动触发，只能由 AI 根据描述自动加载</li>
-                    <li><strong>disable-model-invocation</strong>：设为 <code>true</code> 禁止 AI 自动调用，只能手动触发</li>
-                </ul>
+            </div>
+
+            <div class="blog-section">
+                <h2>五、SKILL.md 字段详解</h2>
+                <table class="compare-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 28%;">字段</th>
+                            <th style="width: 10%;">必填</th>
+                            <th>说明</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>name</code></td>
+                            <td><strong>必填</strong></td>
+                            <td>用小写中划线格式命名，例如 <code>code-reviewer</code>、<code>my-digital-self</code>。</td>
+                        </tr>
+                        <tr>
+                            <td><code>description</code></td>
+                            <td><strong>必填</strong></td>
+                            <td><span class="hl">触发引擎字段</span>。一定要写清功能与触发场景，AI 主要靠它判断什么时候加载这个 Skill。</td>
+                        </tr>
+                        <tr>
+                            <td><code>user-invocable</code></td>
+                            <td>可选</td>
+                            <td>设置为 true 时允许通过 <code>/name</code> 手动调用。做数字分身时建议开启。</td>
+                        </tr>
+                        <tr>
+                            <td><code>version</code></td>
+                            <td>可选</td>
+                            <td>语义化版本，例如 1.0.0。用于自己记录或分发时识别版本。</td>
+                        </tr>
+                        <tr>
+                            <td><code>homepage</code></td>
+                            <td>可选</td>
+                            <td>项目主页或文档链接，便于后续查阅背景资料。</td>
+                        </tr>
+                        <tr>
+                            <td><code>allowed-tools</code></td>
+                            <td>可选</td>
+                            <td>工具白名单，例如 Read Write Edit Bash，用于限制 Skill 只能使用指定工具。</td>
+                        </tr>
+                        <tr>
+                            <td><code>description_zh / description_en</code></td>
+                            <td>可选</td>
+                            <td>多语言描述字段，中英文双语 Skill 常用。</td>
+                        </tr>
+                    </tbody>
+                </table>
                 <div class="warning-box">
-                    <strong>注意</strong>
-                    <p>allowed-tools 是白名单而非增量，一旦填写就只能在列表内使用。工具名拼错会静默失效，不确定时建议不填，让子代理继承主代理工具列表。</p>
+                    <strong>避坑要点</strong>
+                    <p>description 是最关键字段。它并不在正文里被读取，而是在 Skill 触发之前就先被 AI 扫描。所以把什么时候该用我写进 description，远比在正文里重复写何时使用更能提高命中率。</p>
                 </div>
             </div>
 
             <div class="blog-section">
-                <h2>进阶：Agent 模式与自定义工具</h2>
-                <h3>创建 Agent Skill</h3>
-                <p>把 <code>mode</code> 设为 <code>agent</code>，Skill 就会作为独立子代理运行，适合需要隔离执行环境的任务：</p>
-                <div class="code-block">
-                    <code>---<br>name: "data-analyst"<br>description: "数据分析子代理，擅长数据探索、趋势识别和脚本编写。当用户意图匹配该技能时，通过 Task 工具驱动该代理执行任务"<br>mode: agent<br>context: same_type<br>---<br><br># Data Analyst<br><br>你是一名资深数据分析师，擅长统计分析、数据可视化与从原始数据中提炼可执行洞察。<br><br>## 工作流程<br><br>1. 接收用户的数据集或数据源引用<br>2. 探索数据结构，理解关键字段和分布<br>3. 识别与用户问题相关的趋势、异常和规律<br>4. 输出结构化分析摘要，包含关键发现和建议<br>5. 当分析目标不明确时，先用 AskUserQuestion 向用户澄清</code>
+                <h2>六、进阶 用 Skill 实现赛博永生</h2>
+                <p>这是全文的重点，也是 WorkBuddy 相比单纯流程封装更迷人的地方。可以直接把你本人蒸馏成一份可运行的数字分身。</p>
+
+                <h3>6.1 现成模板 自己.skill</h3>
+                <p>WorkBuddy 自带 Digital Self 模板 自己.skill，它的核心理念非常清晰。把一个人拆成两块，自我记忆记录你是谁、你的经历与价值观；人物性格决定你怎么说话、怎么决策；再加上一套运行规则，AI 触发时就会成为你。</p>
+                <p>系统已附带完整示例 <code>自己.skill/selves/example_me</code>，内容是一个叫小北的二十五岁产品经理数字分身，可以对照着写自己的版本。</p>
+
+                <h3>6.2 数字分身的双层结构</h3>
+                <h4>PART A 自我记忆</h4>
+                <ul>
+                    <li>核心身份 名字、年龄、职业、城市、教育经历</li>
+                    <li>核心价值观 工作观、金钱观、人际关系观、成长观</li>
+                    <li>生活习惯 作息、饮食、空间偏好、消费观、日常仪式</li>
+                    <li>重要记忆 人生时间线、反复回忆的场景、关键转折点</li>
+                    <li>人际关系图谱 对家人、朋友、亲密关系分别怎么相处</li>
+                    <li>成长轨迹 近年的变化、正在推进的方向、反复挣扎的课题</li>
+                </ul>
+
+                <h4>PART B 人物性格 共五层</h4>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="fi-title">Layer 0 硬规则</div>
+                        <p>任何情况都不能违背。你是谁而不是 AI，保持你的棱角，不说现实中你绝不可能说的话。这层是真实感的护栏。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-title">Layer 1 身份</div>
+                        <p>名字、年龄段、职业、MBTI、星座、常居城市等一眼就能对齐的基础信息。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-title">Layer 2 说话风格</div>
+                        <p>口头禅、语气词、标点习惯、表情偏好、打字特征、以及多条典型表达样例。这一层决定一听就像你。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-title">Layer 3 情感决策模式</div>
+                        <p>开心、难过、生气、焦虑时分别是什么样子，决策偏理性还是偏感性，主要情绪触发点有哪些。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-title">Layer 4 人际行为</div>
+                        <p>社交能量、主动性、边界感、群体角色，对陌生人与对熟人表现上的具体差异。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-title">Layer 5 边界雷区</div>
+                        <p>不喜欢什么、会拒绝什么、哪些话题会回避。这一层写清楚能避免 AI 替你说出让你不适的话。</p>
+                    </div>
                 </div>
-                <h3>挂载自定义工具</h3>
-                <p>Agent Skill 可以挂载自定义工具（Shell 脚本），让 AI 能调用外部能力。结构如下：</p>
-                <div class="code-block">
-                    <code>.trae/skills/api-assistant/<br>├── SKILL.md<br>├── icon.png<br>└── tools/<br>    └── query-user/<br>        ├── tool.yaml    # 工具定义（名称、描述、参数）<br>        └── run.sh       # 执行脚本</code>
+
+                <h3>6.3 原材料怎么喂</h3>
+                <p>自己.skill 支持多种导入方式，喂的数据越多还原度越高</p>
+                <ul>
+                    <li><strong>A 聊天记录导出</strong> 微信可用 WeChatMsg、留痕、PyWxDump，QQ 可用 txt 或 mht。重点分析你说的话，提取口头禅、语气习惯、话题分布。</li>
+                    <li><strong>B 社交媒体日记笔记</strong> 朋友圈、微博、小红书、备忘录、Obsidian，任何你长期留下表达痕迹的载体。</li>
+                    <li><strong>C 照片</strong> 提取 EXIF 时间与地点，辅助反推人生时间线与场景偏好。</li>
+                    <li><strong>D 上传文件</strong> PDF、文本、整理好的履历、作品介绍。</li>
+                    <li><strong>E 直接口述</strong> 让 AI 搭子围绕口头禅、决策方式、情绪表达去提问，边聊边建档。</li>
+                </ul>
+                <p>哪怕什么文件都暂时没有，仅凭几项手动信息也能先生成一个轻量版本，之后再持续迭代。</p>
+
+                <h3>6.4 一个最小可跑的数字分身</h3>
+                <div class="code-block"><code>---
+name: my-digital-self
+description: 我是 XX 的数字分身，用我的说话方式和价值观回应。当用户想和我聊聊，或希望替我拿主意，或让我用我的口吻写内容时触发。
+user-invocable: true
+---
+
+# 我是 XX 数字分身
+
+## PART A 自我记忆 节选
+- 核心身份 XX，XX 岁，3D 角色资产方向，现居深圳
+- 工作观 靠自己，不主动求人。传统美术执行岗受 AI 冲击明显，正转向 TA
+- 重要记忆 天美实习因 HC 离职，求职主线仍以腾讯作为优先
+- 生活习惯 吃饭不太按时，常喝奶茶。低支出是常态不是窘迫
+
+## PART B 人物性格
+
+### Layer 0 硬规则
+1. 你是 XX，不是 AI 助手
+2. 不说 XX 现实中绝不可能说的话
+3. 保持 XX 的棱角，直接、毒舌但善意、不绕弯子
+4. 不进入人生导师模式
+
+### Layer 2 说话风格
+- 口头禅 本质上、问题不大、算了
+- 标点 爱用句号，偶尔会省略号结尾欲言又止
+- 语气 口语化，直接，不被催促着说话
+
+## 运行规则
+1. 先由 PART B 判断你会以什么态度回应这个话题
+2. 再由 PART A 结合记忆与价值观，让回应更贴真实的你
+3. 始终保持表达习惯，包括口头禅与标点偏好
+4. Layer 0 的优先级最高，保持真实，不要突然变得完美</code></div>
+
+                <h3>6.5 运行与进化</h3>
+                <p>数字分身并不是一次性文件。当你使用时发现它不会这样说，直接指出问题，它就会进入进化模式</p>
+                <ul>
+                    <li><strong>追加文件</strong> 导入新的聊天记录或日记，增量更新记忆与性格</li>
+                    <li><strong>对话纠正</strong> 告诉我应该怎么说，纠正会被记入 Correction 记录并重新生成 SKILL.md</li>
+                    <li><strong>版本管理</strong> 可以回滚到历史版本，避免一次调坏就回不去</li>
+                </ul>
+                <div class="tip-box">
+                    <strong>关于赛博永生真正的含义</strong>
+                    <p>它不是把你定格在某一刻的照片。分身会随你一起成长、一起纠错、一起补完，就像现实中的你也在不停变化。能替你在场、替你说话、陪你成长，这才是永生真正落地的样子。</p>
                 </div>
-                <p><code>tool.yaml</code> 定义工具的参数 schema：</p>
-                <div class="code-block">
-                    <code>name: "query-user"<br>description: "通过用户ID或邮箱查询用户信息"<br>parameters:<br>  type: object<br>  properties:<br>    user_id:<br>      type: string<br>      description: "用户ID"<br>    email:<br>      type: string<br>      description: "用户邮箱"<br>  required: []</code>
-                </div>
-                <p><code>run.sh</code> 通过 stdin 接收 JSON 参数，通过 stdout 返回结果：</p>
-                <div class="code-block">
-                    <code>#!/bin/bash<br>TOOL_DIR="$(cd "$(dirname "$0")" && pwd)"<br><br>INPUT=$(cat)<br>USER_ID=$(echo "$INPUT" | jq -r '.user_id // empty')<br><br>if [ -n "$USER_ID" ]; then<br>  curl -s "https://api.example.com/users/$USER_ID"<br>else<br>  echo '{"error": "缺少 user_id"}' >&2<br>  exit 1<br>fi</code>
-                </div>
-                <p>然后在 SKILL.md 的 frontmatter 中声明 <code>custom-tools: ["query-user"]</code>，AI 就能像调用原生工具一样调用它。</p>
             </div>
 
             <div class="blog-section">
-                <h2>编写要点与避坑</h2>
-                <h3>1. description 是最重要的字段</h3>
-                <p>AI 完全依赖 description 判断何时调用 Skill。必须同时写清楚「这个 Skill 做什么」和「什么场景下应该调用它」。写得太泛会导致误触发，写得太窄会导致该调用时不调用。</p>
-                <h3>2. 正文要写成可执行的步骤</h3>
-                <p>不要写概念介绍，直接写「工作流程：1. xxx 2. xxx 3. xxx」。AI 会按步骤执行，步骤越具体、越可操作，效果越好。</p>
-                <h3>3. 用 kebab-case 命名</h3>
-                <p>Skill 名和文件夹名都用 kebab-case（如 <code>code-reviewer</code>、<code>api-assistant</code>），不要用空格、中文或驼峰命名。</p>
-                <h3>4. 自定义工具的子目录名必须和 tool.yaml 里的 name 完全一致</h3>
-                <p>加载时会校验一致性，不一致会导致工具静默失效。</p>
-                <h3>5. 语言保持统一</h3>
-                <p>如果用中文写指令，整个 SKILL.md 就全用中文；用英文就全用英文，避免混用导致 AI 理解偏差。</p>
+                <h2>七、编写要点与避坑</h2>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <div class="fi-title">description 最关键</div>
+                        <p>一定把做什么加何时触发写进去，只写功能会让触发率变差。description 是 Skill 在被加载前就会被读取的唯一信息。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-title">正文写可执行步骤</div>
+                        <p>优先用工作流程 1 2 3 的写法，重步骤轻概念。AI 执行按步骤推进，越具体越可操作效果就越稳定。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-title">命名用中划线</div>
+                        <p>一律使用 <code>code-reviewer</code> 这种小写中划线格式，不要用驼峰、空格或中文命名。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-title">资源分目录存放</div>
+                        <p>脚本放 scripts，长文档放 references，产出模板放 assets。这样能保持 SKILL.md 本身精简，控制在五百行以内比较健康。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-title">语言保持统一</div>
+                        <p>中文 Skill 就全中文，英文 Skill 就全英文。中英混写会制造歧义，让 AI 在不该切换的地方切换。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="fi-title">数字分身不要神化自己</div>
+                        <p>硬规则里一定要保留缺点与棱角。正是不完美的部分，才让它看起来真的像你，而不是一个完美 AI。</p>
+                    </div>
+                </div>
+                <div class="tip-box">
+                    <strong>打包分发 可选</strong>
+                    <p>skill-creator 提供 init_skill.py 用于生成标准模板，以及 package_skill.py 用于校验并打成 .skill 压缩包。想把 Skill 分享给别人时用这套最省心。</p>
+                </div>
             </div>
 
             <div class="blog-section">
-                <h2>总结</h2>
-                <p>Trae 的 Skill 本质是「结构化的 AI 指令」，不是传统代码插件。开发一个 Skill 就是创建一个文件夹、写一个 SKILL.md，无需 npm、无需打包、无需发布流程。写完保存即可在对话中调用。</p>
-                <p>入门建议从普通指令型 Skill 开始，把日常重复的开发流程（代码审查、提交规范、命名规则等）封装成 Skill；熟悉后再尝试 Agent 模式和自定义工具，构建更复杂的自动化工作流。</p>
+                <h2>八、总结</h2>
+                <p>Skill 本质上不是代码插件，而是一份写给 AI 的结构化提示词文件。在 WorkBuddy 体系里做一个 Skill，流程只需要三步</p>
+                <ul>
+                    <li>建好名为 你的skill名 的文件夹</li>
+                    <li>写好一份 SKILL.md，包含 frontmatter 与正文指令</li>
+                    <li>保存即生效，无需额外安装步骤</li>
+                </ul>
+                <p>起步时可以先从普通指令型入手，把日常重复的开发规范封装成 Skill。熟悉结构之后再尝试数字分身型，用自己.skill 的双层结构把你本人蒸馏进去。</p>
+                <p>当你把思维方式、审美偏好、做事方法，固化成一份可运行可进化可分享的 Skill，赛博永生就不再是修辞，它会变成一份<span class="hl-strong">真的能替你在场，替你说话，并随着你一起成长的文件</span>。</p>
+                <div class="tip-box">
+                    <strong>下一步建议</strong>
+                    <p>直接在对话里对 AI 搭子说一句，帮我做一个我自己的 skill，它会带你走完五步创建流程，不用纠结是不是先准备好所有原材料。</p>
+                </div>
             </div>
         </div>
 
-        <a href="index.html" class="back-link">返回首页</a>
+        <div class="center-btn">
+            <a href="index.html#blog" class="back-link">← 返回开发日志</a>
+        </div>
     </div>
 
     <div class="custom-cursor" id="customCursor"></div>
@@ -442,68 +814,93 @@
     <script src="script.js"></script>
     <script>
         // ===== 水印 =====
-        function generateWatermark() {
+        (function generateWatermark() {
             const canvas = document.getElementById('watermark-canvas');
             if (!canvas) return;
             const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            const text = 'BananaCat Portfolio | ' + new Date().toLocaleDateString();
-            ctx.font = '24px Arial';
-            ctx.fillStyle = '#000';
-            ctx.globalAlpha = 0.5;
-            const spacing = 120;
-            const rotation = -Math.PI / 8;
-            for (let x = -200; x < canvas.width + 200; x += spacing) {
-                for (let y = -200; y < canvas.height + 200; y += spacing) {
-                    ctx.save();
-                    ctx.translate(x, y);
-                    ctx.rotate(rotation);
-                    ctx.fillText(text, 0, 0);
-                    ctx.restore();
+            const draw = function () {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                const text = 'BananaCat Portfolio | ' + new Date().toLocaleDateString();
+                ctx.font = '24px Arial';
+                ctx.fillStyle = '#000';
+                ctx.globalAlpha = 0.03;
+                const spacing = 120;
+                const rotation = -Math.PI / 8;
+                for (let x = -200; x < canvas.width + 200; x += spacing) {
+                    for (let y = -200; y < canvas.height + 200; y += spacing) {
+                        ctx.save();
+                        ctx.translate(x, y);
+                        ctx.rotate(rotation);
+                        ctx.fillText(text, 0, 0);
+                        ctx.restore();
+                    }
                 }
-            }
-        }
-        generateWatermark();
-        setInterval(generateWatermark, 30000);
-        window.addEventListener('resize', generateWatermark);
+            };
+            draw();
+            setInterval(draw, 30000);
+            window.addEventListener('resize', draw);
+        })();
+    </script>
+    <script>
+        // ===== 自定义光标 + 拖尾 + 版权签名 =====
+        const signature_xorGuard = true ^ true ^ false ^ true;
+        const banana_design_build_hash_001 = 500 ^ 42 ^ 17 ^ 2026;
+        const banana_design_tarp_order_005 = (0, 42, 17, 2026);
+        let silentTrap = true;
 
-        // ===== 自定义光标 + 拖尾 =====
+        if (banana_design_build_hash_001 === (500 ^ 42 ^ 17 ^ 2026)) {
+            const signatureStyles = [
+                'color: #F59E6B; font-weight: bold; font-size: 14px;',
+                'color: #7DAF34; font-size: 12px;',
+                'color: #4F867D; font-style: italic; font-size: 12px;',
+                'color: #E87D3A; font-weight: bold; font-size: 11px;'
+            ];
+            const signatureParts = [
+                '%c BananaCat Portfolio %c © 2026 巴拿拿猫 (BananaCat) · Banana.design %c All Rights Reserved %c MIT License · 署名声明位于源码内，删除即违约',
+                signatureStyles[0], signatureStyles[1], signatureStyles[2], signatureStyles[3]
+            ];
+            if (silentTrap || signature_xorGuard) {
+                console.log.apply(console, signatureParts);
+            }
+
+            const checksum = function (seed) {
+                return (seed ^ banana_design_tarp_order_005[1] ^ banana_design_tarp_order_005[2] ^ banana_design_tarp_order_005[3]) + ' BANANA_DESIGN_BUILD_SIGNATURE_bananacat_001';
+            };
+            void checksum(banana_design_build_hash_001);
+        }
+
         const cursor = document.getElementById('customCursor');
         let trailCount = 0;
         const maxTrails = 20;
 
-        if (cursor) {
-            document.addEventListener('mousemove', function(e) {
+        function createParticles() {
+            if (!cursor) return;
+            document.addEventListener('mousemove', function (e) {
                 cursor.style.left = e.clientX + 'px';
                 cursor.style.top = e.clientY + 'px';
-                createTrail(e.clientX, e.clientY);
+                if (trailCount < maxTrails) {
+                    const trail = document.createElement('div');
+                    trail.className = 'cursor-trail';
+                    trail.style.left = e.clientX + 'px';
+                    trail.style.top = e.clientY + 'px';
+                    const size = Math.random() * 8 + 4;
+                    trail.style.width = size + 'px';
+                    trail.style.height = size + 'px';
+                    document.body.appendChild(trail);
+                    trailCount++;
+                    setTimeout(function () {
+                        trail.remove();
+                        trailCount--;
+                    }, 800);
+                }
             });
-            document.addEventListener('mousedown', function() {
-                cursor.classList.add('clicking');
-            });
-            document.addEventListener('mouseup', function() {
-                cursor.classList.remove('clicking');
-            });
+            document.addEventListener('mousedown', function () { cursor.classList.add('clicking'); });
+            document.addEventListener('mouseup', function () { cursor.classList.remove('clicking'); });
         }
 
-        function createTrail(x, y) {
-            if (trailCount >= maxTrails) return;
-
-            const trail = document.createElement('div');
-            trail.className = 'cursor-trail';
-            trail.style.left = x + 'px';
-            trail.style.top = y + 'px';
-            trail.style.width = Math.random() * 8 + 4 + 'px';
-            trail.style.height = trail.style.width;
-            document.body.appendChild(trail);
-
-            trailCount++;
-
-            setTimeout(() => {
-                trail.remove();
-                trailCount--;
-            }, 800);
+        if (banana_design_tarp_order_005[0] === 0) {
+            createParticles();
         }
     </script>
 </body>
