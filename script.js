@@ -3432,39 +3432,58 @@ async function getVisitorInfo() {
     else if (userAgent.includes('Edge')) browser = 'Edge';
     else if (userAgent.includes('Opera')) browser = 'Opera';
     
-    // 获取城市 - 优化版本：添加超时和缓存
+    // 获取城市 - 优化版本：默认 ip-api.com（国内可达），失败不缓存假结果
     let city = '未知城市';
     try {
-        // 检查缓存
+        // 检查缓存 - 仅缓存"成功拿到的真实城市"，未知/失败不缓存避免锁死1小时
         const cachedCity = sessionStorage.getItem('visitorCity');
-        if (cachedCity) {
+        if (cachedCity && cachedCity !== '未知城市') {
             city = cachedCity;
         } else {
-            const url = CONFIG.geoApiUrl || 'https://ipapi.co/json/';
-            
+            const url = CONFIG.geoApiUrl || 'https://ip-api.com/json/?lang=zh-CN&fields=status,message,country,regionName,city,district,query';
+
             // 创建超时Promise
             const timeoutPromise = new Promise((_, reject) => {
-                setTimeout(() => reject(new Error('请求超时')), 3000);
+                setTimeout(() => reject(new Error('请求超时')), 5000);
             });
-            
+
             // 使用Promise.race实现超时控制
             const response = await Promise.race([
                 fetch(url),
                 timeoutPromise
             ]);
-            
+
             const data = await response.json();
-            
-            if (data.city) city = data.city;
-            else if (data.city_name) city = data.city_name;
-            else if (data.district) city = data.district;
-            
-            // 缓存结果，有效期1小时
-            sessionStorage.setItem('visitorCity', city);
-            sessionStorage.setItem('visitorCityTime', Date.now().toString());
+
+            if (data && data.status === 'success') {
+                // ip-api 字段：city = 城市, regionName = 省, district = 区县
+                let parts = [];
+                if (data.country) parts.push(data.country);
+                if (data.regionName) parts.push(data.regionName);
+                if (data.city) parts.push(data.city);
+                // 国内访客：省+市就够了（不要中国开头太冗余），国外访客保留国家
+                if (data.country === '中国' || data.country === 'China') {
+                    parts = [];
+                    if (data.regionName) parts.push(data.regionName);
+                    if (data.city && data.city !== data.regionName) parts.push(data.city);
+                    if (data.district && data.district !== data.city) parts.push(data.district);
+                }
+                if (parts.length > 0) city = parts.join(' · ');
+            } else if (data && data.city) {
+                // 备用：兼容其他接口字段
+                city = data.city;
+            } else if (data && data.city_name) {
+                city = data.city_name;
+            }
+
+            // 仅当拿到真实城市才缓存1小时，未知不缓存让下次继续试
+            if (city !== '未知城市') {
+                sessionStorage.setItem('visitorCity', city);
+                sessionStorage.setItem('visitorCityTime', Date.now().toString());
+            }
         }
     } catch (e) {
-        // 超时或错误时使用默认值，不影响页面加载
+        // 超时或错误时使用默认值，不影响页面加载（故意不缓存，下次访问继续尝试）
         console.log('位置检测超时或失败，使用默认值');
     }
     
