@@ -55,21 +55,21 @@
             100% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
         }
 
-        /* ===== 两栏布局：左卡片 + 右详情 ===== */
+        /* ===== 三栏布局：角色卡 | 导览栏 | 详情正文 ===== */
         .blog-layout {
             display: flex;
-            gap: 2.5rem;
-            padding: 2.5rem 3rem;
+            gap: 2rem;
+            padding: 2.5rem 2.5rem;
             align-items: flex-start;
-            width: 92%;
-            max-width: 1600px;
+            width: 95%;
+            max-width: 1720px;
             margin: 0 auto;
         }
 
-        /* 左侧角色卡片（吸顶，固定尺寸） */
+        /* 最左侧角色卡片（吸顶，固定尺寸） */
         .character-card {
-            flex: 0 0 340px;
-            width: 340px;
+            flex: 0 0 280px;
+            width: 280px;
             height: auto !important;
             overflow: visible !important;
             position: sticky;
@@ -88,10 +88,71 @@
         .character-card-inner img {
             width: 100%;
             height: auto;
-            aspect-ratio: 340/500;
+            aspect-ratio: 280/412;
             object-fit: cover;
             display: block;
             border-radius: 0;
+        }
+
+        /* 中间：日志导览侧栏（吸顶 · 薰衣草紫） */
+        .toc-sidebar {
+            flex: 0 0 250px;
+            width: 250px;
+            position: sticky;
+            top: 2.5rem;
+            align-self: flex-start;
+            background: #E6DCEF;
+            border: 1px solid #C8B8DC;
+            border-radius: 14px;
+            padding: 1.2rem 1.1rem 1.3rem 1.1rem;
+            font-size: 0.88rem;
+            line-height: 1.55;
+        }
+        .toc-group {
+            margin-top: 0.9rem;
+            padding-top: 0.8rem;
+            border-top: 1px dashed rgba(160, 144, 180, 0.3);
+        }
+        .toc-group:first-of-type {
+            margin-top: 0;
+            padding-top: 0;
+            border-top: none;
+        }
+        .toc-group-title {
+            margin: 0 0 0.45rem 0;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #5A4A6A;
+            letter-spacing: 0.02em;
+        }
+        .toc-sidebar ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.28rem;
+        }
+        .toc-sidebar li a {
+            display: block;
+            padding: 0.3rem 0.6rem;
+            color: #6B5B8A;
+            text-decoration: none;
+            border-radius: 7px;
+            transition: background 0.18s ease, color 0.18s ease;
+            font-size: 0.86rem;
+            line-height: 1.4;
+        }
+        .toc-sidebar li a:hover {
+            background: rgba(168, 155, 192, 0.22);
+            color: #4A3A5A;
+        }
+        .toc-sidebar .toc-date {
+            display: inline-block;
+            margin-right: 0.35rem;
+            color: #8B7BA0;
+            font-size: 0.78rem;
+            font-family: 'Consolas', monospace;
         }
         .character-card-info {
             padding: 1.6rem 1.4rem;
@@ -242,6 +303,15 @@
             transform: translateY(-1px);
         }
 
+        /* 中屏：三栏太挤，角色卡 | 导览卡隐藏收进正文，正文撑满 */
+        @media (max-width: 1280px) {
+            .blog-layout { gap: 1.6rem; padding: 2rem 1.8rem; }
+            .character-card { flex: 0 0 250px; width: 250px; }
+            .character-card-inner img { aspect-ratio: 250/368; }
+            .toc-sidebar { flex: 0 0 220px; width: 220px; padding: 1rem; }
+        }
+
+        /* 小屏：平板以下，所有元素改成竖排 */
         @media (max-width: 860px) {
             .blog-layout {
                 flex-direction: column;
@@ -259,7 +329,20 @@
             .character-card-inner img {
                 width: 100%;
                 height: 420px;
+                aspect-ratio: auto;
                 object-fit: cover;
+            }
+            .toc-sidebar {
+                flex: none;
+                width: 100%;
+                position: static;
+                top: auto;
+                padding: 1rem 1.2rem;
+            }
+            .toc-sidebar ul {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.3rem 0.8rem;
             }
             .detail-content { padding: 1.8rem 1.4rem; }
             .blog-title { font-size: 1.5rem; }
@@ -273,7 +356,7 @@
     <div class="custom-cursor"></div>
 
     <div class="blog-layout">
-        <!-- 左侧：角色卡片（吸顶） -->
+        <!-- 最左侧：角色卡片（吸顶） -->
         <aside class="character-card">
             <div class="character-card-inner">
                 <img src="image/shadowheart2.jpg" alt="Shadowheart 暗影之心">
@@ -285,6 +368,41 @@
                         <span class="blog-tag">3D设计</span>
                     </div>
                 </div>
+            </div>
+        </aside>
+
+        <!-- 中间：日志导览栏（吸顶） -->
+        <aside class="toc-sidebar" aria-label="日志导览">
+            <p style="margin: 0 0 1rem 0; font-size: 0.98rem; color: #4A3A5A; font-weight: 600;">🧭 日志导览</p>
+            <p style="margin: -0.6rem 0 1rem 0; font-size: 0.78rem; color: #7B6B8A; line-height: 1.6;">改动持续追加 · 点击直达<br>预计还会有几百次迭代</p>
+
+            <div class="toc-group">
+                <p class="toc-group-title">📑 大章</p>
+                <ul>
+                    <li><a href="#sec-motivation">一、制作动机</a></li>
+                    <li><a href="#sec-progress">二、当前进展</a></li>
+                    <li><a href="#sec-plan">三、后续计划</a></li>
+                </ul>
+            </div>
+
+            <div class="toc-group">
+                <p class="toc-group-title">📝 改动存档</p>
+                <ul>
+                    <li><a href="#log-20260724"><span class="toc-date">07-24</span> 初版三视图</a></li>
+                    <li><a href="#log-20260803"><span class="toc-date">08-03</span> ZBrush高模修改</a></li>
+                    <li><a href="#log-20260814-v2"><span class="toc-date">08-14</span> 第二次模型改动</a></li>
+                    <li><a href="#log-pants-v1">裤装 v1</a></li>
+                    <li><a href="#log-20260816-v3"><span class="toc-date">08-16</span> 第三次模型改动</a></li>
+                </ul>
+            </div>
+
+            <div class="toc-group">
+                <p class="toc-group-title">💭 思考笔记</p>
+                <ul>
+                    <li><a href="#note-mood">近日心情</a></li>
+                    <li><a href="#note-story">关于故事感</a></li>
+                    <li><a href="#note-ai">关于AI辅助的比喻</a></li>
+                </ul>
             </div>
         </aside>
 
@@ -300,12 +418,12 @@
                     <strong>当前阶段：</strong>高模初版（High-Poly Draft v1）
                 </blockquote>
 
-                <h2 class="section-title">一、制作动机</h2>
+                <h2 id="sec-motivation" class="section-title">一、制作动机</h2>
                 <p>最近玩《博德之门3》很喜欢影心这个角色。</p>
                 <p>她身上有一种很矛盾的迷人感，半精灵血脉、暗夜女神的信徒，黑色幽默、以及她和信仰、记忆之间复杂的纠葛，让她成为整个游戏过程中我最想理解的人。</p>
                 <p>于是半夜从床上爬起来打开软件开始做影心的模型，想法总是在三更半夜的时候冒出来，一下子想了几个画面但是都是那种大场景构图，像是被莎尔束缚的掌中玩物，双重抉择下黑白影心走向不同的人生，前期作为莎尔信徒的影心被黑白影心反复拉扯。</p>
 
-                <h2 class="section-title">二、当前进展</h2>
+                <h2 id="sec-progress" class="section-title">二、当前进展</h2>
                 <p><strong>阶段：高模初版（High-Poly Draft v1）— 尚未精修</strong></p>
 
                 <div style="margin: 1.5rem 0; display: flex; gap: 1.5rem; align-items: flex-start; justify-content: center;">
@@ -320,7 +438,7 @@
                 </div>
                 <p>这是第一版人物构图，因为考虑到拓扑和绑定，所以构图和姿势比较基础。——2026年7月24日</p>
 
-                <div style="margin: 1.5rem 0; text-align: center;">
+                <div id="log-20260724" style="margin: 1.5rem 0; text-align: center;">
                     <img src="image/shadowheart_724_draft_views.png" alt="影心7月24日初版生成三视图" style="max-width: 55%; height: auto; border-radius: 12px; box-shadow: 0 4px 20px rgba(139, 91, 122, 0.15); display: block; margin: 0 auto;" oncontextmenu="return false;" draggable="false">
                     <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.8rem;">7月24日初版生成三视图（正/侧/背）</p>
                 </div>
@@ -330,7 +448,7 @@
                     <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">📅 2026年8月3日</p>
                 </div>
 
-                <div style="margin: 1.5rem 0; text-align: center;">
+                <div id="log-20260803" style="margin: 1.5rem 0; text-align: center;">
                     <img src="image/shadowheart_20260803_zbrush.png" alt="影心 ZBrush 高模修改截图 2026-08-03" style="max-width: 60%; height: auto; border-radius: 12px; box-shadow: 0 4px 20px rgba(139, 91, 122, 0.15);">
                     <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.8rem;">ZBrush 高模人工修改阶段实机截图（2026年8月3日 早 08:38）</p>
                 </div>
@@ -341,7 +459,7 @@
 
                 <p>不过虽然手没在动模型，脑子里一直在想影心要改的部分，搬家、跑代码、寄快递、跟各种人沟通的间隙都会反复思考需要调整的地方。今天早上正式开工，先修几个小地方，下午再做其他事情。</p>
 
-                <div style="margin: 2rem 0; padding: 1.2rem 1.5rem; border-left: 3px solid #8b5b7a; background: rgba(139, 91, 122, 0.05); border-radius: 0 8px 8px 0;">
+                <div id="log-20260814-v2" style="margin: 2rem 0; padding: 1.2rem 1.5rem; border-left: 3px solid #8b5b7a; background: rgba(139, 91, 122, 0.05); border-radius: 0 8px 8px 0;">
                     <p style="margin: 0 0 0.5rem 0;"><strong>阶段：高模第二次调整 — 脸型 / 贴图 / 五官细化</strong></p>
                     <p style="margin: 0; color: var(--text-secondary); font-size: 0.9rem;">📅 2026年8月14日 凌晨 · 距8月3日第一次动手过了约11天</p>
                 </div>
@@ -369,25 +487,25 @@
 
                 <p>另外趁热把下半身的裤衩子也改了一版。不过这版说实话自己都不太满意。整体感觉有点怪，尤其是前面那块垂布的颜色，怎么看怎么不舒服，大概之后还要再改好几轮。先把多视图放上来，作为第1版裤子的存档，后面继续迭代的时候可以对比。说实话恨不得一天有48小时都可以用来学习和打磨。</p>
 
-                <div style="margin: 1.5rem 0; text-align: center;">
+                <div id="log-pants-v1" style="margin: 1.5rem 0; text-align: center;">
                     <img src="image/YINGXIN/3_第1次裤子高模多视图.jpg" alt="影心第1版裤装高模多视图" style="max-width: 80%; height: auto; border-radius: 12px; box-shadow: 0 4px 20px rgba(139, 91, 122, 0.15); border: 1px solid rgba(139, 91, 122, 0.12);">
                     <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.8rem;">第1版裤装高模多视图（正面垂布颜色观感不佳，后续继续调整）</p>
                 </div>
 
-                <div style="margin: 1.5rem 0; padding: 1rem 1.5rem; border-left: 3px solid #a89bc0; background: rgba(168, 155, 192, 0.06); border-radius: 0 8px 8px 0;">
+                <div id="note-mood" style="margin: 1.5rem 0; padding: 1rem 1.5rem; border-left: 3px solid #a89bc0; background: rgba(168, 155, 192, 0.06); border-radius: 0 8px 8px 0;">
                     <p style="margin: 0; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.9;">
                         📝 <strong>近日心情</strong>：越做越觉得哪里都不对。脸型差点意思、贴图差点意思、衣服也差点意思，每看一眼都能挑出新的毛病来。有时候真的很希望身边能有个老师或者前辈狠狠骂我一顿，直接点破我看不到的问题——这一路能坚持下来，其实特别感谢所有愿意真心给我提意见的长辈们，那些真话比什么都珍贵。不过大概做角色就是这样吧，"永远不满意"说不定反而是能继续往前走的动力。
                     </p>
                 </div>
 
-                <div style="margin: 1.5rem 0; padding: 1rem 1.5rem; border-left: 3px solid #8b5b7a; background: rgba(139, 91, 122, 0.05); border-radius: 0 8px 8px 0;">
+                <div id="note-story" style="margin: 1.5rem 0; padding: 1rem 1.5rem; border-left: 3px solid #8b5b7a; background: rgba(139, 91, 122, 0.05); border-radius: 0 8px 8px 0;">
                     <p style="margin: 0 0 0.5rem 0;"><strong>💭 关于"故事感"的思考</strong></p>
                     <p style="margin: 0; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.9;">
                         半夜制作的时候思考了一下，那种"哪里都奇怪"的感觉可能不只是脸或衣服本身的问题，而是<strong>缺了游戏角色的故事感</strong>。游戏里的角色身上一般都背着装备，大包小包的袋子、行囊、武器挂件，手上也可能拿着过场道具，甚至身边跟着一只宠物。<span class="highlight">配饰、装备、手持道具、宠物</span>这些"叙事性配件"能交代角色去过哪、在做什么、是什么身份，直接带来沉浸感。但除了这些外在配件，更关键的其实是<strong>跟人物性格相符的动作神态</strong>，默认站姿、待机动画都是看出人物性格的途径。光是穿一身默认衣服摆着 T-pose/A-pose 站在那里，会有一种跟人物背景不太相符的感觉。所以接下来除了继续打磨脸和衣服本身，我也想给她加上一些装备/道具类配件，并考虑一个更贴合影心性格的待机姿态，让整体气质从"角色展示"往"游戏内状态"靠拢。
                     </p>
                 </div>
 
-                <div style="margin: 2rem 0 1.5rem 0; padding-top: 1.2rem; border-top: 1px dashed rgba(139, 91, 122, 0.2);">
+                <div id="log-20260816-v3" style="margin: 2rem 0 1.5rem 0; padding-top: 1.2rem; border-top: 1px dashed rgba(139, 91, 122, 0.2);">
                     <p style="margin: 0 0 0.8rem 0;"><strong>📝 2026-08-16 晚 · 第三次模型改动 · 上半身微调 · 22:54</strong></p>
                     <p style="margin: 0 0 1rem 0; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.9;">
                         今晚花了两个小时多小改一下影心的上半身。最近基本在整理项目，所以只动了头发，微调了脸型和手，衣服的金属部分暂时没动。算是一次小迭代，先存个档。
@@ -397,7 +515,7 @@
                         <p style="color: var(--text-secondary); font-size: 0.9rem; margin-top: 0.8rem;">2026-08-16 22:54 第三次模型改动存档（头发重做、脸型与手微调）</p>
                     </div>
 
-                    <div style="margin: 1.5rem 0 0 0; padding: 1rem 1.5rem; border-left: 3px solid #a89bc0; background: rgba(168, 155, 192, 0.06); border-radius: 0 8px 8px 0;">
+                    <div id="note-ai" style="margin: 1.5rem 0 0 0; padding: 1rem 1.5rem; border-left: 3px solid #a89bc0; background: rgba(168, 155, 192, 0.06); border-radius: 0 8px 8px 0;">
                         <p style="margin: 0 0 0.5rem 0;"><strong>💭 关于AI辅助的比喻</strong></p>
                         <p style="margin: 0; color: var(--text-secondary); font-size: 0.95rem; line-height: 1.9;">
                             做的时候突然想到一个词——AI辅助商业项目的感觉有点像做试管婴儿。为了赶项目周期，应对决策者来来回回改的需求，靠AI快速出方案、快速迭代。第一次接触的时候确实很新鲜，觉得像是"未来科技"，但真的天天用下来就发现平平无奇，只是日常工具而已。不过最重要的是，<span class="highlight">AI辅助能让我们把精力集中在创作里自己真正喜欢的那一部分</span>——雕刻、上色、塑形、造型……创作流程那么长，每个人总有自己最拿手也最投入的环节，剩下的杂活就让AI帮忙扛着，把时间留给自己想发挥的地方。
@@ -405,8 +523,8 @@
                     </div>
                 </div>
 
-                <h2 class="section-title">三、后续计划</h2>
-                <h3>完整制作流程</h3>
+                <h2 id="sec-plan" class="section-title">三、后续计划</h2>
+                <h3 id="plan-pipeline">完整制作流程</h3>
                 <p>从高模到最终导入游戏，计划走完整个 3D 角色制作管线：</p>
                 <div class="table-wrap">
                     <table>
@@ -457,7 +575,7 @@
                     </table>
                 </div>
 
-                <h3>额外造型方向</h3>
+                <h3 id="plan-styles">额外造型方向</h3>
                 <div style="margin: 1.5rem 0; padding: 1.2rem 1.5rem; border-left: 3px solid #6b5b8a; background: rgba(107, 91, 138, 0.05); border-radius: 0 8px 8px 0;">
                     <p style="margin: 0 0 0.5rem 0;"><strong>哥特洛丽塔（Gothic Lolita）风格</strong> <span style="color: var(--text-secondary); font-size: 0.85rem;">— 筹备中</span></p>
                     <p style="margin: 0; color: var(--text-secondary); font-size: 0.95rem;">影心是暗夜女神莎尔的信徒，本身就有一种暗黑、神秘、又被信仰束缚的矛盾气质，感觉哥特洛丽塔的蕾丝、束腰、暗色系质感非常贴合她。黑色与深紫的配色、繁复的细节、压抑又华丽的剪裁，和影心的角色内核几乎是天然契合的。计划在主线版本完成后，额外制作一套哥特洛丽塔造型的服装资产作为变体。</p>
