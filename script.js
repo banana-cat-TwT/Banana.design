@@ -3432,59 +3432,77 @@ async function getVisitorInfo() {
     else if (userAgent.includes('Edge')) browser = 'Edge';
     else if (userAgent.includes('Opera')) browser = 'Opera';
     
-    // 获取城市 - 优化版本：默认 ip-api.com（国内可达），失败不缓存假结果
+    // 获取城市 - 双接口 fallback，全部 HTTPS 避免 Mixed Content 被浏览器拦截
     let city = '未知城市';
     try {
-        // 检查缓存 - 仅缓存"成功拿到的真实城市"，未知/失败不缓存避免锁死1小时
+        // 检查缓存 - 仅缓存"成功拿到的真实城市"，未知/失败不缓存避免锁死
         const cachedCity = sessionStorage.getItem('visitorCity');
         if (cachedCity && cachedCity !== '未知城市') {
             city = cachedCity;
         } else {
-            const url = CONFIG.geoApiUrl || 'https://ip-api.com/json/?lang=zh-CN&fields=status,message,country,regionName,city,district,query';
+            // 候选接口：都要求 HTTPS + CORS + 免费额度够个人站用
+            // ipwho.is：3万次/月，字段清晰，国内访问尚可
+            // freeipapi.com：免费无限次，纯公益，偶尔限流
+            const apis = [
+                {
+                    url: 'https://ipwho.is/?lang=zh-CN',
+                    parse: (d) => {
+                        if (!d || d.success === false) return null;
+                        const parts = [];
+                        const isCN = d.country_code === 'CN' || d.country === '中国' || d.country === 'China';
+                        if (!isCN && d.country) parts.push(d.country);
+                        if (d.region) parts.push(d.region);
+                        if (d.city && d.city !== d.region) parts.push(d.city);
+                        if (d.district && d.district !== d.city) parts.push(d.district);
+                        return parts.length ? parts.join(' · ') : null;
+                    }
+                },
+                {
+                    url: 'https://freeipapi.com/api/json',
+                    parse: (d) => {
+                        if (!d) return null;
+                        const parts = [];
+                        const isCN = d.countryCode === 'CN' || d.country === '中国' || d.countryName === 'China' || d.countryName === '中国';
+                        if (!isCN && (d.countryName || d.country)) parts.push(d.countryName || d.country);
+                        if (d.regionName) parts.push(d.regionName);
+                        if (d.cityName && d.cityName !== d.regionName) parts.push(d.cityName);
+                        if (d.district && d.district !== d.cityName) parts.push(d.district);
+                        return parts.length ? parts.join(' · ') : null;
+                    }
+                }
+            ];
 
-            // 创建超时Promise
-            const timeoutPromise = new Promise((_, reject) => {
-                setTimeout(() => reject(new Error('请求超时')), 5000);
+            const timeoutPromise = (ms) => new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('请求超时')), ms);
             });
 
-            // 使用Promise.race实现超时控制
-            const response = await Promise.race([
-                fetch(url),
-                timeoutPromise
-            ]);
-
-            const data = await response.json();
-
-            if (data && data.status === 'success') {
-                // ip-api 字段：city = 城市, regionName = 省, district = 区县
-                let parts = [];
-                if (data.country) parts.push(data.country);
-                if (data.regionName) parts.push(data.regionName);
-                if (data.city) parts.push(data.city);
-                // 国内访客：省+市就够了（不要中国开头太冗余），国外访客保留国家
-                if (data.country === '中国' || data.country === 'China') {
-                    parts = [];
-                    if (data.regionName) parts.push(data.regionName);
-                    if (data.city && data.city !== data.regionName) parts.push(data.city);
-                    if (data.district && data.district !== data.city) parts.push(data.district);
+            let lastErr = null;
+            for (const api of apis) {
+                try {
+                    const response = await Promise.race([fetch(api.url), timeoutPromise(6000)]);
+                    if (!response.ok) throw new Error('HTTP ' + response.status);
+                    const data = await response.json();
+                    const parsed = api.parse(data);
+                    if (parsed) {
+                        city = parsed;
+                        break;
+                    }
+                } catch (err) {
+                    lastErr = err;
+                    // 失败继续试下一个接口
                 }
-                if (parts.length > 0) city = parts.join(' · ');
-            } else if (data && data.city) {
-                // 备用：兼容其他接口字段
-                city = data.city;
-            } else if (data && data.city_name) {
-                city = data.city_name;
             }
 
-            // 仅当拿到真实城市才缓存1小时，未知不缓存让下次继续试
+            // 仅当拿到真实城市才缓存1小时，未知不缓存让下次访问继续试
             if (city !== '未知城市') {
                 sessionStorage.setItem('visitorCity', city);
                 sessionStorage.setItem('visitorCityTime', Date.now().toString());
+            } else if (lastErr) {
+                console.log('位置检测全部接口失败，使用默认值：', lastErr.message || lastErr);
             }
         }
     } catch (e) {
-        // 超时或错误时使用默认值，不影响页面加载（故意不缓存，下次访问继续尝试）
-        console.log('位置检测超时或失败，使用默认值');
+        console.log('位置检测异常，使用默认值：', e.message || e);
     }
     
     return { os, browser, city };
