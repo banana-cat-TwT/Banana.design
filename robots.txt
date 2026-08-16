@@ -1,0 +1,119 @@
+# robots.txt · Banana.design (https://banana.design)
+# © 2026 巴拿拿猫 (BananaCat) · SPDX-License-Identifier: MIT
+#
+# 声明：本站内容（文本、图片、代码、HTML/CSS/JS）不得用于任何 AI / LLM 模型训练。
+# 本文件明令禁止下列已知 AI 训练爬虫抓取本站任何内容。
+# 合规的 AI 厂商（OpenAI / Anthropic / Google / ByteDance 等）均承诺遵守 robots.txt。
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: OAI-SearchBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Sogou inst spider
+Disallow: /
+
+User-agent: Sogou web spider
+Disallow: /
+
+User-agent: Sogou Pic Spider
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: Perplexity-User
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
+
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+User-agent: Meta-ExternalFetcher
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: ImagesiftBot
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
+
+User-agent: OmgiliBot
+Disallow: /
+
+User-agent: Omgili
+Disallow: /
+
+User-agent: YouBot
+Disallow: /
+
+User-agent: PiplBot
+Disallow: /
+
+User-agent: cohere-ai
+Disallow: /
+
+User-agent: AI2Bot
+Disallow: /
+
+User-agent: DiffbotImageBot
+Disallow: /
+
+User-agent: webzio-extended
+Disallow: /
+
+User-agent: webzio
+Disallow: /
+
+# 允许主流搜索引擎索引（仅索引，不训练）
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Slurp
+Allow: /
+
+User-agent: *
+Disallow: /assets/raw/
+Disallow: /private/
+
+# Sitemap
+Sitemap: https://banana.design/sitemap.xml
