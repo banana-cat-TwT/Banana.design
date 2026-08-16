@@ -2882,10 +2882,7 @@ function initMessageBoard() {
 
     if (!messageForm) return;
 
-    // 保留示例留言展示（给访客看列表长啥样），提交留言暂不公开展示，直接发到邮箱
-    if (messagesContainer) {
-        addSampleMessages();
-    }
+    // 留言列表暂不展示示例（真实提交内容直接到邮箱，不公开展示）
 
     // 禁用旧的 HTML 默认提交
     messageForm.addEventListener('submit', async function(e) {
