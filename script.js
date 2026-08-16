@@ -2872,48 +2872,78 @@ function initBackgroundSlider() {
 
 // 页面加载完成后初始化背景切换
 initBackgroundSlider();
-// initMessageBoard();
+initMessageBoard();
 
-// 初始化留言板功能
+// 初始化留言板功能（Formspree 真实提交，不跳页）
 function initMessageBoard() {
-    // 获取DOM元素
     const messageForm = document.getElementById('messageForm');
     const messagesContainer = document.getElementById('messagesContainer');
-    
-    if (!messageForm || !messagesContainer) return;
-    
-    // 添加示例留言
-    addSampleMessages();
-    
-    // 监听表单提交事件
-    messageForm.addEventListener('submit', function(e) {
+    const formStatus = document.getElementById('form-status');
+
+    if (!messageForm) return;
+
+    // 保留示例留言展示（给访客看列表长啥样），提交留言暂不公开展示，直接发到邮箱
+    if (messagesContainer) {
+        addSampleMessages();
+    }
+
+    // 禁用旧的 HTML 默认提交
+    messageForm.addEventListener('submit', async function(e) {
         e.preventDefault();
-        
-        // 获取表单数据
-        const name = document.getElementById('name').value;
-        const email = document.getElementById('email').value;
-        const message = document.getElementById('message').value;
-        
-        // 创建新留言
-        const newMessage = createMessageItem(name, message);
-        
-        // 添加到留言列表
-        messagesContainer.insertBefore(newMessage, messagesContainer.firstChild);
-        
-        // 清空表单
-        messageForm.reset();
-        
-        // 显示成功提示
-        alert('留言提交成功！');
+
+        const btn = messageForm.querySelector('button[type="submit"]');
+        const originalText = btn ? btn.textContent : '提交留言';
+
+        if (btn) {
+            btn.disabled = true;
+            btn.textContent = '发送中…';
+        }
+        if (formStatus) formStatus.textContent = '';
+
+        try {
+            const res = await fetch(messageForm.action, {
+                method: 'POST',
+                body: new FormData(messageForm),
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (res.ok) {
+                messageForm.reset();
+                if (formStatus) {
+                    formStatus.textContent = '✅ 收到了，谢谢你！我会尽快查阅邮箱回复的～';
+                    formStatus.style.color = '#5A8A5A';
+                }
+            } else {
+                const data = await res.json().catch(() => ({}));
+                const errMsg = (data && data.errors && data.errors.map(x => x.message).join('；')) || '服务端返回异常';
+                throw new Error(errMsg);
+            }
+        } catch (err) {
+            if (formStatus) {
+                formStatus.textContent = '⚠️ 发送失败，稍后再试试看～（如持续失败可直接通过页面底部邮箱联系我）';
+                formStatus.style.color = '#B86B6B';
+            }
+        } finally {
+            if (btn) {
+                btn.disabled = false;
+                btn.textContent = originalText;
+            }
+            // 8 秒后自动清空状态提示，避免一直挂着
+            setTimeout(() => {
+                if (formStatus) {
+                    formStatus.textContent = '';
+                    formStatus.style.color = '';
+                }
+            }, 8000);
+        }
     });
 }
 
-// 创建留言元素
+// 创建留言元素（仅用于本地示例展示）
 function createMessageItem(name, content) {
     const messageItem = document.createElement('div');
     messageItem.className = 'message-item';
-    
-    // 获取当前日期
+
     const now = new Date();
     const dateString = now.toLocaleString('zh-CN', {
         year: 'numeric',
@@ -2922,7 +2952,7 @@ function createMessageItem(name, content) {
         hour: '2-digit',
         minute: '2-digit'
     });
-    
+
     messageItem.innerHTML = `
         <div class="message-header">
             <span class="message-name">${name}</span>
@@ -2930,30 +2960,21 @@ function createMessageItem(name, content) {
         </div>
         <p class="message-content">${content}</p>
     `;
-    
+
     return messageItem;
 }
 
-// 添加示例留言
+// 添加示例留言（仅占位，给访客展示列表样式）
 function addSampleMessages() {
     const messagesContainer = document.getElementById('messagesContainer');
     if (!messagesContainer) return;
-    
+
     const sampleMessages = [
-        {
-            name: '张三',
-            content: '网站设计得非常漂亮，特别是角色展示部分的交互效果，很有创意！'
-        },
-        {
-            name: '李四',
-            content: '小游戏板块的详情页面做得很用心，希望能看到更多作品。'
-        },
-        {
-            name: '王五',
-            content: '开发日志写得很详细，学到了很多东西，感谢分享！'
-        }
+        { name: '张三', content: '网站设计得非常漂亮，特别是角色展示部分的交互效果，很有创意！' },
+        { name: '李四', content: '小游戏板块的详情页面做得很用心，希望能看到更多作品。' },
+        { name: '王五', content: '开发日志写得很详细，学到了很多东西，感谢分享！' }
     ];
-    
+
     sampleMessages.forEach(message => {
         const messageItem = createMessageItem(message.name, message.content);
         messagesContainer.appendChild(messageItem);
