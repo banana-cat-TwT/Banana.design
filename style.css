@@ -1755,6 +1755,52 @@ nav ul li a:hover::after {
     color: #f9ffa7;
 }
 
+.work-card-shadowheart {
+    background: #CAB8D8;
+    border: 2px solid #B0A0C8;
+}
+
+.work-card-shadowheart:hover {
+    box-shadow: 0 5px 25px rgba(180, 160, 200, 0.5);
+}
+
+.work-card-shadowheart .work-info h3 {
+    color: #4A3A5A;
+    text-shadow: 0 0 10px rgba(200, 186, 216, 0.5);
+}
+
+.work-card-shadowheart .work-info p {
+    color: #6B5B7B;
+}
+
+.work-card-shadowheart .work-tags .tag {
+    background: rgba(106, 91, 123, 0.2);
+    color: #6B5B7B;
+}
+
+.work-card-fps {
+    background: #A8998A;
+    border: 2px solid #8A7D6E;
+}
+
+.work-card-fps:hover {
+    box-shadow: 0 5px 25px rgba(168, 153, 138, 0.5);
+}
+
+.work-card-fps .work-info h3 {
+    color: #3F352C;
+    text-shadow: 0 0 10px rgba(168, 153, 138, 0.3);
+}
+
+.work-card-fps .work-info p {
+    color: #5A4F42;
+}
+
+.work-card-fps .work-tags .tag {
+    background: rgba(90, 79, 66, 0.2);
+    color: #5A4F42;
+}
+
 .work-image {
     display: flex;
     width: 100%;

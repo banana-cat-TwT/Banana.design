@@ -32,7 +32,7 @@ const translations = {
 
         // 作品展示
         'works.title': '作品展示',
-        'works.desc': '日常创作总览',
+        'works.desc': '部分作品',
         'works.cat.all': '全部',
         'works.cat.game': '游戏开发',
         'works.cat.character': '角色设计',
@@ -174,7 +174,7 @@ const translations = {
 
         // Portfolio
         'works.title': 'Portfolio',
-        'works.desc': 'A showcase of daily creative work',
+        'works.desc': 'Selected Works',
         'works.cat.all': 'All',
         'works.cat.game': 'Game Development',
         'works.cat.character': 'Character Design',
