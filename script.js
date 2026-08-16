@@ -2885,15 +2885,27 @@ function initMessageBoard() {
     // 留言列表暂不展示示例（真实提交内容直接到邮箱，不公开展示）
 
     // 禁用旧的 HTML 默认提交
+    // 从翻译字典里取当前语言下的文案（切换到英语后提交也会变英文）
+    function t(key, fallback) {
+        if (typeof window.translations !== 'undefined' && typeof window.currentLang !== 'undefined'
+            && window.translations[window.currentLang] && window.translations[window.currentLang][key]) {
+            return window.translations[window.currentLang][key];
+        }
+        return fallback;
+    }
+
     messageForm.addEventListener('submit', async function(e) {
         e.preventDefault();
 
         const btn = messageForm.querySelector('button[type="submit"]');
-        const originalText = btn ? btn.textContent : '提交留言';
+        const submitLabel = t('board.submitBtn', '提交留言');
+        const sendingLabel = t('board.sending', '发送中…');
+        const successLabel = t('board.success', '✅ 收到了，谢谢你！我会尽快查阅邮箱回复的～');
+        const errorLabel = t('board.error', '⚠️ 发送失败，稍后再试试看～（如持续失败可直接通过页面底部邮箱联系我）');
 
         if (btn) {
             btn.disabled = true;
-            btn.textContent = '发送中…';
+            btn.textContent = sendingLabel;
         }
         if (formStatus) formStatus.textContent = '';
 
@@ -2907,7 +2919,7 @@ function initMessageBoard() {
             if (res.ok) {
                 messageForm.reset();
                 if (formStatus) {
-                    formStatus.textContent = '✅ 收到了，谢谢你！我会尽快查阅邮箱回复的～';
+                    formStatus.textContent = successLabel;
                     formStatus.style.color = '#5A8A5A';
                 }
             } else {
@@ -2917,15 +2929,14 @@ function initMessageBoard() {
             }
         } catch (err) {
             if (formStatus) {
-                formStatus.textContent = '⚠️ 发送失败，稍后再试试看～（如持续失败可直接通过页面底部邮箱联系我）';
+                formStatus.textContent = errorLabel;
                 formStatus.style.color = '#B86B6B';
             }
         } finally {
             if (btn) {
                 btn.disabled = false;
-                btn.textContent = originalText;
+                btn.textContent = submitLabel;
             }
-            // 8 秒后自动清空状态提示，避免一直挂着
             setTimeout(() => {
                 if (formStatus) {
                     formStatus.textContent = '';

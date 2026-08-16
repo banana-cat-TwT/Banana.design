@@ -16,6 +16,7 @@ const translations = {
         'nav.games': '游戏展示',
         'nav.blog': '开发日志',
         'nav.about': '关于我',
+        'nav.messageboard': '留言板',
 
         // 顶部导航
         'topnav.works': '作品展示',
@@ -24,6 +25,7 @@ const translations = {
         'topnav.games': '小游戏',
         'topnav.blog': '开发日志',
         'topnav.about': '关于我',
+        'topnav.messageboard': '留言板',
 
         // Hero
         'hero.subtitle': '该网站正在施工中~制作不易，请见谅。',
@@ -122,6 +124,26 @@ const translations = {
 · 个人负责：三维部分全流程独立完成 + 截帧拼图工具与音轨分离插件开发 + Unity URP卡通渲染系统搭建<br>
 · 核心成果：验证三维辅助二维的流程化思路，探索媒介融合在动画创作中的可行性</small>`,
 
+        // 留言板
+        'board.title': '留言板',
+        'board.sub1': '留下你的想法和建议，默认私密收件，不会对外公开',
+        'board.sub2': '留言发送后会直接到我邮箱，想公开展示我会单独加进列表 💌',
+        'board.formTitle': '写下你的留言',
+        'board.labelName': '姓名',
+        'board.phName': '请输入你的姓名',
+        'board.labelEmail': '邮箱（可选，方便我回复你）',
+        'board.phEmail': '可留空，纯匿名也没问题',
+        'board.labelMsg': '留言内容',
+        'board.phMsg': '请输入你的留言',
+        'board.submitBtn': '提交留言',
+        'board.sending': '发送中…',
+        'board.success': '✅ 收到了，谢谢你！我会尽快查阅邮箱回复的～',
+        'board.error': '⚠️ 发送失败，稍后再试试看～（如持续失败可直接通过页面底部邮箱联系我）',
+        'board.listTitle': '留言列表',
+        'board.empty1': '留言默认不公开展示',
+        'board.empty2': '如果你希望自己的留言被加入公开列表',
+        'board.empty3': '可以在留言内容里说一声 💌',
+
         // 页脚
         'footer.tagline': '探索技术与创作的边界',
         'footer.building': '这个小家正在装修中噢',
@@ -158,6 +180,7 @@ const translations = {
         'nav.games': 'Games',
         'nav.blog': 'Dev Log',
         'nav.about': 'About',
+        'nav.messageboard': 'Guestbook',
 
         // Top Navigation
         'topnav.works': 'Portfolio',
@@ -166,6 +189,7 @@ const translations = {
         'topnav.games': 'Mini Games',
         'topnav.blog': 'Dev Log',
         'topnav.about': 'About',
+        'topnav.messageboard': 'Guestbook',
 
         // Hero
         'hero.subtitle': 'This website is currently under construction. Thank you for your patience.',
@@ -264,6 +288,26 @@ Independently completed the pre-production conceptualization, 3D foundation buil
 · Personal Responsibility: Full 3D pipeline independently completed + frame-capture montage tool and audio track separation plugin development + Unity URP cartoon rendering system setup<br>
 · Core Results: Validated the pipeline approach of 3D-assisted 2D, explored the feasibility of media convergence in animation creation</small>`,
 
+        // Message Board
+        'board.title': 'Guestbook',
+        'board.sub1': 'Leave your thoughts and suggestions here. Messages are private by default and will not be shared publicly.',
+        'board.sub2': 'Your message goes directly to my email. Let me know in the message if you want it added to the public list 💌',
+        'board.formTitle': 'Leave a Message',
+        'board.labelName': 'Name',
+        'board.phName': 'Enter your name',
+        'board.labelEmail': 'Email (optional, so I can reply to you)',
+        'board.phEmail': 'Leave blank for fully anonymous',
+        'board.labelMsg': 'Message',
+        'board.phMsg': 'Write your message here',
+        'board.submitBtn': 'Send Message',
+        'board.sending': 'Sending…',
+        'board.success': '✅ Got it, thank you! I will check my email and reply soon.',
+        'board.error': '⚠️ Failed to send. Please try again later. If the issue persists, reach me via the email at the bottom of the page.',
+        'board.listTitle': 'Messages',
+        'board.empty1': 'Messages are not displayed publicly by default',
+        'board.empty2': 'If you would like your message added to the public list',
+        'board.empty3': 'Just mention it in your message 💌',
+
         // Footer
         'footer.tagline': 'Exploring the boundary between technology and creation',
         'footer.building': 'This little home is still under renovation',
@@ -293,8 +337,10 @@ Independently completed the pre-production conceptualization, 3D foundation buil
 
 const BANANA_DESIGN_BUILD_SIGNATURE_bananacat_003 = 'i18n-translate-fn';
 
-// 当前语言
+// 当前语言（挂到 window 上，以便 script.js 里的留言板提交逻辑读取当前语言下的文案）
 let currentLang = localStorage.getItem('banana-lang') || 'zh';
+window.translations = translations;
+window.currentLang = currentLang;
 
 // 语言下拉菜单展开/收起
 function toggleLangDropdown() {
@@ -341,6 +387,7 @@ function selectLanguage(lang) {
 // 应用翻译
 function applyLanguage(lang) {
     currentLang = lang;
+    window.currentLang = lang;
     localStorage.setItem('banana-lang', lang);
 
     // 更新所有带 data-i18n 属性的元素（用 innerHTML 保留 <br> <span> 等 HTML 标签）
@@ -348,6 +395,14 @@ function applyLanguage(lang) {
         const key = element.getAttribute('data-i18n');
         if (translations[lang] && translations[lang][key]) {
             element.innerHTML = translations[lang][key];
+        }
+    });
+
+    // 更新带 data-i18n-placeholder 属性元素的 placeholder（输入框、文本域）
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(element => {
+        const key = element.getAttribute('data-i18n-placeholder');
+        if (translations[lang] && translations[lang][key]) {
+            element.setAttribute('placeholder', translations[lang][key]);
         }
     });
 

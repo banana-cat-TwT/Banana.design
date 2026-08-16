@@ -103,7 +103,7 @@
                     <p style="color: #ff6666; font-size: 0.9rem;">本站已启用版权保护与访客追踪系统</p>
                     <p style="color: #ff6666; font-size: 0.9rem;">继续访问即表示您同意遵守以上声明</p>
                     <p style="color: #66bb6a; font-size: 0.85rem; margin-top: 10px;">✅ 【公告 · 2026-08-06】今日新闻更新引发的加载异常已修复，网站全部功能恢复正常</p>
-                    <p style="color: #ffaa00; font-size: 0.85rem; margin-top: 6px;">⚠️ 本网站制作时间较短，目前一些功能尚未完全制作完毕</p>
+                    <p style="color: #ffaa00; font-size: 0.85rem; margin-top: 6px;">⚠️ 本网站制作时间较短，目前所有基础功能均已实现，后续会继续添加新功能，敬请期待~</p>
                 </div>
                 <button id="enter-btn" style="margin-top: 20px; padding: 12px 40px; background: linear-gradient(135deg, #ff4444, #cc0000); color: #fff; border: none; border-radius: 30px; font-size: 1.1rem; cursor: pointer; transition: all 0.3s ease; letter-spacing: 4px;">
                     我已了解
@@ -166,6 +166,12 @@
                         <span class="nav-text" data-i18n="nav.about">关于我</span>
                     </a>
                 </li>
+                <li class="side-nav-item">
+                    <a href="#message-board" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text" data-i18n="nav.messageboard">留言板</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -187,6 +193,7 @@
                 <li><a href="#games" data-i18n="topnav.games">小游戏</a></li>
                 <li><a href="#blog" data-i18n="topnav.blog">开发日志</a></li>
                 <li><a href="#about" data-i18n="topnav.about">关于我</a></li>
+                <li><a href="#message-board" data-i18n="topnav.messageboard">留言板</a></li>
                 <li style="position: relative;">
                     <button id="langDropdownBtn" onclick="toggleLangDropdown()" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); color: #fff; border-radius: 20px; padding: 4px 14px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s ease; margin-left: 8px; display: inline-flex; align-items: center; gap: 6px;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'">
                         <span id="langCurrentLabel">中文</span>
@@ -2055,42 +2062,42 @@
         <!-- 留言板板块 -->
         <section id="message-board" class="parallax-section">
             <div class="parallax-bg" data-speed="0.2" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20abstract%20background%2C%20subtle%20gradient%2C%20modern%20design%2C%20neutral%20tones&image_size=landscape_16_9');"></div>
-            <h2 class="elastic-element">留言板</h2>
-            <p class="elastic-element">留下你的想法和建议，默认私密收件，不会对外公开</p>
-            <p class="elastic-element" style="font-size: 0.9rem; opacity: 0.85;">留言发送后会直接到我邮箱，想公开展示我会单独加进列表 💌</p>
+            <h2 class="elastic-element" data-i18n="board.title">留言板</h2>
+            <p class="elastic-element" data-i18n="board.sub1">留下你的想法和建议，默认私密收件，不会对外公开</p>
+            <p class="elastic-element" data-i18n="board.sub2" style="font-size: 0.9rem; opacity: 0.85;">留言发送后会直接到我邮箱，想公开展示我会单独加进列表 💌</p>
             
             <div class="message-board-content">
                 <div class="message-form elastic-element">
-                    <h3>写下你的留言</h3>
+                    <h3 data-i18n="board.formTitle">写下你的留言</h3>
                     <form id="messageForm" action="https://formspree.io/f/mrpzygbb" method="POST">
                         <div class="form-group">
-                            <label for="name">姓名</label>
-                            <input type="text" id="name" name="name" required placeholder="请输入你的姓名">
+                            <label for="name" data-i18n="board.labelName">姓名</label>
+                            <input type="text" id="name" name="name" required data-i18n-placeholder="board.phName" placeholder="请输入你的姓名">
                         </div>
 
                         <div class="form-group">
-                            <label for="email">邮箱（可选，方便我回复你）</label>
-                            <input type="email" id="email" name="email" placeholder="可留空，纯匿名也没问题">
+                            <label for="email" data-i18n="board.labelEmail">邮箱（可选，方便我回复你）</label>
+                            <input type="email" id="email" name="email" data-i18n-placeholder="board.phEmail" placeholder="可留空，纯匿名也没问题">
                         </div>
 
                         <div class="form-group">
-                            <label for="message">留言内容</label>
-                            <textarea id="message" name="message" required placeholder="请输入你的留言" rows="5"></textarea>
+                            <label for="message" data-i18n="board.labelMsg">留言内容</label>
+                            <textarea id="message" name="message" required rows="5" data-i18n-placeholder="board.phMsg" placeholder="请输入你的留言"></textarea>
                         </div>
                         <!-- 防垃圾留言的蜜罐字段（真实用户不会看到） -->
                         <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none !important;">
-                        <button type="submit" class="submit-btn">提交留言</button>
+                        <button type="submit" class="submit-btn" data-i18n="board.submitBtn">提交留言</button>
                         <p id="form-status" style="margin-top: 0.9rem; font-size: 0.92rem; min-height: 1.4rem;"></p>
                     </form>
                 </div>
                 
                 <div class="messages-list elastic-element">
-                    <h3>留言列表</h3>
+                    <h3 data-i18n="board.listTitle">留言列表</h3>
                     <div id="messagesContainer" style="opacity: 0.65;">
                         <p style="padding: 2rem 1.5rem; line-height: 2; margin: 0; text-align: center;">
-                            留言默认不公开展示<br>
-                            如果你希望自己的留言被加入公开列表<br>
-                            可以在留言内容里说一声 💌
+                            <span data-i18n="board.empty1">留言默认不公开展示</span><br>
+                            <span data-i18n="board.empty2">如果你希望自己的留言被加入公开列表</span><br>
+                            <span data-i18n="board.empty3">可以在留言内容里说一声 💌</span>
                         </p>
                     </div>
                 </div>
