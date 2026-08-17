@@ -3571,11 +3571,11 @@ function initCopyrightProtection() {
     disableShortcuts();
     disableClipboard();
     disableDrag();
-    // detectDevTools(); // 截图时临时禁用
-    // setupBlurProtection(); // 截图时临时禁用
-    // setupAntiScreenshot(); // 截图时临时禁用
-    // generateWatermark(); // 截图时临时禁用
-    // setInterval(generateWatermark, CONFIG.watermarkInterval); // 截图时临时禁用
+    detectDevTools();
+    setupBlurProtection();
+    setupAntiScreenshot();
+    generateWatermark();
+    setInterval(generateWatermark, CONFIG.watermarkInterval);
 }
 
 // 启动版权保护
