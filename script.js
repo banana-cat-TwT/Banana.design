@@ -3571,12 +3571,87 @@ function initCopyrightProtection() {
     disableShortcuts();
     disableClipboard();
     disableDrag();
-    detectDevTools();
-    setupBlurProtection();
-    setupAntiScreenshot();
-    generateWatermark();
-    setInterval(generateWatermark, CONFIG.watermarkInterval);
+    // detectDevTools(); // 截图时临时禁用
+    // setupBlurProtection(); // 截图时临时禁用
+    // setupAntiScreenshot(); // 截图时临时禁用
+    // generateWatermark(); // 截图时临时禁用
+    // setInterval(generateWatermark, CONFIG.watermarkInterval); // 截图时临时禁用
 }
 
 // 启动版权保护
 initCopyrightProtection();
+
+// ===== 视频懒加载 + 自动播放修复（解决多视频被浏览器优化策略暂停的问题）=====
+// 浏览器对页面上的多视频会限制：不在视口内的视频只加载元数据（readyState=1），不加载视频数据
+// 用 Intersection Observer 监听视频进入视口，主动触发 load() + play()
+function setupVideoLazyLoad() {
+    if (!('IntersectionObserver' in window)) {
+        // 老浏览器降级：直接全部播放
+        document.querySelectorAll('video').forEach(function(v) {
+            v.muted = true;
+            var p = v.play();
+            if (p && p.catch) p.catch(function(){});
+        });
+        return;
+    }
+    var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+            var v = entry.target;
+            if (entry.isIntersecting) {
+                // 进入视口：加载并播放
+                v.muted = true;
+                if (v.readyState < 2) {
+                    v.load();  // 强制加载视频数据
+                }
+                var p = v.play();
+                if (p && p.catch) {
+                    p.catch(function() { v.dataset.needPlay = '1'; });
+                }
+            } else {
+                // 离开视口：暂停释放内存
+                if (!v.paused) v.pause();
+            }
+        });
+    }, { rootMargin: '200px', threshold: 0.1 });
+
+    document.querySelectorAll('video').forEach(function(v) {
+        observer.observe(v);
+        // 同时尝试立即播放（如果可见的话）
+        v.muted = true;
+        var p = v.play();
+        if (p && p.catch) p.catch(function(){});
+    });
+}
+
+// 用户第一次触摸/点击时强制触发所有视频播放（绕过微信限制）
+function onFirstVideoInteraction() {
+    document.querySelectorAll('video').forEach(function(v) {
+        v.muted = true;
+        if (v.readyState < 2) v.load();
+        var p = v.play();
+        if (p && p.catch) p.catch(function(){});
+    });
+    document.removeEventListener('touchstart', onFirstVideoInteraction);
+    document.removeEventListener('click', onFirstVideoInteraction);
+}
+document.addEventListener('touchstart', onFirstVideoInteraction, { passive: true });
+document.addEventListener('click', onFirstVideoInteraction);
+
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(setupVideoLazyLoad, 500);
+});
+
+// 切换标签页回来时重新触发
+document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) {
+        setTimeout(function() {
+            document.querySelectorAll('video').forEach(function(v) {
+                v.muted = true;
+                var p = v.play();
+                if (p && p.catch) p.catch(function(){});
+            });
+        }, 200);
+    }
+});
+// ===== 修复结束 =====
