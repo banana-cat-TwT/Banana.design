@@ -67,6 +67,7 @@ const translations = {
         'blog.desc': '分享开发心得、技术文章和创作故事',
         'blog.cat.all': '全部',
         'blog.cat.llm': '大模型',
+        'blog.cat.character': '角色制作',
         'blog.readmore': '阅读全文',
         'blog.related': '相关日志',
 
@@ -231,6 +232,7 @@ const translations = {
         'blog.desc': 'Sharing development insights, technical articles, and creative stories',
         'blog.cat.all': 'All',
         'blog.cat.llm': 'LLM',
+        'blog.cat.character': 'Character Art',
         'blog.readmore': 'Read More',
         'blog.related': 'Related Logs',
 

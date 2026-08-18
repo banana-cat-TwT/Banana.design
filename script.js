@@ -376,34 +376,47 @@ function initEventListeners() {
         }
     });
     
-    // 作品分类功能
-    const categoryBtns = document.querySelectorAll('.category-btn');
-    const workCards = document.querySelectorAll('.work-card');
-    
-    categoryBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // 移除所有按钮的active类
-            categoryBtns.forEach(b => b.classList.remove('active'));
-            // 添加当前按钮的active类
-            this.classList.add('active');
-            
-            const category = this.textContent.trim();
-            
-            workCards.forEach(card => {
-                if (category === '全部') {
-                    card.style.display = 'block';
-                } else {
-                    // 获取作品的分类（这里假设作品卡片有一个data-category属性）
-                    const cardCategory = card.getAttribute('data-category');
-                    if (cardCategory === category) {
+    // 分类功能（作品分类 + 博客分类）
+    function initCategoryFilters(scope) {
+        const categoryBtns = scope.querySelectorAll('.category-btn');
+        const isWorksCategory = scope.classList.contains('works-category');
+        const cards = isWorksCategory
+            ? document.querySelectorAll('.work-card')
+            : document.querySelectorAll('.blog-card');
+
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 只移除同组按钮的active类
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                const filterCategory = this.getAttribute('data-category');
+                const filterText = this.textContent.trim();
+
+                cards.forEach(card => {
+                    if (filterCategory === 'all' || filterText === '全部' || filterText === 'All') {
                         card.style.display = 'block';
                     } else {
-                        card.style.display = 'none';
+                        const cardCategoryAttr = card.getAttribute('data-category') || '';
+                        // 支持空格分隔的多分类匹配
+                        const cardCategories = cardCategoryAttr.split(/\s+/);
+                        const match = cardCategories.some(cat =>
+                            cat === filterCategory || cat === filterText
+                        );
+                        card.style.display = match ? 'block' : 'none';
                     }
-                }
+                });
             });
         });
-    });
+    }
+
+    // 初始化作品分类
+    const worksCategoryEl = document.querySelector('.works-category');
+    if (worksCategoryEl) initCategoryFilters(worksCategoryEl);
+
+    // 初始化博客分类
+    const blogCategoriesEl = document.querySelector('.blog-categories');
+    if (blogCategoriesEl) initCategoryFilters(blogCategoriesEl);
     
     // 角色卡片点击放大和翻转功能
     const characterCards = document.querySelectorAll('.character-card');
@@ -2178,35 +2191,48 @@ window.onkeydown = function(event) {
     }
 };
 
-// 作品分类功能
+// 分类功能（作品分类 + 博客分类）
 document.addEventListener('DOMContentLoaded', function() {
-    const categoryBtns = document.querySelectorAll('.category-btn');
-    const workCards = document.querySelectorAll('.work-card');
-    
-    categoryBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            // 移除所有按钮的active类
-            categoryBtns.forEach(b => b.classList.remove('active'));
-            // 添加当前按钮的active类
-            this.classList.add('active');
-            
-            const category = this.textContent.trim();
-            
-            workCards.forEach(card => {
-                if (category === '全部') {
-                    card.style.display = 'block';
-                } else {
-                    // 获取作品的分类（这里假设作品卡片有一个data-category属性）
-                    const cardCategory = card.getAttribute('data-category');
-                    if (cardCategory === category) {
+    function initCategoryFilters(scope) {
+        const categoryBtns = scope.querySelectorAll('.category-btn');
+        const isWorksCategory = scope.classList.contains('works-category');
+        const cards = isWorksCategory
+            ? document.querySelectorAll('.work-card')
+            : document.querySelectorAll('.blog-card');
+
+        categoryBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 只移除同组按钮的active类
+                categoryBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+
+                const filterCategory = this.getAttribute('data-category');
+                const filterText = this.textContent.trim();
+
+                cards.forEach(card => {
+                    if (filterCategory === 'all' || filterText === '全部' || filterText === 'All') {
                         card.style.display = 'block';
                     } else {
-                        card.style.display = 'none';
+                        const cardCategoryAttr = card.getAttribute('data-category') || '';
+                        // 支持空格分隔的多分类匹配
+                        const cardCategories = cardCategoryAttr.split(/\s+/);
+                        const match = cardCategories.some(cat =>
+                            cat === filterCategory || cat === filterText
+                        );
+                        card.style.display = match ? 'block' : 'none';
                     }
-                }
+                });
             });
         });
-    });
+    }
+
+    // 初始化作品分类
+    const worksCategoryEl = document.querySelector('.works-category');
+    if (worksCategoryEl) initCategoryFilters(worksCategoryEl);
+
+    // 初始化博客分类
+    const blogCategoriesEl = document.querySelector('.blog-categories');
+    if (blogCategoriesEl) initCategoryFilters(blogCategoriesEl);
 });
 
 // 视差滚动效果
