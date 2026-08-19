@@ -1,0 +1,1190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《天渊庙》·凌川 角色制作记录日志 - BananaCat Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary: #7FA99B;
+            --secondary: #5E8B7E;
+            --accent: #B8D4C9;
+            --highlight: #5E8B7E;
+            --highlight-bright: #7FA99B;
+            --dark-bg: #FBF7F0;
+            --dark-bg-deep: #F1E9DA;
+            --light-bg: #5E8B7E;
+            --light-bg-soft: #4A6A5E;
+            --text-main: #3B4A42;
+            --text-soft: #5E6E66;
+        }
+
+        body {
+            background: linear-gradient(180deg, var(--dark-bg) 0%, var(--dark-bg-deep) 100%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            cursor: none;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: -10%;
+            width: 120%;
+            height: 100%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(127, 169, 155, 0.18) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(184, 212, 201, 0.30) 0%, transparent 40%),
+                        radial-gradient(ellipse at 50% 50%, rgba(220, 200, 165, 0.25) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(180deg, transparent 0%, rgba(127, 169, 155, 0.04) 20%, transparent 40%),
+                linear-gradient(0deg, transparent 0%, rgba(220, 200, 165, 0.06) 20%, transparent 40%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .blog-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .blog-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--highlight);
+            letter-spacing: 2px;
+            text-shadow: 0 0 30px rgba(127, 169, 155, 0.3);
+        }
+
+        .blog-subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            margin-bottom: 20px;
+        }
+
+        .blog-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: var(--text-soft);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .blog-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 40px;
+        }
+
+        .blog-section {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(248, 244, 234, 0.9) 100%);
+            border: 1px solid rgba(127, 169, 155, 0.35);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow:
+                0 4px 20px rgba(94, 139, 126, 0.08),
+                0 0 30px rgba(184, 212, 201, 0.18);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blog-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(127, 169, 155, 0.55), transparent);
+        }
+
+        .blog-content h2 {
+            color: var(--highlight);
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            font-size: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .blog-content h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--highlight) 0%, var(--accent) 100%);
+            border-radius: 2px;
+        }
+
+        .blog-content h3 {
+            color: var(--secondary);
+            margin-top: 20px;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            padding-left: 12px;
+            border-left: 4px solid var(--highlight);
+        }
+
+        .blog-content h4 {
+            color: var(--highlight);
+            margin-top: 15px;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .blog-content p {
+            margin-bottom: 20px;
+            color: var(--text-main);
+        }
+
+        .blog-content ul {
+            margin-bottom: 20px;
+            padding-left: 20px;
+            color: var(--text-main);
+        }
+
+        .blog-content li {
+            margin-bottom: 10px;
+        }
+
+        .blog-content strong {
+            color: var(--highlight);
+            font-weight: bold;
+        }
+
+        .back-link {
+            display: inline-block;
+            padding: 12px 24px;
+            background: linear-gradient(135deg, var(--highlight) 0%, #4A6A5E 100%);
+            color: #FBF7F0;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 1rem;
+            box-shadow: 0 3px 10px rgba(94, 139, 126, 0.2);
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(94, 139, 126, 0.3);
+        }
+
+        .team-info {
+            background: linear-gradient(135deg, rgba(184, 212, 201, 0.45) 0%, rgba(220, 200, 165, 0.3) 100%);
+            border-left: 4px solid var(--highlight);
+            padding: 20px 25px;
+            margin: 20px 0;
+            border-radius: 0 12px 12px 0;
+            box-shadow: 0 0 20px rgba(127, 169, 155, 0.12);
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(184, 212, 201, 0.35);
+            border-radius: 12px;
+            border: 1px solid rgba(127, 169, 155, 0.3);
+        }
+
+        .stat-item .number {
+            font-size: 2rem;
+            color: var(--highlight);
+            font-weight: bold;
+        }
+
+        .stat-item .label {
+            color: var(--text-soft);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .workflow-step {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(184, 212, 201, 0.35);
+            border-radius: 12px;
+            border-left: 4px solid var(--highlight);
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--highlight), #4A6A5E);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: white;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        .step-content h4 {
+            margin-top: 0;
+            color: var(--highlight);
+        }
+
+        .step-content p {
+            margin-bottom: 0;
+        }
+
+        .problem-box {
+            background: linear-gradient(135deg, rgba(220, 200, 165, 0.55) 0%, rgba(200, 170, 120, 0.3) 100%);
+            border-left: 4px solid #C89F5C;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .problem-box h4 {
+            color: #A07A3F;
+            margin-bottom: 10px;
+        }
+
+        .problem-box p {
+            color: #6E5A3A;
+            margin: 0;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .tool-item {
+            background: rgba(139, 69, 19, 0.15);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 107, 53, 0.2);
+            text-align: center;
+        }
+
+        .tool-item strong {
+            display: block;
+            color: var(--highlight);
+            margin-bottom: 5px;
+        }
+
+        .tool-item span {
+            font-size: 0.9rem;
+            color: var(--light-bg);
+        }
+
+        /* 自定义光标样式 */
+        .custom-cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            background-image: url('image/guangb.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(60, 169, 201, 0.8) 0%, rgba(63, 108, 166, 0.4) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 0.8s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3);
+            }
+        }
+    </style>
+
+    <!-- 51.la 访客统计 V6 -->
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"3Qu6OIFKMWrFWPyF",ck:"3Qu6OIFKMWrFWPyF"})</script>
+</head>
+<body>
+    <!-- Watermark Canvas -->
+    <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.03;"></canvas>
+
+    <!-- 跟随导航 -->
+    <nav class="side-nav" id="sideNav">
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#items" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">道具展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">游戏展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="blog-detail-container">
+        <div class="blog-content">
+
+            <div class="blog-header">
+                <h1 class="blog-title">《天渊庙》· 凌川 — 角色制作记录日志</h1>
+                <div class="blog-subtitle">原创武侠企划 · 毕业设计初期方案（已搁置）</div>
+                <div class="blog-meta">
+                    <span>🗓️ 制作时间：2025年5月</span>
+                    <span>🏷️ 标签：武侠 · 概念设计 · ZBrush高模</span>
+                    <span style="color: #7A8A5E; font-style: italic;">状态：项目调整，已停更</span>
+                </div>
+            </div>
+
+            <section class="blog-section">
+                <h2>企划简介</h2>
+                <p>《天渊庙》是本人毕业设计初期规划的原创武侠企划，目标输出是一部 3D 武侠动画预告片。世界观独立搭建，主角<strong>凌川</strong>由我独立设计。</p>
+                <p>后来因为<strong>艺术项目方向整体调整</strong>，毕业设计改为走"三维辅助二维跨媒介协作"的路线（即最终的《独行者》），所以《天渊庙》这套武侠企划就没有继续推进完成。角色制作进度分两块：<strong>头部相关（头发、脸部、眼睛、睫毛、口腔、牙齿、舌头）已走完全流程 PBR 管线并落地；服装与装备部分已开始进行低模拓扑，但因突然切换毕设项目没能继续推进拓扑细化与材质烘焙</strong>，也未进入绑定与动画环节。</p>
+            </section>
+
+            <section class="blog-section">
+                <h2>角色展示 · 凌川</h2>
+                <div style="margin: 20px 0; text-align: center;">
+                    <img src="image/lingchuan/lc_1.png" alt="《天渊庙》主角凌川 角色制作记录"
+                         style="max-width: 100%; max-height: 620px; border-radius: 14px;
+                                border: 2px solid rgba(127, 169, 155, 0.45);
+                                box-shadow: 0 10px 35px rgba(94, 139, 126, 0.18);
+                                background: #FBF7F0; object-fit: contain;">
+                    <p style="margin-top: 14px; font-size: 0.95rem; color: #5E8B7E; font-style: italic;">
+                        凌川 · 头部已完成完整 PBR 流程 · 服装装备进行到低模拓扑阶段中止
+                    </p>
+                </div>
+            </section>
+
+            <section class="blog-section">
+                <h2>时间进度记录</h2>
+                <div class="workflow-step">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h4>世界观与角色概念</h4>
+                        <p>独立搭建《天渊庙》武侠世界观，确定主角凌川的人物设定、身份背景和视觉关键词。</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h4>分镜脚本推进</h4>
+                        <p>动画预告片的分镜完成到可播放阶段，关键镜头和叙事节奏基本落定。</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h4>角色高模雕刻</h4>
+                        <p>2025 年 5 月，用 2-3 周时间在 ZBrush 中完成凌川全身高模雕刻（头脸 + 服装装备）。</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h4>头部完整 PBR 流程</h4>
+                        <p>头发、脸部、眼睛、睫毛、口腔、牙齿、舌头等头部组件完成拓扑 → UV → 材质烘焙 → 贴图全套 PBR 流程。</p>
+                    </div>
+                </div>
+                <div class="workflow-step">
+                    <div class="step-number">5</div>
+                    <div class="step-content">
+                        <h4>服装装备低模拓扑（已开始，未完成）</h4>
+                        <p>服装与装备已展开低模拓扑工作，但因突然切换毕设项目，未能继续推进到拓扑细化、UV 拆分与材质烘焙阶段。</p>
+                    </div>
+                </div>
+                <div class="workflow-step" style="opacity: 0.45;">
+                    <div class="step-number">✕</div>
+                    <div class="step-content">
+                        <h4>后续阶段（未执行）</h4>
+                        <p>绑定 / 动画K帧 / 灯光渲染 / 剪辑输出 — 因项目整体调整未继续。</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="blog-section">
+                <h2>停更说明</h2>
+                <div class="team-info">
+                    <p>停更并不是因为做不下去，而是毕业设计的方向整体换成了《独行者》的三维辅助二维跨媒介协作路线，一方面能避开和实习时间撞车，另一方面也是结合毕设评审的偏好调整风格走向，沿用我早已熟练的三维辅助二维跨媒介流程继续推进。</p>
+                    <p>《天渊庙》和凌川的设定都完整保留着，等以后有空、或者有合适的机会，可能会重启继续做。</p>
+                </div>
+            </section>
+
+            <section class="blog-section" style="background: linear-gradient(135deg, rgba(248, 244, 234, 0.95) 0%, rgba(235, 224, 200, 0.9) 100%); border: 1px solid rgba(160, 122, 63, 0.25);">
+                <h2 style="color: #7A6042;">后记 · 回头看</h2>
+                <div style="background: linear-gradient(135deg, rgba(184, 212, 201, 0.4) 0%, rgba(220, 200, 165, 0.3) 100%);
+                            border-left: 4px solid #7A6042;
+                            padding: 18px 22px; margin: 20px 0 28px 0; border-radius: 0 12px 12px 0;
+                            color: #5E6E66; font-style: italic;">
+                    <p style="margin: 0 0 8px 0;">现在回头翻凌川这版的文件，心里的第一反应几乎总是——<strong style="color: #7A6042;">"怎么会丑成这样"</strong></p>
+                    <p style="margin: 0;">不是矫情，是真的不满意。高模整体造型、头发的穿插层次和雕刻细腻度都不够，脸型和五官细节也达不到我现在的标准。最近整理作品时重新打开了以前的文件，心里默默质疑自己当时的判断。如果以后有空重启这个企划，大概率会从高模阶段重新雕刻一轮。</p>
+                </div>
+
+                <p>但这种感觉对我来说其实已经不是第一次。几乎每次完成一件作品，我都会陷入同一个循环：<strong>制作过程中隐约觉得某处好像不太对，但又说不清具体在哪里；直到把它放下，去忙别的事情，隔几天再回头看，问题一下子就清清楚楚地浮了出来。</strong></p>
+                <p>作品做的越多，我越相信这不是偶然，而是每个创作者都绕不过去的规律。</p>
+
+                <h3 style="border-left-color: #7A6042; color: #7A6042;">为什么做的时候，永远看不清</h3>
+                <p>因为在制作的当下，大脑处在<strong>创作者模式</strong>里。满脑子都是具体的操作——这一丛面要不要再收一下，那个色相差了几度，UV有没有拉平，法线是不是都朝外。人的注意力是有限的，当它全部被细节操作占满时，就很难再抽出空间去审视整体。</p>
+                <p>这就像把脸贴在画布跟前看一幅画：你只能看到笔触的走向和颜料的颗粒，却看不到整体的构图与色彩关系。</p>
+
+                <h3 style="border-left-color: #7A6042; color: #7A6042;">为什么隔几天回来，就全都看出来了</h3>
+                <p>因为一旦离开那个位置、脱离了当时的纠结，大脑才第一次切换成<strong>旁观者模式</strong>。隔了几天之后，具体的操作细节已经从记忆里淡去，终于可以用一个观众最朴素的第一印象，去重新打量自己的作品。</p>
+                <p>于是问题自己就浮出来了：这里的比例其实有点怪，那里的颜色和整体气质不搭，成品的感觉跟当初设想的不完全一致。这不是什么玄学，<strong>距离，才能带来客观的审视。</strong></p>
+
+                <h3 style="border-left-color: #7A6042; color: #7A6042;">但这件事的背面，其实是值得开心的</h3>
+                <p>隔几天就能看出以前作品的问题，恰恰说明——<strong>自己的审美基准线一直在提高</strong>。</p>
+
+                <h3 style="border-left-color: #7A6042; color: #7A6042;">但这里有一个很实际的陷阱</h3>
+                <p>对于靠作品吃饭的人来说，隔几天就看出问题的循环很容易演变成无底洞：改完一版 → 隔几天 → 还是觉得有毛病 → 再改 → 隔几天 → 仍然觉得不够好，永远也交付不出去。</p>
+                <p>所以我后来试着把问题分成两类：</p>
+                <ul>
+                    <li><strong>硬伤（一定要改）</strong>：拓扑错误、穿模、法线反向、完成度明显不足。</li>
+                    <li><strong>主观偏好（不要无限改）</strong>："这个颜色是不是再冷一点更好""这个角度是不是不够帅"。</li>
+                </ul>
+                <p><strong>主观偏好是永远挑不完的。</strong>你永远能觉得还可以更好，但还可以更好不等于现在有问题。很多时候我只是在用不断升高的新标准，反复折磨拷打自己。一直挑下去，就永远无法交付出去。</p>
+
+                <div style="background: rgba(127, 169, 155, 0.25); border-left: 4px solid #5E8B7E; padding: 18px 22px; margin: 24px 0 10px 0; border-radius: 0 12px 12px 0;">
+                    <p style="margin: 0;"><strong>我现在给自己的止血方法：</strong>给每一件作品画一条明确的截止线。这一版改完，就不再动了。不是放弃更高的要求，而是承认一个事实：</p>
+                    <p style="margin: 8px 0 0 0;">隔几天能看出问题是一件好事，说明自己还在往前走。但不能让这个机制，变成永远走不出去的原地循环。</p>
+                </div>
+
+            </section>
+
+            <a href="index.html" class="back-link">← 返回首页</a>
+        </div>
+    </div>
+
+    <!-- 桌宠系统 -->
+    <div class="desk-pet" id="deskPet">
+        <div class="pet-sprite" id="petSprite">
+            <img src="image/zhuochong/眼镜男-正面idle.png" alt="桌宠" id="petImage">
+        </div>
+        <div class="pet-bubble" id="petBubble">
+            <span class="bubble-text" id="bubbleText">喵~</span>
+        </div>
+        <div class="pet-controls" id="petControls">
+            <button class="control-btn" id="menuBtn" title="菜单">☰</button>
+            <button class="control-btn" id="pinBtn" title="固定位置">📌</button>
+            <button class="control-btn" id="followBtn" title="跟随滚动">👀</button>
+            <button class="control-btn" id="hideBtn" title="隐藏">✖️</button>
+        </div>
+    </div>
+
+    <!-- 自定义光标 -->
+    <div class="custom-cursor" id="customCursor"></div>
+
+    <script src="script.js"></script>
+    <script>
+        // ===== 水印 =====
+        function generateWatermark() {
+            const canvas = document.getElementById('watermark-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const text = 'BananaCat Portfolio | ' + new Date().toLocaleDateString();
+            ctx.font = '24px Arial';
+            ctx.fillStyle = '#000';
+            ctx.globalAlpha = 0.5;
+            const spacing = 120;
+            const rotation = -Math.PI / 8;
+            for (let x = -200; x < canvas.width + 200; x += spacing) {
+                for (let y = -200; y < canvas.height + 200; y += spacing) {
+                    ctx.save();
+                    ctx.translate(x, y);
+                    ctx.rotate(rotation);
+                    ctx.fillText(text, 0, 0);
+                    ctx.restore();
+                }
+            }
+        }
+        generateWatermark();
+        setInterval(generateWatermark, 30000);
+        window.addEventListener('resize', generateWatermark);
+    </script>
+
+    <script>
+        // 桌宠系统 - 像素小人卓翀
+        document.addEventListener('DOMContentLoaded', function() {
+            const deskPet = document.getElementById('deskPet');
+            const petImage = document.getElementById('petImage');
+            const petBubble = document.getElementById('petBubble');
+            const bubbleText = document.getElementById('bubbleText');
+            
+            const spritePath = 'image/zhuochong/';
+            const sprites = {
+                idle: spritePath + '眼镜男-正面idle.png',
+                idleBack: spritePath + '眼镜男-背面idle.png',
+                idleLeft: spritePath + '眼镜男-向左侧面idle.png',
+                walkFront1: spritePath + '眼镜男-正面右手左脚.png',
+                walkFront2: spritePath + '眼镜男-正面左手右脚.png',
+                walkBack1: spritePath + '眼镜男-背面右手左脚.png',
+                walkBack2: spritePath + '眼镜男-背面左手右脚.png',
+                walkLeft1: spritePath + '眼镜男-向左侧右手左脚.png',
+                walkLeft2: spritePath + '眼镜男-向左侧左手右脚.png',
+                drink: spritePath + '眼镜男喝水.png',
+                water1: spritePath + '眼镜男拿水杯.png',
+                water2: spritePath + '眼镜男拿水杯2.png',
+                bass: spritePath + '眼镜男弹贝斯1.png',
+                bass2: spritePath + '眼镜男弹贝斯2.png',
+                bass3: spritePath + '眼镜男弹贝斯3.png',
+                bass4: spritePath + '眼镜男弹贝斯4.png',
+                sweep: spritePath + '眼镜男扫地状态.png',
+                sweep2: spritePath + '眼镜男扫地状态2.png',
+                trash: spritePath + '眼镜男拿垃圾袋.png'
+            };
+            
+            const seasonConfig = {
+                spring: { label: '春季', dialog: ['春天来了~', '花开得好漂亮！', '天气变暖了呢'] },
+                summer: { label: '夏季', dialog: ['好热啊…', '想吃冰的…', '夏天真热'] },
+                autumn: { label: '秋季', dialog: ['好凉爽~', '叶子掉下来了', '秋天到了'] },
+                winter: { label: '冬季', dialog: ['好冷…', '缩起来…', '冬天真冷'] }
+            };
+            
+            let currentState = 'idle';
+            let isMoving = false;
+            let walkFrame = 0;
+            let currentDirection = 'idle';
+            let currentTimeSlot = '';
+            let lastActivityTime = Date.now();
+            let clickCount = 0;
+            let clickTimer = null;
+            let mousePosition = { x: 0, y: 0 };
+            let currentEmotion = 'normal';
+            let emotionTimer = null;
+            let emotionCooldown = 0;
+            let isSleeping = false;
+            let sleepTimer = null;
+            let isPinned = false;
+            let isFollowing = true;
+            let isHidden = false;
+            let affectionLevel = 0;
+            let affectionExp = 0;
+            let maxExpPerLevel = 100;
+            let isDragging = false;
+            let dragOffset = { x: 0, y: 0 };
+            let currentWeather = 'clear';
+            let weatherTimer = null;
+            let currentInterval = null;
+            let currentSeason = '';
+            
+            const timeSlots = [
+                { start: 6, end: 9, name: 'morning', status: '起床', dialog: ['早啊，今天也要加油', '刚起床，还有点困', '新的一天开始了！'] },
+                { start: 9, end: 12, name: 'noon', status: '精神', dialog: ['工作中，加油！', '今天任务好多', '要不要休息一下？'] },
+                { start: 12, end: 14, name: 'lunch', status: '午饭', dialog: ['该吃饭了', '肚子好饿', '今天吃什么呢？'] },
+                { start: 14, end: 18, name: 'afternoon', status: '工作', dialog: ['继续工作', '加油，快完成了', '时间过得真快'] },
+                { start: 18, end: 22, name: 'evening', status: '放松', dialog: ['今天辛苦了', '终于可以休息了', '要不要听我弹贝斯？'] },
+                { start: 22, end: 0, name: 'night', status: '犯困', dialog: ['好困啊', '该睡觉了', '明天还要早起'] },
+                { start: 0, end: 6, name: 'midnight', status: '深夜', dialog: ['还不睡吗？', '熬夜对身体不好', '早点休息吧'] }
+            ];
+            
+            const emotions = [
+                { name: 'happy', probability: 0.3, dialog: ['今天心情不错~', '嘿嘿', '好开心！'], action: 'bass', duration: [30000, 60000] },
+                { name: 'idle', probability: 0.25, dialog: ['…', '嗯？什么？', '发呆中…'], action: 'idle', duration: [20000, 40000] },
+                { name: 'tired', probability: 0.2, dialog: ['好困…', '再躺一会', '想睡觉'], action: 'idle', duration: [40000, 60000] },
+                { name: 'angry', probability: 0.15, dialog: ['哼！', '别烦我', '生气了！'], action: 'idle', duration: [15000, 30000] },
+                { name: 'proud', probability: 0.1, dialog: ['可以跟我提一些修改意见哦', '这算什么', '可以玩玩网站内的电子算卦哦~祝你每天都有好心情！'], action: 'bass', duration: [20000, 30000] }
+            ];
+            
+            const pageNavigation = {
+                'index.html': {
+                    active: ['欢迎来我的小家~', '这里是我的主页，随便看看吧', '很高兴见到你！'],
+                    click: ['这是我的主页，展示了我的作品和项目', '你可以点击导航栏查看更多内容', '有什么想了解的吗？']
+                },
+                'blog-tianyuanmiao-lingchuan.html': {
+                    active: ['这是天元庙凌川的制作记录哦', '武侠角色可惜没做完…', '以后有机会会重启的~'],
+                    click: ['凌川的高模做得好辛苦', '因为项目调整停在这里了', '看看以后有没有时间继续做吧']
+                }
+            };
+            
+            const words = [
+                '在忙什么呢~', '需要帮忙吗？', '休息一下吧！', 
+                '要不要听我弹贝斯？', '我来打扫一下！', '好想喝水...',
+                '今天也要加油哦！', '一起玩吧~', '肚子有点饿了',
+            ];
+            
+            function updateSprite(src) {
+                petImage.src = src;
+            }
+            
+            function getCurrentTimeSlot() {
+                const now = new Date();
+                const hour = now.getHours();
+                for (const slot of timeSlots) {
+                    if (slot.start <= slot.end) {
+                        if (hour >= slot.start && hour < slot.end) {
+                            return slot;
+                        }
+                    } else {
+                        if (hour >= slot.start || hour < slot.end) {
+                            return slot;
+                        }
+                    }
+                }
+                return timeSlots[0];
+            }
+            
+            function getCurrentSeason() {
+                const month = new Date().getMonth() + 1;
+                if (month >= 3 && month <= 5) return 'spring';
+                if (month >= 6 && month <= 8) return 'summer';
+                if (month >= 9 && month <= 11) return 'autumn';
+                return 'winter';
+            }
+            
+            function updateSeasonStatus() {
+                const season = getCurrentSeason();
+                if (season !== currentSeason) {
+                    currentSeason = season;
+                    deskPet.className = 'desk-pet season-' + season;
+                    const config = seasonConfig[season];
+                    const dialog = config.dialog[Math.floor(Math.random() * config.dialog.length)];
+                    showBubble(dialog);
+                }
+            }
+            
+            function updateTimeSlotStatus() {
+                const slot = getCurrentTimeSlot();
+                if (slot.name !== currentTimeSlot) {
+                    currentTimeSlot = slot.name;
+                    const dialog = slot.dialog[Math.floor(Math.random() * slot.dialog.length)];
+                    showBubble(dialog);
+                }
+            }
+            
+            function triggerRandomEmotion() {
+                if (currentState !== 'idle' || emotionCooldown > Date.now()) {
+                    return;
+                }
+                const random = Math.random();
+                let cumulativeProbability = 0;
+                for (const emotion of emotions) {
+                    cumulativeProbability += emotion.probability;
+                    if (random <= cumulativeProbability) {
+                        setEmotion(emotion);
+                        break;
+                    }
+                }
+            }
+            
+            function setEmotion(emotion) {
+                currentEmotion = emotion.name;
+                const dialog = emotion.dialog[Math.floor(Math.random() * emotion.dialog.length)];
+                showBubble(dialog);
+                if (emotion.action === 'bass') {
+                    playBass();
+                } else if (emotion.action === 'sweep') {
+                    playSweep();
+                } else if (emotion.action === 'drink') {
+                    playDrink();
+                } else {
+                    playIdle();
+                }
+                const duration = Math.random() * (emotion.duration[1] - emotion.duration[0]) + emotion.duration[0];
+                if (emotionTimer) {
+                    clearTimeout(emotionTimer);
+                }
+                emotionTimer = setTimeout(function() {
+                    currentEmotion = 'normal';
+                    playIdle();
+                    emotionCooldown = Date.now() + (Math.random() * 10000 + 5000);
+                }, duration);
+            }
+            
+            function getCurrentPage() {
+                const path = window.location.pathname;
+                const filename = path.split('/').pop();
+                return filename || 'index.html';
+            }
+            
+            function showPageNavigationDialog() {
+                const currentPage = getCurrentPage();
+                const pageConfig = pageNavigation[currentPage];
+                if (pageConfig) {
+                    const dialogs = pageConfig.active;
+                    const dialog = dialogs[Math.floor(Math.random() * dialogs.length)];
+                    showBubble(dialog);
+                }
+            }
+            
+            function updateWeather() {
+                const weathers = ['clear', 'cloudy', 'rainy', 'snowy', 'windy'];
+                currentWeather = weathers[Math.floor(Math.random() * weathers.length)];
+                const config = weatherConfig[currentWeather];
+                if (config) {
+                    const dialog = config.dialog[Math.floor(Math.random() * config.dialog.length)];
+                    showBubble(dialog);
+                }
+            }
+            
+            function checkUserActivity() {
+                const idleTime = Date.now() - lastActivityTime;
+                if (idleTime > 300000 && !isSleeping && currentState === 'idle') {
+                    isSleeping = true;
+                    showBubble('zzZ...');
+                }
+            }
+            
+            function sleep() {
+                if (currentState !== 'idle') return;
+                isSleeping = true;
+                showBubble('zzZ...');
+                playIdle();
+            }
+            
+            function wakeUp() {
+                if (isSleeping) {
+                    isSleeping = false;
+                    currentState = 'idle';
+                    showBubble('嗯...？我醒着呢！');
+                    playIdle();
+                }
+            }
+            
+            function togglePin() {
+                isPinned = !isPinned;
+                const pinBtn = document.getElementById('pinBtn');
+                if (isPinned) {
+                    pinBtn.textContent = '📌';
+                    showBubble('我固定在这里了！');
+                } else {
+                    pinBtn.textContent = '📌';
+                    showBubble('我可以自由移动了！');
+                }
+            }
+            
+            function toggleFollow() {
+                isFollowing = !isFollowing;
+                const followBtn = document.getElementById('followBtn');
+                if (isFollowing) {
+                    followBtn.textContent = '👀';
+                    showBubble('我会跟随你滚动！');
+                } else {
+                    followBtn.textContent = '👁️';
+                    showBubble('我不会跟随滚动了！');
+                }
+            }
+            
+            function toggleHide() {
+                isHidden = !isHidden;
+                const hideBtn = document.getElementById('hideBtn');
+                if (isHidden) {
+                    deskPet.style.display = 'none';
+                    hideBtn.textContent = '▶️';
+                } else {
+                    deskPet.style.display = 'block';
+                    hideBtn.textContent = '✖️';
+                    showBubble('我又回来啦！');
+                }
+            }
+            
+            function initControlButtons() {
+                const menuBtn = document.getElementById('menuBtn');
+                const pinBtn = document.getElementById('pinBtn');
+                const followBtn = document.getElementById('followBtn');
+                const hideBtn = document.getElementById('hideBtn');
+                
+                if (menuBtn) {
+                    menuBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        toggleSideNav();
+                    });
+                }
+                if (pinBtn) {
+                    pinBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        togglePin();
+                    });
+                }
+                if (followBtn) {
+                    followBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        toggleFollow();
+                    });
+                }
+                if (hideBtn) {
+                    hideBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        toggleHide();
+                    });
+                }
+            }
+            
+            function toggleSideNav() {
+                const sideNav = document.getElementById('sideNav');
+                if (sideNav) {
+                    sideNav.classList.toggle('expanded');
+                }
+            }
+            
+            function addAffection(amount) {
+                affectionExp += amount;
+                while (affectionExp >= maxExpPerLevel) {
+                    affectionExp -= maxExpPerLevel;
+                    affectionLevel++;
+                    showBubble('好感度升级了！现在是' + affectionLevel + '级');
+                    saveAffectionData();
+                }
+                saveAffectionData();
+            }
+            
+            function saveAffectionData() {
+                const data = { level: affectionLevel, exp: affectionExp };
+                localStorage.setItem('deskPetAffection', JSON.stringify(data));
+            }
+            
+            function loadAffectionData() {
+                const data = localStorage.getItem('deskPetAffection');
+                if (data) {
+                    const parsedData = JSON.parse(data);
+                    affectionLevel = parsedData.level || 0;
+                    affectionExp = parsedData.exp || 0;
+                }
+            }
+            
+            function startDrag(e) {
+                if (isPinned) return;
+                e.preventDefault();
+                isDragging = true;
+                const rect = deskPet.getBoundingClientRect();
+                dragOffset.x = e.clientX - rect.left;
+                dragOffset.y = e.clientY - rect.top;
+                if (isSleeping) {
+                    wakeUp();
+                }
+                document.body.style.cursor = 'grabbing';
+            }
+            
+            function drag(e) {
+                if (!isDragging) return;
+                e.preventDefault();
+                const newX = e.clientX - dragOffset.x;
+                const newY = e.clientY - dragOffset.y;
+                const maxX = window.innerWidth - deskPet.offsetWidth;
+                const maxY = window.innerHeight - deskPet.offsetHeight;
+                const clampedX = Math.max(0, Math.min(maxX, newX));
+                const clampedY = Math.max(0, Math.min(maxY, newY));
+                deskPet.style.left = clampedX + 'px';
+                deskPet.style.top = clampedY + 'px';
+                deskPet.style.bottom = 'auto';
+            }
+            
+            function endDrag() {
+                isDragging = false;
+                document.body.style.cursor = 'default';
+            }
+            
+            const weatherConfig = {
+                clear: { dialog: ['今天天气真好！', '阳光明媚，适合出去走走', '好喜欢晴天！'], action: 'bass' },
+                cloudy: { dialog: ['今天有点阴天', '云有点多', '适合在家休息'], action: 'idle' },
+                rainy: { dialog: ['下雨了，好凉快', '雨声真好听', '记得带伞哦'], action: 'sweep' },
+                snowy: { dialog: ['下雪了！', '好美的雪景', '好想堆雪人'], action: 'idle' },
+                windy: { dialog: ['风好大', '头发都被吹乱了', '有点冷'], action: 'idle' }
+            };
+            
+            function playIdle() {
+                currentState = 'idle';
+                isMoving = false;
+                const idles = [sprites.idle, sprites.idleBack, sprites.idleLeft];
+                updateSprite(idles[Math.floor(Math.random() * idles.length)]);
+            }
+            
+            function clearCurrentInterval() {
+                if (currentInterval) {
+                    clearInterval(currentInterval);
+                    currentInterval = null;
+                }
+            }
+            
+            function playWalk(direction) {
+                clearCurrentInterval();
+                currentState = 'walk';
+                currentDirection = direction;
+                isMoving = true;
+                walkFrame = 0;
+                let steps = 0;
+                currentInterval = setInterval(function() {
+                    if (currentState !== 'walk' || steps >= 10) {
+                        clearInterval(currentInterval);
+                        currentInterval = null;
+                        playIdle();
+                        return;
+                    }
+                    if (direction === 'right') {
+                        updateSprite(walkFrame % 2 === 0 ? sprites.walkFront1 : sprites.walkFront2);
+                        deskPet.style.left = (parseInt(deskPet.style.left || '20') + 20) + 'px';
+                    } else if (direction === 'left') {
+                        updateSprite(walkFrame % 2 === 0 ? sprites.walkLeft1 : sprites.walkLeft2);
+                        const newLeft = Math.max(20, parseInt(deskPet.style.left || '20') - 20);
+                        deskPet.style.left = newLeft + 'px';
+                    }
+                    walkFrame++;
+                    steps++;
+                }, 300);
+            }
+            
+            function playBass() {
+                clearCurrentInterval();
+                currentState = 'bass';
+                let frame = 0;
+                const bassFrames = [sprites.bass, sprites.bass2, sprites.bass3, sprites.bass4];
+                currentInterval = setInterval(function() {
+                    updateSprite(bassFrames[frame % 4]);
+                    frame++;
+                    if (frame >= 32) {
+                        clearInterval(currentInterval);
+                        currentInterval = null;
+                        playIdle();
+                    }
+                }, 400);
+            }
+            
+            function playSweep() {
+                clearCurrentInterval();
+                currentState = 'sweep';
+                let frame = 0;
+                const sweepFrames = [sprites.sweep, sprites.sweep2];
+                currentInterval = setInterval(function() {
+                    updateSprite(sweepFrames[frame % 2]);
+                    frame++;
+                    if (frame >= 20) {
+                        clearInterval(currentInterval);
+                        currentInterval = null;
+                        playIdle();
+                    }
+                }, 500);
+            }
+            
+            function playDrink() {
+                clearCurrentInterval();
+                currentState = 'drink';
+                let frame = 0;
+                const drinkFrames = [sprites.drink, sprites.water1, sprites.water2, sprites.water1];
+                currentInterval = setInterval(function() {
+                    updateSprite(drinkFrames[frame % 4]);
+                    frame++;
+                    if (frame >= 24) {
+                        clearInterval(currentInterval);
+                        currentInterval = null;
+                        playIdle();
+                    }
+                }, 450);
+            }
+            
+            function showBubble(text) {
+                bubbleText.textContent = text;
+                petBubble.classList.add('show');
+                setTimeout(function() {
+                    petBubble.classList.remove('show');
+                }, 3000);
+            }
+            
+            function showHeart() {
+                const heart = document.createElement('div');
+                heart.className = 'pet-heart';
+                heart.innerHTML = '🧡';
+                heart.style.left = '50%';
+                heart.style.top = '0';
+                heart.style.transform = 'translateX(-50%)';
+                deskPet.appendChild(heart);
+                setTimeout(function() {
+                    heart.remove();
+                }, 2000);
+            }
+            
+            // 初始化
+            loadAffectionData();
+            initControlButtons();
+            updateSeasonStatus();
+            updateTimeSlotStatus();
+            showPageNavigationDialog();
+            
+            // 桌宠点击事件
+            deskPet.addEventListener('click', function(e) {
+                e.stopPropagation();
+                if (isSleeping) {
+                    wakeUp();
+                    return;
+                }
+                clickCount++;
+                if (clickTimer) clearTimeout(clickTimer);
+                clickTimer = setTimeout(function() {
+                    if (clickCount === 1) {
+                        const currentPage = getCurrentPage();
+                        const pageConfig = pageNavigation[currentPage];
+                        if (pageConfig && pageConfig.click) {
+                            const dialogs = pageConfig.click;
+                            const dialog = dialogs[Math.floor(Math.random() * dialogs.length)];
+                            showBubble(dialog);
+                        } else {
+                            const randomWord = words[Math.floor(Math.random() * words.length)];
+                            showBubble(randomWord);
+                        }
+                        addAffection(1);
+                        showHeart();
+                    } else if (clickCount >= 2) {
+                        playBass();
+                        showBubble('来听我弹贝斯吧！');
+                        addAffection(3);
+                        showHeart();
+                    }
+                    clickCount = 0;
+                }, 250);
+            });
+            
+            // 鼠标移动检测
+            document.addEventListener('mousemove', function(e) {
+                lastActivityTime = Date.now();
+                if (isSleeping) {
+                    wakeUp();
+                }
+                mousePosition = { x: e.clientX, y: e.clientY };
+            });
+            
+            // 自定义光标
+            const cursor = document.getElementById('customCursor');
+            if (cursor) {
+                document.addEventListener('mousemove', function(e) {
+                    cursor.style.left = e.clientX + 'px';
+                    cursor.style.top = e.clientY + 'px';
+                    createTrail(e.clientX, e.clientY);
+                });
+                document.addEventListener('mousedown', function() {
+                    cursor.classList.add('clicking');
+                });
+                document.addEventListener('mouseup', function() {
+                    cursor.classList.remove('clicking');
+                });
+            }
+
+            // 光标拖尾
+            let trailCount = 0;
+            const maxTrails = 20;
+            function createTrail(x, y) {
+                if (trailCount >= maxTrails) return;
+                const trail = document.createElement('div');
+                trail.className = 'cursor-trail';
+                trail.style.left = x + 'px';
+                trail.style.top = y + 'px';
+                trail.style.width = Math.random() * 8 + 4 + 'px';
+                trail.style.height = trail.style.width;
+                document.body.appendChild(trail);
+                trailCount++;
+                setTimeout(() => {
+                    trail.remove();
+                    trailCount--;
+                }, 800);
+            }
+            
+            // 随机情绪触发
+            setInterval(triggerRandomEmotion, 30000);
+            
+            // 时间更新
+            setInterval(updateTimeSlotStatus, 60000);
+            
+            // 用户活动检测
+            setInterval(checkUserActivity, 60000);
+        });
+    </script>
+</body>
+</html>
