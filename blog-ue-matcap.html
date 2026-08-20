@@ -438,6 +438,38 @@ BANANA_DESIGN_BUILD_SIGNATURE_bananacat_005
                     <li>在移动平台项目里做实际落地，评估电池、发热和性能表现</li>
                 </ul>
             </div>
+
+            <div class="blog-section">
+                <h2>学习视频 · MatCap 材质原理讲解与 UE5 实现</h2>
+                <p>下面这段 B 站视频是"美学阿姨"讲的 MatCap 材质原理与 UE5 实现方法，作为本日志"一、技术原理"和"四、技术实现要点"板块的视频对照。讲师会从原理讲到节点搭建，对照着上面的文字看会更直观。</p>
+                <div style="background: rgba(255, 255, 255, 0.82); border: 1px solid rgba(79, 157, 166, 0.25); border-radius: 12px; padding: 1.2rem; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.14); margin: 1.5rem 0;">
+                    <div style="aspect-ratio: 16/9; width: 100%; overflow: hidden; border-radius: 8px; position: relative;">
+                        <iframe src="https://player.bilibili.com/player.html?bvid=BV1GR4y1b76n&page=1&high_quality=1&danmaku=0&autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
+                    </div>
+                    <p style="text-align: center; color: #2C4044; font-size: 0.9rem; margin: 0.8rem 0 0 0;">视频来源：B 站《(美学阿姨)MatCap材质原理讲解与UE5中的实现方法》（BV1GR4y1b76n）</p>
+                </div>
+                <h3>视频学习要点（辅助笔记）</h3>
+                <p style="font-size: 0.9rem; color: #2C4044; margin-bottom: 1rem;">以下要点基于 MatCap 通用知识整理，作为观看视频时的对照清单。视频里讲师的具体操作顺序和参数请以视频为准。</p>
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <h4>讲师实操流程</h4>
+                        <p>通常从 ZBrush / Substance Designer 烘焙 Matcap 球形图开始，再到 UE5 材质编辑器搭节点，最后在场景里实测调参，对照本日志"二、研究过程"三阶段看会更清晰。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>UE5 节点关键</h4>
+                        <p>View Vector 计算、球面映射到 UV 的坐标转换、Normal Blending 强度调节是三大节点核心，对应本日志"四、技术实现要点"里的三个关键词。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>常见坑点</h4>
+                        <p>采样坐标系选择（视图空间 vs 世界空间）、法线空间转换、Matcap 图分辨率与质量，这些细节讲师通常会在现场踩坑演示，值得重点记录。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>与 PBR 的取舍</h4>
+                        <p>Matcap 性能低、风格统一但缺乏动态光照；PBR 真实但吃性能。讲师一般会给出什么时候用 Matcap、什么时候必须换 PBR 的判断标准，对应本日志"五、延伸方向"里的混合研究。</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="center-btn">

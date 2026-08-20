@@ -7,8 +7,9 @@
     <link rel="stylesheet" href="style.css">
     <style>
         body {
-            background: #121212;
-            color: #e0e0e0;
+            background: linear-gradient(180deg, #FBFAFC 0%, #F4F1F8 100%);
+            background-attachment: fixed;
+            color: #3B3340;
         }
         
         .blog-detail-container {
@@ -25,29 +26,29 @@
         .blog-detail-title {
             font-size: 2.5rem;
             margin-bottom: 1rem;
-            color: #f0f0f0;
-            text-shadow: 0 0 10px rgba(156, 39, 176, 0.5);
+            color: #6A1B9A;
+            text-shadow: 0 2px 8px rgba(186, 104, 200, 0.25);
         }
         
         .blog-detail-meta {
             font-size: 1rem;
-            color: #9e9e9e;
+            color: #8E8499;
             margin-bottom: 2rem;
         }
         
         .blog-content {
-            background: #1e1e1e;
+            background: #FFFFFF;
             border-radius: 12px;
             padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            border: 2px solid #333;
+            box-shadow: 0 10px 30px rgba(156, 39, 176, 0.12);
+            border: 2px solid #E1BEE7;
         }
         
         .section-title {
             font-size: 1.5rem;
             margin-bottom: 1.5rem;
-            color: #9C27B0;
-            border-bottom: 2px solid #9C27B0;
+            color: #8E24AA;
+            border-bottom: 2px solid #CE93D8;
             padding-bottom: 0.5rem;
         }
         
@@ -64,41 +65,42 @@
         }
         
         .feature-item {
-            background: #252525;
+            background: #F8F5FB;
             border-radius: 8px;
             padding: 1.5rem;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 12px rgba(156, 39, 176, 0.08);
+            border: 1px solid rgba(186, 104, 200, 0.15);
         }
         
         .feature-item h4 {
             margin-top: 0;
-            color: #f0f0f0;
+            color: #6A1B9A;
             margin-bottom: 0.5rem;
         }
         
         .feature-item p {
-            color: #9e9e9e;
+            color: #5E5666;
             font-size: 0.9rem;
         }
         
         .btn-back {
             display: inline-block;
             padding: 0.75rem 1.5rem;
-            background: #9C27B0;
-            color: #f0f0f0;
+            background: #BA68C8;
+            color: #FFFFFF;
             text-decoration: none;
             border-radius: 50px;
             font-weight: bold;
             transition: all 0.3s ease;
             margin-top: 2rem;
-            border: 2px solid #9C27B0;
+            border: 2px solid #BA68C8;
         }
         
         .btn-back:hover {
             transform: translateY(-3px);
-            background: #BA68C8;
-            color: #f0f0f0;
-            box-shadow: 0 10px 25px rgba(156, 39, 176, 0.4);
+            background: #9C27B0;
+            color: #FFFFFF;
+            box-shadow: 0 10px 25px rgba(156, 39, 176, 0.3);
         }
         
         @media (max-width: 768px) {
@@ -245,6 +247,45 @@
                     
                     <h3>多Pass渲染的性能问题</h3>
                     <p>多层渲染虽然效果好，但性能消耗大。优化方案包括LOD技术、视距剔除、简化远处毛发细节等。</p>
+                </div>
+                
+                <h2 class="section-title">学习视频 · XGen 交互式毛发梳理分享</h2>
+                <div class="section-content">
+                    <p style="margin-bottom: 1rem;">下面这段 B 站分享视频专门讲 Maya XGen Interactive Grooming（交互式毛发梳理）的实操流程，作为本日志"引导线系统"与"毛发的制作方式"板块的实践补充。看完后再回头看上面的概念会更有抓手。</p>
+                    <div style="background: #F8F5FB; border-radius: 12px; padding: 1.2rem; border: 2px solid #BA68C8; box-shadow: 0 5px 20px rgba(156, 39, 176, 0.15); margin: 1.5rem 0;">
+                        <div style="aspect-ratio: 16/9; width: 100%; overflow: hidden; border-radius: 8px; position: relative;">
+                            <iframe src="https://player.bilibili.com/player.html?bvid=BV1Rw836vEeH&page=1&high_quality=1&danmaku=0&autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>
+                        </div>
+                        <p style="text-align: center; color: #8E8499; font-size: 0.9rem; margin: 0.8rem 0 0 0;">视频来源：B 站《Xgen 交互式分享》（BV1Rw836vEeH）</p>
+                    </div>
+                    <h3 style="color: #8E24AA; margin-top: 1.5rem;">视频学习要点（辅助笔记）</h3>
+                    <p style="color: #5E5666; font-size: 0.9rem; margin-bottom: 1rem;">以下要点基于 XGen I.G. 通用知识整理，作为观看视频时的对照清单。视频里讲师的具体操作顺序和参数请以视频为准。</p>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <h4>核心机制</h4>
+                            <p>XGen Interactive Grooming 基于引导线 + 笔刷交互，区别于传统描述式 XGen（基于 Description + Expression），最大特点是所见即所得、可直接在视口里梳理。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>主要笔刷</h4>
+                            <p>梳理 Comb、修剪 Trim、密度笔刷 Density、缩放笔刷 Scale、平移 Translate、遮罩 Mask 等，配合不同笔刷半径与衰减曲线控制局部形态。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>修改器堆栈</h4>
+                            <p>Curl 卷曲、Noise 扰动、Clump 聚集、Bunch 束起等修改器可堆叠，顺序影响最终结果，类似节点但不可任意重排，需要规划堆叠层次。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>属性传递</h4>
+                            <p>可将 I.G. 烘焙回传统 XGen Description，或导出为 Alembic 缓存供其他 DCC/引擎使用，是 I.G. 接入下游管线的关键节点。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>与引擎衔接</h4>
+                            <p>通过引导线烘焙 / .abc 缓存接入 Unity/UE 的毛发系统，I.G. 是实时毛发制作常用的上游梳理工具，需要确认引擎端的导入规则与单位。</p>
+                        </div>
+                        <div class="feature-item">
+                            <h4>与同类工具对比</h4>
+                            <p>I.G. 偏手 K 美术风格梳理，Houdini Fur 偏程序化控制，Yeti 偏节点图组合。美术主导风格化选 I.G.，技术主导批量生成选 Houdini/Yeti。</p>
+                        </div>
+                    </div>
                 </div>
                 
                 <h2 class="section-title">总结与展望</h2>
