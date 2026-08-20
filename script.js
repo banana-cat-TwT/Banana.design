@@ -2824,7 +2824,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const navToggleBtn = document.getElementById('navToggleBtn');
     const navCloseBtn = document.getElementById('navCloseBtn');
     const navLinks = document.querySelectorAll('.side-nav-link');
-    const sections = document.querySelectorAll('section[id]');
+    // 把 <footer id="contact"> 也纳入滚动观察范围，防止滑到页脚时联系方式不高亮
+    const sections = Array.prototype.concat.call(
+        Array.prototype.slice.call(document.querySelectorAll('section[id]')),
+        document.querySelectorAll('footer[id]')
+    );
+
+    // 顶部导航也用平滑滚动，不然联系方式点下去是硬跳
+    const topNavLinks = document.querySelectorAll('header nav ul > li > a[href^="#"]');
+    topNavLinks.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const targetId = this.getAttribute('href');
+            if (!targetId || targetId === '#' || targetId.length < 2) return;
+            const target = document.querySelector(targetId);
+            if (!target) return;
+            e.preventDefault();
+            window.scrollTo({ top: target.offsetTop, behavior: 'smooth' });
+        });
+    });
     
     // 切换导航展开/收起
     navToggleBtn.addEventListener('click', function() {
@@ -3724,4 +3741,56 @@ document.addEventListener('visibilitychange', function() {
         }, 200);
     }
 });
-// ===== 修复结束 =====
+
+// ===== 微信号复制弹窗 =====
+(function() {
+    var WECHAT_ID = 'httpnotonl1';
+    function openWechatModal() {
+        var el = document.getElementById('wechatModal');
+        if (el) {
+            el.classList.add('active');
+            var hint = document.getElementById('wechatCopyHint');
+            if (hint) hint.classList.remove('show');
+        }
+    }
+    function closeWechatModal() {
+        var el = document.getElementById('wechatModal');
+        if (el) el.classList.remove('active');
+    }
+    function fallbackCopy(text) {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); } catch (e) {}
+        document.body.removeChild(ta);
+    }
+    function copyWechatId() {
+        var hint = document.getElementById('wechatCopyHint');
+        function showDone() {
+            if (hint) {
+                hint.classList.add('show');
+                setTimeout(function() { hint.classList.remove('show'); }, 2200);
+            }
+        }
+        if (window.navigator && window.navigator.clipboard && window.navigator.clipboard.writeText) {
+            window.navigator.clipboard.writeText(WECHAT_ID).then(showDone).catch(function() {
+                fallbackCopy(WECHAT_ID);
+                showDone();
+            });
+        } else {
+            fallbackCopy(WECHAT_ID);
+            showDone();
+        }
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') closeWechatModal();
+    });
+    window.openWechatModal = openWechatModal;
+    window.closeWechatModal = closeWechatModal;
+    window.copyWechatId = copyWechatId;
+})();
+
+// ===== 淇缁撴潫 ===== 修复结束 =====

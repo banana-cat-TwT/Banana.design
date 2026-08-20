@@ -176,6 +176,12 @@
                         <span class="nav-text" data-i18n="nav.messageboard">留言板</span>
                     </a>
                 </li>
+                <li class="side-nav-item">
+                    <a href="#contact" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text" data-i18n="nav.contact">联系方式</span>
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -192,6 +198,7 @@
         <nav>
             <ul>
                 <li><a href="#works" data-i18n="topnav.works">作品展示</a></li>
+                <li><a href="#contact" data-i18n="topnav.contact">联系方式</a></li>
                 <li><a href="#characters" data-i18n="topnav.characters">角色展示</a></li>
                 <li><a href="#items" data-i18n="topnav.items">道具展示</a></li>
                 <li><a href="#games" data-i18n="topnav.games">小游戏</a></li>
@@ -2117,7 +2124,7 @@
         </section>
     </main>
 
-    <footer>
+    <footer id="contact">
         <div class="footer-content">
             <div class="footer-section">
                 <h3>BananaCatOnl1</h3>
@@ -2133,14 +2140,36 @@
             <div class="footer-section">
                 <h3 data-i18n="footer.social">社交媒体</h3>
                 <div class="social-links">
-                    <a href="#" class="social-icon icon-wechat"></a>
-                    <a href="#" class="social-icon icon-weibo"></a>
-                    <a href="#" class="social-icon icon-github"></a>
+                    <a href="javascript:void(0)" class="social-icon icon-wechat" onclick="openWechatModal()" title="微信"></a>
+                    <a href="#" class="social-icon icon-weibo" title="微博"></a>
+                    <a href="#" class="social-icon icon-github" title="GitHub"></a>
                 </div>
             </div>
         </div>
         <p class="footer-bottom" data-i18n="footer.copyright">&copy; 2026 我的作品集</p>
     </footer>
+
+    <!-- 微信号复制弹窗 -->
+    <div id="wechatModal" class="wechat-modal-overlay" onclick="if(event.target === this) closeWechatModal()">
+        <div class="wechat-modal">
+            <div class="wechat-modal-header">
+                <span class="wechat-modal-title">加个微信 👋</span>
+                <button class="wechat-modal-close" onclick="closeWechatModal()" aria-label="关闭">×</button>
+            </div>
+            <p class="wechat-modal-tip">手机相机 / 微信「扫一扫」直接加我，或者手动复制微信号～</p>
+            <div class="wechat-qrcode-wrap">
+                <img src="image/weixin.jpg" alt="微信二维码" class="wechat-qrcode-img" onerror="this.style.display='none';this.parentNode.classList.add('qr-failed');">
+                <p class="wechat-qrcode-caption">扫码直接加好友</p>
+            </div>
+            <div class="wechat-or">—— 或者手动复制 ——</div>
+            <div class="wechat-id-row">
+                <span class="wechat-id-label">微信号</span>
+                <span class="wechat-id-value" id="wechatIdText">httpnotonl1</span>
+            </div>
+            <button class="wechat-copy-btn" onclick="copyWechatId()">📋 一键复制微信号</button>
+            <div class="wechat-copy-hint" id="wechatCopyHint">已复制！打开微信粘贴搜索就行 🎉</div>
+        </div>
+    </div>
 
     <!-- 作品详情模态框 -->
     <div id="workDetailModal" class="modal">

@@ -6450,6 +6450,11 @@ footer {
 /* 占位图标样式 */
 .icon-wechat {
     background-color: #07C160;
+    background-image: url("image/weixin2.png");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .icon-weibo {
@@ -6462,6 +6467,157 @@ footer {
 
 /* 提示：替换为实际图标时，添加 background-image 属性 */
 /* 例如：.icon-wechat { background-image: url('path/to/wechat-icon.png'); } */
+
+/* ===== 微信号复制弹窗 ===== */
+.wechat-modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 99999;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+.wechat-modal-overlay.active {
+    display: flex;
+    animation: wechatFadeIn 0.22s ease-out;
+}
+@keyframes wechatFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+.wechat-modal {
+    width: min(380px, 100%);
+    background: linear-gradient(160deg, #ffffff 0%, #f4fff7 100%);
+    border-radius: 18px;
+    padding: 1.6rem 1.5rem 1.4rem;
+    box-shadow: 0 20px 50px rgba(7, 193, 96, 0.25), 0 8px 24px rgba(0, 0, 0, 0.25);
+    border: 2px solid rgba(7, 193, 96, 0.35);
+    position: relative;
+    animation: wechatPopIn 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes wechatPopIn {
+    from { transform: scale(0.85) translateY(10px); opacity: 0; }
+    to   { transform: scale(1)    translateY(0);    opacity: 1; }
+}
+.wechat-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.7rem;
+}
+.wechat-modal-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #07C160;
+}
+.wechat-modal-close {
+    background: #f0f0f0;
+    border: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    line-height: 1;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.2s;
+}
+.wechat-modal-close:hover { background: #e2e2e2; color: #333; transform: rotate(90deg); }
+.wechat-modal-tip {
+    margin: 0 0 1.1rem;
+    color: #555;
+    font-size: 0.92rem;
+    line-height: 1.6;
+    text-align: center;
+}
+.wechat-qrcode-wrap {
+    width: 210px;
+    margin: 0 auto 0.4rem;
+    padding: 14px 14px 8px;
+    background: #fff;
+    border: 2px solid #07C160;
+    border-radius: 14px;
+    box-shadow: 0 6px 18px rgba(7, 193, 96, 0.18);
+    text-align: center;
+}
+.wechat-qrcode-wrap.qr-failed { display: none; }
+.wechat-qrcode-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    image-rendering: -webkit-optimize-contrast;
+}
+.wechat-qrcode-caption {
+    margin: 6px 0 0;
+    font-size: 0.82rem;
+    color: #07C160;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+.wechat-or {
+    text-align: center;
+    color: #999;
+    font-size: 0.82rem;
+    margin: 1rem 0 0.7rem;
+    letter-spacing: 2px;
+}
+.wechat-id-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f4fff7;
+    border: 1.5px dashed #07C160;
+    border-radius: 10px;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.1rem;
+}
+.wechat-id-label {
+    color: #07C160;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+.wechat-id-value {
+    font-family: 'Consolas', 'Menlo', monospace;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #0a7d3f;
+    letter-spacing: 0.5px;
+    user-select: all;
+}
+.wechat-copy-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #07C160 0%, #06ad56 100%);
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 12px rgba(7, 193, 96, 0.3);
+}
+.wechat-copy-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(7, 193, 96, 0.4);
+}
+.wechat-copy-btn:active { transform: translateY(0); }
+.wechat-copy-hint {
+    text-align: center;
+    color: #07C160;
+    font-size: 0.85rem;
+    margin-top: 0.7rem;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.25s;
+}
+.wechat-copy-hint.show { opacity: 1; }
 
 .footer-bottom {
     text-align: center;
