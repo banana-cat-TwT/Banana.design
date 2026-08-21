@@ -1268,6 +1268,15 @@ nav ul li a:hover::after {
     border: 1px solid rgba(255, 159, 67, 0.3);
 }
 
+.news-update-note {
+    text-align: center;
+    margin: 6px 0 14px;
+    color: rgba(255, 159, 67, 0.6);
+    font-size: 0.8rem;
+    letter-spacing: 0.5px;
+    font-style: italic;
+}
+
 .archive-modal {
     position: fixed;
     top: 0;
