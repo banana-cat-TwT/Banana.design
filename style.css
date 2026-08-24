@@ -1863,6 +1863,29 @@ nav ul li a:hover::after {
     color: #5A4F42;
 }
 
+.work-card-lingchuan {
+    background: linear-gradient(135deg, #F6D488, #E9A94B);
+    border: 2px solid #D08A2E;
+}
+
+.work-card-lingchuan:hover {
+    box-shadow: 0 5px 25px rgba(233, 169, 75, 0.5);
+}
+
+.work-card-lingchuan .work-info h3 {
+    color: #7A4A12;
+    text-shadow: 0 0 10px rgba(246, 212, 136, 0.5);
+}
+
+.work-card-lingchuan .work-info p {
+    color: #8A5B24;
+}
+
+.work-card-lingchuan .work-tags .tag {
+    background: rgba(122, 74, 18, 0.18);
+    color: #7A4A12;
+}
+
 .work-image {
     display: flex;
     width: 100%;
