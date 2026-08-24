@@ -254,7 +254,7 @@
 
         <section id="news" class="parallax-section" style="background: #0a0a0a;">
             <div class="news-content">
-                <h2 class="elastic-element">📰 <span data-i18n="news.title">每日新闻</span> | 2026-08-22</h2>
+                <h2 class="elastic-element">📰 <span data-i18n="news.title">每日新闻</span> | 2026-08-23</h2>
                 <p class="news-update-note">🕐 每天下午 3:00 更新</p>
                 <div class="news-tabs elastic-element">
                     <button class="news-tab active" onclick="switchNewsTab('ai')" data-i18n="news.tab.ai">🤖 AI</button>
@@ -270,12 +270,12 @@
                         <div class="news-card news-card-1 elastic-element">
                             <div class="news-number">①</div>
                             <div class="news-info">
-                                <h3>Google发布DiffusionGemma：扩散式文本生成，单卡H100跑出1500 tokens/s</h3>
-                                <p>Google发布DiffusionGemma技术报告，采用扩散机制替代传统自回归生成，以256 token块为单位并行生成文本。单张H100上推理速度达到1500 tokens/s。这是文本生成范式的结构性突破——自回归（逐token生成）是GPT系列的速度瓶颈，扩散并行生成直接把速度拉高一整个数量级。对AI Coding工具影响深远：代码补全/生成对延迟极度敏感，1500 tokens/s意味着"即敲即出"的IDE体验可能成为标配。与OpenAI GPT-5.6 Sol"Ultrafast"模式（750 tokens/s，Cerebras WSE-3专用硬件）形成对照：DiffusionGemma用单张H100就跑出2倍速度，成本门槛更低。</p>
+                                <h3>OpenAI下调GPT-5.6 Sol API价格：输入降20%、输出降33%，首度对最强旗舰模型动刀</h3>
+                                <p>OpenAI于8月22日宣布，未来三个月内将旗舰模型GPT-5.6 Sol的开发者价格下调逾20%。具体为：输入从5美元/百万Tokens降至4美元（-20%），输出从30美元降至20美元（-33%），缓存与长上下文费用同步下调；API已即时生效，ChatGPT Work与Codex Credits逐步推送。这是Sol自7月发布以来首次降价，也是OpenAI首次对最强旗舰模型动刀，标志着大模型价格战从"中杯大杯"蔓延到"超大杯"。输出端降幅（33%）大于输入端，直接利好代码生成、长文本写作等高生成量场景，AI Coding工具的成本曲线进一步下移。与Anthropic冲刺史上最大IPO形成对照：模型越卖越便宜，头部公司估值越涨越高，AI应用层"成本下移时刻"正在到来。</p>
                                 <div class="news-tags">
-                                    <span class="tag">DiffusionGemma</span>
-                                    <span class="tag">扩散文本生成</span>
-                                    <span class="tag">1500 tokens/s</span>
+                                    <span class="tag">GPT-5.6 Sol降价</span>
+                                    <span class="tag">输入-20%输出-33%</span>
+                                    <span class="tag">AI应用成本下移</span>
                                 </div>
                             </div>
                         </div>
@@ -283,12 +283,12 @@
                         <div class="news-card news-card-2 elastic-element">
                             <div class="news-number">②</div>
                             <div class="news-info">
-                                <h3>Anthropic挖来谷歌TPU创始人自研芯片，冲刺AI行业史上最大规模IPO</h3>
-                                <p>Anthropic聘请谷歌定制芯片业务创始人Amir Salek组建自研AI芯片团队，同时与英国芯片初创Fractile达成约2.5亿美元采购协议，计划锁定2027年约3.5GW的下一代TPU容量，并与三星联合设计定制硬件。Anthropic估值已达3800亿美元，正筹备AI行业史上最大规模IPO；自研芯片是"去英伟达化"的关键一步。博通正在谈判超600亿美元AI芯片债务融资，Google已为Anthropic搭建超1500亿美元的基础设施融资体系——AI算力正在金融化。对AI Coding生态：头部模型公司从"租卡"转向"造卡"，长期将重塑API定价权和供应链格局。</p>
+                                <h3>英伟达上架550B指令跟随教师模型，同日ARC-AGI-3公开关100%满分通关</h3>
+                                <p>英伟达在Hugging Face上架一款550B参数指令跟随教师模型，主打约束遵循、结构化输出与格式控制，定位为蒸馏与后训练的教师底座。另据Hugging Face联合创始人Clement Delangue透露，英伟达自建的CUDA内核优化编码框架在ARC-AGI-3的25个公开游戏、183个关卡中全部通关，取得100%通过率。高质量教师模型公开，意味着中小团队可以把有限算力花在偏好对齐与领域数据上，无需从头训练超大模型，开源/闭源模型的能力差距可能通过蒸馏快速收敛。ARC-AGI-3满分不再是纯研究指标，而是"模型自己优化CUDA内核"的工程信号——AI Coding正从"写业务代码"下沉到"优化底层基础设施"。两条新闻同日出现，显示英伟达在"模型+编译/内核优化"双线上同时卡位。</p>
                                 <div class="news-tags">
-                                    <span class="tag">Anthropic自研芯片</span>
-                                    <span class="tag">AI行业IPO</span>
-                                    <span class="tag">算力金融化</span>
+                                    <span class="tag">550B教师模型</span>
+                                    <span class="tag">ARC-AGI-3满分</span>
+                                    <span class="tag">英伟达双线卡位</span>
                                 </div>
                             </div>
                         </div>
@@ -296,12 +296,12 @@
                         <div class="news-card news-card-3 elastic-element">
                             <div class="news-number">③</div>
                             <div class="news-info">
-                                <h3>Mojo编程语言全面开源（Apache 2.0协议），AI原生语言进入主流</h3>
-                                <p>Modular公司正式发布完整的Mojo编译器和工具链，采用Apache 2.0开源协议。Mojo是一款为AI开发设计的编程语言，兼具Python的易用性和C级别的性能，上周刚发布1.0正式版。AI Coding赛道从"模型层"（GPT/Claude）向下延伸到"语言层"——如果AI原生语言成为主流，整个开发工具链将被重新定义。Apache 2.0协议意味着企业可自由商用，对构建AI基础设施的公司是重大利好。与Python生态的兼容策略（易用性）+ C级性能，瞄准的正是当前AI工程化中"Python慢、C++难"的痛点。</p>
+                                <h3>WRC 2026：中国人形机器人半年出货超4万台、全球占比97%，真正稳定"干活"的不足5%</h3>
+                                <p>2026世界机器人大会（WRC）8月19-23日在北京举行。据《2026人形机器人产业发展报告》，上半年中国人形机器人出货量已超4万台，全球占比进一步提升至97%。然而行业报道同时指出，大量订单仍来自科研、展厅、文旅场景，真正进厂稳定连续作业的占比不足5%。4万台/97%的数据坐实中国在全球人形机器人制造端的绝对主导，宇树、智元等头部厂商已完成规模化出货。"出货多、干活少"揭示具身智能当前最大矛盾：本体制造能力跑在智能与数据前面，行业关注点正从"能不能造出来"转向"能不能在真实环境里稳定泛化"。对3D角色/TA方向同学是明确信号：机器人需要海量高质量3D资产、动作数据与物理仿真，这与现有技能栈高度相关，是潜在的横向迁移机会。</p>
                                 <div class="news-tags">
-                                    <span class="tag">Mojo开源</span>
-                                    <span class="tag">Apache 2.0</span>
-                                    <span class="tag">AI原生语言</span>
+                                    <span class="tag">WRC 2026</span>
+                                    <span class="tag">人形机器人4万台</span>
+                                    <span class="tag">进厂不足5%</span>
                                 </div>
                             </div>
                         </div>
@@ -309,12 +309,12 @@
                         <div class="news-card news-card-4 elastic-element">
                             <div class="news-number">④</div>
                             <div class="news-info">
-                                <h3>OpenAI首次主动暂停GPT-6强化学习训练，为期两周：安全优先于速度</h3>
-                                <p>OpenAI史无前例地暂停了下一代旗舰模型的强化学习训练。奥特曼亲自宣布此举旨在确保安全、对齐与监控标准能匹配模型激增的新能力。测试显示Astra模型可能在几乎无需人工指导的情况下执行高级网络攻击。这是硅谷大厂首次主动按下AI开发"暂停键"，标志着"加速派"开始让位于"审慎派"。与8/21 Anthropic+EPFL"思维病毒"论文形成共振——安全不再是边缘议题。对AI Coding的直接影响：如果模型训练因安全审查放缓，短期内现有模型（GPT-5.6 / Claude Mythos 5）的能力窗口会被拉长，给开源/竞品更多追赶时间。</p>
+                                <h3>阿里拟配售800亿港元新股，所得款项100%投向AI基础设施，CEO称三年回本</h3>
+                                <p>8月23日，阿里巴巴宣布拟向美国境外非美国人士配售新股，募资800亿港元（约合688亿元人民币）。这是阿里2019年港股上市以来首次新股配售，所得净额将全部用于全栈AI能力建设与AI基础设施。阿里本季度Capex已达676.78亿元（同比+75%），CEO吴泳铭称AI算力投入预计三年回本、甚至缩短至两年半或两年——头部云厂商对AI资本开支回报周期的预期首次公开量化。800亿港元量级说明中国科技巨头的AI军备竞赛仍在加码，算力/数据中心/自研芯片是下一个主战场。对AI Coding与具身智能都是底层支撑：更便宜的云算力、更稳定的模型API、更大的开源生态，最终都会传导到应用层。</p>
                                 <div class="news-tags">
-                                    <span class="tag">GPT-6暂停训练</span>
-                                    <span class="tag">安全对齐</span>
-                                    <span class="tag">加速派vs审慎派</span>
+                                    <span class="tag">阿里800亿港元配售</span>
+                                    <span class="tag">AI基础设施</span>
+                                    <span class="tag">三年回本</span>
                                 </div>
                             </div>
                         </div>
@@ -322,12 +322,12 @@
                         <div class="news-card news-card-5 elastic-element">
                             <div class="news-number">⑤</div>
                             <div class="news-info">
-                                <h3>RSI（递归自我改进）成AI创业最密集赛道，半年融资超10亿美元</h3>
-                                <p>递归自我改进（RSI）成为今年AI创业最密集方向。3月起Core Automation（Jerry Tworek，OpenAI）、Recursive（Richard Socher等八人）、Mirendil、INT21、rekursiv.ai、Inherent相继公开，8月Jeff Dean等成立Discovery Loop。半年内合计融资超10亿美元，Recursive估值达46.5亿美元。RSI="AI自己改进自己"，是通往AGI的核心路径之一。对AI Coding意义：如果RSI在代码领域率先落地，意味着AI不仅能写代码，还能自己发现bug、自己优化架构、自己迭代版本——人类工程师的角色将进一步从"写"转向"审"。顶级人才正从大厂流向RSI创业。</p>
+                                <h3>高盛警告AI动能裂痕显现，Nebius 50亿美元可转债+内蒙古1361亿算力项目集中签约</h3>
+                                <p>高盛警告AI动能裂痕显现，存储与数据中心板块估值缺口最具吸引力，AI概念股短期承压，资金转向硬资产与估值洼地。AI云厂商Nebius发行50亿美元可转债，约为其年化营收3.5倍，激进融资扩张显示市场对重资产模式存在分歧。同期内蒙古1361亿元算力项目集中签约，火山引擎/寒武纪等入局，"东数西算"进入大单落地期，绿电+凉爽气候成区位优势。三条消息叠在一起看：一方面AI基建投资仍在加码（阿里800亿、内蒙1361亿），另一方面估值与泡沫质疑开始从二级市场传导（高盛、Nebius 3.5倍营收可转债），"资本投入→应用回报"的匹配度正在变成AI赛道的核心判断依据。</p>
                                 <div class="news-tags">
-                                    <span class="tag">RSI递归自我改进</span>
-                                    <span class="tag">AGI路径</span>
-                                    <span class="tag">10亿美元融资</span>
+                                    <span class="tag">高盛AI动能裂痕</span>
+                                    <span class="tag">Nebius 50亿可转债</span>
+                                    <span class="tag">内蒙古算力1361亿</span>
                                 </div>
                             </div>
                         </div>
@@ -341,12 +341,12 @@
                         <div class="news-card news-card-1 elastic-element">
                             <div class="news-number">①</div>
                             <div class="news-info">
-                                <h3>GTA6史上最大泄露进入"法律回合"：法院批传票+Take-Two行动+Xbox联手遭玩家反噬</h3>
-                                <p>黑客组织CyberLeek陆续公开《GTA6》地图、多段实机演示后，博主放出Telegram频道截图声称"最快明天、一周内放出可运行的游戏版本"。Take-Two已对CyberLeek展开法律行动，主泄露网站无法访问、部分泄露视频下架，法院已批准传票，R星启动全平台溯源追责。Xbox高层声明"正与Take-Two密切合作保护知识产权"却被评论区一边倒嘲讽，玩家把矛头指向光盘消失/数字版发行/行业垄断。黑客变现链条持续运转：Solana发币市值曾达376万美元，公开售卖后续泄露视频广告位（门槛16.4万美元加密货币）。Jason Schreier透露：2022年被黑后R星强制回办公室、限制远程工具，本次事件后内部士气再度下降。</p>
+                                <h3>GTA6泄露事件升级：113GB"本体"文件扩散，安全陷阱并发、业内警示版本控制加固</h3>
+                                <p>继8/21大规模素材泄露后，近日一款标称约113.9GB、声称是《GTA6》完整可玩开发版本的文件通过BT、下载站与社群扩散。安全机构与业内人士同步发出警示，指出不法分子正借GTA6热度设下安全陷阱（恶意软件、钓鱼）。开发版本外流不仅冲击R星的内容保密与营销节奏，也再次暴露大型3A项目供应链/内部版本管理的风险。对从业者而言，版本控制、构建水印、内部权限审计可能成为大厂后续重点加固方向。黑客"泄露+发币+直播带货"的完整变现链路仍在运转，后续几周相关的钓鱼、恶意软件流量可能会持续攀升。</p>
                                 <div class="news-tags">
-                                    <span class="tag">GTA6法律回合</span>
-                                    <span class="tag">CyberLeek变现</span>
-                                    <span class="tag">Xbox玩家反噬</span>
+                                    <span class="tag">GTA6 113GB</span>
+                                    <span class="tag">安全陷阱钓鱼</span>
+                                    <span class="tag">版本控制加固</span>
                                 </div>
                             </div>
                         </div>
@@ -354,12 +354,12 @@
                         <div class="news-card news-card-2 elastic-element">
                             <div class="news-number">②</div>
                             <div class="news-info">
-                                <h3>索尼《最后生还者Online》沉没成本近1亿美元，规模接近《美末2》</h3>
-                                <p>Jason Schreier分析索尼服务型游戏战略专题中披露：《美末》多人最初只是中小型衍生品，体量不断扩张后预算逼近《美末2》的2.2亿美元；2023年12月14日顽皮狗正式终止开发，理由是"若上线并长期运营需要全工作室资源支撑多年更新，团队不愿彻底转型为纯服务型工作室"。这是索尼服务型游戏战略最具象的代价锚点，与日前Bungie 5-6个项目夭折、36亿美元收购回报几乎全打水漂形成呼应——"硬件转ARPPU+服务型"并非新现实，是要用人命填的。长线服务型游戏的运营成本与团队文化冲突正在从"传闻"变成硬成本数据。</p>
+                                <h3>战神制作人David Jaffe评《黑神话：钟馗》：像"梦想项目"，索尼近年更像流水线</h3>
+                                <p>《战神》初代制作人David Jaffe在观看《黑神话：钟馗》15分钟实机后，称赞其角色受伤、翻滚、起身等动作细节具有"生命感"与叙事感，视觉方向统一；同时直言近年部分索尼作品给他"流水线生产"感，而《钟馗》更像有人真正投入心血的梦想项目。海外核心制作人首次将国产3A与索尼第一方直接对比并给出正面评价，说明《钟馗》在角色动画、战斗反馈、视觉统一性上已达到国际一线讨论度。对3D角色/动画同学：受伤状态机、动作叙事化、视觉一致性是可能被问及的作品集亮点。</p>
                                 <div class="news-tags">
-                                    <span class="tag">美末Online沉没成本</span>
-                                    <span class="tag">索尼服务型游戏</span>
-                                    <span class="tag">顽皮狗</span>
+                                    <span class="tag">David Jaffe评价</span>
+                                    <span class="tag">黑神话钟馗</span>
+                                    <span class="tag">索尼流水线对比</span>
                                 </div>
                             </div>
                         </div>
@@ -367,12 +367,12 @@
                         <div class="news-card news-card-3 elastic-element">
                             <div class="news-number">③</div>
                             <div class="news-info">
-                                <h3>《黑神话：钟馗》15分钟实机B站两天破1000万，敖厂长时隔两年立场反转</h3>
-                                <p>游戏科学8月20日公开《黑神话》系列第二部《黑神话：钟馗》15分钟超长实机演示，截至8/22 B站播放量突破1000万、点赞82.9万。敖厂长时隔两年态度180度逆转，最新视频称发售那天要"静静感受这视觉奇迹背后的艰辛和繁难"——2024年悟空发售前夕他曾因观点视频引发全网争议。女流66点评：场景渲染达新时代游戏高度（水下/阴天/尸体氛围"秀肌肉"）、战斗系统含完美闪避+实时处决+带属性火焰符、召唤系统可"附身"辅助角色切换武器技能、最大进步是"男主有性格有故事了，不再是天命人那种移动摄像头"。钟馗本体片尾压轴，第二款黑神话IP的剧情塑造压力反而是最大悬念。</p>
+                                <h3>《影之刃零》进入发售倒计时66天，二周目"六十六天"永久死亡模式曝光</h3>
+                                <p>距离2026/10/29全球发售仅剩66天。官方披露二周目将解锁"六十六天"模式：在最高难度基础上加入永久死亡机制，玩家仅有66次复活机会，剧情推进与战败都会消耗天数，归零则强制从头开始。该作Steam愿望单已破160万份，此前1199元实体收藏礼盒上线即售罄。国产单机在高难度动作设计+商业化周边两条线上同时推进，验证了国产3A除了预售，还有实体典藏/联名周边的变现空间。对3D角色同学：该作武器种类（30主+25副）、敌人设计是动作资产堆量的典型样本。</p>
                                 <div class="news-tags">
-                                    <span class="tag">黑神话钟馗</span>
-                                    <span class="tag">敖厂长反转</span>
-                                    <span class="tag">B站千万播放</span>
+                                    <span class="tag">影之刃零66天模式</span>
+                                    <span class="tag">160万愿望单</span>
+                                    <span class="tag">国产3A商业化</span>
                                 </div>
                             </div>
                         </div>
@@ -380,12 +380,12 @@
                         <div class="news-card news-card-4 elastic-element">
                             <div class="news-number">④</div>
                             <div class="news-info">
-                                <h3>科隆展开幕夜名单曝光：8/26凌晨巫师3全新DLC+FF7重制终章+权游RTS</h3>
-                                <p>2026德国科隆游戏展（gamescom）开幕夜直播北京时间8月26日（周三）凌晨2点开启。已确认重磅：《巫师3：狂猎》全新DLC《旧时曲》（发售约12年后推出，CDPR与Fool's Theory联合开发，被官方定位为《巫师4》前奏，揭晓杰洛特"三把剑"设定）、《最终幻想7：重制版》三部曲最终章《启示录》（总监滨口直树亲自展示）、《权力的游戏：维斯特洛之战》首次公开RTS实机。IGN重点期待：《寂静岭Townfall》《火焰纹章：万缕千丝》《使命召唤：现代战争4》。国产单机参展阵容：《昭和》《猿公剑》《抵抗者》《湮灭之潮》。</p>
+                                <h3>泄露显示《GTA6》昼夜循环或达144分钟，为前作3倍，影响开放世界光照与天气设计</h3>
+                                <p>玩家从黑客CyberLeek泄露的开发画面推算：游戏内1分钟≈现实6秒，完整24小时昼夜循环或达144分钟（2小时24分钟），约为《GTA5》《大镖客2》48分钟循环的3倍。更长的时间尺度会直接影响光照系统、天气循环、NPC行为调度、任务时间窗口等开放世界设计。对TA/3D同学：这意味着环境光照与天空盒需要更平滑的过渡曲线，夜间/黄昏时段的视觉表现权重会显著提高；开放世界里的动态光照精度、体积雾、昼夜NPC行为切换都是可以研究的专题。</p>
                                 <div class="news-tags">
-                                    <span class="tag">Gamescom 2026</span>
-                                    <span class="tag">巫师3全新DLC</span>
-                                    <span class="tag">FF7重制终章</span>
+                                    <span class="tag">GTA6 144分钟昼夜</span>
+                                    <span class="tag">光照系统</span>
+                                    <span class="tag">开放世界设计</span>
                                 </div>
                             </div>
                         </div>
@@ -393,12 +393,12 @@
                         <div class="news-card news-card-5 elastic-element">
                             <div class="news-number">⑤</div>
                             <div class="news-info">
-                                <h3>硬件端"内存危机"全面外溢：PS6掌机600美元难守+NS2 9月涨价后或再涨</h3>
-                                <p>AMD知名爆料者Kepler_L2在NeoGAF表示，PS6掌机定价600美元"绝对不现实"，根因是LPDDR内存价格持续上涨；不过索尼CFO此前透露已提前锁定2026年内存供应，现款PS5短期不会再涨。TheGamer报道：受AI产业热潮带动全球硬件元器件价格走高，任天堂已经官宣Switch 2 9月涨价，但涨价"或许还没结束"。内存紧缺不再是单一硬件问题，索尼、任天堂、AMD Radeon一条线全部承压；3A单机开发成本+主机硬件同步抬头的2026下半年产业大势已经成型。Dota2 TI15奖金池相较2021年峰值缩水近3700万美元，也从赛事侧印证了玩家娱乐预算整体收紧。</p>
+                                <h3>「PSBlackout」玩家停机抗议启动：一周不登录PSN反对索尼去光盘化，请愿超35万签名</h3>
+                                <p>由游戏保存组织Does It Play发起的「PSBlackout」抗议于8/23晚7点至8/30晚7点进行，呼吁玩家一周不开机、不登录、不消费，以回应索尼2028年起停止为PlayStation新游戏生产实体光盘的决定。此前相关Change.org请愿已获超35万签名。索尼CFO已向投资者表示抗议未对业务产生实质影响，数字化战略不变。这一事件反映了实体版衰退、数字所有权争议、玩家权益组织化的趋势，对发行策略与平台生态都有长期影响。</p>
                                 <div class="news-tags">
-                                    <span class="tag">硬件内存危机</span>
-                                    <span class="tag">PS6掌机定价</span>
-                                    <span class="tag">NS2再涨价</span>
+                                    <span class="tag">PSBlackout抗议</span>
+                                    <span class="tag">索尼去光盘化</span>
+                                    <span class="tag">35万请愿签名</span>
                                 </div>
                             </div>
                         </div>
