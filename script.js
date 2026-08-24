@@ -3147,6 +3147,14 @@ function switchCard(type) {
             title: '音轨分离工具开发日志',
             desc: '基于Python和深度学习的音频处理工具，能够将音频文件分离为多个音轨（如人声、鼓、贝斯、其他乐器等），并为每个音轨生成可视化的波形图，支持多种音频格式。',
             link: 'blog-audio-separator.html'
+        },
+        lingchuan: {
+            image: 'image/lingchuan/场景概念.png',
+            date: '2025年5月',
+            views: '0 阅读',
+            title: '《天渊庙》· 凌川 — 角色制作记录日志',
+            desc: '毕业设计初期规划的原创武侠企划，主角凌川由本人独立设计。头部相关已走完全流程PBR管线并落地；服装装备进行到低模拓扑阶段，因切换毕设项目中止。',
+            link: 'blog-tianyuanmiao-lingchuan.html'
         }
     };
 
