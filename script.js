@@ -1144,7 +1144,7 @@ function renderVideoArchive() {
         const numList = ['①', '②', '③', '④', '⑤', '⑥', '⑦', '⑧', '⑨', '⑩'];
         return '<div class="news-card elastic-element">' +
             '<div style="aspect-ratio: 16/9; width: 100%; overflow: hidden; border-radius: 8px 8px 0 0; position: relative;">' +
-            '<iframe src="https://player.bilibili.com/player.html?bvid=' + v.bvid + '&page=1&high_quality=1&danmaku=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>' +
+            '<iframe src="https://player.bilibili.com/player.html?bvid=' + v.bvid + '&page=1&high_quality=1&danmaku=0&mute=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe>' +
             '</div>' +
             '<div class="news-info">' +
             '<div style="font-size: 0.9rem; color: rgb(255, 159, 67); font-weight: bold; margin-bottom: 0.5rem;">' + numList[i] + ' · ' + v.date + '</div>' +
