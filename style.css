@@ -1864,8 +1864,8 @@ nav ul li a:hover::after {
 }
 
 .work-card-lingchuan {
-    background: linear-gradient(135deg, #f6d188, #db8840);
-    border: 2px solid #D08A2E;
+    background: linear-gradient(135deg, #edb759, #d66228);
+    border: 2px solid #d15929;
 }
 
 .work-card-lingchuan:hover {
@@ -1873,17 +1873,17 @@ nav ul li a:hover::after {
 }
 
 .work-card-lingchuan .work-info h3 {
-    color: #7A4A12;
-    text-shadow: 0 0 10px rgba(246, 212, 136, 0.5);
+    color: #7a3812;
+    text-shadow: 0 0 10px rgba(244, 172, 113, 0.5);
 }
 
 .work-card-lingchuan .work-info p {
-    color: #8A5B24;
+    color: #8a4b24;
 }
 
 .work-card-lingchuan .work-tags .tag {
     background: rgba(122, 74, 18, 0.18);
-    color: #7A4A12;
+    color: #944117;
 }
 
 .work-image {
