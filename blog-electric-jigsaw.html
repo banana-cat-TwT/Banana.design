@@ -155,6 +155,44 @@
             background: #F5B642;
         }
 
+        .back-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            text-decoration: none;
+            background: rgba(224, 161, 59, 0.08);
+            border: 2px dashed #E0A13B;
+            border-radius: 12px;
+            padding: 1.1rem 1.25rem;
+            transition: all 0.3s ease;
+            margin-top: 1.25rem;
+        }
+
+        .back-card:hover {
+            background: rgba(224, 161, 59, 0.16);
+            border-style: solid;
+            transform: translateY(-2px);
+        }
+
+        .back-card-text { flex: 1; }
+
+        .back-card-title {
+            color: #E0A13B;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .back-card-desc { font-size: 0.95rem; color: #D9D4CC; }
+
+        .back-card-arrow {
+            color: #E0A13B;
+            font-size: 1.4rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
         @media (max-width: 768px) {
             .blog-detail-content {
                 grid-template-columns: 1fr;
@@ -349,7 +387,15 @@
                             <li>开发移动版本，扩大游戏的受众范围</li>
                         </ul>
 
-                        <a href="index.html#blog" class="btn-back">返回开发日志</a>
+                        <a href="index.html#blog" class="btn-back">查看开发日志</a>
+
+                        <a href="game-circuitlink.html" class="back-card">
+                            <span class="back-card-text">
+                                <span class="back-card-title">查看电路连接游戏详情页</span>
+                                <span class="back-card-desc">想看这款游戏的概览、玩法介绍、演示视频请移步至游戏详情页查看。</span>
+                            </span>
+                            <span class="back-card-arrow">点击查看详情</span>
+                        </a>
                     </div>
                 </div>
 
