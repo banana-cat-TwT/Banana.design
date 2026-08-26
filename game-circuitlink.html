@@ -150,6 +150,43 @@
             color: #fff;
             box-shadow: 0 10px 25px rgba(217, 123, 63, 0.4);
         }
+
+        .devlog-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            text-decoration: none;
+            background: #FFF6DD;
+            border: 2px dashed #D97B3F;
+            border-radius: 12px;
+            padding: 1.1rem 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .devlog-card:hover {
+            background: #FFE8B8;
+            border-style: solid;
+            transform: translateY(-2px);
+        }
+
+        .devlog-card-text { flex: 1; }
+
+        .devlog-card-title {
+            color: #D97B3F;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+
+        .devlog-card-desc { font-size: 0.95rem; color: #6A574D; }
+
+        .devlog-card-arrow {
+            color: #D97B3F;
+            font-size: 1.4rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
         
         @media (max-width: 768px) {
             .game-detail-content {
@@ -305,7 +342,18 @@
                         <div style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
                             <img src="images/DIANLULIANJIE2.jpg" alt="电路链接制作花絮" style="max-width: 100%; height: auto; border-radius: 8px; border: 2px solid #ffd68b; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);">
                         </div>
-                        <p>这是游戏开发过程中的一张制作花絮照片，展示了游戏场景的设计和开发过程。我们团队在开发过程中注重细节，努力为玩家创造一个沉浸式的游戏体验。</p>
+                        <p>这是游戏开发过程中的制作花絮照片，展示了游戏场景的设计和开发过程。</p>
+                    </div>
+
+                    <h2 class="section-title">开发日志</h2>
+                    <div class="section-content">
+                        <a href="blog-electric-jigsaw.html" class="devlog-card">
+                            <span class="devlog-card-text">
+                                <span class="devlog-card-title">电路连接游戏开发日志</span>
+                                <span class="devlog-card-desc">想看这款游戏更详细的开发过程与技术实现可移步到这一篇日志查看详情。</span>
+                            </span>
+                            <span class="devlog-card-arrow">→</span>
+                        </a>
                     </div>
                     
                     <div style="display: flex; gap: 1rem; margin-top: 2rem;">
@@ -327,8 +375,8 @@
                     <h3>技术栈</h3>
                     <ul class="game-features">
                         <li>前端：C sharp</li>
-                        <li>游戏引擎：Unity</li>
-                        <li>美术：Photoshop,3ds Max,ZBrush,Blender,Substance Painter</li>
+                        <li>游戏引擎：Unity2021.3.23f1</li>
+                        <li>美术：Photoshop,3ds Max,ZBrush,Blender,Substance Painter,Unity</li>
                         <li>音效：Audacity</li>
                     </ul>
                     
