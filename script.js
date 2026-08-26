@@ -3227,55 +3227,6 @@ function switchCard(type) {
     if (readMore) readMore.href = data.link;
 }
 
-// 电路卡片切换函数
-function switchCircuitCard(type) {
-    const card = document.getElementById('circuit-card');
-    if (!card) return;
-
-    const cardData = {
-        game: {
-            date: '2026年4月23日',
-            views: '0 阅读',
-            title: '电路链接游戏开发日志',
-            desc: '基于Unity URP渲染管线开发的益智类游戏，玩家需要通过连接电路来解决各种谜题。游戏采用现代化的视觉风格，结合了物理模拟和逻辑推理元素，为玩家提供了富有挑战性的游戏体验。',
-            link: 'blog-electric-jigsaw.html'
-        },
-        effect: {
-            date: '2026年4月22日',
-            views: '0 阅读',
-            title: '电路效果开发日志',
-            desc: '记录了在电路效果开发方面的探索和实践，包括电路板、跳电、单根电等电路相关的视觉效果。',
-            link: 'blog-circuit.html'
-        },
-        scene: {
-            date: '2026年4月23日',
-            views: '0 阅读',
-            title: '场景效果开发日志',
-            desc: '整理了一系列场景效果，包括云效果、交替时间段着色器、扰动效果等多种视觉效果的开发过程。这些录屏记录了从概念设计到技术实现的完整开发流程。',
-            link: 'blog-screen-recordings.html'
-        }
-    };
-
-    const data = cardData[type];
-    if (!data) return;
-
-    // 更新日期和阅读量
-    const dateSpan = card.querySelector('.blog-date');
-    const viewsSpan = card.querySelector('.blog-views');
-    if (dateSpan) dateSpan.textContent = data.date;
-    if (viewsSpan) viewsSpan.textContent = data.views;
-
-    // 更新标题和描述
-    const h3 = card.querySelector('h3');
-    const p = card.querySelector('p');
-    if (h3) h3.textContent = data.title;
-    if (p) p.textContent = data.desc;
-
-    // 更新阅读全文链接
-    const readMore = card.querySelector('.read-more');
-    if (readMore) readMore.href = data.link;
-}
-
 // 大一综合记录卡片切换函数
 function switchFineArtCard(type) {
     const card = document.getElementById('fineart-card');
