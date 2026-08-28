@@ -356,6 +356,66 @@
                 transform: translate(-50%, -50%) scale(0.3);
             }
         }
+
+        /* ===== 本页章节导航栏 ===== */
+        .toc-sidebar {
+            position: fixed;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 190px;
+            z-index: 99;
+            background: #F7FAEA;
+            border: 1px solid #DCE6BE;
+            border-radius: 14px;
+            padding: 18px 14px;
+            box-shadow: 0 4px 24px rgba(140, 175, 78, 0.18);
+        }
+        .toc-sidebar .toc-title {
+            font-size: 1rem;
+            font-weight: bold;
+            color: var(--highlight);
+            text-align: center;
+            margin-bottom: 14px;
+        }
+        .toc-sidebar ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .toc-sidebar li {
+            margin-bottom: 6px;
+        }
+        .toc-sidebar a {
+            display: block;
+            padding: 8px 12px;
+            color: var(--light-bg-soft);
+            text-decoration: none;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            border-radius: 8px;
+            border-left: 3px solid transparent;
+            word-wrap: break-word;
+            transition: all 0.2s ease;
+        }
+        .toc-sidebar a:hover {
+            background: #F2F6DF;
+            color: var(--highlight);
+        }
+        .toc-sidebar a.active {
+            background: #F2F6DF;
+            color: var(--highlight);
+            border-left-color: var(--highlight);
+            font-weight: bold;
+        }
+        .blog-detail-container {
+            margin-left: 230px;
+            margin-right: 24px;
+        }
+        @media (max-width: 960px) {
+            .toc-sidebar { display: none; }
+            .blog-detail-container { margin-left: 0; margin-right: 0; }
+        }
     </style>
 
     <!-- 51.la 访客统计 V6 -->
@@ -420,9 +480,21 @@
         </div>
     </nav>
 
+    <!-- 本页章节导航 -->
+    <aside class="toc-sidebar" id="tocSidebar">
+        <div class="toc-title">本页目录</div>
+        <ul>
+            <li><a href="#overview" class="toc-link active">项目概述</a></li>
+            <li><a href="#background" class="toc-link">背景与出发点</a></li>
+            <li><a href="#problems" class="toc-link">遇到的问题与解决方案</a></li>
+            <li><a href="#summary" class="toc-link">经验总结</a></li>
+            <li><a href="#plans" class="toc-link">后续计划</a></li>
+        </ul>
+    </aside>
+
     <div class="blog-detail-container">
         <div class="blog-content">
-            <section class="blog-section">
+            <section class="blog-section" id="overview">
                 <h2>项目概述</h2>
                 <p>这是一个半人工半AI、在3.5小时内完成的PBR全流程FPS角色制作项目。通过串联多种AI工具实现自动化管线，从概念设计到大部分PBR材质输出由AI完成，眼球、睫毛、眉毛、发片等关键细节为全手工制作，将传统数天的角色制作周期压缩到半天内。</p>
                 
@@ -447,7 +519,7 @@
                 </div>
             </section>
 
-            <section class="blog-section">
+            <section class="blog-section" id="background">
                 <h2>背景与出发点</h2>
                 <p>天美项目结束后，连续两天沉浸在《星露谷》的游戏放松中，突然想起此前某项目组提出的关于制作FPS角色案例的建议。基于这个灵感，于夜间着手开发了一个全身FPS角色模型。</p>
                 
@@ -469,7 +541,7 @@
                 </ul>
             </section>
 
-            <section class="blog-section">
+            <section class="blog-section" id="problems">
                 <h2>遇到的问题与解决方案</h2>
 
                 <div class="problem-box">
@@ -498,7 +570,7 @@
                 </div>
             </section>
 
-            <section class="blog-section">
+            <section class="blog-section" id="summary">
                 <h2>经验总结</h2>
                 <div class="team-info">
                     <p>通过这次3.5小时的全流程实验，验证了AI工作流配合少量人工精修，已可完成从概念设计到PBR材质输出的角色制作，其中眼球、睫毛、眉毛、发片为全手工制作，其余环节由AI完成。但也要客观承认：由于主体结构没有人工重做、也没有做全程后期修正，这次产出的角色质量距离直接用于真正的商业游戏项目还有明显差距——整体造型偏臃肿，部分细节和比例虽然符合基本要求，但离上线可用的美术标准还差得远，只能作为概念验证和流程探索的样例来看。</p>
@@ -515,7 +587,7 @@
                 <p>目前AI仍处于快速发展阶段，纯自动化生成的质量自然也不能强求一步到位。这个实验更重要的意义是验证了AI工作流配合少量人工精修，能跑通PBR角色全流程，对于前期概念验证、快速出样、节省人力是有帮助的，但要真正落地到游戏项目里，后续还是少不了人工的打磨与把控。输出质量与最终可用性随AI迭代持续提升，后续将继续探索更短时间、更高完成度的自动化管线。</p>
             </section>
 
-            <section class="blog-section">
+            <section class="blog-section" id="plans">
                 <h2>后续计划</h2>
                 <p>把这个角色改成真正可以上线的角色。</p>
             </section>
@@ -571,6 +643,34 @@
         generateWatermark();
         setInterval(generateWatermark, 30000);
         window.addEventListener('resize', generateWatermark);
+    </script>
+
+    <script>
+        // ===== 本页章节导航滚动高亮 =====
+        (function() {
+            var ids = ['overview', 'background', 'problems', 'summary', 'plans'];
+            var links = document.querySelectorAll('.toc-link');
+            var sections = ids.map(function(id) { return document.getElementById(id); }).filter(Boolean);
+
+            function updateActive() {
+                var scrollPos = window.scrollY + 120;
+                var currentId = sections.length ? sections[0].id : null;
+                sections.forEach(function(sec) {
+                    var top = sec.getBoundingClientRect().top + window.scrollY;
+                    if (top <= scrollPos) {
+                        currentId = sec.id;
+                    }
+                });
+                links.forEach(function(link) {
+                    var isActive = link.getAttribute('href') === '#' + currentId;
+                    link.classList.toggle('active', isActive);
+                });
+            }
+
+            window.addEventListener('scroll', updateActive);
+            window.addEventListener('resize', updateActive);
+            window.addEventListener('load', updateActive);
+        })();
     </script>
 
     <script>
