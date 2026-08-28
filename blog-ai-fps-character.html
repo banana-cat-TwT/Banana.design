@@ -473,16 +473,16 @@
                 <div class="problem-box">
                     <h4>AI模型拓扑质量不稳定</h4>
                     <p>早期生成的模型虽然外观细节丰富，但拓扑结构混乱，无法直接用于游戏。解决方案是在工作流中接入专门负责拓扑的AI模型，并在提示词中明确四边形面数与布线走向要求，在保留外观细节的同时直接获得符合工程标准的干净拓扑。</p>
-                    <video controls autoplay muted loop playsinline style="width: 100%; border-radius: 12px; background: #EAF0D8; margin-top: 15px;">
+                    <video controls autoplay muted loop playsinline style="width: 50%; border-radius: 12px; background: #EAF0D8; display: block; margin: 15px auto 0;">
                         <source src="videos/FPS1/FPS1.mp4" type="video/mp4">
                         您的浏览器不支持视频播放，请点击 <a href="videos/FPS1/FPS1.mp4">下载视频</a>
                     </video>
                     <p style="margin-top: 0.8rem;">第一次生成的头盔低模拓扑。尽管单个装备的AI拓扑效果相比前几个月已有明显进步，但仍能看到不少可以优化的地方。布线存在许多打结、凌乱的节点，其中不少其实并没有必要，本可以直接烘焙到贴图上而无需专门布线；一些回字形、环形的结构本可以用一个面就直接概括，AI却容易把这些结构逐层都生成出来；本应平滑的表面反而出现了多余的拓扑。最明显的是头盔内部，头盔表面线条很少、比较正常，内部却堆了大量四边面，这正是AI容易读错内部结构的典型表现。</p>
-                    <video controls autoplay muted loop playsinline style="width: 100%; border-radius: 12px; background: #EAF0D8; margin-top: 15px;">
+                    <video controls autoplay muted loop playsinline style="width: 50%; border-radius: 12px; background: #EAF0D8; display: block; margin: 15px auto 0;">
                         <source src="videos/FPS1/FPS2.mp4" type="video/mp4">
                         您的浏览器不支持视频播放，请点击 <a href="videos/FPS1/FPS2.mp4">下载视频</a>
                     </video>
-                    <p style="margin-top: 0.8rem;">第二次生成的头盔低模拓扑，相比第一次有明显改善。回字形的结构已经变成一个面直接概括，整体结构更简洁；圆形部分从向内塌缩的拓扑改成了两点连线拓扑；绑带第一次出现的破面这次也没有了。不过头盔内部仍然堆了大量四边面，内部结构依旧是AI拓扑比较容易犯错的地方。</p>
+                    <p style="margin-top: 0.8rem;">第二次生成的头盔低模拓扑，回字形的结构已经变成一个面直接概括，圆形部分也从向内塌缩的拓扑改成了两点连线拓扑，绑带第一次出现的破面这次也没有了。不过表面上的线反而变多了，还是存在不少打结的地方，部分线条甚至重叠在一起，表面拉的线依然偏多。如果不是在PC端运行，其实不需要在表面布这么多线，一般手游的布线只要比第一次生成的头盔表面再少一些就够了。另外头盔内部依旧堆了大量四边面，内部结构仍然是AI拓扑比较容易犯错的地方。</p>
                 </div>
 
                 <div class="problem-box">
