@@ -1388,6 +1388,13 @@ const archiveData = {
             { title: 'AI 价格战全面升级：OpenAI 降价 80%，Anthropic 同步降价', desc: 'OpenAI 将 GPT-5.6 Luna 价格下调 80%（输入 $1→$0.2/M Token，输出 $6→$1.2/M），中档 Terra 降价 20%，旗舰 Sol 新增 2.5 倍速 Fast 模式。Anthropic 紧随其后推出 Claude Opus 5（定价为 Fable 5 的一半），取消原定 9 月 Sonnet 5 涨价计划。降价压力直接来自中国竞争者：DeepSeek、阿里 Qwen 等低成本模型持续压缩海外厂商利润空间。谷歌也以更低价 Gemini 3.7 Flash 加入竞争。AI 模型业务正从"比谁更贵"全面转向"比谁更值"，当模型价格趋同，生态和工具链将成为新的差异化。', tags: ['OpenAI降价', 'Anthropic', '价格战'] },
             { title: '端侧算力与机器人算力双线爆发：4.8 亿美元砸向 Agent 芯片', desc: '端侧 Agent 芯片新贵获 4.8 亿美元融资，首颗 AI 芯片已进入量产阶段，端侧算力赛道从概念验证进入商业化落地。机器人走进真实物理世界的算力需求两年暴增 10 倍，通过技术手段可少花一半成本、部署效率提升 80%。下周（8/17-23）为机器人链催化密集周：宇树科技预计挂牌上市、世界机器人大会及人形机器人运动会相继举行，中金预测智谱、MINIMAX 有望纳入恒指。具身智能从"演示阶段"进入"算力军备竞赛阶段"，算力需求两年 10 倍增长意味着机器人不再只是机械问题，而是算力+算法+数据的复合挑战。', tags: ['端侧Agent芯片', '机器人算力', '具身智能'] }
         ]},
+        '2026-08-28': { preview: '英伟达Q2财报营收962亿美元同比翻倍并给出下财年70%增长指引、英伟达129亿美元收购Hugging Face掌控模型分发、腾讯混元Hy4-preview开源804B MoE 1M上下文、Anthropic启动MHS硬件版MCP接管物理设备、宇树一周市值蒸发近2000亿王兴兴坦言场景落地才是拐点...', cards: [
+            { title: '英伟达 Q2 财报炸裂：营收 962 亿美元同比 +106%，黄仁勋给出下财年 +70% 长期指引', desc: 'FY27 Q2 营收 962 亿美元（同比 +106%），净利润 600 亿美元、毛利率约 75%，数据中心业务 890 亿美元（+117%）。黄仁勋罕见给出"下一财年营收预计跃升 70%"的长期指引，回应算力见顶、客户自研等质疑。单日市值增加约 4420 亿美元，仅次于微软纪录。对 3D/算力从业者：Vera Rubin 量产 + 70% 增长意味着算力价格短期难跌，反而可能因 GB300/Rubin 切换出现结构性紧缺。', tags: ['英伟达Q2', '营收+106%', '70%长期指引'] },
+            { title: '英伟达 129 亿美元收购 Hugging Face，从"卖铲子"到"掌控分发"', desc: '英伟达以 129 亿美元（约 867 亿人民币）全资收购 Hugging Face，溢价约 86 倍年化收入。HF 托管 300 万+ 模型仓库、服务 1300 万开发者，叠加 Stripe 80 亿收购 OpenRouter，AI 中间层（路由+分发）已被金融+算力巨头瓜分。对 3D 资产生成：HF 是 TripoSR、Trellis、混元等模型常用发布平台，关注国内是否被迫迁向 ModelScope。', tags: ['Hugging Face', '129亿美元', '开源分发'] },
+            { title: '腾讯混元 Hy4-preview 开源：804B MoE / 49B 激活 / 1M 上下文', desc: '腾讯混元 8/28 在 Hugging Face 等平台开源 Hy4-preview 及 FP8 量化版，总参数 770B（含 MTP 层 804B），每 token 激活 49B，100 万 token 上下文，Gated DSA 注意力 + iHC 残差连接。内部 203 项工程任务盲测 2.99 分略胜 GLM-5.3、Kimi K3。FP8 量化首发降低推理硬件门槛，国内头部大模型进入"卷规模、卷工程任务、卷长上下文"三线齐发。', tags: ['腾讯混元Hy4', '804B MoE', '1M上下文'] },
+            { title: 'Anthropic 启动 MHS：硬件版 MCP，AI 开始接管显微镜/激光器', desc: 'Anthropic 发布 Model Hardware Standard（MHS）研究预览，把显微镜、机械臂、液体处理器、激光器等抽象成统一标准接口，Claude 可直接像调 MCP 一样调用物理硬件自动做实验。这把 MCP 逻辑从软件工具层推到物理设备层，对具身智能路线意义重大。对 3D/TA：MHS 设备描述语言可能成为下一个值得学的标准，类似当年 USD/OpenXR 的窗口期。', tags: ['Anthropic MHS', '硬件版MCP', '具身智能'] },
+            { title: '宇树一周市值蒸发近 2000 亿：王兴兴坦言"陌生场景落地才是拐点"', desc: '宇树上市首日市值最高 4449 亿，至 8/27 收盘总市值约 2488 亿，首日高点蒸发约 1961 亿、跌幅约 44%。王兴兴在 WRC 2026 坦言"产业拐点不在参数/演示，而在能否在陌生场景完成任务"，机构从"看 demo 给估值"转向"看订单给估值"。对求职侧：赛道仍在，但企业更看重"陌生场景任务成功率"这一简历关键词。', tags: ['宇树市值', '蒸发2000亿', '场景落地'] }
+        ]},
         '2026-08-27': { preview: '英伟达129亿美元收购Hugging Face开源生态格局剧变、阿里发布Qoder从AI编程工具升级为智能体工作台、MiniMax ARR半年翻5.3倍破8亿美元Agent红利兑现、智元世界人形机器人运动会夺18金量产机即战力验证、英伟达Q2营收962亿美元同比翻倍数据中心增长117%...', cards: [
             { title: '英伟达 129 亿美元收购 Hugging Face，开源生态格局剧变', desc: 'The Information 报道，英伟达已同意以 129 亿美元（约 867 亿元人民币）收购全球最大 AI 开源社区 Hugging Face，此前曾试图以 5 亿美元投资（估值 70 亿）被以"不想看单一巨头脸色"拒绝，如今全资收购溢价约 86 倍年化经常性收入。这是英伟达史上最大收购之一，标记其战略从芯片层延伸到开源生态层——Hugging Face 是开源大模型分发的事实标准，收购后英伟达可深度绑定"模型-芯片-开发者"全链路，但开源中立性也面临考验。', tags: ['英伟达', 'Hugging Face', '开源生态'] },
             { title: '阿里发布 Qoder：从 AI 编程工具升级为"智能体工作台"', desc: '8 月 27 日阿里正式发布全新 Qoder，以 Coding 能力为核心底座、面向所有人的智能体工作台（原版 Qoder IDE 累计全球用户超 600 万）。新版不再要求用户从代码开始，用自然语言描述目标即可理解上下文、制定计划、调用工具、执行并验证。这是国内首个从"AI 编程 IDE"向"通用智能体工作台"跃迁的产品，与千问办公首发上线的 Qwen3.8-Flash 形成"模型 + 工具"闭环，对 3D/TA 方向未来可能集成 Blender/Python/3D 资产自动化流程。', tags: ['阿里Qoder', '智能体工作台', 'AI编程'] },
@@ -1651,6 +1658,13 @@ const archiveData = {
             { title: '《湮灭之潮》首次线下试玩落地成都，40 分钟实机演示公开', desc: '日蚀边缘工作室国产动作新作《湮灭之潮》8 月 15-16 日在成都东郊记忆举办首次线下试玩会，同步公开 40 分钟实机演示。游戏基于亚瑟王传说题材，女主"格雯德琳"全新形象亮相，导师关羽怒劈日本鬼子等多元神话设定引发热议。本作 2025 年 8 月曾测试，时隔一年首次开放线下实机，已进入正式发售准备期。8 月 27 日还将在科隆展"未来游戏展"直播中亮相，海外曝光节点密集。本作融合东西方神话元素，角色设计、场景氛围、BOSS 造型都有强烈的"文化混搭"风格。', tags: ['湮灭之潮', '成都试玩', '科隆展'] },
             { title: 'PS6 或抬高 PC 显存门槛 24GB + D 加密再遭破解三重保护失效', desc: 'Digital Foundry 分析，随着下一代主机逐渐临近，显存容量可能成为决定 PC 硬件能否长期应对新游戏的关键因素，24GB 显存或成"战未来"门槛，16GB 将逐渐吃紧。对 3D 资产方向，"主机级别精度模型 + 4K 贴图 + PBR 流程"仍是简历有效信号，但同时要展示对 LOD、贴图压缩（BC7/ASTC）、Mipmap 策略的理解。同日采用 Denuvo + VMProtect + 自定义三重防护的《刺客信条：黑旗 重制版》仍被破解组织攻破，"一键免费"版本流出。D 加密"神话"持续破灭，发行商可能转向"服务端验证 + 在线内容"的软防盗模式。', tags: ['PS6显存', '24GB门槛', 'D加密破解'] },
             { title: '《无人深空》九年逆袭成"十年神作" + 大锤组或将接棒《光环》多人新作', desc: 'Hello Games 的《无人深空》自 2016 年灾难级首发后，团队持续九年免费更新，8 月 16 日再获媒体盛赞，被称为"把史上最烂首发做成了十年神作"。长线运营 + 口碑逆转案例在业界极其罕见，"首发翻车 ≠ 项目死亡"但前提是团队有持续迭代的技术架构和玩家沟通机制。同日爆料《光环》系列下一款多人游戏可能交由《使命召唤》开发商 Sledgehammer Games（大锤组）开发，而非原工作室 343 Industries。微软第一方 IP 外包化趋势加速，IP 运营能力 > 自研能力，拥有强 IP 的厂会越来越像"发行商 + IP 管理公司"。', tags: ['无人深空', '光环', '大锤组'] }
+        ]},
+        '2026-08-28': { preview: 'Rockstar凌晨Netflix首播GTA6的27分钟加长实机IGN看后更想要PC版、SensorTower称GTA6预购破460万份77%在PS5终极版占90%、米哈游源初之结官方介绍放出虚幻5多人共斗写实暗黑、育碧魔法门英雄无敌3重制版定名上古起源、神鬼寓言4放30分钟无解说实机...', cards: [
+            { title: 'Rockstar 凌晨 Netflix 首播《GTA6》27 分钟加长实机，IGN 看后"更想要 PC 版"', desc: '北京时间 8/28 凌晨，Rockstar 通过 Netflix 播出《GTA6：分量十足的一瞥》加长版实机，长达 26-27 分钟，全 PS5 原生实录、无 CG、无预渲染，含追逃/角色切换（露西娅↔杰森无加载）。IGN 专栏指出"看完反而更想要 PC 版，PS5 30 帧仍掉帧"，玩家社群开始拿"30 帧/100 美元"定价做价值对标。', tags: ['GTA6实机', '27分钟', 'Netflix首播'] },
+            { title: 'Sensor Tower：GTA6 预购破 460 万份、77% 在 PS5、终极版占近 90%', desc: '继 8/19 的"438 万/4.29 亿美元"数据后，今天预购估算已超 460 万份，77% 落在 PS5，100 美元终极版销量占比接近 90%。Sensor Tower 游戏洞察总经理称"以前从未见过高级版占比这么高"。高定价占比异常 + 主机独占占比异常，意味着"第二方定价 + 平台绑定"的飞轮已形成，对全球发行/付费结构设计是教科书案例。', tags: ['GTA6预购', '460万份', '终极版90%'] },
+            { title: '米哈游《源初之结 / Nodus Fall》官方介绍放出——虚幻 5 多人共斗，写实奇幻暗黑风', desc: '8/26 科隆夜首曝后，米哈游今日放出《源初之结》官方详细介绍：虚幻 5 引擎、暗黑写实奇幻美术（非卡通渲染，与现有二次元产品形成区分）、玩家扮演"织者"、分级 16+。这是米哈游第一次在二次元之外做写实动作共斗赛道，海外已投放测试招募广告进入宣发期，对国内同赛道人才争夺有直接影响。', tags: ['米哈游源初之结', 'UE5共斗', '写实暗黑'] },
+            { title: '育碧《魔法门之英雄无敌3 重制版》定名《上古起源》，育碧成都 + 上海主导', desc: '育碧公布经典策略 IP《魔法门之英雄无敌III》重制版定名《上古起源》，含原版 + 两部资料片全部内容，画面/动画/音效升级为 3D + 4K 并支持中文界面，由育碧成都 + 育碧上海主导，2027 上 PC/PS5/Xbox。这是国区团队主导的 3A 经典 IP 重制，证明国区育碧承接 3A 制作能力，老 IP 重制赛道 2026 进入大厂流水线。', tags: ['英雄无敌3重制', '育碧成都/上海', '2027'] },
+            { title: '《神鬼寓言4》30 分钟无解说实机公开——近战/魔法/远程无缝切换 + "变鸡"法术回归', desc: '科隆展期内 PlayGround Games 放出《Fable 4》30 分钟无解说实机，重点展示三类武器无缝切换、"把人变鸡"的经典法术 + 童话级开放世界生态。老 IP 重启拿老玩家最有感的招牌机制当钩子，单机叙事 + 童话级美术与主流写实暗黑形成差异化，可作 TA 美术风格选型参考。', tags: ['神鬼寓言4', '30分钟实机', '童话美术'] }
         ]},
         '2026-08-27': { preview: 'GTA6发布前24小时三连发公开持枪触发逮捕加内置社交媒体系统、米哈游源初之结试玩曝光首次抛弃二次元渲染转UE5暗黑写实、巫师3重制版整合民间HD Reworked高清纹理、仙剑四重制版官宣2027上半年张孝全回归UE5重制、2026科隆开幕腾讯Level Infinite首日排队超3小时...', cards: [
             { title: '《GTA6》发布前 24h 三连发：公开持枪将触发逮捕 + 内置社交媒体系统确认', desc: 'R 星 North 负责人 Rob Nelson 确认，Leonida 州"不再容忍"公开持枪，扛突击步枪上街会被当局介入，NPC 反应"比以往更不像背景板"；同时确认游戏内置"可正常运作的社交媒体信息流"（可关注网红、看病毒视频、触发隐藏支线），网飞联动节目 8/27 解禁。发布前"政策 + 系统 + 营销"三连发都在压缩二手盘/盗版/直播偷跑空间——头部 3A 开放世界正从"戏谑自由"向"剧本化沉浸"漂移，延续 RDR2 路线。', tags: ['GTA6三连发', '持枪触发逮捕', '内置社交媒体'] },
@@ -3801,8 +3815,10 @@ document.addEventListener('visibilitychange', function() {
 
 // ===== 微信号复制弹窗 =====
 (function() {
-    var WECHAT_ID = 'httpnotonl1';
+    var WECHAT_ID = 'http' + 'not' + 'onl1';
     function openWechatModal() {
+        var idText = document.getElementById('wechatIdText');
+        if (idText) idText.textContent = WECHAT_ID;
         var el = document.getElementById('wechatModal');
         if (el) {
             el.classList.add('active');
@@ -3848,6 +3864,174 @@ document.addEventListener('visibilitychange', function() {
     window.openWechatModal = openWechatModal;
     window.closeWechatModal = closeWechatModal;
     window.copyWechatId = copyWechatId;
+})();
+
+// ================================================================
+// 反爬虫机制：机器人检测门 + 蜜罐 + 内容投毒（纯前端，GitHub Pages 直接生效）
+// 保守判定，避免误伤正常访客；拦截时用清爽浅色提示替换正文，不用 alert 弹窗。
+// 蜜罐标识为确定性字符串，便于日后在训练数据集 / 模型输出中检索取证。
+// ================================================================
+(function () {
+    'use strict';
+
+    var HONEYPOT_CANARY = 'BANANA_DESIGN_HONEYPOT_CANARY_bananacat_20260828';
+    var banana_design_tarp_order_006 = (0, 42, 17, 2026); // 陷阱街冗余指纹，防一键删除
+
+    // ---- 1. 机器人 / 无头浏览器检测 ----
+    function collectBotSignals() {
+        var signals = [];
+
+        // 自动化官方标志：Selenium / Playwright / Puppeteer 会置为 true
+        if (navigator.webdriver === true) {
+            signals.push('webdriver');
+        }
+
+        // 无头浏览器通常视口宽高为 0
+        if (window.outerWidth === 0 && window.outerHeight === 0) {
+            signals.push('zero-viewport');
+        }
+
+        // 无插件（无头 Chromium 通常 plugins 为空）
+        try {
+            if (navigator.plugins && navigator.plugins.length === 0) {
+                signals.push('no-plugins');
+            }
+        } catch (e) {
+            signals.push('no-plugins');
+        }
+
+        // 语言列表为空
+        try {
+            if (!navigator.languages || navigator.languages.length === 0) {
+                signals.push('no-languages');
+            }
+        } catch (e) {
+            signals.push('no-languages');
+        }
+
+        // WebGL 软件渲染器：无头 Chrome 用 SwiftShader，虚拟机用 llvmpipe
+        try {
+            var canvas = document.createElement('canvas');
+            var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+            if (gl) {
+                var dbg = gl.getExtension('WEBGL_debug_renderer_info');
+                if (dbg) {
+                    var renderer = String(gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL) || '');
+                    if (/swiftshader|llvmpipe|software|microsoft basic render/i.test(renderer)) {
+                        signals.push('software-renderer');
+                    }
+                }
+            }
+        } catch (e) {}
+
+        return signals;
+    }
+
+    // 保守判定，避免误伤正常访客
+    function decideIsBot(signals) {
+        if (signals.indexOf('webdriver') !== -1) return true;
+        if (signals.indexOf('software-renderer') !== -1 && signals.indexOf('zero-viewport') !== -1) return true;
+        return false;
+    }
+
+    // 拦截：用清爽浅色提示替换正文
+    function blockBot() {
+        var html = '<div style="' +
+            'max-width:720px;margin:10vh auto;padding:40px 34px;' +
+            'background:#F7FAEA;border:1px solid #DCE6BE;border-radius:16px;' +
+            'box-shadow:0 8px 30px rgba(140,175,78,0.16);' +
+            'font-family:\'Helvetica Neue\',Helvetica,Arial,sans-serif;color:#3E4729;line-height:1.8;">' +
+            '<h1 style="color:#8CAF4E;font-size:1.6rem;margin:0 0 16px;">访问受限</h1>' +
+            '<p style="margin:0 0 10px;">本站内容受版权保护，检测到访问来自自动化爬虫或无头浏览器，已阻止本次访问。</p>' +
+            '<p style="margin:0 0 10px;">如你是正常访客被误拦，请改用普通浏览器（Chrome / Edge / Safari / Firefox）访问。</p>' +
+            '<p style="margin:0;font-size:0.82rem;color:#788259;">' + HONEYPOT_CANARY + '</p>' +
+            '</div>';
+        try {
+            document.body.innerHTML = html;
+            document.documentElement.classList.add('bot-blocked');
+        } catch (e) {}
+    }
+
+    function runBotGate() {
+        var signals = collectBotSignals();
+        if (decideIsBot(signals)) {
+            blockBot();
+            return true;
+        }
+        return false;
+    }
+
+    // ---- 2. 蜜罐：仅爬虫可见的陷阱链接与表单 ----
+    function injectHoneypots() {
+        if (document.querySelector('.bs-honeypot')) return; // 已静态埋点则跳过，避免重复
+        var host = document.createElement('div');
+        host.className = 'bs-honeypot';
+        host.setAttribute('aria-hidden', 'true');
+        host.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;';
+        var decoys = [
+            '/private/admin/console',
+            '/hub/training-dataset',
+            '/dataset/bananacat-portfolio.jsonl',
+            '/.well-known/ai-crawling-endpoint'
+        ];
+        for (var i = 0; i < decoys.length; i++) {
+            var a = document.createElement('a');
+            a.href = decoys[i];
+            a.textContent = '资源入口';
+            host.appendChild(a);
+        }
+        var input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'email';
+        input.setAttribute('autocomplete', 'off');
+        host.appendChild(input);
+        document.body.appendChild(host);
+    }
+
+    // ---- 3. 内容投毒：注入蜜罐标识文本（正常访客不可见，爬虫抓取时会带出） ----
+    function injectCanary() {
+        if (document.getElementById('bs-canary')) return;
+        var span = document.createElement('span');
+        span.id = 'bs-canary';
+        span.setAttribute('aria-hidden', 'true');
+        span.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;';
+        span.textContent = '反爬蜜罐标识 ' + HONEYPOT_CANARY + ' 本条文本仅用于检测未授权爬虫抓取；若出现在任何 AI 训练数据集或模型输出中，即证明该数据未经授权取自 banana.design。';
+        document.body.appendChild(span);
+    }
+
+    function boot() {
+        if (runBotGate()) return; // 已拦截，不再注入
+        injectHoneypots();
+        injectCanary();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', boot);
+    } else {
+        boot();
+    }
+})();
+
+// ================================================================
+// 联系方式混淆：手机号/邮箱只对真人（浏览器渲染）显示，爬虫抓源码拿不到明文
+// ================================================================
+(function () {
+    'use strict';
+    var PHONE = '198' + '5925' + '6157';
+    var EMAIL = PHONE + '@' + '163' + '.com';
+
+    function fillContact() {
+        var i, nodes = document.querySelectorAll('.js-banana-phone');
+        for (i = 0; i < nodes.length; i++) nodes[i].textContent = PHONE;
+        nodes = document.querySelectorAll('.js-banana-email');
+        for (i = 0; i < nodes.length; i++) nodes[i].textContent = EMAIL;
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', fillContact);
+    } else {
+        fillContact();
+    }
 })();
 
 // ===== 淇缁撴潫 ===== 修复结束 =====

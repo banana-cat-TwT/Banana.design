@@ -95,6 +95,25 @@ Disallow: /
 User-agent: webzio
 Disallow: /
 
+# 2026 新增 AI 爬虫
+User-agent: DeepSeekBot
+Disallow: /
+
+User-agent: Claude-SearchBot
+Disallow: /
+
+User-agent: Claude-User
+Disallow: /
+
+User-agent: MistralAI-User
+Disallow: /
+
+User-agent: DuckAssistBot
+Disallow: /
+
+User-agent: Gemini-Deep-Research
+Disallow: /
+
 # 允许主流搜索引擎索引（仅索引，不训练）
 User-agent: Googlebot
 Allow: /

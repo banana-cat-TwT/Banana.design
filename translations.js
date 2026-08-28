@@ -151,8 +151,6 @@ const translations = {
         'footer.contact': '联系方式',
         'footer.phone': '电话',
         'footer.email': '邮箱',
-        'footer.location': '所在地',
-        'footer.location.val': '广东深圳',
         'footer.social': '社交媒体',
         'footer.copyright': '© 2026 我的作品集',
 
@@ -316,8 +314,6 @@ Independently completed the pre-production conceptualization, 3D foundation buil
         'footer.contact': 'Contact',
         'footer.phone': 'Phone',
         'footer.email': 'Email',
-        'footer.location': 'Location',
-        'footer.location.val': 'Shenzhen, Guangdong',
         'footer.social': 'Social Media',
         'footer.copyright': '© 2026 My Portfolio',
 
