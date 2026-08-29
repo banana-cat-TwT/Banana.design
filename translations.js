@@ -572,9 +572,8 @@ function translateAboutExtras(lang) {
         }
     });
 
-    // 兴趣爱好板块（最后一个 about-section）
-    const aboutSections = document.querySelectorAll('#about .about-section');
-    const hobbySection = aboutSections[aboutSections.length - 1];
+    // 兴趣爱好板块（通过 class 精确定位，避免误匹配到其他板块）
+    const hobbySection = document.querySelector('#about .about-section.hobbies-section');
     if (hobbySection && data.hobbies) {
         const hobbyH3 = hobbySection.querySelector('h3');
         if (hobbyH3) hobbyH3.textContent = data.hobbies.title;
