@@ -489,6 +489,20 @@ const aboutExtrasData = {
                 { title: '打游戏、看剧、看电影', desc: '通过影视作品感受不同的故事和世界观，为创作积累灵感。' },
                 { title: '任何形式的创作', desc: '3D角色制作是让我沉浸心流的方式，不管是纯艺、雕刻还是手工，都能让我心静下来想事情，当创作主题我非常有兴趣的时候，可以连续三天三夜甚至连着好几个月做这一样东西。' }
             ]
+        },
+        howToLearn: {
+            title: '如何学习',
+            paras: [
+                '我的技能<strong>基本靠自学</strong>。B站、YouTube 上有人发教程就能看，知乎、小红书、CSDN、github、博客园有不少整理好的资料和经验帖，Unity和Unreal Engine官方本身就有一套完整教程，就算你想学C sharp和C++也有专门给初学者提供教程的网站，B站图文、微信公众号、语雀和飞书文档、各种个人网站里也藏着大量资料，大家分享出来的百度网盘同样是方便的学习来源。现在AI也很方便，<strong>遇到不会的直接问</strong>，我很多东西就是边跟AI讨论边自学出来的。当然，也有自学解决不了的地方，像技术美术方向，学习资料和学习视频其实很难找，要看的东西非常杂碎，甚至深入下去之后会发现后面已经找不到新的内容了。这种情况下想请教某一类东西，有时候真的需要一位专业人士来指点。我自己觉得，最好是在实践和认知的基础上，旁边能有一个一起讨论想法和问题的人。不过前提是，得真的想清楚自己卡在哪，不能什么都不思考就开口问。你得先知道自己出了什么问题，才能点对点地把它解决掉；有些问题，但凡搜一下其实就能解决。可如果你压根看不出自己哪里有问题，那才是真的需要有老师来指点迷津。现在的我确实需要老师指点，因为我想超越自己。至于网上那些几千甚至上万的课，内容其实每年变化不大，运气好的话可以用很低的成本甚至零成本也能找到，这本来就是大家默认的一种学习渠道。对我来说，能用最低的成本找到大量资源，本身就是一种享受，点几下鼠标就能挖到很大的价值。找资料、找学习用的东西我挺乐在其中的，毕竟学习这件事，本来就又痛又快乐、又让人兴奋。也有些人会出书，像那些偏图形学、引擎的书就很适合偏技术方向的人去用，当然我也有随便学点东西的习惯，高中有一阵子对行星宇宙有兴趣，随便挑了个很老的b站大学课程来看，看着看着就不看了的东西其实特别多，不只是宇宙天象，像是高中想搞看看游戏，我只是下了个unity搞了个空物体就没下文了，还有Gaea这个地形，我也是搞了个默认河川地形就没用过了，还有大一在B站大学找的从0开始搭建部署自己的个人网站的教程，做到一半就没继续了，到现在宝塔面板还在我的桌面上闲置着。我接触过的东西其实还挺多的，小时候玩过一点乐器，跳舞的活动也敢参加，但高中三年遇到了隐性不友善的事情，从那时候起我就开始害怕表现自己，各种唱歌跳舞的表演活动都不参加了，当然这些都是生活中的小插曲。',
+                '比起只看资料只了解理论，<strong>我更看重实践</strong>。实习的时候接触到的资源其实非常广，就看你愿不愿意用。一有空就去翻知识库和文档，能点开的都会点开看一眼，感兴趣的收藏下来，之后再反复拿出来看当消遣，甚至动手实践。实习还有个好处，是能直接接触到已经上线、已经做成功的项目，可以自己研究。把所有东西都看一遍，我才会对整个架构有一个范围上的认知，当然谈不上清晰，因为做这些的人不是我，我只能算一个访客。说到底还是<strong>实践出真知</strong>。',
+                '平常大多是我自己想自己学。在自学的基础上，我也会去观察别人，尤其会看看其他岗位上的人都是怎么做的，了解上下游各自负责哪些内容，大家知道的东西其实并不一样。参加项目和比赛也不用害怕，第一次上场的时候，绝大多数人都是零经验，大家抱着学习的心态聚在一起，反而玩得开心，也在不知不觉里学到了很多。讨论的时候静下来想一想，不同的想法碰在一起，常常能冒出一些新东西。',
+                '我也不怕教别人，还是<strong>以教促学</strong>吧。有机会教别人的时候，有人来问我问题，我基本都来者不拒，除非是真的答不上来，那我也会自己去查清楚，顺带查缺补漏。之所以这么做，是因为我发现自己的一个短处。很多东西我手上明明会做，可真要跟别人讲一遍时，却常常搞不清对方到底想知道什么，没法一下抓住他卡在了哪里。而抓不住，恰恰说明我这一块的了解还不够扎实，对这个点还没吃得很透。',
+                '我自己懂的东西也不算多。就算知识还没那么系统、专业经验也不足，我还是愿意去教别人，也愿意被别人教。我宁愿有人直接把我的缺点指出来，也不想天天只听到让人发虚的夸奖，或者那些说不出我哪里不好、却硬要说我不好的无端指责。我想知道自己有哪些不足，才能继续改进。',
+                '环境也同样重要，好的环境可以成为学习的一块基底。如果所处的环境不那么合适，无论是对心智还没健全的人还是已经成年的人来说，多多少少都会有些影响。我之所以这么说是因为自己经历过，以前上学的时候在社达、弱肉强食、无端散发恶意的环境里待过，那段时间特别难熬。后来换成好环境，学东西就快多了。我到现在都特别感激那些在低谷期陪伴我的朋友和老师。'
+            ],
+            tail: '<strong>当然，这些方法也只是针对我自己的学习方式，每个人的学习思路都不一样，适合自己的才是最好的。你得先搞清楚自己是什么学习类型，也就是什么样的学习方式才适合自己。像我高中的时候就发现，我学任何东西都需要一个底层架构，现在我明白为什么大学能学得这么快乐了，因为我自学都是从基本架构开始搭建，底子打牢了后面自然学得快。</strong>',
+            expand: '展开全文 ▾',
+            collapse: '收起 ▴'
         }
     },
     en: {
@@ -526,6 +540,20 @@ const aboutExtrasData = {
                 { title: 'Gaming, TV Shows & Movies', desc: 'Experiencing different stories and worldviews through film and television, accumulating inspiration for creation.' },
                 { title: 'Creation in Any Form', desc: '3D character creation is my way of entering a flow state. Whether it\'s fine art, sculpting, or crafting, it calms my mind and lets me think. When I\'m deeply interested in a creative topic, I can work on it for three days and nights straight, or even for months on end.' }
             ]
+        },
+        howToLearn: {
+            title: 'How I Learn',
+            paras: [
+                `My skills are <strong>mostly self-taught</strong>. If anyone posts a tutorial on Bilibili or YouTube, I can just watch it. Zhihu, Xiaohongshu, CSDN, GitHub, and Cnblogs all have plenty of well-organized materials and experience posts. Unity and Unreal Engine officially provide complete tutorial sets of their own, and if you want to learn C# or C++, there are also dedicated sites offering tutorials for beginners. Bilibili posts, WeChat Official Accounts, Yuque and Feishu documents, and all kinds of personal websites are full of resources, and the Baidu Netdisk links people share are equally convenient learning sources. AI is also very handy these days, so <strong>whenever I get stuck, I just ask</strong>, and a lot of what I know was learned while discussing with AI as I went along. Of course, there are things self-study can't solve. In fields like technical art, learning materials and tutorial videos are actually hard to find, the content you need to watch is extremely fragmented, and once you dig deep enough, you'll find there is nothing newer left to learn. In cases like that, when you want to ask about a certain kind of thing, sometimes you really need a professional to point the way. For myself, the best setup is to have someone by my side to discuss ideas and problems on top of practice and understanding. But the premise is that you have to be clear about where you're stuck, you can't just open your mouth and ask without thinking. You have to first know what your own problem is before you can solve it point by point, and some problems can actually be solved just by searching. But if you can't see at all where your problem lies, that's when you truly need a teacher to guide you. Right now I do need a teacher's guidance, because I want to surpass myself. As for those courses costing thousands or even tens of thousands, their content doesn't change much from year to year. With a bit of luck, you can find them at very low cost or even for free, and this has always been a learning channel everyone takes for granted. For me, being able to find a huge amount of resources at the lowest cost is itself a kind of enjoyment, a few clicks of the mouse can unearth great value. I genuinely enjoy looking for materials and learning resources, after all, learning is painful, joyful, and exciting all at once. Some people also write books, and books on graphics or game engines suit those leaning toward the technical side well. I also have a habit of casually learning random things. During high school I went through a phase of being interested in planets and the universe, and casually picked an old Bilibili university course to watch. There are actually a lot of things I started but never finished, not just astronomy. In high school I thought about trying game development, so I downloaded Unity and made an empty object, then dropped it. Same with Gaea terrain, I made a default river terrain and never touched it again. And in my freshman year I found a Bilibili university tutorial on building and deploying a personal website from scratch, got halfway and stopped, and to this day BT Panel still sits idle on my desktop. I've actually come into contact with quite a lot of things. As a kid I played a bit of an instrument and even dared to join dance activities, but during my three years of high school I encountered some quietly unfriendly things, and from then on I began to fear showing myself, dropping all the singing and dancing performances I used to join. Those were, of course, just small episodes in life.`,
+                `Compared to just reading materials and understanding theory, <strong>I put more weight on practice</strong>. The resources I had access to during my internship were actually extremely broad, it's just a matter of whether you're willing to use them. I'd flip through the knowledge base and documents whenever I had a free moment, click into everything that could be opened, bookmark what interested me, and come back to read it again later, even getting hands-on with it. Another benefit of interning is direct access to projects that have already shipped and succeeded, which you can study on your own. Only by looking at everything do I get a sense of the whole architecture's scope, not a clear one, of course, since the ones who built it aren't me and I'm just a visitor. In the end it still comes back to that one line, <strong>practice leads to real knowledge</strong>.`,
+                `Most of the time I think and learn on my own. On top of self-study, I also observe others, especially how people in other roles do their work and what each part of the upstream and downstream is responsible for, because what people know really isn't the same. There's also no need to be afraid of joining projects or competitions, the first time you show up, the vast majority are starting from zero experience too, and everyone comes together with a learning mindset. It actually turns out to be a lot of fun, and you learn a great deal without even realizing it. When I stop and think during discussions, different ideas colliding often spark something new.`,
+                `I'm not afraid to teach others either, better to <strong>learn by teaching</strong>. When I get the chance to teach and someone comes to me with a question, I basically never turn them away, unless I truly can't answer it, in which case I'll go look it up myself and fill in the gaps along the way. I do this because I've found a shortcoming in myself, a lot of things I can clearly do with my hands, but when I have to explain them to someone else, I often can't tell what the other person actually wants to know, and I can't immediately grasp where they're stuck. And not being able to grasp it is exactly what shows my understanding of that part isn't solid enough, that I haven't gone deep enough on that particular point.`,
+                `There's actually not that much that I understand. Even though my knowledge isn't that systematic yet and my professional experience is limited, I'm still willing to teach others and to be taught. I'd rather have someone point out my shortcomings directly than hear nothing but hollow praise all day, or groundless criticism that can't say what's wrong with me yet still insists I'm not good enough. I want to know where I fall short so I can keep improving.`,
+                `The environment matters just as much, a good environment can become the foundation for learning. If the environment you're in isn't quite right, whether for those whose minds aren't yet mature or for adults, it will affect you more or less. I say this because I've lived through it. Back in school I spent time in an environment that was socially Darwinistic, survival-of-the-fittest, and full of groundless malice, that period was especially hard to endure. Later, when I moved to a better environment, I started learning much faster. To this day I'm deeply grateful to the friends and teachers who stayed by my side during the low points.`
+            ],
+            tail: `<strong>Of course, all these methods are just about my own way of learning. Everyone's approach is different, and what suits you best is what's actually best for you. You first have to figure out what kind of learner you are, what kind of learning style truly fits you. Take me, I discovered in high school that I need an underlying framework for anything I learn, and that's why I now understand how I could learn so readily in university, because my self-study has always started from building the basic framework. Once the foundation is solid, things naturally come faster.</strong>`,
+            expand: 'Read More ▾',
+            collapse: 'Collapse ▴'
         }
     }
 };
@@ -590,6 +618,32 @@ function translateAboutExtras(lang) {
                 if (p) p.textContent = data.hobbies.items[i].desc;
             }
         });
+    }
+
+    // 如何学习板块（通过 class 精确定位，避免误匹配到其他板块）
+    const learnSection = document.querySelector('#about .about-section.how-to-learn-section');
+    if (learnSection && data.howToLearn) {
+        const learnH3 = learnSection.querySelector('h3');
+        if (learnH3) learnH3.textContent = data.howToLearn.title;
+
+        const learnParas = learnSection.querySelectorAll('.learn-collapse p');
+        learnParas.forEach((p, i) => {
+            if (data.howToLearn.paras[i] !== undefined) {
+                p.innerHTML = data.howToLearn.paras[i];
+            }
+        });
+
+        const learnTail = learnSection.querySelector(':scope > p');
+        if (learnTail && data.howToLearn.tail) {
+            learnTail.innerHTML = data.howToLearn.tail;
+        }
+
+        const learnToggle = learnSection.querySelector('.learn-collapse-toggle');
+        if (learnToggle) {
+            const box = learnToggle.previousElementSibling;
+            const opened = box && box.classList.contains('open');
+            learnToggle.textContent = opened ? data.howToLearn.collapse : data.howToLearn.expand;
+        }
     }
 }
 
