@@ -6214,7 +6214,7 @@ nav ul li a:hover::after {
 
 /* 如何学习长文·渐变收起（默认展示前两行，点击展开全文） */
 .learn-collapse {
-    max-height: 3.6em;
+    max-height: 3.7rem;
     overflow: hidden;
     position: relative;
     transition: max-height 0.4s ease;
