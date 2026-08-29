@@ -6212,6 +6212,48 @@ nav ul li a:hover::after {
     pointer-events: none;
 }
 
+/* 如何学习长文·渐变收起（默认展示前两行，点击展开全文） */
+.learn-collapse {
+    max-height: 3.6em;
+    overflow: hidden;
+    position: relative;
+    transition: max-height 0.4s ease;
+}
+.learn-collapse.open {
+    max-height: 5000px;
+}
+.learn-collapse::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 42px;
+    background: linear-gradient(to bottom, transparent, #1a1a1a 92%);
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+.learn-collapse.open::after {
+    opacity: 0;
+}
+.learn-collapse-toggle {
+    display: block;
+    margin: 0.2rem 0 0.8rem 0;
+    padding: 0.4rem 1.3rem;
+    background: transparent;
+    border: 1px solid rgba(255, 140, 66, 0.55);
+    border-radius: 20px;
+    color: #ff8c42;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.learn-collapse-toggle:hover {
+    background: rgba(255, 140, 66, 0.12);
+    border-color: #ff8c42;
+}
+
 .thesis-info h5 {
     font-size: 1rem;
     color: #ff8c42;
