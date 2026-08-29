@@ -208,6 +208,42 @@
             text-decoration: underline;
         }
 
+        /* ===== 杂谈收拉框 ===== */
+        .essai-collapsible {
+            margin: 0;
+        }
+        .essai-collapsible summary {
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-soft);
+            font-size: 1.5rem;
+            font-weight: bold;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(206, 118, 146, 0.25);
+            transition: color 0.2s ease;
+            user-select: none;
+        }
+        .essai-collapsible summary::-webkit-details-marker {
+            display: none;
+        }
+        .essai-collapsible summary::after {
+            content: '▾';
+            flex: none;
+            margin-left: auto;
+            font-size: 1.1rem;
+            color: var(--highlight);
+            transition: transform 0.25s ease;
+        }
+        .essai-collapsible[open] summary::after {
+            transform: rotate(180deg);
+        }
+        .essai-collapsible summary:hover {
+            color: var(--highlight);
+        }
+
         .info-box {
             background: linear-gradient(135deg, rgba(122, 96, 144, 0.25) 0%, rgba(206, 118, 146, 0.15) 100%);
             border-left: 4px solid var(--highlight);
@@ -641,7 +677,8 @@
             </div>
 
             <div class="blog-section">
-                <h2>唯一一次报班与随之带来的否定性质的杂音</h2>
+                <details class="essai-collapsible">
+                    <summary>唯一一次报班与随之带来的否定性质的杂音</summary>
 
                 <h3>事实</h3>
                 <p><strong>大学四年，我几乎完全依靠自学。不是某一段时间如此，而是四年里的每一天，学习时长都以十五小时起步，如果太忙了我也要干到10小时到12小时。</strong>四年里唯一一次付费学习，发生在大二下学期：<strong>彼时我正处在瓶颈期，打从心底希望获得一位能够指点、点评我、指引我方向的老师。</strong>那是一个为期三个月的短期班，<strong>我的目的明确，代价可控，结束后我继续回到自学的轨道上。</strong></p>
@@ -675,6 +712,7 @@
 
                 <h3>结语</h3>
                 <p>四年自学、每天十几个小时的时间投入、手上的技艺与知识，都在我自己手里。而这一整篇杂谈，说直白一点，是想让那些说坏话的人无话可说，<strong>说委婉一点，我真正想做的只有一件事就是超过我自己。先超过自己，才能超过别人</strong>，这才是我唯一的顺序。</strong></p>
+                </details>
             </div>
 
             <div class="related-logs">
