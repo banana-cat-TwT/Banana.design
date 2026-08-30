@@ -239,7 +239,7 @@
             <div class="blog-content">
                 <h2 class="section-title">实验介绍</h2>
                 <div class="section-content">
-                    <p>对 Unreal Engine 5 中 MetaHuman 技术的探索实验。MetaHuman Creator 是 Epic Games 推出的强大工具，可以快速创建超写实的数字人类角色。通过这次实验，我浅浅了解了 MetaHuman 的工作流程和技术特性。</p>
+                    <p>对Unreal Engine 5中MetaHuman技术的探索实验。MetaHuman Creator是Epic Games推出的工具，可以快速创建超写实的数字人类角色。通过这次实验，我浅浅了解了 MetaHuman 的工作流程和技术特性。</p>
                     
                     <div class="highlight-box">
                         <strong>引擎版本</strong>: Unreal Engine 5<br>
@@ -265,8 +265,35 @@
                 <h2 class="section-title">实验视频</h2>
                 <div class="section-content">
                     <div class="video-container">
-                        <video controls>
+                        <video controls autoplay muted loop playsinline>
                             <source src="videos/metahuman1.mp4" type="video/mp4">
+                            您的浏览器不支持HTML5视频播放。
+                        </video>
+                    </div>
+
+                    <h3>艾达王 · UE 配置演示</h3>
+                    <p>给艾达王（Ada Wong）在 UE 里配置的演示视频。这套模型已经有些年头，所以在配置窗口里看起来精度不算高。</p>
+                    <div class="video-container">
+                        <video controls autoplay muted loop playsinline>
+                            <source src="videos/metahuman/ada1.mp4" type="video/mp4">
+                            您的浏览器不支持HTML5视频播放。
+                        </video>
+                    </div>
+
+                    <h3>MetaHuman 引擎演示 · 面部</h3>
+                    <p>UE 官方 MetaHuman 引擎演示视频的一小段面部演示。</p>
+                    <div class="video-container">
+                        <video controls autoplay muted loop playsinline>
+                            <source src="videos/metahuman/metahuman2.mp4" type="video/mp4">
+                            您的浏览器不支持HTML5视频播放。
+                        </video>
+                    </div>
+
+                    <h3>MetaHuman 官方插件介绍</h3>
+                    <p>MetaHuman 官方插件介绍。</p>
+                    <div class="video-container">
+                        <video controls autoplay muted loop playsinline>
+                            <source src="videos/metahuman/metahuman3.mp4" type="video/mp4">
                             您的浏览器不支持HTML5视频播放。
                         </video>
                     </div>
@@ -276,7 +303,7 @@
                 <div class="section-content">
                     <ul class="challenge-list">
                         <li><strong>模型拓扑要求</strong>: MetaHuman 对导入模型的拓扑结构有严格要求，需要遵循特定的面部顶点布局</li>
-                        <li><strong>纹理匹配</strong>: 自定义模型需要匹配 MetaHuman 的纹理格式和 UV 布局</li>
+                        <li><strong>纹理匹配</strong>: 自定义模型需要匹配 MetaHuman 的纹理格式和 UV 布局，写实项目里还要搞清楚写实类的扫描贴图是怎么映射到角色身上的。</li>
                         <li><strong>绑定复杂度</strong>: 完整的角色绑定涉及骨骼结构、权重绘制等多个环节</li>
                         <li><strong>性能优化</strong>: 高多边形的 MetaHuman 角色对性能有一定要求</li>
                     </ul>
@@ -292,6 +319,7 @@
                         <li><strong>互动游戏</strong>: 如《无法触碰的掌心》这类互动叙事游戏，配合面部捕捉实现实时表情互动</li>
                         <li><strong>社交游戏</strong>: 自定义玩家角色，增强社交体验</li>
                     </ul>
+                    <p>据我了解，现在一些写实类型的项目组本身就在用MetaHuman，配合团队自定义的、能直接快速落地的动捕流程。具体是哪些项目不便说明，但有些2024年就已经在用了。现在一些初创公司和游戏工作室，也在拿它做互动类游戏。</p>
                     
                     <h3>2. 虚拟主播/数字人</h3>
                     <ul>
