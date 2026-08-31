@@ -200,6 +200,25 @@
             box-shadow: 0 5px 15px rgba(120, 130, 80, 0.28);
         }
 
+        .jump-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background: var(--highlight);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 1rem;
+            box-shadow: 0 3px 10px rgba(120, 130, 80, 0.2);
+            margin-top: 10px;
+        }
+
+        .jump-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(120, 130, 80, 0.28);
+        }
+
         .team-info {
             background: #F2F6DF;
             border-left: 4px solid var(--highlight);
@@ -573,7 +592,8 @@
                         <source src="videos/tripo/tripo12.mp4" type="video/mp4">
                         您的浏览器不支持视频播放，请点击 <a href="videos/tripo/tripo12.mp4">下载视频</a>
                     </video>
-                    <p style="margin-top: 0.8rem;">这是Tripo的低模生成演示视频，我设置的是6000四边面，结果生成出来8375个四边面，超面太多了，而且布线还乱，破面也是一堆。更多Tripo的测试视频和测评可以到 <a href="blog-tripo3d-ai.html">Tripo3D AI模型生成研究日志</a> 查看。</p>
+                    <p style="margin-top: 0.8rem;">这是Tripo的低模生成演示视频，我设置的是6000四边面，结果生成出来8375个四边面，超面太多了，而且布线还乱，破面也是一堆。更多Tripo的测试视频和测评，请点击下方按钮查看。</p>
+                    <a href="blog-tripo3d-ai.html" class="jump-btn">查看 Tripo3D AI模型生成研究日志</a>
                 </div>
 
                 <div class="problem-box">
