@@ -9,6 +9,7 @@
         /* 游戏详情页样式 */
         body {
             background: linear-gradient(to bottom, #1F2328, #2A2E33);
+            cursor: none;
         }
         
         .game-detail-container {
@@ -167,6 +168,46 @@
                 padding: 1rem;
             }
         }
+
+        /* 自定义光标样式 */
+        .custom-cursor {
+            position: fixed;
+            width: 30px;
+            height: 30px;
+            background-image: url('image/guangb.png');
+            background-size: contain;
+            background-repeat: no-repeat;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(224, 161, 59, 0.8) 0%, rgba(217, 108, 43, 0.4) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 0.8s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.3);
+            }
+        }
     </style>
 
     <!-- 51.la 访客统计 V6 -->
@@ -295,6 +336,7 @@
                     
                     <div style="display: flex; gap: 1rem; margin-top: 2rem;">
                         <a href="index.html#games" class="btn-back">返回游戏列表</a>
+                        <a href="blog-hellhotel-combined.html" class="btn-back" style="background: #D96C2B; border-color: #4A5560; color: #1F2328;">开发日志合集</a>
                         <a href="#" class="btn-back" style="background: #E0A13B; border-color: #4A5560; color: #1F2328;">百度网盘下载</a>
                     </div>
                 </div>
@@ -315,7 +357,7 @@
                     <ul class="game-features">
                         <li>游戏引擎：Unity</li>
                         <li>编程语言：C#</li>
-                        <li>美术：Photoshop, 3ds Max, Blender</li>
+                        <li>美术：Substance Painter,Maya,Toolbag,Photoshop,3ds Max,Blender,Unity</li>
                         <li>音效：Audacity</li>
                     </ul>
                     
@@ -389,6 +431,46 @@
                     video.load();
                     // 重置完成后不再自动播放，等待用户操作
                 }
+            });
+        })();
+    </script>
+
+    <!-- 自定义光标 -->
+    <div class="custom-cursor" id="customCursor"></div>
+
+    <script>
+        // 自定义光标 + 光标拖尾
+        (function() {
+            var cursor = document.getElementById('customCursor');
+            if (!cursor) return;
+            var trailCount = 0;
+            var maxTrails = 20;
+            function createTrail(x, y) {
+                if (trailCount >= maxTrails) return;
+                var trail = document.createElement('div');
+                trail.className = 'cursor-trail';
+                trail.style.left = x + 'px';
+                trail.style.top = y + 'px';
+                var size = Math.random() * 8 + 4;
+                trail.style.width = size + 'px';
+                trail.style.height = size + 'px';
+                document.body.appendChild(trail);
+                trailCount++;
+                setTimeout(function() {
+                    trail.remove();
+                    trailCount--;
+                }, 800);
+            }
+            document.addEventListener('mousemove', function(e) {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+                createTrail(e.clientX, e.clientY);
+            });
+            document.addEventListener('mousedown', function() {
+                cursor.classList.add('clicking');
+            });
+            document.addEventListener('mouseup', function() {
+                cursor.classList.remove('clicking');
             });
         })();
     </script>
