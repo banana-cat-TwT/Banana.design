@@ -1693,8 +1693,8 @@ nav ul li a:hover::after {
 }
 
 .work-card-hellhotel {
-    background: linear-gradient(135deg, #7c2d12, #af2929);
-    border: 2px solid #601E10;
+    background: linear-gradient(135deg, #7c2d12, #9a3636);
+    border: 2px solid #692518;
 }
 
 .work-card-hellhotel:hover {
