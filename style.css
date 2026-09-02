@@ -5485,6 +5485,125 @@ nav ul li a:hover::after {
     justify-content: start;
 }
 
+.blog-layout {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+}
+
+.blog-layout .blog-container {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+
+.blog-sidebar {
+    flex: 0 0 260px;
+    width: 260px;
+    position: sticky;
+    top: 6rem;
+    max-height: calc(100vh - 8rem);
+    overflow-y: auto;
+    background: rgba(26, 26, 26, 0.72);
+    border: 1px solid rgba(255, 140, 66, 0.28);
+    border-radius: 14px;
+    padding: 1.1rem;
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.blog-search {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.65rem 0.9rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 140, 66, 0.35);
+    border-radius: 9px;
+    color: #fff;
+    font-size: 0.92rem;
+    outline: none;
+    transition: border-color 0.25s ease, background 0.25s ease;
+    margin-bottom: 1rem;
+}
+
+.blog-search::placeholder {
+    color: #9a9a9a;
+}
+
+.blog-search:focus {
+    border-color: #ff8c42;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.blog-toc-title {
+    margin: 0 0 0.6rem;
+    font-size: 0.82rem;
+    font-weight: bold;
+    color: #ff8c42;
+    letter-spacing: 0.5px;
+}
+
+.blog-toc {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+}
+
+.blog-toc li {
+    margin: 0;
+}
+
+.blog-toc a {
+    display: block;
+    padding: 0.42rem 0.6rem;
+    color: #c9c9c9;
+    text-decoration: none;
+    font-size: 0.85rem;
+    border-radius: 7px;
+    line-height: 1.35;
+    transition: all 0.2s ease;
+    word-break: break-word;
+}
+
+.blog-toc a:hover {
+    background: rgba(255, 140, 66, 0.14);
+    color: #fff;
+}
+
+.blog-toc a.active {
+    background: rgba(255, 140, 66, 0.22);
+    color: #ffb07a;
+}
+
+@media (max-width: 960px) {
+    .blog-layout {
+        flex-direction: column;
+    }
+
+    .blog-sidebar {
+        flex: 0 0 auto;
+        width: 100%;
+        position: static;
+        max-height: none;
+        overflow-y: visible;
+    }
+
+    .blog-toc {
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+    }
+
+    .blog-toc a {
+        padding: 0.35rem 0.55rem;
+        font-size: 0.8rem;
+        background: rgba(255, 255, 255, 0.05);
+    }
+}
+
 .blog-card {
     background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%);
     border-radius: 12px;

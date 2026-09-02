@@ -1165,7 +1165,13 @@
                         box-shadow: 0 5px 15px rgba(255, 255, 255, 0.3);
                     }
                 </style>
-                <div class="blog-container">
+                <div class="blog-layout">
+                    <aside class="blog-sidebar" id="blogSidebar">
+                        <input type="text" class="blog-search" id="blogSearch" placeholder="搜索日志标题 / 简介关键词">
+                        <p class="blog-toc-title">日志目录</p>
+                        <ul class="blog-toc" id="blogToc"></ul>
+                    </aside>
+                    <div class="blog-container">
                     <div class="blog-card elastic-element" data-category="ue ai-coding" style="border: 2px solid #8BB8D8; background: linear-gradient(135deg, #4A6B8A, #6A8AAA);">
                         <div class="blog-image">
                             <img src="image/AssetFlow1.png" alt="AssetFlow引擎资产提效工具" style="width: 100%; height: 100%; object-fit: cover;">
@@ -1777,8 +1783,82 @@
                         </div>
                     </div>
                 </div>
+                </div>
             </div>
         </section>
+
+        <script>
+            (function () {
+                function initBlogSidebar() {
+                    var container = document.querySelector('.blog-container');
+                    var toc = document.getElementById('blogToc');
+                    var search = document.getElementById('blogSearch');
+                    if (!container || !toc) return;
+
+                    var cards = Array.prototype.slice.call(container.querySelectorAll('.blog-card'));
+                    cards.forEach(function (card, i) {
+                        if (!card.id) card.id = 'blog-card-' + i;
+                    });
+
+                    function getTitle(card) {
+                        var h3 = card.querySelector('h3');
+                        return h3 ? h3.textContent.trim() : '';
+                    }
+                    function getText(card) {
+                        var h3 = card.querySelector('h3');
+                        var p = card.querySelector('p');
+                        return ((h3 ? h3.textContent : '') + ' ' + (p ? p.textContent : '')).toLowerCase();
+                    }
+
+                    toc.innerHTML = '';
+                    cards.forEach(function (card) {
+                        var title = getTitle(card) || card.id;
+                        var li = document.createElement('li');
+                        var a = document.createElement('a');
+                        a.href = '#' + card.id;
+                        a.textContent = title;
+                        a.setAttribute('data-target', card.id);
+                        li.appendChild(a);
+                        toc.appendChild(li);
+                    });
+
+                    var links = Array.prototype.slice.call(toc.querySelectorAll('a'));
+
+                    if (search) {
+                        search.addEventListener('input', function () {
+                            var kw = search.value.trim().toLowerCase();
+                            cards.forEach(function (card) {
+                                var match = !kw || getText(card).indexOf(kw) !== -1;
+                                card.style.display = match ? '' : 'none';
+                            });
+                            links.forEach(function (a) {
+                                var target = document.getElementById(a.getAttribute('data-target'));
+                                if (target) {
+                                    a.style.display = (target.style.display === 'none') ? 'none' : '';
+                                }
+                            });
+                        });
+                    }
+
+                    links.forEach(function (a) {
+                        a.addEventListener('click', function (e) {
+                            e.preventDefault();
+                            var target = document.getElementById(a.getAttribute('data-target'));
+                            if (!target) return;
+                            target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            links.forEach(function (l) { l.classList.remove('active'); });
+                            a.classList.add('active');
+                        });
+                    });
+                }
+
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', initBlogSidebar);
+                } else {
+                    initBlogSidebar();
+                }
+            })();
+        </script>
 
         <section id="about" class="parallax-section">
             <div class="parallax-bg" data-speed="0.25" style="background-image: url('https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=dark%20abstract%20background%2C%20subtle%20gradient%2C%20modern%20design%2C%20neutral%20tones&image_size=landscape_16_9');"></div>
