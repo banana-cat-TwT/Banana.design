@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>实用纹理网站研究日志 - 巴拿拿猫的个人网站</title>
+    <title>实用网站与插件合集 - 巴拿拿猫的个人网站</title>
     <link rel="stylesheet" href="style.css">
     <style>
         :root {
-            --primary: #f59e0b;
-            --secondary: #fcd34d;
-            --accent: #fbbf24;
-            --highlight: #a3e635;
-            --dark-bg: #1c1917;
-            --dark-bg-deep: #0f0d0b;
-            --light-bg: #fef3c7;
+            --primary: #C2908A;
+            --secondary: #8C7468;
+            --accent: #D3AFA6;
+            --highlight: #CD9830;
+            --dark-bg: #F3ECE3;
+            --dark-bg-deep: #EAE0D3;
+            --light-bg: #5A4E46;
         }
 
         body {
@@ -33,8 +33,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(ellipse at 30% 40%, rgba(245, 158, 11, 0.15) 0%, transparent 50%),
-                        radial-gradient(ellipse at 70% 60%, rgba(163, 230, 53, 0.1) 0%, transparent 40%);
+            background: radial-gradient(ellipse at 30% 40%, rgba(194, 144, 138, 0.22) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 60%, rgba(166, 181, 160, 0.16) 0%, transparent 40%);
             pointer-events: none;
             z-index: -1;
         }
@@ -56,7 +56,7 @@
             font-size: 2.5rem;
             margin-bottom: 1rem;
             color: var(--secondary);
-            text-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+            text-shadow: 0 0 20px rgba(194, 144, 138, 0.3);
         }
 
         .blog-subtitle {
@@ -77,11 +77,11 @@
         }
 
         .blog-section {
-            background: rgba(28, 25, 23, 0.8);
+            background: rgba(255, 251, 246, 0.75);
             border-radius: 15px;
             padding: 2rem;
             margin-bottom: 2rem;
-            border: 1px solid rgba(245, 158, 11, 0.2);
+            border: 1px solid rgba(194, 144, 138, 0.28);
         }
 
         .blog-section h3 {
@@ -107,10 +107,10 @@
         }
 
         .feature-item {
-            background: rgba(245, 158, 11, 0.1);
+            background: rgba(194, 144, 138, 0.12);
             border-radius: 10px;
             padding: 1.5rem;
-            border: 1px solid rgba(245, 158, 11, 0.3);
+            border: 1px solid rgba(194, 144, 138, 0.32);
         }
 
         .feature-item h4 {
@@ -124,7 +124,7 @@
         }
 
         .highlight-box {
-            background: rgba(163, 230, 53, 0.1);
+            background: rgba(205, 152, 48, 0.14);
             border-left: 4px solid var(--highlight);
             padding: 1rem 1.5rem;
             margin: 1.5rem 0;
@@ -139,7 +139,7 @@
             display: inline-block;
             padding: 0.75rem 1.5rem;
             background: linear-gradient(145deg, var(--primary), var(--accent));
-            color: var(--dark-bg);
+            color: #fffaf5;
             text-decoration: none;
             border-radius: 50px;
             font-weight: bold;
@@ -151,7 +151,7 @@
         .btn-back:hover {
             transform: translateY(-3px);
             background: linear-gradient(145deg, var(--secondary), var(--primary));
-            box-shadow: 0 10px 25px rgba(245, 158, 11, 0.4);
+            box-shadow: 0 10px 25px rgba(194, 144, 138, 0.4);
         }
 
         .video-container {
@@ -184,6 +184,51 @@
                 height: 280px;
             }
         }
+
+        /* 左侧章节导航栏 */
+        .chapter-nav {
+            position: fixed;
+            left: 1.2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 999;
+            background: rgba(255, 251, 246, 0.92);
+            border: 1px solid rgba(194, 144, 138, 0.4);
+            border-radius: 12px;
+            padding: 0.8rem 0.5rem;
+            box-shadow: 0 6px 24px rgba(140, 116, 104, 0.14);
+            max-width: 220px;
+        }
+
+        .chapter-nav a {
+            display: block;
+            padding: 0.5rem 0.9rem;
+            color: #8C7468;
+            text-decoration: none;
+            font-size: 0.88rem;
+            border-radius: 8px;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .chapter-nav a:hover {
+            background: rgba(194, 144, 138, 0.14);
+            color: #6B5149;
+        }
+
+        .chapter-nav a.active {
+            background: rgba(205, 152, 48, 0.18);
+            color: #CD9830;
+            font-weight: 600;
+        }
+
+        @media (max-width: 960px) {
+            .chapter-nav {
+                display: none;
+            }
+        }
     </style>
 
     <!-- 51.la 访客统计 V6 -->
@@ -194,24 +239,40 @@
     <!-- Watermark Canvas -->
     <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.03;"></canvas>
 
+    <!-- 左侧章节导航栏 -->
+    <nav class="chapter-nav" id="chapterNav">
+        <a href="#sec-intro" class="active">写在前面</a>
+        <a href="#sec-texture">一 · 实用纹理网站</a>
+        <a href="#sec-video">视频分享</a>
+        <a href="#sec-advantage">网站核心优势</a>
+        <a href="#sec-experience">实际应用体验</a>
+        <a href="#sec-summary">总结与推荐</a>
+        <a href="#sec-studiocats">二 · StudioCats 插件</a>
+    </nav>
+
     <div class="blog-detail-container">
         <div class="blog-header">
-            <h1 class="blog-title">实用纹理网站研究日志</h1>
-            <p class="blog-subtitle">发现一款超好用的贴图纹理资源网站</p>
+            <h1 class="blog-title">实用网站与插件合集</h1>
+            <p class="blog-subtitle">顺手收藏的资源与工具，持续补充</p>
             <div class="blog-meta">
                 <span>发布日期：2026年5月16日</span> | 
-                <span>阅读次数：0</span> | 
                 <span>分类：资源推荐</span>
             </div>
         </div>
 
         <div class="blog-content">
-            <div class="blog-section">
-                <h3>发现之旅</h3>
-                <p>最近在B站上刷到了一个宝藏视频，介绍了一款非常实用的纹理网站。看完视频后我迫不及待地去尝试了一下，结果发现真的太好用了！这个网站完美解决了我平时在纹理素材方面的痛点，必须记录下来分享给大家。</p>
+            <div class="blog-section" id="sec-intro">
+                <h3>写在前面</h3>
+                <p>这个页面原本只是记录一款纹理网站，后来逐渐把平时刷到、用到顺手的小工具也塞了进来，就干脆改成了「实用网站与插件合集」。</p>
+                <p class="highlight-box" style="border-left: 4px solid var(--highlight);"><strong>郑重说明：</strong>这里收录的内容都是我平时<span class="hl-strong">随手添加</span>进来的，不是系统整理过的完整清单，还有很多好用的网站和插件没有被写进来。以后想到或用到再慢慢补上。</p>
             </div>
 
-            <div class="blog-section">
+            <div class="blog-section" id="sec-texture">
+                <h3>一 · 实用纹理网站</h3>
+                <p>第一款记录的是通过B站视频发现的一款纹理网站，解决纹理素材查找的痛点。</p>
+            </div>
+
+            <div class="blog-section" id="sec-video">
                 <h3>视频分享</h3>
                 <p>以下是介绍这个纹理网站的B站视频：</p>
                 <div class="video-container">
@@ -219,7 +280,7 @@
                 </div>
             </div>
 
-            <div class="blog-section">
+            <div class="blog-section" id="sec-advantage">
                 <h3>网站核心优势</h3>
                 <div class="feature-list">
                     <div class="feature-item">
@@ -241,7 +302,7 @@
                 </div>
             </div>
 
-            <div class="blog-section">
+            <div class="blog-section" id="sec-experience">
                 <h3>实际应用体验</h3>
                 <p>经过实际使用测试，这个纹理网站确实非常实用：</p>
                 <ul>
@@ -252,12 +313,24 @@
                 </ul>
             </div>
 
-            <div class="blog-section">
+            <div class="blog-section" id="sec-summary">
                 <h3>总结与推荐</h3>
                 <div class="highlight-box">
                     <strong>强烈推荐！</strong>这个纹理网站真的是创作者的福音，尤其是对于独立开发者和学生来说，简直是宝藏资源库。强烈建议大家去看看这个视频，相信你也会和我一样感到惊喜！
                 </div>
                 <p>如果你也在为纹理素材发愁，不妨试试这个网站，相信会给你带来很多便利。好的工具能让创作事半功倍，这个纹理网站就是这样一个好帮手。</p>
+            </div>
+
+            <div class="blog-section" id="sec-studiocats">
+                <h3>二 · StudioCats 绘图软件实时同步插件</h3>
+                <p>顺手收藏的一款免费小工具，可以把 Clip Studio Paint、Photoshop、GIMP 的编辑画面实时同步到 Unity 里，画贴图时不用反复导入导出。</p>
+                <ul>
+                    <li><strong>CLIP STUDIO Live Sync Tool for Unity：</strong>Clip Studio Paint 画面实时同步到 Unity</li>
+                    <li><strong>Photoshop Live Sync Tool for Unity：</strong>Photoshop 画面实时同步到 Unity</li>
+                    <li><strong>GIMP Live Sync Tool For Unity：</strong>GIMP 画面实时同步到 Unity</li>
+                </ul>
+                <p>三个工具均免费，来源于 BOOTH 平台的 StudioCats 商店。</p>
+                <p style="margin-top: 1rem;"><a href="https://studiocats.booth.pm/items/8740429" target="_blank" rel="noopener noreferrer" style="color: var(--secondary); text-decoration: underline; word-break: break-all;">https://studiocats.booth.pm/items/8740429</a></p>
             </div>
 
             <div style="text-align: center;">
@@ -267,5 +340,42 @@
     </div>
 
     <script src="script.js"></script>
+    <script>
+        (function () {
+            var navLinks = document.querySelectorAll('#chapterNav a');
+            if (!navLinks.length) return;
+
+            var sections = [];
+            navLinks.forEach(function (link) {
+                var id = link.getAttribute('href');
+                var sec = document.querySelector(id);
+                if (sec) sections.push({ link: link, sec: sec });
+            });
+
+            function setActive() {
+                var scrollPos = window.scrollY + 120;
+                var current = null;
+                sections.forEach(function (item) {
+                    if (item.sec.offsetTop <= scrollPos) current = item;
+                });
+                navLinks.forEach(function (link) { link.classList.remove('active'); });
+                if (current) current.link.classList.add('active');
+            }
+
+            window.addEventListener('scroll', setActive);
+            setActive();
+
+            navLinks.forEach(function (link) {
+                link.addEventListener('click', function (e) {
+                    var target = document.querySelector(link.getAttribute('href'));
+                    if (!target) return;
+                    e.preventDefault();
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    navLinks.forEach(function (l) { l.classList.remove('active'); });
+                    link.classList.add('active');
+                });
+            });
+        })();
+    </script>
 </body>
 </html>
