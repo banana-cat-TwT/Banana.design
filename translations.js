@@ -481,7 +481,7 @@ const aboutExtrasData = {
         ],
         hobbies: {
             title: '兴趣爱好',
-            intro: '曾有长辈提醒过我，涉猎过广容易样样不精。但我始终觉得，不能因为担心不够精深就停止探索，对什么有兴趣就去接触，这并没有什么不好，总不能因为害怕就压抑自己的好奇心和探索欲。我的学习方法一向是在一个方向上深入钻研的同时，也去接触其他领域，从过去到现在，一直都是如此。与其说自己会什么，我更习惯把东西做出来再说，平时学了什么不必声张，真正做出了东西再摆出来就好。',
+            intro: '曾有长辈提醒过我，涉猎过广容易样样不精。但我始终觉得，不能因为担心不够精深就停止探索，对什么有兴趣就去接触，这并没有什么不好，总不能因为害怕就压抑自己的好奇心和探索欲。我的学习方法一向是在一个方向上深入钻研的同时，也去接触其他领域，从过去到现在，一直都是如此。与其说自己会什么，我更习惯把东西做出来再说，平时学了什么不必声张，真正做出了东西再摆出来就好。我也从不轻易对别人承诺，说出口的就一定是我有把握做到的，我不喜欢说大话，同样也反感别人给我画大饼。',
             items: [
                 { title: '游戏开发', desc: '利用课余时间开发小型游戏，学习游戏引擎和游戏设计原理。' },
                 { title: '旅游', desc: '喜欢探索不同的地方，体验当地文化和风景，为创作寻找灵感。' },
@@ -532,7 +532,7 @@ const aboutExtrasData = {
         ],
         hobbies: {
             title: 'Hobbies',
-            intro: 'A senior once reminded me that spreading too wide leads to mastering nothing. But I have always felt that one shouldn\'t stop exploring just out of fear of not being deep enough. If something interests you, go explore it — there\'s nothing wrong with that. You shouldn\'t suppress your curiosity and desire to explore just because you\'re afraid. My learning approach has always been to dive deep in one direction while also touching on other fields. From the past to now, it has always been this way. Rather than claiming what I can do, I prefer to make things first and talk later. What I learn day-to-day doesn\'t need to be announced — when something real is produced, then it\'s worth showing.',
+            intro: 'A senior once reminded me that spreading too wide leads to mastering nothing. But I have always felt that one shouldn\'t stop exploring just out of fear of not being deep enough. If something interests you, go explore it — there\'s nothing wrong with that. You shouldn\'t suppress your curiosity and desire to explore just because you\'re afraid. My learning approach has always been to dive deep in one direction while also touching on other fields. From the past to now, it has always been this way. Rather than claiming what I can do, I prefer to make things first and talk later. What I learn day-to-day doesn\'t need to be announced — when something real is produced, then it's worth showing. I also never make promises lightly; whatever I say is always something I'm confident I can deliver. I don't like empty talk, and I dislike it just as much when others feed me empty promises.',
             items: [
                 { title: 'Game Development', desc: 'Developing small games in my spare time, learning game engines and game design principles.' },
                 { title: 'Traveling', desc: 'Love exploring different places, experiencing local culture and scenery, finding inspiration for creation.' },

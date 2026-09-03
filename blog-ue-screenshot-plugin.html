@@ -232,8 +232,8 @@
         }
 
         .demo-video {
-            width: 100%;
-            max-width: 720px;
+            width: 50%;
+            max-width: 480px;
             height: auto;
             display: block;
             margin: 1rem auto;
@@ -250,6 +250,35 @@
             margin-top: 0.5rem;
             margin-bottom: 1.5rem;
             opacity: 0.85;
+        }
+
+        .shot-row {
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+            margin: 1.5rem 0;
+        }
+
+        .shot-item {
+            flex: 1 1 0;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .shot-item .demo-video {
+            width: 100%;
+            max-width: 320px;
+            margin: 0 auto;
+        }
+
+        .shot-item img {
+            width: 100%;
+            max-width: 320px;
+            height: auto;
+            display: block;
+            margin: 0 auto;
         }
 
         .back-link {
@@ -427,23 +456,65 @@
             <div class="blog-section">
                 <h2>四、可视化调参面板更新</h2>
 
-                <p>这次给插件补了一个独立的可视化调参面板Python窗口，它负责把参数写进UE再出图，面板和出图通过同一个配置文件衔接。</p>
+                <p>这次给插件补了一个独立的可视化调参面板Python窗口，它负责把参数写进UE再出图，面板和出图通过同一个配置文件衔接。面板自上而下分几块：距离系数滑块（左边带 9 机位俯视示意图，拖滑块相机环实时外扩内收）、命名前缀与输出文件夹、9 个机位的勾选（选中显示绿勾，支持全选/反选/全不选）、可选的模型文件归类，以及保存配置 / 打开输出文件夹 / 恢复默认三个操作按钮。</p>
 
-                <p>面板自上而下分几块：距离系数滑块（左边带 9 机位俯视示意图，拖滑块相机环实时外扩内收）、命名前缀与输出文件夹、9 个机位的勾选（选中显示绿勾，支持全选/反选/全不选）、可选的模型文件归类，以及保存配置 / 打开输出文件夹 / 恢复默认三个操作按钮。</p>
+                <p>这次更新又优化了摄像机视图的可视化，新版本比第一版更直观、更好理解。下面这段是面板更新完成后的一次全面测试，打开调参面板把每个功能逐项试了一遍，确认各项都能正常使用。</p>
 
-                <video class="demo-video" controls autoplay loop muted playsinline preload="metadata">
-                    <source src="videos/uescreenshot3.mp4" type="video/mp4">
-                    您的浏览器不支持HTML5视频播放。
-                </video>
-                <p class="video-caption">▲ 演示三：可视化调参面板操作</p>
+                <div class="shot-row">
+                    <div class="shot-item">
+                        <video class="demo-video" controls autoplay loop muted playsinline preload="metadata">
+                            <source src="videos/uescreenshot3.mp4" type="video/mp4">
+                            您的浏览器不支持HTML5视频播放。
+                        </video>
+                        <p class="video-caption">▲ 演示三：可视化调参面板操作</p>
+                    </div>
+                    <div class="shot-item">
+                        <video class="demo-video" controls autoplay loop muted playsinline preload="metadata">
+                            <source src="videos/uescreenshot4.mp4" type="video/mp4">
+                            您的浏览器不支持HTML5视频播放。
+                        </video>
+                        <p class="video-caption">▲ 演示四：摄像机视图可视化更新</p>
+                    </div>
+                    <div class="shot-item">
+                        <video class="demo-video" controls autoplay loop muted playsinline preload="metadata">
+                            <source src="videos/uescreenshot6.mp4" type="video/mp4">
+                            您的浏览器不支持HTML5视频播放。
+                        </video>
+                        <p class="video-caption">▲ 演示五：面板功能逐项测试</p>
+                    </div>
+                </div>
 
-                <p>这次更新又优化了摄像机视图的可视化：第一版里相机空间关系的示意比较抽象，新版本把它改得更直观、更好理解。</p>
+                <h3>4.1 UE5 截图演示</h3>
+                <p>这是 UE5 版本环境的截图演示，展示插件在较新引擎下的实际运行效果。</p>
+                <div class="shot-row">
+                    <div class="shot-item">
+                        <video class="demo-video" controls autoplay loop muted playsinline preload="metadata">
+                            <source src="videos/uescreenshot5.mp4" type="video/mp4">
+                            您的浏览器不支持HTML5视频播放。
+                        </video>
+                        <p class="video-caption">▲ 演示六：UE5 截图演示</p>
+                    </div>
+                    <div class="shot-item">
+                        <video class="demo-video" controls autoplay loop muted playsinline preload="metadata">
+                            <source src="videos/uescreenshot7.mp4" type="video/mp4">
+                            您的浏览器不支持HTML5视频播放。
+                        </video>
+                        <p class="video-caption">▲ 演示七：另一组输出结果的视频演示</p>
+                    </div>
+                </div>
 
-                <video class="demo-video" controls autoplay loop muted playsinline preload="metadata">
-                    <source src="videos/uescreenshot4.mp4" type="video/mp4">
-                    您的浏览器不支持HTML5视频播放。
-                </video>
-                <p class="video-caption">▲ 演示四：摄像机视图可视化更新（比第一版更直观）</p>
+                <h3>4.2 输出文件展示</h3>
+                <p>插件运行后自动导出的截图文件，按预设规则自动命名与分类整理。</p>
+                <div class="shot-row">
+                    <div class="shot-item">
+                        <img src="image/UEscreenshots2.png" alt="UE多截图工具输出文件展示" style="width: 100%; border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.18);">
+                        <p class="video-caption">▲ 输出文件展示：一键导出的多角度截图</p>
+                    </div>
+                    <div class="shot-item">
+                        <img src="image/UEscreenshots3.png" alt="UE多截图工具输出结果展示二" style="width: 100%; border-radius: 12px; box-shadow: 0 6px 18px rgba(0,0,0,0.18);">
+                        <p class="video-caption">▲ 输出结果展示：另一次导出的截图</p>
+                    </div>
+                </div>
             </div>
         </div>
 
