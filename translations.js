@@ -94,6 +94,10 @@ const translations = {
         'about.edu.tag4': '团队协作',
 
         // 实习经历详情
+        'about.intern.game.title': '游戏项目研发',
+        'about.intern.game.date': '2026年5月13日 - 至今',
+        'about.intern.game.role': '游戏美术',
+        'about.intern.game.desc': '自研与小型团队项目均有参与，项目题材多元，覆盖写实、卡通等多种风格。美术部分由我主导，独立负责资产从概念设计到引擎落地的全流程，工具链覆盖 UE、Unity、Blender、ZBrush、Substance Painter。与程序、策划头脑风暴共同确定方案，策划参与资产最终落地；凭借长期独立开发经验，团队沟通协作一直顺畅。项目持续开发中。',
         'about.intern.tx.title': '深圳市腾讯计算机系统有限公司｜天美IEG',
         'about.intern.tx.date': '2025年8月11日 - 2026年5月12日',
         'about.intern.tx.role': '3D美术',
@@ -260,7 +264,7 @@ const translations = {
         'about.intern.game.title': 'Game Project Development',
         'about.intern.game.date': 'May 13, 2026 - Present',
         'about.intern.game.role': 'Game Artist',
-        'about.intern.game.desc': 'Responsible for full-cycle 2D/3D art development across self-developed and small-team projects, covering realistic, stylized and other styles, independently handling the entire pipeline from concept design to engine implementation; coordinating with planning and programming teams to unify art standards and performance benchmarks, delivering assets to production, and adapting to PC/mobile platform requirements.',
+        'about.intern.game.desc': 'Involved in both self-developed and small-team projects across a wide range of themes and styles, including realistic and stylized. I lead the art side, independently handling the full pipeline from concept design to engine implementation, with a toolchain covering UE, Unity, Blender, ZBrush, and Substance Painter. I brainstorm with programmers and designers to shape the plan, with designers involved in final asset delivery. Thanks to long experience in solo development, team communication has always been smooth. The project is under continuous development.',
         'about.intern.tx.title': 'Tencent (Shenzhen) | TiMi Studios (IEG)',
         'about.intern.tx.date': 'August 11, 2025 - May 12, 2026',
         'about.intern.tx.role': '3D Artist',
