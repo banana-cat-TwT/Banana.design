@@ -257,6 +257,10 @@ const translations = {
         'about.edu.tag4': 'Team Collaboration',
 
         // Internship Details
+        'about.intern.game.title': 'Game Project Development',
+        'about.intern.game.date': 'May 13, 2026 - Present',
+        'about.intern.game.role': 'Game Artist',
+        'about.intern.game.desc': 'Responsible for full-cycle 2D/3D art development across self-developed and small-team projects, covering realistic, stylized and other styles, independently handling the entire pipeline from concept design to engine implementation; coordinating with planning and programming teams to unify art standards and performance benchmarks, delivering assets to production, and adapting to PC/mobile platform requirements.',
         'about.intern.tx.title': 'Tencent (Shenzhen) | TiMi Studios (IEG)',
         'about.intern.tx.date': 'August 11, 2025 - May 12, 2026',
         'about.intern.tx.role': '3D Artist',
