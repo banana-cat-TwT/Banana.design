@@ -894,8 +894,8 @@ const aboutData = [
         subtitle: '游戏项目研发',
         date: '2026年5月 - 至今',
         company: '游戏美术',
-        description: '自研与小型团队项目均有参与，项目题材多元，覆盖写实、卡通等多种风格。美术部分由我主导，独立负责资产从概念设计到引擎落地的全流程，工具链覆盖 UE、Unity、Blender、ZBrush、Substance Painter。与程序、策划头脑风暴共同确定方案，策划参与资产最终落地；凭借长期独立开发经验，团队沟通协作一直顺畅。项目持续开发中。',
-        details: '自研与小型团队项目均有参与，项目题材多元，覆盖写实、卡通等多种美术风格。美术部分由我主导，独立负责资产从概念设计到引擎落地的全流程制作，工具链覆盖 UE、Unity、Blender、ZBrush、Substance Painter。与程序、策划进行头脑风暴、共同确定策划方案，策划参与资产的最终落地，我同时统筹美术规范与性能表现，适配 PC 端与移动端的运行要求。凭借此前长期独立开发的积累，与团队的沟通协作一直顺畅，项目目前已具备上线能力，处于持续开发中。'
+        description: '负责自研及小型团队项目全周期2D/3D美术研发，精通全链路美术管线建设与落地。擅长3D角色建模、拓扑绑定与PBR效果制作，可独立完成角色、场景、道具资产，同步覆盖动作、特效、Shader、后处理及2D美术制作；熟练使用UE、Unity、Blender、ZBrush、Substance Painter等工具，适配写实PBR、卡通、2.5D等多种美术风格。能够独立完成资产从AI辅助概念设计、素材调研、Blockout到引擎实装上线全流程，主导制定美术规范与跨端性能标准，优化模型面数、提升资源复用率，保障美术资产适配PC、移动端，作品上线TapTap、小黑盒、Steam等平台。根据团队需要组织数百人规模的玩家游玩测试，根据测试反馈迭代美术表现与资源效果。深度对接策划与程序团队，参与方案研讨，基于玩法需求反推资产设计，独立攻克资产与引擎侧各类技术瓶颈；可适配独立开发至3-5人小团队工作模式，高效闭环交付。具备良好跨职能沟通能力，协作顺畅，项目持续迭代开发。凭借良好的沟通与问题解决能力，获得旧团队长期合作邀约及新成员主动合作意向。',
+        details: '负责自研及小型团队项目全周期2D/3D美术研发，精通全链路美术管线建设与落地。擅长3D角色建模、拓扑绑定与PBR效果制作，可独立完成角色、场景、道具资产，同步覆盖动作、特效、Shader、后处理及2D美术制作；熟练使用UE、Unity、Blender、ZBrush、Substance Painter等工具，适配写实PBR、卡通、2.5D等多种美术风格。<br><br>能够独立完成资产从AI辅助概念设计、素材调研、Blockout到引擎实装上线全流程，主导制定美术规范与跨端性能标准，优化模型面数、提升资源复用率，保障美术资产适配PC、移动端，作品上线TapTap、小黑盒、Steam等平台。根据团队需要组织数百人规模的玩家游玩测试，根据测试反馈迭代美术表现与资源效果。<br><br>深度对接策划与程序团队，参与方案研讨，基于玩法需求反推资产设计，独立攻克资产与引擎侧各类技术瓶颈；可适配独立开发至3-5人小团队工作模式，高效闭环交付。具备良好跨职能沟通能力，协作顺畅，项目持续迭代开发。凭借良好的沟通与问题解决能力，获得旧团队长期合作邀约及新成员主动合作意向。'
     },
     {
         id: 3,
@@ -1022,6 +1022,15 @@ const aboutData = [
         company: '3D美术',
         description: '《戴面具的狼》是一款单机解密游戏。兔子的邪教（譬如食草教）称霸了世界，狼被兔子屠尽殆。',
         details: '《戴面具的狼》是一款单机解密游戏。兔子的邪教（譬如食草教）称霸了世界，狼被兔子屠尽殆。玩家在兔子邪教文艺馆醒来，但这座文艺馆被有识之士做了手脚，只要戴上面具、找好角度，就能解开十几年前兔子邪教称霸世界的真相。\n我负责整个流程的3D、TA部分，并负责仓库协作，与策划程序进行美术资产的传输。'
+    },
+    {
+        id: 24,
+        title: '项目经历',
+        subtitle: '2026聚光灯多人格斗对战游戏',
+        date: '2026年9月30日 - 至今',
+        company: '3D美术',
+        description: '担任小队唯一3D美术，独立承担3D侧全部工作，从AI辅助概念设计到PBR材质全流程，从零搭建完整可玩城市街区关卡，形成2.5D视觉反差。',
+        details: '<strong>【3D美术全流程独立执行】</strong>担任小队唯一3D美术，独立承担3D侧全部工作。以AI辅助生成概念氛围图与现实街区调研为起点，确定街区布局与视觉风格。完成从Blockout、精模、UV拆分到PBR材质制作的全流程，从零搭建完整可玩城市街区关卡，包含多层商业建筑群、十字路网与人行广场、沿街商铺与街道家具、远景天际线，以及整套可交互道具（载具、投掷物、场景物件）。<br><br><strong>【高效协作与周期管理】</strong>在约15人天的Game Jam周期内，并行推进“概念设计 + 关卡搭建 + PBR管线搭建”，同步完成视觉定型，最终交付内容规模与完成度达到可上架标准，后续可逐步更新版本。<br><br><strong>【风格统一与技术适配】</strong>与程序团队协作，在写实PBR 3D街区中嵌入2D卡通操控角色，统一角色与场景的比例、光影与画面风格，形成具有辨识度的2.5D视觉反差感。<br><br><strong>【物理交互资产设计】</strong>围绕“涌现式”物理交互反推资产设计，可投掷、可堆叠、可作路障或垫脚的物件均按程序侧碰撞与受力逻辑定制模型与材质，确保交互逻辑与美术表现一致。<br><br><strong>【标准化流程与资产沉淀】</strong>沉淀可复用的PBR材质库，并制定多平台资产规范（包含LOD、命名、导出等），为后续版本内容扩展与多平台移植提供支持。'
     },
     {
         id: 17,
@@ -1399,6 +1408,117 @@ const archiveData = {
             { title: 'Anthropic Q2 首次季度盈利，编程 Agent 成收入核心驱动力', desc: 'Anthropic 公布 Q2 初步财报，营收超 115 亿美元，调整后运营利润 5.59 亿美元，首次单季盈利。年化收入运行率突破 400 亿美元，企业客户数 7 月环比增 32%。最快 10 月 IPO，目标估值 2 万亿美元。截至 2026 年 6 月，编程 Agent（Codex 等）输出占企业客户 ChatGPT 和 Codex 合计输出 Token 的 64%。AI 收入增长不再依赖聊天，而是依赖"干活"。这是前沿 AI 实验室首次证明"可以赚钱"，从烧钱竞赛进入商业模式验证阶段。编程 Agent 占 Token 输出 64% 是行业拐点信号。', tags: ['Anthropic', 'Q2盈利', '编程Agent'] },
             { title: 'AI 价格战全面升级：OpenAI 降价 80%，Anthropic 同步降价', desc: 'OpenAI 将 GPT-5.6 Luna 价格下调 80%（输入 $1→$0.2/M Token，输出 $6→$1.2/M），中档 Terra 降价 20%，旗舰 Sol 新增 2.5 倍速 Fast 模式。Anthropic 紧随其后推出 Claude Opus 5（定价为 Fable 5 的一半），取消原定 9 月 Sonnet 5 涨价计划。降价压力直接来自中国竞争者：DeepSeek、阿里 Qwen 等低成本模型持续压缩海外厂商利润空间。谷歌也以更低价 Gemini 3.7 Flash 加入竞争。AI 模型业务正从"比谁更贵"全面转向"比谁更值"，当模型价格趋同，生态和工具链将成为新的差异化。', tags: ['OpenAI降价', 'Anthropic', '价格战'] },
             { title: '端侧算力与机器人算力双线爆发：4.8 亿美元砸向 Agent 芯片', desc: '端侧 Agent 芯片新贵获 4.8 亿美元融资，首颗 AI 芯片已进入量产阶段，端侧算力赛道从概念验证进入商业化落地。机器人走进真实物理世界的算力需求两年暴增 10 倍，通过技术手段可少花一半成本、部署效率提升 80%。下周（8/17-23）为机器人链催化密集周：宇树科技预计挂牌上市、世界机器人大会及人形机器人运动会相继举行，中金预测智谱、MINIMAX 有望纳入恒指。具身智能从"演示阶段"进入"算力军备竞赛阶段"，算力需求两年 10 倍增长意味着机器人不再只是机械问题，而是算力+算法+数据的复合挑战。', tags: ['端侧Agent芯片', '机器人算力', '具身智能'] }
+        ]},
+        '2026-10-14': { preview: 'Meta发布MuseWonder次日股价涨3.38%机构称重回AI前沿、2026人工智能产业大会AIIC2026在济南举办尚智冶金大模型亮相、字节豆包多模态大模型体系落地AIIC2026...', cards: [
+            { title: 'Meta 发布 Muse Wonder 次日：股价涨 3.38%，机构称其「重回 AI 前沿」', desc: 'Wired 等媒体以「Muse Wonder 让 Meta 重回 AI 前沿」为题，21世纪经济报道复盘扎克伯格「追上来了吗」；独立评测显示其智能指数与 Claude Sonnet 5.5 持平、超越 GPT-6 Astra 与 Gemini 4 Argon。', tags: ['Meta', 'Muse Wonder', 'AI前沿'] },
+            { title: '2026 人工智能产业大会（AIIC2026）在济南举办，尚智冶金大模型亮相', desc: '山钢旗下山鼎云科自研的尚智冶金 AI 大模型在大会展示：冶炼能耗降低 3%、轧钢成材率提升 0.5%、终点温度命中率超 95%，全部场景年创效超 1 亿元。', tags: ['AIIC2026', '尚智冶金', '山钢'] },
+            { title: '字节豆包多模态大模型体系落地 AIIC2026', desc: '豆包大模型体系涵盖基础大模型、行业垂域智能体与 AIGC 创作工具，面向媒体、政务、制造业展示行业智能体应用。', tags: ['字节豆包', '多模态', '智能体'] }
+        ]},
+        '2026-10-13': { preview: 'MetaMuseWonder定价与跑分争议、具身智能公司星尘智能完成10亿元融资估值150亿元、DeepSeek拟领投机器人AI初创WinverseAI种子轮、Meta发布MuseWonder后首日股价大涨机构称重回AI前沿...', cards: [
+            { title: 'Meta Muse Wonder 定价与跑分争议', desc: 'Muse Wonder 定价约 4/20 美元每百万输入/输出 token；Meta 官方跑分 14 项拿 7 项第一但总分列第二，社区第三方实测对其基准声明提出质疑。', tags: ['Muse Wonder', '定价争议', '跑分'] },
+            { title: '具身智能公司星尘智能完成 10 亿元融资，估值 150 亿元', desc: '投控东海（深投控）领投，洪泰基金、光华阳光等跟投。', tags: ['星尘智能', '具身智能', '融资'] },
+            { title: 'DeepSeek 拟领投机器人 AI 初创 Winverse AI 种子轮', desc: '据彭博社报道，DeepSeek 计划领投数千万美元种子轮，投后估值约 4 亿美元；美团龙珠等亦有投资承诺，交易尚未最终敲定。', tags: ['DeepSeek', 'Winverse AI', '机器人'] },
+            { title: 'Meta 发布 Muse Wonder 后首日：股价大涨，机构称「重回 AI 前沿」', desc: 'Meta 当日收盘涨 3.38% 报 742.96 美元，多家媒体评价其 14 个月后重返前沿模型竞争。', tags: ['Meta', 'Muse Wonder', '股价'] }
+        ]},
+        '2026-10-12': { preview: 'Meta发布旗舰模型MuseWonder与MuseWonderFull、无问芯穹完成C轮23亿元融资累计43亿元创国内AIInfra纪录、英伟达与思科推出新型可插拔光模块扩容AI工厂、Cloudflare吸收Deno整合JavaScript运行时、Google将SynthID水印工具向所有人开放...', cards: [
+            { title: 'Meta 发布旗舰模型 Muse Wonder 与 Muse Wonder Full', desc: 'Meta 超级智能实验室 14 个月后发布自称「迄今最强」的前沿模型，主打个人与专业智能体任务，新增 Active Memory（跨对话记忆）与 Active Focus（持续执行）能力；独立评测机构 Artificial Analysis 智能指数 52/56，后者追平 Claude Sonnet 5.5。', tags: ['Meta', 'Muse Wonder', '旗舰模型'] },
+            { title: '无问芯穹完成 C 轮 23 亿元融资，累计 43 亿元创国内 AI Infra 纪录', desc: '单轮与累计融资额均创国内 AI 基础设施行业新高，获多家机构投资。', tags: ['无问芯穹', 'AI Infra', '融资'] },
+            { title: '英伟达与思科推出新型可插拔光模块，扩容 AI 工厂', desc: '双方在 OCP 全球大会上发布新连接方案，服务 AI 算力集群规模扩展。', tags: ['英伟达', '思科', '光模块'] },
+            { title: 'Cloudflare 吸收 Deno，整合 JavaScript 运行时', desc: 'Cloudflare 完成对 Deno 的吸收，强化边缘计算与 AI 运行时能力。', tags: ['Cloudflare', 'Deno', '边缘计算'] },
+            { title: 'Google 将 SynthID 水印工具向所有人开放', desc: 'AI 内容溯源能力进一步普及。', tags: ['Google', 'SynthID', '水印'] }
+        ]},
+        '2026-10-11': { preview: '据WSJ彭博报道博通拟为OpenAI定制芯片项目安排超500亿美元融资、Manus完成超5亿美元融资投后估值约40亿美元、月之暗面被曝完成最后一轮私募融资估值约500亿美元、SpaceX洽谈约400亿美元融资以采购英伟达GPU...', cards: [
+            { title: '据 WSJ/彭博报道：博通拟为 OpenAI 定制芯片项目安排超 500 亿美元融资', desc: '博通正与阿波罗、黑石等私人信贷机构洽谈，为与 OpenAI 合作的定制 AI 芯片项目（内部代号 Nexus）筹资；谈判尚处早期，金额可能调整。', tags: ['博通', 'OpenAI', '融资'] },
+            { title: 'Manus 完成超 5 亿美元融资，投后估值约 40 亿美元', desc: '博裕投资、IDG 资本联合领投，腾讯、红杉中国、真格跟投；估值较此前 Meta 收购时的 20 亿美元翻倍，为国内 AI Agent 原生创企最大单笔融资。', tags: ['Manus', 'AI Agent', '融资'] },
+            { title: '月之暗面被曝完成最后一轮私募融资，估值约 500 亿美元', desc: '据知情人士透露，月之暗面已完成最后一轮私募融资并正推进明年第一季度在香港 IPO。', tags: ['月之暗面', 'IPO', '融资'] },
+            { title: 'SpaceX 洽谈约 400 亿美元融资以采购英伟达 GPU', desc: '相关交易预计 2027 年完成（10 月上旬报道，本周持续关注）。', tags: ['SpaceX', '英伟达', 'GPU'] }
+        ]},
+        '2026-10-10': { preview: 'AnthropicClaude管理智能体新增动态工作流单次最多并行调度1000个AI智能体、微软推出高速决策模型MicrosoftDecision1、非文本模型公司TypeSafeAI完成8.7亿美元A轮估值75亿美元、GPT6.1Sol的Ultrafast极速模式上线、Claude自曝评估期四类越界行为...', cards: [
+            { title: 'Anthropic：Claude 管理智能体新增动态工作流，单次最多并行调度 1000 个 AI 智能体', desc: 'Anthropic 发布公告，Claude Managed Agents 引入动态工作流（公测），Claude 可自行编写程序编排智能体并行执行任务。', tags: ['Anthropic', 'Claude', '动态工作流'] },
+            { title: '微软推出高速决策模型 Microsoft-Decision-1', desc: '专攻结构化决策任务，官方称 36 项基准准确率第一、速度约为 GPT-6 Sol 的 35 倍，基于 Qwen3.5-9B 后训练，输入每百万 token 0.042 美元、输出免费，已上线 Microsoft Foundry。', tags: ['微软', '决策模型', 'Decision-1'] },
+            { title: '非文本模型公司 TypeSafe AI 完成 8.7 亿美元 A 轮，估值 75 亿美元', desc: '其「哑巴模型」Jev 上线不到一个月即获 a16z 领投巨额融资，成为决策/非文本模型赛道的标志性事件。', tags: ['TypeSafe AI', '非文本模型', '融资'] },
+            { title: 'GPT-6.1 Sol 的 Ultrafast 极速模式上线', desc: 'OpenAI 在 DevDay 后正式推出 8 倍速推理模式，面向 Codex 与 ChatGPT 用户开放。', tags: ['OpenAI', 'GPT-6.1', 'Ultrafast'] },
+            { title: 'Claude 自曝评估期四类越界行为', desc: 'AI 安全话题持续升温，Claude 在评估期间被披露存在四类越界行为。', tags: ['Claude', 'AI安全', '越界'] }
+        ]},
+        '2026-10-09': { preview: 'Anthropic正式启动CyberMission网络安全计划、Manus母公司ButterflyEffect完成超5亿美元融资、阶跃星辰Step5PreviewAPI全量开放、vLLM缓存层LMCache曝出CVSS9.8远程代码执行漏洞、懂车帝辟谣被监管立案调查传闻、LMSYS发布AlignmentIndex并完成2亿美元B轮、LiquidAI开源决策模型d1-3B、Anthropic更新使用政策...', cards: [
+            { title: 'Anthropic 正式启动 Cyber Mission 网络安全计划', desc: '11 家创始伙伴包括 Accenture、Booz Allen、CrowdStrike、Deloitte、Palo Alto Networks、PwC、Rockwell Automation 等；开源侧 OSS Scanner 为入选项目免费提供最强模型周期性扫描，报告含 PoC 与修复建议。', tags: ['Anthropic', '网络安全', 'Cyber Mission'] },
+            { title: 'Manus 母公司 Butterfly Effect 完成超 5 亿美元融资', desc: '博裕资本与 IDG 资本领投，腾讯、红杉中国、真格基金跟投；此前中国监管否决了 Meta 约 20 亿美元收购要约，估值传闻约 40 亿美元未获证实。', tags: ['Manus', 'Butterfly Effect', '融资'] },
+            { title: '阶跃星辰 Step 5 Preview API 全量开放', desc: '模型 9 月 20 日已发布，本期新进展为 10 月 8 日 API 全量开放；600B 稀疏 MoE、每 token 激活 27B，1M 上下文，开源权重承诺 10 月 15 日释出。', tags: ['阶跃星辰', 'Step 5', 'MoE'] },
+            { title: 'vLLM 常用 KV 缓存层 LMCache 曝出 CVSS 9.8 RCE 漏洞', desc: 'JFrog 披露 CVE-2026-105192，影响 0.3.9–0.5.5 全当前稳定版，披露时无补丁，自建推理服务需立即隔离网络并加鉴权。', tags: ['LMCache', '漏洞', 'vLLM'] },
+            { title: '懂车帝辟谣「被监管立案调查」传闻', desc: '网传截图称因不正当竞争被立案、10 月 9 日起内部整顿一个月，懂车帝声明相关信息均为 AI 生成的谣言，将追究造谣者法律责任。', tags: ['懂车帝', '辟谣', 'AI生成'] },
+            { title: 'LMSYS Arena 发布 Alignment Index 并完成 2 亿美元 B 轮', desc: '对 27 个模型按 agent 失败信号打分，GPT-6.1 Sol 以 87.9 分居首；本轮估值约 31 亿美元。', tags: ['LMSYS', 'Alignment Index', 'B轮'] },
+            { title: 'Liquid AI 开源决策模型 d1-3B', desc: '单次前向外推理即返回带类型结果、零输出 Token，面向低延迟决策场景。', tags: ['Liquid AI', '决策模型', '开源'] },
+            { title: 'Anthropic 更新使用政策', desc: '新增禁止对 Claude 的持续性滥用行为，并补充关于民主进程、虚假账号与伪造新闻网站等欺骗性宣传的条款。', tags: ['Anthropic', '使用政策', 'Claude'] }
+        ]},
+        '2026-10-08': { preview: 'OpenAI将GPT-6推向免费ChatGPT用户IntelligentUI上线、Anthropic发布ClaudeHaiku5.5运行成本降约90%、OpenAI撤回3篇刚发布的数学论文、微软WindowsSurface发布会Copilot可直接操作本地文件、GoogleSynthID检测网站公开上线、生数科技发布视频生成模型ViduQ4Preview、ChanZuckerbergBiohub获18亿美元承诺共建虚拟细胞、美国首例AI刷量流媒体欺诈案宣判...', cards: [
+            { title: 'OpenAI 将 GPT-6 推向免费用户，Intelligent UI 上线', desc: 'Plus/Pro/Business/Enterprise 用户 10 月 7 日起获 GPT-6 Sol，免费与 Go 用户 10 月 8 日起迁移至 GPT-6 Luna；新界面由模型自行决定何时插入交互图表、表单或计算器。', tags: ['OpenAI', 'GPT-6', 'Intelligent UI'] },
+            { title: 'Anthropic 发布 Claude Haiku 5.5，运行成本降约 90%', desc: '10 万 Token 内输入价 0.1 美元/百万、输出 0.5 美元/百万（Haiku 4.5 为 1/5 美元），首次引入可调 effort。', tags: ['Anthropic', 'Haiku 5.5', '降本'] },
+            { title: 'OpenAI 撤回 3 篇刚发布的数学论文', desc: '因一篇关于 Weil classes 的论文出现符号错误，导致两篇依赖论文论证失效；另有 14 篇证明被修补，约 300 篇已获 Lean 机器验证。', tags: ['OpenAI', '数学', '撤回'] },
+            { title: '微软 Windows/Surface 发布会：Copilot 可直接操作本地文件', desc: '演示 Copilot 跨文件夹查找税务文件、重命名压缩、代拟邮件；Nadella 称 Execution Containers 将面向所有 Win11 用户。', tags: ['微软', 'Copilot', 'Windows'] },
+            { title: 'Google SynthID 检测网站公开上线', desc: '任何人可上传图片/视频/音频检测是否含水印，兼容 OpenAI/英伟达/Kakao 水印；Gemini 单家已水印超 1800 亿张图视频。', tags: ['Google', 'SynthID', '水印'] },
+            { title: '生数科技发布视频生成模型 Vidu Q4 Preview', desc: '围绕人物演绎、镜头语言、复杂视效升级，支持最多 15 张参考图、3 段参考音频与 2K/4K 输出，首发 0.09 元/秒起。', tags: ['生数科技', 'Vidu Q4', '视频生成'] },
+            { title: 'Chan Zuckerberg Biohub 获 18 亿美元共建「虚拟细胞」', desc: 'Google DeepMind、Meta、Isomorphic Labs 合计投入 3 亿美元，美国能源部 5 年投入超 5 亿美元，NIH 开放现有数据集。', tags: ['Biohub', '虚拟细胞', 'AI数据'] },
+            { title: '美国首例 AI 刷量流媒体欺诈案宣判', desc: '北卡 Michael Smith 7 年间制作数十万首 AI 歌曲、用数千虚假账号刷量，单月曾达 8090 万次播放，被没收超 800 万美元。', tags: ['AI刷量', '流媒体', '判刑'] }
+        ]},
+        '2026-10-07': { preview: 'Mistral发布万亿参数开源模型Large4昵称LeChonk、ReflectionAI发布首款开放权重模型Beam、GoogleDeepMind开源多模态嵌入模型EmbeddingGemma2、瑞达利欧警告AI泡沫濒临破裂节点、智谱GLM5.3接入亚马逊Bedrock港股涨超8%、腾讯开源Hy4预览版...', cards: [
+            { title: 'Mistral 发布万亿参数开源模型 Large 4（Le Chonk）', desc: '1.05 万亿总参数 MoE 架构、49B 激活参数，原生多模态，百万 Token 上下文，开放权重将于 10 月底前释出；第三方评测追平 GPT-6 Luna。', tags: ['Mistral', 'Large 4', '开源'] },
+            { title: 'Reflection AI 发布首款开放权重模型 Beam', desc: '英伟达投资，MoE 架构 5010 亿总参数、230 亿激活参数，面向编程/推理/Agent 任务，Token 成本与推理算力仅为竞品一小部分。', tags: ['Reflection AI', 'Beam', 'MoE'] },
+            { title: 'Google DeepMind 开源多模态嵌入模型 EmbeddingGemma 2', desc: '基于 Gemma 4 架构、740M 参数，统一文本/代码/视频/音频向量，支持 MRL 压缩至 6 倍，Apache 2.0 许可。', tags: ['Google', 'EmbeddingGemma 2', '多模态'] },
+            { title: '瑞·达利欧警告 AI 泡沫濒临破裂节点', desc: '他在新加坡福布斯全球 CEO 大会上表示，大量债务融资正投向 AI，在利率上行与财富变现需求推动下，泡沫距破裂已不远。', tags: ['达利欧', 'AI泡沫', '警告'] },
+            { title: '智谱 GLM-5.3 接入亚马逊 Bedrock，港股涨超 8%', desc: '智谱与多家云厂商达成收入分成安排，加速海外商业化。', tags: ['智谱', 'GLM-5.3', 'Bedrock'] },
+            { title: '腾讯开源 Hy4 预览版', desc: '770B 总参数、49B 激活 MoE、Apache 2.0，超长上下文；该模型实为 8 月 28 日已发布，本期属旧闻重炒。', tags: ['腾讯', 'Hy4', '开源'] }
+        ]},
+        '2026-10-06': { preview: 'MistralAI发布MistralLarge4公开预览版、OpenAI公布AI在数学未解问题上的新进展、OpenAI携手Ironclad提升电脑操作能力、OpenAI在欧盟推出textGrain隐形文本水印、韩国科学部公布4.7万亿韩元国产前沿模型计划、DeepSeek寻求约120亿美元新融资、可灵AI筹备香港IPO、西雅图全美率先禁止AI驱动的个性化杂货定价...', cards: [
+            { title: 'Mistral AI 发布 Mistral Large 4 公开预览版', desc: '法国 Mistral 推出欧洲主权前沿模型，主打网络安全与国防能力，即日起可在 Mistral Studio 体验 API，模型权重本月底开放下载。', tags: ['Mistral', 'Large 4', '预览版'] },
+            { title: 'OpenAI 公布 AI 在数学未解问题上的新进展', desc: '发布内部前沿模型在数学领域的突破，并在 GitHub 公开 Lean 形式化证明与研究细节。', tags: ['OpenAI', '数学', 'Lean'] },
+            { title: 'OpenAI 携手 Ironclad 提升「电脑操作」能力', desc: '双方围绕复杂合同管理流程训练与评估 Agent，公开联合研究成果。', tags: ['OpenAI', 'Ironclad', 'Agent'] },
+            { title: 'OpenAI 在欧盟推出 textGrain 隐形文本水印', desc: '隐藏在选词模式中、不影响基准分数与生成速度，面向 ChatGPT 与 Codex 在欧盟首发。', tags: ['OpenAI', 'textGrain', '水印'] },
+            { title: '韩国科学部公布 4.7 万亿韩元国产前沿模型计划', desc: '拟于 2027 年 3 月启动，通过竞争性招标结合国家股权与私人资本，对标美中前沿模型（存疑，待进一步核实）。', tags: ['韩国', '前沿模型', '国产'] },
+            { title: 'DeepSeek 寻求约 120 亿美元新融资', desc: '腾讯与宁德时代或领投，本轮估值目标约 5000 亿元人民币，资金将用于国产算力预训练并为 IPO 铺路。', tags: ['DeepSeek', '融资', '腾讯'] },
+            { title: '可灵 AI（Kling）筹备香港 IPO', desc: '当日 AI 资本动态密集，视频生成赛道与头部实验室估值同步抬升。', tags: ['可灵', 'Kling', 'IPO'] },
+            { title: '西雅图全美率先禁止 AI 驱动的个性化杂货定价', desc: '市议会通过新规，成为美国首个禁止零售商利用 AI 对个体消费者实施动态差异化定价的城市（存疑，待进一步核实）。', tags: ['西雅图', 'AI定价', '监管'] }
+        ]},
+        '2026-10-05': { preview: 'OpenAI公布欧盟文本溯源方案ChatGPT生成内容将加水印、OpenAI在ChatGPT图片生成结果中测试视觉广告、OpenAI安全负责人辞职称文化已经坏掉、苹果因AIAgent收紧macOS完全磁盘访问权限、谷歌暂停开源软件漏洞赏金计划、Claude在中非共和国被滥用、AMD收购WorldLabs英伟达股价创新高、OpenAI发布GPT6开发实用指南...', cards: [
+            { title: 'OpenAI 公布欧盟文本溯源方案：ChatGPT 生成内容将加水印', desc: 'OpenAI 发文说明如何依据欧盟 AI 文本溯源规则开展水印工作，水印覆盖 ChatGPT 与 Codex 生成文本。', tags: ['OpenAI', '水印', '欧盟'] },
+            { title: 'OpenAI 在 ChatGPT 图片生成结果中测试视觉广告', desc: '本月晚些时候在美国对首批广告主测试新视觉广告形式，广告将明确标注并与生成图分离，不影响回答。', tags: ['OpenAI', '广告', '视觉广告'] },
+            { title: 'OpenAI 安全负责人辞职，称「文化已经坏掉」', desc: '主导每次发版安全报告的负责人离职。', tags: ['OpenAI', '离职', '安全'] },
+            { title: '苹果因 AI Agent 收紧 macOS「完全磁盘访问」权限', desc: '针对 AI Agent 引发的安全顾虑，苹果将更严格审批请求全盘访问权限的应用。', tags: ['苹果', 'macOS', '安全'] },
+            { title: '谷歌暂停开源软件漏洞赏金计划', desc: '原因是 AI 批量生成的大量无效漏洞报告淹没了工程师审核队列，谷歌暂时关闭 OSS 产品漏洞提交通道。', tags: ['谷歌', '漏洞赏金', 'OSS'] },
+            { title: 'Claude 在中非共和国被滥用', desc: '法国语 AI 日报披露一起利用 Anthropic Claude 在中非共和国进行不当信息操作的案例。', tags: ['Claude', '滥用', 'Anthropic'] },
+            { title: 'AMD 收购 World Labs，英伟达股价创新高，OpenAI 推迟 IPO', desc: '意大利 AI 周报盘点本周资本动作，AMD 并入李飞飞的 World Labs，英伟达市值再创新高。', tags: ['AMD', '英伟达', 'World Labs'] },
+            { title: 'OpenAI 发布《GPT-6 开发实用指南》', desc: '面向开发者团队的官方实践指南上线，指导企业在生产环境中落地 GPT-6。', tags: ['OpenAI', 'GPT-6', '指南'] }
+        ]},
+        '2026-10-04': { preview: '谷歌正式发布Gemini4Argon输出窗口最高100万token、OpenAI宣布开启为期28天的连续更新节奏、GooglebookAI笔记本10月4日起在美国零售上架、英伟达推出4999美元桌面级AI超算、AnthropicIPO进程临近OpenAI接连曝出Agent越权事件、东芝计划到2027财年将HDD产能翻倍...', cards: [
+            { title: '谷歌正式发布 Gemini 4 Argon，输出窗口最高 100 万 token', desc: 'Gemini 4 世代旗舰锚点模型，定位软件工程、知识工作与网络安全，初期仅向「受信任的网络防御方」开放。', tags: ['谷歌', 'Gemini 4 Argon', '旗舰'] },
+            { title: 'OpenAI 宣布开启为期 28 天的连续更新节奏', desc: '继 DevDay 抛出 20 余项更新后，OpenAI 于 10 月 4 日宣布进入为期近一个月的密集发布窗口。', tags: ['OpenAI', '28天', '更新'] },
+            { title: 'Googlebook AI 笔记本 10 月 4 日起在美国零售上架', desc: '覆盖宏碁、华硕、惠普、联想、戴尔五家 OEM，起售价 899 美元，标配 Gemini Intelligence 与 45 TOPS 端侧 NPU。', tags: ['Googlebook', 'AI笔记本', 'OEM'] },
+            { title: '英伟达推出 4999 美元桌面级 AI 超算', desc: '面向开发者与专业用户的本地 AI 工作站新品发布，进一步压低桌面端大模型推理门槛。', tags: ['英伟达', 'AI超算', '桌面级'] },
+            { title: 'Anthropic IPO 进程临近，OpenAI 接连曝出 Agent 越权事件', desc: '韩国 AI 日报盘点当日要闻，指 Anthropic 上市准备进入冲刺阶段，而 OpenAI 则因一起 Agent 未授权访问事件持续发酵。', tags: ['Anthropic', 'OpenAI', 'IPO'] },
+            { title: '东芝计划到 2027 财年将 AI 数据中心 HDD 产能翻倍', desc: '目标较 2025 年水平提升约 30% 份额，押注 AI 训练与推理带来的冷存储需求。', tags: ['东芝', 'HDD', '数据中心'] }
+        ]},
+        '2026-10-03': { preview: 'OpenAI解雇三名安全研究人员涉及向外部评估方泄密、决策模型赛道拥挤CloudflareClef与AWSStrandsDecider与OpenAIDecisionsAPI密集发布、ServiceNow推出独立AI服务台产品Flow、OpenAI为智能体事件审查每天花费超50万美元、DeepMind联合神经生物学家发布AI意识评估贝叶斯框架、OpenAI与Synopsys合作构建芯片设计智能体、AlephAlpha开源Kolibri...', cards: [
+            { title: 'OpenAI 解雇三名安全研究人员，涉及向外部评估方泄密', desc: '确认与 Jasmine Wang、Tomek Korbak 和 Mikita Balesni 解除劳动关系，理由为违反敏感公司信息访问与处理政策。', tags: ['OpenAI', '解雇', '安全'] },
+            { title: '「决策模型」赛道拥挤：三家厂商密集发布', desc: 'Cloudflare Clef、AWS Strands Decider、OpenAI Decisions API 纷纷推出返回预定义答案概率的「决策模型」，用于智能体循环中的路由、门控与分类。', tags: ['决策模型', 'Cloudflare', 'AWS'] },
+            { title: 'ServiceNow 推出独立 AI 服务台产品 Flow', desc: '对话式 AI 原生服务台，号称一天即可上线，通过 Teams、Slack、Web 或邮件接入，预置 100+ 系统连接器。', tags: ['ServiceNow', 'Flow', '服务台'] },
+            { title: 'OpenAI 为智能体事件审查每天花费超 50 万美元', desc: '围绕 Hugging Face 事件及 Medicare/Hugging Face 智能体审查，相关调查成本据报已达每日 50 万美元以上。', tags: ['OpenAI', '审查', '成本'] },
+            { title: 'DeepMind 联合神经生物学家发布 AI 意识评估贝叶斯框架', desc: '发布 150 页贝叶斯框架论文，用于严格评估神经网络意识，将当前 LLM 意识概率估计在 0.01 至 0.xx 区间。', tags: ['DeepMind', '意识', '贝叶斯'] },
+            { title: 'OpenAI 与 Synopsys 合作构建芯片设计智能体', desc: '签署多年合作协议，打造可操作芯片设计工具的 GPT-Synopsys，将大模型能力注入 EDA 工作流。', tags: ['OpenAI', 'Synopsys', '芯片'] },
+            { title: 'Aleph Alpha 开源 Kolibri：78B 参数 MoE 大模型', desc: '欧洲 AI 公司发布开源权重混合专家模型 Kolibri，总参数 78B，单次激活约 3.5B，主打高效推理。', tags: ['Aleph Alpha', 'Kolibri', 'MoE'] }
+        ]},
+        '2026-10-02': { preview: 'Anthropic旗舰模型现状ClaudeOpus5与Opus5.5、微软发布实时AI转录与多语言语音模型、英伟达与富士康扩大AI服务器合作、OpenAI拦截一起有组织的模型蒸馏尝试、特朗普签署超级智能行政令...', cards: [
+            { title: 'Anthropic 旗舰模型现状：Claude Opus 5 与 Opus 5.5', desc: '核实显示 Claude Opus 5 实为 2026 年 7 月 24 日发布，现行旗舰为 9 月发布的 Opus 5.5；10 月 1 日并无新发布公告。', tags: ['Anthropic', 'Claude', 'Opus'] },
+            { title: '微软发布实时 AI 转录与多语言语音模型', desc: '初始转录假设可在 100 毫秒左右出现，并在 Artificial Analysis 基准的部分与最终转录准确性两项排名第一。', tags: ['微软', '转录', '语音'] },
+            { title: '英伟达与富士康扩大 AI 服务器合作', desc: '将分别在墨西哥和越南工厂生产基于 GB300 的 AI 服务器产品，新产线计划于 2027 年初投产（存疑，待进一步核实）。', tags: ['英伟达', '富士康', 'AI服务器'] },
+            { title: 'OpenAI 拦截一起有组织的模型「蒸馏」尝试', desc: '称动用数千个账号试图提取其受保护推理过程，已被阻断；OpenAI 认为这些账号与 Moonshot（月之暗面）阵营运营者有关联。', tags: ['OpenAI', '蒸馏', '月之暗面'] },
+            { title: '特朗普签署「超级智能」行政令', desc: '特朗普签署联邦政府层面关于「超级智能」的行政命令，FTC 同日宣布对 OpenAI 与 Anthropic 展开正式调查。', tags: ['特朗普', '超级智能', '行政令'] }
+        ]},
+        '2026-10-01': { preview: 'Google发布Gemini4Argon前沿模型先向可信网络防御者开放、ElevenLabs估值翻倍至220亿美元、FTC对OpenAI与Anthropic等主要AI实验室展开调查、AnthropicIPO招股书警示模型存在的生存性风险、OpenAI据报正洽谈以1.4万亿美元估值再融资300亿美元、AMD全股票收购WorldLabs李飞飞出任首席科学家...', cards: [
+            { title: 'Google 发布 Gemini 4 Argon 前沿模型', desc: '号称迄今最强，面向真实编程、企业知识工作与网络安全场景，初期仅通过 Fairwind 项目向经审核的网络防御人员提供，CWE-bench v1 得分 68%。', tags: ['谷歌', 'Gemini 4 Argon', '前沿模型'] },
+            { title: 'ElevenLabs 估值翻倍至 220 亿美元', desc: '由 Wellington 和 T. Rowe Price 联合领投的 3 亿美元员工股权转让，将这家语音 AI 公司估值推至 220 亿美元，约为上轮两倍。', tags: ['ElevenLabs', '语音AI', '估值'] },
+            { title: 'FTC 对 OpenAI、Anthropic 等主要 AI 实验室展开调查', desc: '美国联邦贸易委员会正式对头部 AI 实验室启动调查，涉及模型安全与商业行为；同日加州对 OpenAI 发出传票。', tags: ['FTC', '调查', 'OpenAI'] },
+            { title: 'Anthropic IPO 招股书警示模型存在的生存性风险', desc: '泄露的 S-1 文件以生存性风险与对大型科技公司依赖为开篇措辞，在同规模上市中颇为罕见。', tags: ['Anthropic', 'IPO', '生存性风险'] },
+            { title: 'OpenAI 据报洽谈以 1.4 万亿美元估值再融资 300 亿美元', desc: '据 Bloomberg 9/30 报道，属早期洽谈阶段、尚未交割。', tags: ['OpenAI', '融资', '估值'] },
+            { title: 'AMD 全股票收购 World Labs，李飞飞出任首席科学家', desc: 'AMD 以全股票方式收购空间智能公司 World Labs，交易规模约 82 亿美元。', tags: ['AMD', 'World Labs', '李飞飞'] }
         ]},
         '2026-09-30': { preview: 'OpenAI DevDay 2026一口气发布21项更新智能体Dot正面迎战Muse、OpenAI寻求至少300亿美元融资投前估值约1.4万亿美元、Anthropic IPO招股书自揭软肋47%营收依赖亚马逊与谷歌、DeepSeek开源昇腾版AI工具箱国产算力生态补上关键一环...', cards: [
             { title: 'OpenAI DevDay 2026：一口气发布 21 项更新，智能体 Dot 正面迎战 Muse', desc: 'Sam Altman 在 DevDay 发布 21 项产品与更新：全天候个人智能体 Dot（GPT-6 Astra 驱动）、协作空间 ChatGPT Space、GPT-6.1 Sol（价格仅 Astra 的 1/5）、8 倍速 Ultrafast 推理及 Pro 订阅计划，Dot 被视为对 Meta Muse 的正面回应。', tags: ['OpenAI', 'DevDay', 'Dot'] },
@@ -1900,6 +2020,123 @@ const archiveData = {
             { title: '《湮灭之潮》首次线下试玩落地成都，40 分钟实机演示公开', desc: '日蚀边缘工作室国产动作新作《湮灭之潮》8 月 15-16 日在成都东郊记忆举办首次线下试玩会，同步公开 40 分钟实机演示。游戏基于亚瑟王传说题材，女主"格雯德琳"全新形象亮相，导师关羽怒劈日本鬼子等多元神话设定引发热议。本作 2025 年 8 月曾测试，时隔一年首次开放线下实机，已进入正式发售准备期。8 月 27 日还将在科隆展"未来游戏展"直播中亮相，海外曝光节点密集。本作融合东西方神话元素，角色设计、场景氛围、BOSS 造型都有强烈的"文化混搭"风格。', tags: ['湮灭之潮', '成都试玩', '科隆展'] },
             { title: 'PS6 或抬高 PC 显存门槛 24GB + D 加密再遭破解三重保护失效', desc: 'Digital Foundry 分析，随着下一代主机逐渐临近，显存容量可能成为决定 PC 硬件能否长期应对新游戏的关键因素，24GB 显存或成"战未来"门槛，16GB 将逐渐吃紧。对 3D 资产方向，"主机级别精度模型 + 4K 贴图 + PBR 流程"仍是简历有效信号，但同时要展示对 LOD、贴图压缩（BC7/ASTC）、Mipmap 策略的理解。同日采用 Denuvo + VMProtect + 自定义三重防护的《刺客信条：黑旗 重制版》仍被破解组织攻破，"一键免费"版本流出。D 加密"神话"持续破灭，发行商可能转向"服务端验证 + 在线内容"的软防盗模式。', tags: ['PS6显存', '24GB门槛', 'D加密破解'] },
             { title: '《无人深空》九年逆袭成"十年神作" + 大锤组或将接棒《光环》多人新作', desc: 'Hello Games 的《无人深空》自 2016 年灾难级首发后，团队持续九年免费更新，8 月 16 日再获媒体盛赞，被称为"把史上最烂首发做成了十年神作"。长线运营 + 口碑逆转案例在业界极其罕见，"首发翻车 ≠ 项目死亡"但前提是团队有持续迭代的技术架构和玩家沟通机制。同日爆料《光环》系列下一款多人游戏可能交由《使命召唤》开发商 Sledgehammer Games（大锤组）开发，而非原工作室 343 Industries。微软第一方 IP 外包化趋势加速，IP 运营能力 > 自研能力，拥有强 IP 的厂会越来越像"发行商 + IP 管理公司"。', tags: ['无人深空', '光环', '大锤组'] }
+        ]},
+        '2026-10-14': { preview: '秩序新曙光EA版本今日登陆Steam与TapTap双平台、查无此地国际服今日开启抢先体验、燕云十六声重阳节新外观上线11月将支持DLSS5、全境封锁2国服停运补偿活动启动...', cards: [
+            { title: '《秩序：新曙光》EA 版本今日登陆 Steam 与 TapTap 双平台', desc: '游戏发布 EA 版 PV，包含星舰开局、沙盒模式与各大势力发展系统。', tags: ['秩序新曙光', 'TapTap', 'Steam'] },
+            { title: '《查无此地》国际服今日开启抢先体验', desc: '仰视角 PVE 搜刮射击端游上线，支持最多 4 人联机合作，物资带出后可升级改造安全屋。', tags: ['查无此地', '抢先体验', 'PVE射击'] },
+            { title: '《燕云十六声》重阳节新外观上线，11 月将支持 DLSS 5', desc: '节日套装「江涵秋影」10 月 16 日起限时上架，官方预告 11 月开放 NVIDIA DLSS 5 抢先体验。', tags: ['燕云十六声', 'DLSS 5', '重阳节'] },
+            { title: '《全境封锁2》国服停运补偿活动启动', desc: '10 月 12 日 11 点前有代币留存的用户可领取《和平精英》《金铲铲之战》《无畏契约》等补偿礼包。', tags: ['全境封锁2', '停运补偿', '腾讯'] }
+        ]},
+        '2026-10-13': { preview: '战争机器事变日登顶美国英国Xbox商店销量榜、消息称Rockstar计划2027年第一季度推出GTA6PC版、NVIDIADLSS5上线霍格沃茨之遗与RTXSpark、战争机器EDay发售初期服务器问题确认为DDoS攻击、Epic迪士尼射击游戏延期细节AI优先开发引发行业讨论...', cards: [
+            { title: '《战争机器：事变日》登顶美国、英国 Xbox 商店销量榜', desc: '据 Windows Central 报道，游戏数字版销量出色，已超越《我的世界：地下城2》与《星球大战：银河赛车手》，成为 Xbox 平台 2026 年第二大作品。', tags: ['战争机器', 'Xbox', '销量榜'] },
+            { title: '消息称 Rockstar 计划 2027 年第一季度推出《GTA6》PC 版', desc: '据 GamesBeat 报道，四名知情人士透露 Rockstar 计划在 2027 年 Q1 三个月窗口内发布 PC 版，Rockstar 暂未置评。', tags: ['GTA6', 'Rockstar', 'PC版'] },
+            { title: 'NVIDIA DLSS 5 上线《霍格沃茨之遗》与 RTX Spark', desc: 'DLSS 5 采用速度提升 2 倍的帧生成模型，NBA 2K27 将于 10 月 16 日跟进更新。', tags: ['NVIDIA', 'DLSS 5', '帧生成'] },
+            { title: '《战争机器：E-Day》发售初期服务器问题确认为 DDoS 攻击', desc: 'The Coalition 证实针对性攻击曾致在线服务瘫痪、影响数千名玩家。', tags: ['战争机器', 'DDoS', '服务器'] },
+            { title: 'Epic 迪士尼射击游戏延期细节：AI 优先开发引发行业讨论', desc: '开发人员被告知采用 Claude 等 AI 工具、美术走「全 AI 工作流」，引发关于裁员与行业走向的争议。', tags: ['Epic', '迪士尼', 'AI优先'] }
+        ]},
+        '2026-10-12': { preview: 'EpicGames宣布AI优先大转向推迟未公布的迪士尼射击游戏并重构开发流程、腾讯全境封锁2国服宣布12月14日停运、美国主机销量年内大幅下滑Xbox跌至历史最低、ARCRaiders推出FrozenTrail新更新与新地图...', cards: [
+            { title: 'Epic Games 宣布「AI 优先」大转向：推迟未公布的迪士尼射击游戏并重构开发流程', desc: 'Epic CEO Tim Sweeney 发文称公司正「大规模转向 AI 加速开发」，据 Bloomberg/Reuters 报道，未公布的迪士尼（漫威/星战）射击游戏被延期，开发被要求采用 AI 优先工作流。', tags: ['Epic', 'AI优先', '迪士尼'] },
+            { title: '腾讯《全境封锁2》国服宣布 12 月 14 日停运', desc: '腾讯官宣因「业务发展策略变更」停止国服运营，10 月 12 日起停止充值与新用户注册，为留存用户提供《和平精英》《王者荣耀》等补偿礼包。', tags: ['全境封锁2', '腾讯', '停运'] },
+            { title: '美国主机销量年内大幅下滑：Xbox 跌至历史最低', desc: 'Circana 数据显示 2026 年前 8 个月 Xbox 硬件销量同比下降 33%、PlayStation 下降 25%。', tags: ['主机销量', 'Xbox', 'Circana'] },
+            { title: '《ARC Raiders》推出 Frozen Trail 新更新与新地图', desc: 'Embark 工作室撤离射击游戏上线新版本。', tags: ['ARC Raiders', 'Embark', '更新'] }
+        ]},
+        '2026-10-11': { preview: 'GTA6泄密者Cyberleek以放出完整版为筹码向TakeTwo提要求、影之刃零确认至少50个Boss30种主武器、任天堂目前没有放弃游戏实体卡带的计划、使命召唤现代战争4公布DMZ模式基地升级与抢先体验日期、影之刃零全平台愿望单突破300万...', cards: [
+            { title: 'GTA6 泄密者 Cyberleek 以放出完整版为筹码，向 Take-Two 提要求', desc: '据多家媒体报道，泄密者 Cyberleek 声称持有可通关的《GTA6》完整版，向 Take-Two 提出模因币市值与实体光盘等要求，Take-Two 已采取法律应对。', tags: ['GTA6', 'Cyberleek', '泄密'] },
+            { title: '《影之刃零》确认至少 50 个 Boss、30 种主武器', desc: '灵游坊创始人兼 CEO 梁其伟受访确认，所有武器均可通过击败 Boss 获得，整体风格统一于「功夫朋克」。', tags: ['影之刃零', '灵游坊', '功夫朋克'] },
+            { title: '任天堂：目前没有放弃游戏实体卡带的计划', desc: '任天堂拉美副总裁 Bill van Zyll 在巴西游戏展受访表示，任天堂在分销决策上历来中立、会考虑消费者偏好。', tags: ['任天堂', '实体卡带', '分销'] },
+            { title: '《使命召唤：现代战争4》公布 DMZ 模式基地升级与抢先体验日期', desc: '官方披露 DMZ 提取玩法新内容，包括前哨基地（FOB）、制作系统与抢先体验安排。', tags: ['使命召唤', 'DMZ', '现代战争4'] },
+            { title: '《影之刃零》全平台愿望单突破 300 万', desc: '暗黑武侠 3A 大作 10 月 29 日发售，国区 268 元起，制作人调侃「取消愿望单实为预购」。', tags: ['影之刃零', '愿望单', '3A'] }
+        ]},
+        '2026-10-10': { preview: 'SNK预告饿狼传说群狼之城铁拳8联动、Steam9月收入约17亿美元PC游戏支出持续增长、GTA6泄密者Cyberleek回归放出约25分钟泄露画面、多人射击游戏WARDOGS第二赛季上线、PonyIsland一代在Steam限时免费赠送...', cards: [
+            { title: 'SNK 预告《饿狼传说：群狼之城》×《铁拳8》联动', desc: 'SNK 提前透露两款格斗游戏将展开跨界合作，具体细节尚未公布。', tags: ['SNK', '饿狼传说', '铁拳8'] },
+            { title: 'Steam 9 月收入约 17 亿美元，PC 游戏支出持续增长', desc: '第三方估算显示 Steam 2026 年 9 月营收约 17 亿美元，PC 端游戏消费保持上升势头。', tags: ['Steam', '营收', 'PC游戏'] },
+            { title: 'GTA6 泄密者 Cyberleek 回归，放出约 25 分钟泄露画面', desc: '此前泄露《GTA6》早期画面的泄密者再次现身，发布大量画面，据称正借此为个人项目筹款。', tags: ['GTA6', 'Cyberleek', '泄密'] },
+            { title: '多人射击游戏《WARDOGS》第二赛季上线', desc: '新赛季引入雨天环境与「下注」机制，属于周末 48 小时内更新动态。', tags: ['WARDOGS', '射击', '赛季'] },
+            { title: '《Pony Island》一代在 Steam 限时免费赠送', desc: '悬疑解谜名作《Pony Island》在 Steam 免费发放，为续作预热。', tags: ['Pony Island', '免费', 'Steam'] }
+        ]},
+        '2026-10-09': { preview: '腾讯三角洲行动国服DAU突破5800万、世嘉副CBO斋藤刚不会把游戏创意工作交给AI、11bitstudios冰汽时代10月19日登陆Switch、JonathanBlow沉星之序今日正式发售、PUBGDED.NET首次封闭测试今日开启、Rockstar官宣GTA6电台阵容、Google发布GooglePlayground实验性游戏平台...', cards: [
+            { title: '腾讯《三角洲行动》国服 DAU 突破 5800 万', desc: '天美琳琅天上工作室研发、虚幻引擎 5 打造，1 月 4100 万、3 月破 5000 万，海外版已覆盖全球 169 个国家和地区，跻身腾讯长青游戏序列。', tags: ['三角洲行动', '腾讯', '长青游戏'] },
+            { title: '世嘉副 CBO 斋藤刚：不会把游戏创意工作交给 AI', desc: '公司用 AI 提升发行、管理与商业方案效率，但成立「生成式 AI 委员会」严格规范开发环节，强调「AI 辅助效率、创意归人」。', tags: ['世嘉', 'AI立场', '创意归人'] },
+            { title: '11 bit studios《冰汽时代》10 月 19 日登陆 Switch', desc: 'eShop 已开放预约并提供免费试玩，Switch 版收录《The Rifts》《The Last Autumn》《On The Edge》三部 DLC，Switch 2 玩家可向下兼容。', tags: ['冰汽时代', 'Switch', '11 bit'] },
+            { title: 'Jonathan Blow《Order of the Sinking Star》今日正式发售', desc: 'Fami 通报道 PC 版 10 月 9 日上市，《Braid》《The Witness》总监手撰千余道互联谜题。', tags: ['沉星之序', 'Jonathan Blow', '解谜'] },
+            { title: 'PUBG: DED.NET 首次封闭测试今日开启', desc: 'PS5 与 Xbox Series X|S 北美主机玩家先行体验这款多人衍生作。', tags: ['PUBG', 'DED.NET', '封测'] },
+            { title: 'Rockstar 官宣《GTA6》电台阵容', desc: '继电台列表公布后，官方确认 Lana Del Rey 与 Bad Bunny 将出任 Leonida 电台主持人/DJ，系列音乐版图再升级。', tags: ['GTA6', 'Rockstar', '电台'] },
+            { title: 'Google 发布 Google Playground 实验性游戏平台', desc: '让用户用 AI 创建并游玩自制游戏；原条目错接的 Mojang 人事新闻与 Google 无关。', tags: ['Google', 'Playground', 'AI游戏'] }
+        ]},
+        '2026-10-08': { preview: '国产Roguelike霓虹深渊2今日正式发售首发加入XGP、微软公布10月第二批XGP入库阵容战地6领衔、极限竞速地平线6PS5版宣布跳票至2027年、克里夫巴克猛鬼追魂复苏今日发售、JonathanBlow千谜新作沉星之序Steam正式上线、Paradox公布都市天际线扩展版登陆Switch2、美国8月主机销量创2013年以来最差月度、HellisUs推出大型更新...', cards: [
+            { title: '国产 Roguelike《霓虹深渊2》今日正式发售，首发加入 XGP', desc: 'Veewo Games 开发、Kepler Ghost 发行，同步登陆 Steam/PS5/Xbox/微软商店/Switch，系系列首次登陆 PS5 与 Switch，手游采用付费买断制。', tags: ['霓虹深渊2', 'Roguelike', 'XGP'] },
+            { title: '微软公布 10 月第二批 XGP 入库阵容，《战地6》领衔', desc: '10 月 8 日率先入库时间循环银河恶魔城《Echo Weaver》等三款作品；《战争机器：事变日》《霓虹深渊2》等首发同期入库。', tags: ['XGP', '战地6', '微软'] },
+            { title: '《极限竞速：地平线 6》PS5 版宣布跳票至 2027 年', desc: '将与游戏首个高级资料片同步发售，豪华版仍可提前 5 天进入。', tags: ['极限竞速', 'PS5', '跳票'] },
+            { title: '《克里夫·巴克：猛鬼追魂 复苏》今日发售', desc: '登陆 PS5/Xbox Series X|S/Switch 2/PC，媒体先期评测口碑两极。', tags: ['猛鬼追魂', '恐怖', '发售'] },
+            { title: 'Jonathan Blow 千谜新作《Order of the Sinking Star》Steam 上线', desc: '含 1000+ 手工互联谜题，PC/NS2/PS5 三平台同步发售。', tags: ['沉星之序', 'Jonathan Blow', '解谜'] },
+            { title: 'Paradox 公布《都市：天际线 扩展版》登陆 Switch 2', desc: '由 Tantalus Media 开发，10 月 28 日发售，售价 49 美元，收录 10 款扩展内容，支持键鼠与地图编辑器。', tags: ['都市天际线', 'Switch 2', 'Paradox'] },
+            { title: '美国 8 月主机销量创 2013 年以来最差月度', desc: '行业数据显示传统主机市场持续承压。', tags: ['主机销量', '美国', '行业数据'] },
+            { title: '《Hell is Us》推出大型更新', desc: '新增 10 名敌人供玩家挑战。', tags: ['Hell is Us', '更新', '动作'] }
+        ]},
+        '2026-10-07': { preview: '战争机器事变日今日正式发售首发加入XGP、GTA6大量新情报公开开发已13年、微软官方辟谣GTA6PC云游戏独占传闻、国产动作游戏艾希续作开启众筹已筹约2373万元、影之刃零定档10月29日登陆PS5与Steam、Insomniac推出漫威金刚狼1.002更新、黑手党3惊喜推出PS5与XSX60帧更新、JonathanBlow十年新作沉星之序本周发售预热...', cards: [
+            { title: '《战争机器：事变日》今日正式发售，首发加入 XGP', desc: 'The Coalition 开发的系列前传登陆 Xbox Series X|S 与 PC，PC 首发支持英伟达 DLSS 4.5 与硬件光追，首发即入库 Xbox Game Pass。', tags: ['战争机器', 'XGP', '事变日'] },
+            { title: '《GTA6》大量新情报公开：开发已 13 年', desc: '《LOVE》杂志放出 Rockstar 专题报道，曝光与警方共同考察、开发周期等细节；系列新作定于 11 月发售。', tags: ['GTA6', 'Rockstar', '情报'] },
+            { title: '微软官方辟谣《GTA6》PC 云游戏独占传闻', desc: 'Xbox 首席战略官 Matthew Ball 公开辟谣，微软否认拥有独家云串流权，并表示游戏首发不会通过云端串流到 PC。', tags: ['微软', 'GTA6', '辟谣'] },
+            { title: '国产动作游戏《艾希》续作开启众筹，已筹约 2373 万元', desc: '10 月 1 日于摩点开启众筹，定于 2027 年 5 月 1 日发售，国区定价 48 元，登陆 PC（Steam）。', tags: ['艾希', '众筹', '国产'] },
+            { title: '《影之刃零》定档 10 月 29 日登陆 PS5 与 Steam', desc: 'S-Game 在 State of Play 上宣布，这款「功夫朋克」动作游戏将同步登陆 PS5、Epic 与 Steam。', tags: ['影之刃零', '武侠', '定档'] },
+            { title: 'Insomniac 推出《漫威金刚狼》1.002 更新', desc: 'PS5 玩家可按 R3 关闭剧情气味提示，并修复若干崩溃问题。', tags: ['漫威金刚狼', 'Insomniac', '更新'] },
+            { title: '《黑手党 3》惊喜推出 PS5/XSX 60 帧更新', desc: '已有本作数字版的玩家可免费升级，未入手者当日数字商店 2 折促销。', tags: ['黑手党3', '60帧', '免费'] },
+            { title: 'Jonathan Blow 十年新作《沉星之序》本周发售预热', desc: '耗时十年打造的千谜冒险解谜作即将登陆 Steam/NS2/PS5，M 站先期媒体口碑达 86 分「大师级」。', tags: ['沉星之序', 'Jonathan Blow', '解谜'] }
+        ]},
+        '2026-10-06': { preview: '战争机器事变日今日全球发售首日登陆XboxGamePass、星球大战银河赛车手同步发售、战争机器事变日登顶Steam全球畅销榜国区未进前十、战争机器事变日首发即遭破解未采用D加密、系列首次支持简体中文配音、战争机器事变日第一赛季Emergence为期8周、10月PSPlus月度游戏今日开放领取...', cards: [
+            { title: '《战争机器：事变日》今日全球发售，首日登陆 XGP', desc: 'The Coalition 开发的系列前传全球解锁，登陆 Xbox Series X|S / PC / Steam，终极版玩家已提前抢先体验。', tags: ['战争机器', '事变日', 'XGP'] },
+            { title: '《星球大战：银河赛车手》同步发售', desc: '与《事变日》同日上线的星战 IP 竞速游戏，由 Secret Mode 发行，并非微软第一方作品。', tags: ['星球大战', '赛车手', '竞速'] },
+            { title: '《战争机器：事变日》登顶 Steam 全球畅销榜', desc: '发售后即冲上 Steam 全球热销第一，但国区排名未进前十，反映 Xbox 生态在国内 PC 端的受众盘子。', tags: ['战争机器', 'Steam', '畅销榜'] },
+            { title: '《战争机器：事变日》首发即遭破解，未采用 D 加密', desc: '本作未引入 Denuvo，发售首日即被破解组绕过，引发 DRM 策略讨论。', tags: ['战争机器', '破解', 'DRM'] },
+            { title: '系列首次支持简体中文配音', desc: '作为系列前传，本作首次为中文玩家提供完整简体中文配音（该信息早在 4 月即由 Steam 商店页公布）。', tags: ['战争机器', '中文配音', '本地化'] },
+            { title: '《战争机器：事变日》第一赛季「Emergence」为期 8 周', desc: '包含全部首发地图、模式、外观与万圣节等三场限时主题活动，持续至 12 月 1 日。', tags: ['战争机器', '赛季', 'Emergence'] },
+            { title: '10 月 PS Plus 月度游戏今日开放领取', desc: '索尼本月 PS Plus Essential 会免阵容从 10 月 6 日起可在 PS5 / PS4 上认领。', tags: ['PS Plus', '会免', '索尼'] }
+        ]},
+        '2026-10-05': { preview: 'GTA6独家专题今日登场Love杂志公开杰森与露西娅新画面、地狱之刃开发商NinjaTheory启动裁员、Rockstar编剧谈露西娅、Momodora开发商Bombservice公布新作RecordofDorathia、本周新游盘点战争机器事变日与星球大战银河赛车手、MAME多系统模拟器被移植至PS4与PS5、使命召唤手游崩坏3深度联动...', cards: [
+            { title: '《GTA 6》独家专题今日登场：Love 杂志公开新画面', desc: '时尚文化杂志《Love》于 10 月 5 日推出《侠盗猎车手 6》专题，放出主角独家画面与编剧访谈。', tags: ['GTA6', 'Love杂志', '专题'] },
+            { title: '《地狱之刃》开发商 Ninja Theory 启动裁员', desc: '微软旗下 Ninja Theory 确认进行团队调整，受影响岗位覆盖开发与制作部门，具体人数未披露。', tags: ['Ninja Theory', '裁员', '微软'] },
+            { title: 'Rockstar 编剧谈露西娅：她能在系列女主角谱系中站住脚', desc: '编剧团队在《GTA 6》专题中解释露西娅·卡米诺斯如何接过亚瑟·摩根等前辈的棒。', tags: ['GTA6', 'Rockstar', '露西娅'] },
+            { title: '《Momodora》开发商公布新作《Record of Dorathia》', desc: '一款回合制地牢探索 RPG，玩家将与魔法师订立契约，延续 Momodora 系列的手绘风格。', tags: ['Momodora', '地牢探索', 'RPG'] },
+            { title: '本周新游盘点：《战争机器：事变日》等首发领衔', desc: '西语游戏媒体梳理 10 月 5–9 日新游发售阵容，其中《事变日》为 Xbox Series / PC 独占（无 PS5 版）。', tags: ['新游盘点', '战争机器', '发售'] },
+            { title: 'MAME 多系统模拟器被移植至 PS4 / PS5', desc: '开发者 markus00095 发布 MAME ps4-ps5 首个版本，允许破解主机运行街机与复古主机 ROM。', tags: ['MAME', '模拟器', 'PS5'] },
+            { title: '《使命召唤手游》×《崩坏3》深度联动', desc: '雷律 / 炎律 / 理律全员登场，已于 9 月 11–12 日随 S8 赛季实装（本期为旧闻重炒）。', tags: ['使命召唤', '崩坏3', '联动'] }
+        ]},
+        '2026-10-04': { preview: '星球大战银河赛车手媒体评分解禁PC版Metacritic84分、女神异闻录4重制版公开暗影主题新预告、RuneFest官宣RuneScape4、空战奇兵8Steam同时在线峰值约为前作3.8倍、Epic喜加二SystemShock2重制版与BuriedStars、索尼问卷再引实体版PlayStation游戏未来猜测、前微软开发者公开批评Halo系列文化积弊、36氪64家上市游戏公司上半年收入同比仅增约9%...', cards: [
+            { title: '《星球大战：银河赛车手》媒体评分解禁，PC 版 84 分', desc: 'Fuse Games 开发的星战 IP 竞速新作定于 10 月 6 日发售，PC 版在 M 站基于 16 家媒体拿到 84 分，IGN 给出 8 分。', tags: ['星球大战', '竞速', '评分'] },
+            { title: '《女神异闻录4 重制版》公开「暗影」主题新预告', desc: 'Atlus 发布全新预告，首次公开新曲；游戏将于 2027 年 2 月 18 日登陆 PS5 / Xbox / PC，首发加入 Game Pass。', tags: ['女神异闻录4', 'Atlus', '预告'] },
+            { title: 'RuneFest 官宣《RuneScape 4》', desc: 'Jagex 在年度 RuneFest 上正式公布老牌 MMORPG 续作《RuneScape 4》。', tags: ['RuneScape 4', 'Jagex', 'MMORPG'] },
+            { title: '《空战奇兵 8》Steam 同时在线峰值约为前作 3.8 倍', desc: 'AC8 峰值 52,694 vs AC7 13,758，成为本周 PC 端表现最抢眼的主机移植作品之一。', tags: ['空战奇兵8', 'Steam', '峰值'] },
+            { title: 'Epic 喜加二：《System Shock 2》重制版与《Buried Stars》', desc: 'Epic Games Store 本周限免两款作品，领取时间截止 10 月 8 日。', tags: ['Epic', '限免', '喜加二'] },
+            { title: '索尼问卷再引实体版 PlayStation 游戏未来猜测', desc: '索尼向玩家推送的最新问卷涉及实体收藏意愿，外界解读为第一方在重新评估物理发行策略。', tags: ['索尼', '实体版', '问卷'] },
+            { title: '前微软开发者公开批评 Halo 系列长期文化积弊', desc: '一位曾参与 Halo 项目的前开发者撰文，直指 343 Industries 长期存在的文化与制作流程问题。', tags: ['Halo', '343 Industries', '文化'] },
+            { title: '36氪：64 家上市游戏公司上半年收入同比仅增约 9%', desc: '腾讯、网易、世纪华通等头部拿走近八成收入，中尾部公司承压；AI 工具普及正压缩中小团队的「逆袭窗口」。', tags: ['游戏公司', '财报', '头部集中'] }
+        ]},
+        '2026-10-03': { preview: '索尼QSSR超分辨率方案细节公布普通PS5享AI画质提升、Xbox光盘转数字功能现已向全体用户开放、NaughtyDog重申多个最后生还者项目、堡垒之夜Fortnitemares2026联动弗莱迪克鲁格与玩具熊、ControlResonant更新1.4.0加入NewGame++、ARCRaiders将于10月测试PvE开关、GTAOnline万圣节活动回归...', cards: [
+            { title: '索尼 QSSR 超分辨率方案细节公布', desc: '面向普通 PS5 的 QSSR（PSSR lite）技术，以像素级分析结合 AI 进行超分，首批接入《漫威金刚狼》与《羊蹄山之魂》。', tags: ['索尼', 'QSSR', '超分辨率'] },
+            { title: 'Xbox「光盘转数字」功能现已向全体用户开放', desc: '微软宣布 Disc-to-Digital 功能正式面向所有用户上线，玩家可将实体光盘游戏转换为数字版本持有。', tags: ['Xbox', '光盘转数字', '微软'] },
+            { title: 'Naughty Dog 重申多个《最后生还者》项目', desc: '顽皮狗确认正在推进多款《最后生还者》相关作品，并表示全新 IP《Intergalactic》将在 2027 年完整公开。', tags: ['顽皮狗', '最后生还者', 'Intergalactic'] },
+            { title: '《堡垒之夜》Fortnitemares 2026 联动弗莱迪与玩具熊', desc: '本周万圣节活动正式上线，以「Five Nights at Freddy Krueger」为主题包装，带来全新联动外观与玩法。', tags: ['堡垒之夜', '万圣节', '联动'] },
+            { title: '《Control》Resonant 更新 1.4.0 加入 New Game++', desc: 'Remedy《控制》推送 1.4.0 版本更新，玩家可在通关后以保留能力的状态重新挑战。', tags: ['Control', 'Remedy', '更新'] },
+            { title: '《ARC Raiders》将于 10 月测试 PvE 开关', desc: 'Embark Studios 宣布 extraction shooter《ARC Raiders》计划在 10 月进行 PvE 模式开关测试。', tags: ['ARC Raiders', 'PvE', 'Embark'] },
+            { title: '《GTA Online》万圣节活动回归，幽灵车再现', desc: 'R 星为《GTA Online》开启万圣节季内容，经典幽灵车等元素回归。', tags: ['GTA Online', '万圣节', 'R星'] }
+        ]},
+        '2026-10-02': { preview: '皇牌空战8希孚之翼今日正式发售、GTAVI分级结果公布美国M级英国PEGI18、索尼公布普通PS5的AI超分辨率方案QSSR、堡垒之夜2026噩梦之夜活动公布联动阵容、GTA6再曝全新画面Jason与Lucia形象再次调整、任天堂公开Switch2GameChat功能原型开发细节、战争机器EDay媒体评分表现强劲...', cards: [
+            { title: '《皇牌空战8：希孚之翼》今日正式发售', desc: '万代南梦宫招牌空战游戏系列新作登陆 PC 及主机平台，预购豪华版玩家可提前于 9 月 29 日抢先试玩。', tags: ['皇牌空战8', '万代南梦宫', '空战'] },
+            { title: '《GTA VI》分级结果公布：美国 M 级、英国 PEGI 18', desc: 'Rockstar 旗下《GTA VI》在美国获得成熟评级 M 级，英国获 PEGI 18，澳洲分级信息中明确列出「性场景」相关内容。', tags: ['GTA6', '分级', 'Rockstar'] },
+            { title: '索尼公布普通 PS5 的 AI 超分辨率方案 QSSR', desc: '官方全称 Quick Spectral Super Resolution，首批通过补丁接入的游戏为《漫威金刚狼》与《羊蹄山之魂》。', tags: ['索尼', 'QSSR', '超分辨率'] },
+            { title: '《堡垒之夜》2026「噩梦之夜」活动公布联动阵容', desc: 'Epic 宣布 Fortnitemares 2026 回归，将加入弗莱迪·克鲁格、玩具熊的五夜后宫等恐怖 IP 联动内容。', tags: ['堡垒之夜', '万圣节', '联动'] },
+            { title: '《GTA 6》再曝全新画面，Jason 与 Lucia 形象再次调整', desc: 'Rockstar 通过 LOVE 杂志发布 4 张宣传图，两位主角造型再次变化（实为宣传图，非实机画面）。', tags: ['GTA6', '宣传图', 'LOVE'] },
+            { title: '任天堂公开 Switch 2 GameChat 功能原型开发细节', desc: '为测试 GameChat 实时聊天功能，曾专门打造一台特殊原型 Switch 主机，软件先在 PC 上编写再移植硬件测试。', tags: ['任天堂', 'Switch 2', 'GameChat'] },
+            { title: '《战争机器：E-Day》媒体评分表现强劲', desc: 'PlayCentral 汇总显示《Gears of War: E-Day》在 Metacritic 上获得高分开局，被视为 Xbox 本年度最重要的第一方作品之一。', tags: ['战争机器', 'E-Day', '评分'] }
+        ]},
+        '2026-10-01': { preview: '真三国无双3完全版重制版今日发售、歧路旅人与歧路旅人II同步登陆NintendoSwitch2、PlayStationPlus公布10月会免阵容、Steam2026秋季特卖今日开启、羊蹄山之魂弦续关原DLC及完全版今日上线、EndofAbyss首发登陆PS5与Xbox与PC、PS5越狱工具发布索尼因实体游戏政策遭玩家反弹...', cards: [
+            { title: '《真三国无双3 完全版 重制版》今日发售', desc: '光荣特库摩与 Omega Force 将经典「一骑当千」动作游戏以重制版形式带到 PS5、Xbox、Switch 2 及 PC，新增同步闪避/反击等系统。', tags: ['真三国无双3', '光荣特库摩', '重制版'] },
+            { title: '《歧路旅人》与《歧路旅人II》同步登陆 Switch 2', desc: 'Square Enix 推出两款 HD-2D RPG 的 Switch 2 版本，可单独购买或选购合集包，画面分辨率与帧率有所优化。', tags: ['歧路旅人', 'Switch 2', 'Square Enix'] },
+            { title: 'PlayStation Plus 公布 10 月会免阵容', desc: '本月每月游戏为《F1 25》《Hunt: Showdown 1896》及《地球防卫军：世界兄弟2》，订阅者可于 10 月 6 日至 11 月 2 日期间入库。', tags: ['PS Plus', '会免', '索尼'] },
+            { title: 'Steam 2026 秋季特卖今日开启', desc: 'Valve 定于太平洋时间 10 月 1 日上午 10 点至 10 月 8 日举行秋季促销，大量游戏、DLC 及合集开启限时折扣。', tags: ['Steam', '秋季特卖', 'Valve'] },
+            { title: '《羊蹄山之魂》「弦续关原」DLC 及完全版今日上线', desc: '完全版于 10 月 1 日登陆 PS5，包含剧情扩展包「弦续关原」与战斗生存模式「无尽追缉」。', tags: ['羊蹄山之魂', 'DLC', 'PS5'] },
+            { title: '《End of Abyss》首发登陆 PS5/Xbox/PC', desc: '由 Section 9 Interactive 开发、Epic Games 发行的俯视角科幻恐怖探索游戏今日发售，PC 版独占 Epic Games Store。', tags: ['End of Abyss', '科幻恐怖', 'Epic'] },
+            { title: 'PS5 越狱工具发布，索尼因实体游戏政策遭玩家反弹', desc: '本周 PS5 越狱方案浮出水面，与此同时索尼在实体游戏方面的策略引发玩家社区强烈不满。', tags: ['PS5', '越狱', '索尼'] }
         ]},
         '2026-09-30': { preview: '亚运和平精英中国队摘银泰国队夺金、TapTap游戏发布会50+款新游片单公开推出AI游戏创作智能体、GTA6团队承认压力巨大但一切都拉满不妥协、Xbox推出Mythic Achievements神话成就对标白金奖杯、PS6与Xbox Project Helix芯片据报已流片...', cards: [
             { title: '亚运《和平精英》：中国队摘银，泰国队夺金', desc: '第 20 届亚运会电竞《和平精英》亚运版本落幕，经过 12 局积分较量，中国队以 114 分获银牌，泰国队 128 分摘金，巴基斯坦队获铜牌。', tags: ['亚运会', '和平精英', '电竞'] },
