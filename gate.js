@@ -66,6 +66,9 @@
         try { localStorage.setItem(STORAGE_KEY, '1'); } catch (e) {}
         document.body.classList.remove('gate-locked');
         gate.style.display = 'none';
+        // 解锁后内容才恢复渲染，主动触发一次滚动/缩放检测，让弹性动画、视差等按真实布局重新计算
+        window.dispatchEvent(new Event('scroll'));
+        window.dispatchEvent(new Event('resize'));
     }
     function deny() {
         err.textContent = '密码不正确，请重试';
