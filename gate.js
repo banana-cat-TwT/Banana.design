@@ -1,15 +1,26 @@
 /*
  * Banana.design 访问软门（客户端校验）
- * 说明：密码明文保存在本文件，属「防君子不防小人」的软门。
- * 通过后写入 localStorage（按域名共享），同一浏览器输一次全站通用。
+ * 说明：密码不存明文，仅存简单哈希；属「防君子不防小人」的软门。
+ * 通过前隐藏页面真实内容，通过后写入 localStorage（按域名共享），同一浏览器输一次全站通用。
  */
 (function () {
-    var GATE_PASSWORD = '7896';
+    var GATE_HASH = '7c7c2e23'; // 密码 7896 的 djb2 哈希，避免在源码里出现明文
     var STORAGE_KEY = 'bc_site_pass';
+
+    function hashPin(s) {
+        var h = 5381;
+        for (var i = 0; i < s.length; i++) {
+            h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
+        }
+        return h.toString(16);
+    }
 
     var granted = false;
     try { granted = localStorage.getItem(STORAGE_KEY) === '1'; } catch (e) {}
     if (granted) { return; }
+
+    // 未解锁前隐藏页面真实内容，只保留密码门遮罩
+    document.body.classList.add('gate-locked');
 
     function createStyle() {
         var style = document.createElement('style');
@@ -23,7 +34,8 @@
             '#access-gate button{margin-top:1.2rem;width:100%;padding:0.7rem;background:#e8833a;color:#fff;border:none;border-radius:8px;font-size:1rem;cursor:pointer;transition:background .2s;}' +
             '#access-gate button:hover{background:#d4722e;}' +
             '#access-gate .gate-error{color:#d4722e;font-size:0.85rem;line-height:1.4;min-height:1.2em;margin-top:0.8rem;}' +
-            '#access-gate .gate-note{margin:0.9rem 0 0;color:#9a8a76;font-size:0.78rem;line-height:1.6;}';
+            '#access-gate .gate-note{margin:0.9rem 0 0;color:#9a8a76;font-size:0.78rem;line-height:1.6;}' +
+            'body.gate-locked>*:not(#access-gate){display:none!important;}';
         document.head.appendChild(style);
     }
 
@@ -34,7 +46,7 @@
             '<div class="gate-card">' +
             '<h2>请输入访问密码</h2>' +
             '<p class="gate-desc">输入密码后即可进入网站</p>' +
-            '<p class="gate-note">本站自 2026年9月30日 起启用访问密码。此前收到分享链接的朋友，若还不知道密码，请来找我询问。</p>' +
+            '<p class="gate-note">本站自 2026年9月30日 起启用访问密码。此前收到分享链接的朋友，若还不知道密码，可以来问我，也可以在简历首页右下角查看。</p>' +
             '<input id="gate-input" type="password" inputmode="numeric" maxlength="4" placeholder="••••" autocomplete="off">' +
             '<button id="gate-btn" type="button">进入</button>' +
             '<div class="gate-error" id="gate-error"></div>' +
@@ -52,6 +64,7 @@
 
     function allow() {
         try { localStorage.setItem(STORAGE_KEY, '1'); } catch (e) {}
+        document.body.classList.remove('gate-locked');
         gate.style.display = 'none';
     }
     function deny() {
@@ -60,7 +73,7 @@
         input.focus();
     }
     function check() {
-        if (input.value === GATE_PASSWORD) { allow(); } else { deny(); }
+        if (hashPin(input.value) === GATE_HASH) { allow(); } else { deny(); }
     }
 
     btn.addEventListener('click', check);
