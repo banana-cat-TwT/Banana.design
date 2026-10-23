@@ -1,7 +1,7 @@
 /*
  * Banana.design 访问软门（客户端校验）
  * 说明：密码不存明文，仅存简单哈希；属「防君子不防小人」的软门。
- * 通过前隐藏页面真实内容，通过后写入 localStorage（按域名共享），同一浏览器输一次全站通用。
+ * 通过前隐藏页面真实内容，通过后写入 localStorage（按域名共享）；每天 0 点或连续 4 小时未打开即失效，需重新输入。
  */
 (function () {
     var GATE_HASH = '7c7c2e23'; // 密码 7896 的 djb2 哈希，避免在源码里出现明文
@@ -15,9 +15,37 @@
         return h.toString(16);
     }
 
+    var MAX_AGE = 4 * 60 * 60 * 1000; // 连续 4 小时未打开就失效
+
+    function isSameDay(a, b) {
+        var d1 = new Date(a), d2 = new Date(b);
+        return d1.getFullYear() === d2.getFullYear() &&
+            d1.getMonth() === d2.getMonth() &&
+            d1.getDate() === d2.getDate();
+    }
+
+    // 每天 0 点自动刷新一次，让仍开着的页面重新走密码校验
+    (function () {
+        var now = new Date();
+        var next = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 1);
+        var ms = next - now;
+        if (ms > 0) { setTimeout(function () { location.reload(); }, ms); }
+    })();
+
     var granted = false;
-    try { granted = localStorage.getItem(STORAGE_KEY) === '1'; } catch (e) {}
-    if (granted) { return; }
+    try {
+        var storedTs = parseInt(localStorage.getItem(STORAGE_KEY), 10);
+        if (storedTs) {
+            var nowTs = Date.now();
+            granted = (nowTs - storedTs < MAX_AGE) && isSameDay(storedTs, nowTs);
+        }
+    } catch (e) {}
+
+    if (granted) {
+        // 已放行时刷新活动时间，让 4 小时从「最近一次打开」起算
+        try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch (e) {}
+        return;
+    }
 
     // 未解锁前隐藏页面真实内容，只保留密码门遮罩
     document.body.classList.add('gate-locked');
@@ -63,7 +91,7 @@
     var err = document.getElementById('gate-error');
 
     function allow() {
-        try { localStorage.setItem(STORAGE_KEY, '1'); } catch (e) {}
+        try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch (e) {}
         document.body.classList.remove('gate-locked');
         gate.style.display = 'none';
         // 解锁后内容才恢复渲染，主动触发一次滚动/缩放检测，让弹性动画、视差等按真实布局重新计算
