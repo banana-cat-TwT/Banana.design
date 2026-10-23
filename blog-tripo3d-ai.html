@@ -903,6 +903,42 @@
             </div>
 
             <div class="blog-section">
+                <h3>智能网格生成 2.0 的问题（2026年9月底）</h3>
+                <p>2026 年 9 月底，用 Tripo 的智能网格生成 2.0 生成低模时，遇到了一些网格方面的错误。主要问题是面数分布不均：大部分拓扑都好好的，突然有一块特别特别多面；不然就是该一个面解决的地方，拓扑反而乱七八糟的，还带着一些多余的乱线。</p>
+
+                <h4>问题截图展示</h4>
+                <div style="display: grid; align-items: start; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin: 1.5rem 0;">
+                    <div style="background: rgba(71, 184, 255, 0.2); border-radius: 10px; padding: 1rem; border: 1px solid rgba(255, 99, 71, 0.3);">
+                        <img src="image/tripo/low1202610.png" alt="智能网格生成2.0问题1" style="width: 100%; border-radius: 8px;">
+                        <p style="text-align: center; color: #ff6347; font-size: 0.9rem; margin-top: 0.5rem;">①</p>
+                    </div>
+                    <div style="background: rgba(71, 184, 255, 0.2); border-radius: 10px; padding: 1rem; border: 1px solid rgba(255, 99, 71, 0.3);">
+                        <img src="image/tripo/low2202610.png" alt="智能网格生成2.0问题2" style="width: 100%; border-radius: 8px;">
+                        <p style="text-align: center; color: #ff6347; font-size: 0.9rem; margin-top: 0.5rem;">②</p>
+                    </div>
+                    <div style="background: rgba(71, 184, 255, 0.2); border-radius: 10px; padding: 1rem; border: 1px solid rgba(255, 99, 71, 0.3);">
+                        <img src="image/tripo/low3202610.png" alt="智能网格生成2.0问题3" style="width: 100%; border-radius: 8px;">
+                        <p style="text-align: center; color: #ff6347; font-size: 0.9rem; margin-top: 0.5rem;">③</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-section">
+                <h3>投射贴图测试（2026年10月初）</h3>
+                <p>2026 年 10 月初，想试试用 Tripo 投射贴图，把图片映射到模型上看看效果。结果重试了三次，Tripo 都没理解图片对应模型结构的样子，始终无法把图片直接映射上去。</p>
+                <div style="background: rgba(70, 122, 181, 0.45); border-radius: 10px; overflow: hidden; border: 1px solid rgba(56, 86, 120, 0.3); max-width: 700px; margin: 1.5rem auto;">
+                    <img src="image/tripo/tex202610.png" alt="Tripo投射贴图测试" style="width: 100%; height: auto; display: block;">
+                    <div style="padding: 1rem; text-align: center;">
+                        <h4 style="color: #92bfd4; margin-bottom: 0.5rem;">Tripo · 投射贴图测试</h4>
+                        <p style="font-size: 0.9rem; color: #7ee8fa;">重试三次都没有理解图片对应模型结构的样子，无法直接映射上去</p>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <strong>说法的确认：</strong>这里其实不太确定，AI 生成模型的贴图，跟把图片映射到模型上，到底是不是同一个概念，我不太确定。
+                </div>
+            </div>
+
+            <div class="blog-section">
                 <h3>技术优势与局限性</h3>
                 <h4>优势</h4>
                 <ul>
