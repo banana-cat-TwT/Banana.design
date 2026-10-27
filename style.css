@@ -5089,6 +5089,48 @@ nav ul li a:hover::after {
     border: 2px solid #CD853F;
 }
 
+.game-item-travel {
+    background: linear-gradient(135deg, #FBE6BE, #F2BE62, #DE9A45);
+    border: 3px solid #C98534;
+    box-shadow: 0 8px 25px rgba(200, 130, 40, 0.30);
+}
+
+.game-item-travel:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(200, 130, 40, 0.42), 0 0 0 3px rgba(200, 130, 40, 0.22);
+    border-color: #B5731F;
+}
+
+.game-item.game-item-travel h3 {
+    color: #6B4118 !important;
+    text-shadow: none;
+}
+
+.game-item.game-item-travel p {
+    color: #7A4A1F !important;
+}
+
+.game-item-travel .game-link {
+    background: linear-gradient(135deg, #EBAF4F, #D68A30);
+    color: #fff;
+    border: 2px solid #B5731F;
+}
+
+.game-item-travel .game-link:hover {
+    background: linear-gradient(135deg, #D68A30, #B5731F);
+    color: #fff;
+    box-shadow: 0 5px 15px rgba(214, 138, 48, 0.45);
+}
+
+.game-item-travel .game-img {
+    border: 2px solid #D9A14E;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
+}
+
+.game-item-travel .game-character {
+    border: 2px solid #D9A14E;
+}
+
 .game-item-duelang {
     background: #F7F2E1;
     border: 3px solid #D6BE8A;

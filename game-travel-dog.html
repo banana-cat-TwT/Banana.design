@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>与小狗的自然旅行 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 游戏详情页样式（烤面包金黄治愈配色） */
+        body { background: #FBF1DC; }
+
+        .game-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .game-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .game-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #A85F1C;
+        }
+
+        .game-detail-subtitle {
+            font-size: 1.2rem;
+            color: #B88650;
+            margin-bottom: 2rem;
+        }
+
+        .game-detail-cover {
+            width: 100%;
+            height: 400px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 3rem;
+            border: 3px solid #E3B26A;
+            box-shadow: 0 10px 30px rgba(198, 128, 46, 0.16);
+        }
+
+        .game-detail-content {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 3rem;
+        }
+
+        .game-detail-main {
+            background: #FFFBF1;
+            border: 1px solid #EAD3A2;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(198, 128, 46, 0.08);
+        }
+
+        .game-detail-sidebar {
+            background: #FFFBF1;
+            border: 1px solid #EAD3A2;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(198, 128, 46, 0.08);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: #BD7A2A;
+            border-left: 4px solid #E3A54E;
+            padding-left: 0.75rem;
+        }
+
+        .section-content {
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            color: #7A5A38;
+        }
+
+        .game-detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0 1.5rem;
+            font-size: 0.95rem;
+            color: #7A5A38;
+        }
+
+        .game-detail-table th,
+        .game-detail-table td {
+            border: 1px solid #EAD3A2;
+            padding: 0.6rem 0.75rem;
+            text-align: left;
+        }
+
+        .game-detail-table th {
+            background: #F6E2B3;
+            color: #98641F;
+            font-weight: bold;
+        }
+
+        .game-detail-table tr:nth-child(even) td {
+            background: #FBF1DC;
+        }
+
+        .game-features {
+            list-style: none;
+            padding: 0;
+            color: #7A5A38;
+        }
+
+        .game-features li {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .game-features li::before {
+            content: "•";
+            color: #E3A54E;
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .game-detail-sidebar h3 {
+            color: #98641F;
+            margin: 1.5rem 0 1rem;
+        }
+
+        .game-detail-sidebar h3:first-child {
+            margin-top: 0;
+        }
+
+        .gallery-container {
+            margin-top: 2rem;
+        }
+
+        .gallery-container h3 {
+            color: #98641F;
+            margin-bottom: 1rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #EAD3A2;
+            box-shadow: 0 5px 15px rgba(198, 128, 46, 0.08);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: #E3A54E;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 2px solid #C98534;
+        }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(214, 138, 48, 0.35);
+            background: #D68A30;
+        }
+
+        @media (max-width: 768px) {
+            .game-detail-content {
+                grid-template-columns: 1fr;
+            }
+
+            .game-detail-cover {
+                height: 250px;
+            }
+
+            .game-detail-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+
+    <!-- 51.la 访客统计 V6 -->
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"3Qu6OIFKMWrFWPyF",ck:"3Qu6OIFKMWrFWPyF"})</script>
+</head>
+<body>
+    <script src="gate.js"></script>
+    <!-- 前景灰烬特效 -->
+    <div class="ash-container" id="ashContainer"></div>
+
+    <!-- 跟随导航 -->
+    <nav class="side-nav" id="sideNav">
+        <button class="nav-toggle-btn" id="navToggleBtn">
+            <span class="toggle-icon"></span>
+        </button>
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#characters" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">角色展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">小游戏</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>我的作品集</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="game-detail-container">
+            <div class="game-detail-header">
+                <h1 class="game-detail-title">与小狗的自然旅行</h1>
+                <p class="game-detail-subtitle">3D 风格化卡通 · 休闲治愈养成 · Unity · 暂定名</p>
+                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=stylized%20low-poly%203D%20game%20scene%2C%20a%20lone%20traveler%20with%20a%20small%20backpack%20and%20a%20cute%20short-legged%20corgi%20walking%20along%20a%20dirt%20trail%20through%20a%20green%20river%20valley%2C%20warm%20golden%20hour%20light%2C%20soft%20pastel%20natural%20palette%2C%20cozy%20healing%20mood%2C%20wide%20establishing%20shot&image_size=landscape_16_9" alt="与小狗的自然旅行封面" class="game-detail-cover">
+            </div>
+
+            <div class="game-detail-content">
+                <div class="game-detail-main">
+                    <h2 class="section-title">游戏简介</h2>
+                    <div class="section-content">
+                        <p>这是一款3D风格化卡通的休闲治愈养成游戏。玩家带着一只小狗在自然环境中旅行，沿途探索、获取食物、安排日常生活，并在合适的地方搭建临时营地。随着探索不断深入，会慢慢发现自己更想去、也更远的地方。</p>
+                        <p>核心循环是「观察环境，选定一个想去的地方 → 准备食物与补给 → 外出探索、采集、发现新地点 → 回到营地做饭、休息、整理 → 修整之后，再往更远处或迁营出发」。</p>
+                        <p>探索采用越走越高的珠链式地图结构，细节见下方地图设计。</p>
+                        <p>小狗会帮忙搬运、寻找水源和食物、自主发现资源；你昏睡时它守在身边，饿昏后还会叼来果子把你唤醒。它是整段旅程中最主要的陪伴感来源。</p>
+                    </div>
+
+                    <h2 class="section-title">地图设计</h2>
+                    <div class="section-content">
+                        <p>地图是一条约600米见方的珠链主径，串起3处落脚点，从河谷一路爬升到悬崖。每个营地各带一个5到7个探索点的环形探索圈，站在这处营地就能看见下一个目标，这也是迁营的主要动机。</p>
+                        <p>整体不大，可行走范围约600米×600米，最大高差55米，主线全长约1200米，营地间距约350米。垂直方向就是叙事方向，越走越高，终点是整张地图的最高点。</p>
+                        <p>单个营地的探索圈半径约150米，绕一圈约500米。圈内放3个顺路点保证走出去就有反馈，再放2个绕路点奖励主动偏离，走到哪都会绕回帐篷，避免来回折返的枯燥。每一次迁营都是一次明确的上坡。</p>
+                        <table class="game-detail-table">
+                            <thead>
+                                <tr><th>区域</th><th>水源</th><th>食物</th><th>柴火</th><th>离开动机</th></tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>A 河谷低地</td><td>河，约30米</td><td>浆果×8，密集</td><td>充足</td><td>浆果采完，北坡能看见白桦林</td></tr>
+                                <tr><td>B 白桦林台地</td><td>溪或潭，约60米</td><td>蘑菇×5，少量浆果</td><td>中等</td><td>林中夜里太暗，能看见岩脊孤松</td></tr>
+                                <tr><td>C 松林高地</td><td>山泉，约120米</td><td>蓝莓×4，分散</td><td>几乎没有</td><td>什么都缺，但已能看见悬崖</td></tr>
+                                <tr><td>D 悬崖</td><td>无</td><td>无</td><td>无</td><td>终点，坐下看云海</td></tr>
+                            </tbody>
+                        </table>
+                        <p>因为不提供地图界面，认路主要靠几层线索，每区一个剪影独特的视线锚点（白桦白线、岩脊孤松、橙色断层），主径与支线的小径语言，随距离衰减的水声和高地风声，小鸟群提示资源点，以及小狗抽动鼻子、转向、回头看你。地图不用空气墙，陡坡会让人下滑，密灌木钻不过去，深水走到腰深会被推回，边缘用山体和浓雾渐隐。</p>
+                    </div>
+
+                    <h2 class="section-title">制作思路</h2>
+                    <div class="section-content">
+                        <p>项目围绕2026 ThatGameJam主办方给出的音乐旋律展开创作，因此在2026年10月26日出题后启动。团队最初就想着让音乐成为叙事主线，随进程变化，并提出了出生发现、世界苏醒、生命汇聚、隐匿扩散的四段式情感结构。</p>
+                        <p>采用风格化低多边形卡通与温暖治愈的绘本感配色，让整段旅程看起来轻松、柔和，相对来说考验的是shader的风格化表现效果。</p>
+                        <p>以规划能力的成长作为核心成长来源，难度适中，压力贴合一次轻松旅行的定位。</p>
+                        <p>一人一狗之间的陪伴感，是主线探索之外最想传递的情绪。</p>
+                        <p>团队最早还讨论过一个语音交互的想法，程序策划想将通过语音和小狗交互作为主玩法，让玩家像现实里那样教小狗做事、下达指令、让它帮忙做事情，目前仍在评估是否纳入正式玩法。</p>
+                        <p>游戏内的时间按完整的24小时运行，昼夜与场景明暗随这24小时自然变化，现实与游戏的时间换算尚未确定，我之后会在测试时根据地图路线和实际游玩节奏调整。</p>
+                    </div>
+
+                    <h2 class="section-title">制作分工</h2>
+                    <div class="section-content">
+                        <p>项目于2026年10月26日启动。目前团队共4人，除本人外还有程序策划、音乐音效、文案各一人。本人承担所有与视觉美学相关的工作，包括引擎与渲染表现、全部3D美术（角色、场景、地编、绑定、动画、贴图、Shader、后处理）以及2D概念图、UI，并负责整体美术方案与艺术风格的确定。项目处于原型制作阶段。</p>
+                    </div>
+
+                    <div class="gallery-container">
+                        <h3>概念氛围图</h3>
+                        <div class="gallery-grid">
+                            <div class="gallery-item">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=stylized%20low-poly%203D%20game%20scene%2C%20a%20small%20cozy%20campsite%20on%20a%20grassy%20river%20terrace%2C%20one%20tiny%20tent%20and%20a%20ring%20of%20campfire%20stones%2C%20meandering%20shallow%20river%20with%20a%20pebble%20bar%2C%20soft%20yellow-green%20grass%2C%20distant%20white%20birch%20grove%2C%20warm%20golden%20morning%20light&image_size=square" alt="河谷营地">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=stylized%20low-poly%203D%20game%20scene%2C%20airy%20white%20birch%20forest%20on%20a%20gentle%20slope%2C%20slender%20white%20trunks%20with%20black%20horizontal%20marks%2C%20mossy%20fallen%20logs%2C%20dappled%20light%20on%20ferns%2C%20mint%20green%20and%20paper%20white%20palette%2C%20peaceful%20and%20healing&image_size=square" alt="白桦林">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=stylized%20low-poly%203D%20game%20scene%2C%20clifftop%20plateau%20at%20the%20edge%20of%20an%20escarpment%2C%20warm%20orange%20layered%20rock%20strata%2C%20sea%20of%20clouds%20below%2C%20distant%20mountains%20fading%20into%20haze%2C%20a%20cute%20corgi%20sitting%20beside%20a%20small%20tent%2C%20warm%20sunset%20light%2C%20huge%20sky&image_size=square" alt="悬崖远眺">
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="index.html#games" class="btn-back">返回小游戏列表</a>
+                </div>
+
+                <div class="game-detail-sidebar">
+                    <h3>游戏信息</h3>
+                    <ul class="game-features">
+                        <li>名称：与小狗的自然旅行（暂定名）</li>
+                        <li>状态：制作中（原型Demo）</li>
+                        <li>引擎：Unity（URP 渲染管线）</li>
+                        <li>类型：休闲旅行养成</li>
+                        <li>团队：4人</li>
+                        <li>启动：2026年10月26日</li>
+                        <li>活动：2026 ThatGameJam</li>
+                    </ul>
+
+                    <h3>美术风格</h3>
+                    <ul class="game-features">
+                        <li>3D低多边形风格化卡通</li>
+                        <li>温暖治愈绘本感配色</li>
+                        <li>PBR贴图 / Shader与后处理</li>
+                    </ul>
+
+                    <h3>游戏特色</h3>
+                    <ul class="game-features">
+                        <li>一人一狗旅行</li>
+                        <li>珠链式探索地图</li>
+                        <li>营地驻扎与迁营</li>
+                        <li>轻松的生活模拟</li>
+                        <li>24小时昼夜循环</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: <span class="js-banana-email"></span></p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 我的作品集</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
