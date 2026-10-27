@@ -140,6 +140,13 @@
             margin-bottom: 1rem;
         }
 
+        .gallery-note {
+            color: #8A6A3A;
+            font-size: 0.95rem;
+            line-height: 1.7;
+            margin-bottom: 1.25rem;
+        }
+
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -278,7 +285,6 @@
             <div class="game-detail-header">
                 <h1 class="game-detail-title">与小狗的自然旅行</h1>
                 <p class="game-detail-subtitle">3D 风格化卡通 · 休闲治愈养成 · Unity · 暂定名</p>
-                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=stylized%20low-poly%203D%20game%20scene%2C%20a%20lone%20traveler%20with%20a%20small%20backpack%20and%20a%20cute%20short-legged%20corgi%20walking%20along%20a%20dirt%20trail%20through%20a%20green%20river%20valley%2C%20warm%20golden%20hour%20light%2C%20soft%20pastel%20natural%20palette%2C%20cozy%20healing%20mood%2C%20wide%20establishing%20shot&image_size=landscape_16_9" alt="与小狗的自然旅行封面" class="game-detail-cover">
             </div>
 
             <div class="game-detail-content">
@@ -291,10 +297,10 @@
                         <p>小狗会帮忙搬运、寻找水源和食物、自主发现资源；你昏睡时它守在身边，饿昏后还会叼来果子把你唤醒。它是整段旅程中最主要的陪伴感来源。</p>
                     </div>
 
-                    <h2 class="section-title">地图设计</h2>
+                    <h2 class="section-title">初版引擎场景地图布局设计</h2>
                     <div class="section-content">
-                        <p>地图是一条约600米见方的珠链主径，串起3处落脚点，从河谷一路爬升到悬崖。每个营地各带一个5到7个探索点的环形探索圈，站在这处营地就能看见下一个目标，这也是迁营的主要动机。</p>
-                        <p>整体不大，可行走范围约600米×600米，最大高差55米，主线全长约1200米，营地间距约350米。垂直方向就是叙事方向，越走越高，终点是整张地图的最高点。</p>
+                        <p>暂时是以下地图方案，我出原型之后根据大家测试DEMO的感觉更改模型排布。整体是一条约600米见方的珠链主径，串起3处落脚点，从河谷一路爬升到悬崖。每个营地各带一个5到7个探索点的环形探索圈，站在这处营地就能看见下一个目标，这也是迁营的主要动机。</p>
+                        <p>整体大但相对空旷，减少非必要工作量，垂直方向就是叙事方向，越走越高，终点是整张地图的最高点。</p>
                         <p>单个营地的探索圈半径约150米，绕一圈约500米。圈内放3个顺路点保证走出去就有反馈，再放2个绕路点奖励主动偏离，走到哪都会绕回帐篷，避免来回折返的枯燥。每一次迁营都是一次明确的上坡。</p>
                         <table class="game-detail-table">
                             <thead>
@@ -314,7 +320,7 @@
                     <div class="section-content">
                         <p>项目围绕2026 ThatGameJam主办方给出的音乐旋律展开创作，因此在2026年10月26日出题后启动。团队最初就想着让音乐成为叙事主线，随进程变化，并提出了出生发现、世界苏醒、生命汇聚、隐匿扩散的四段式情感结构。</p>
                         <p>采用风格化低多边形卡通与温暖治愈的绘本感配色，让整段旅程看起来轻松、柔和，相对来说考验的是shader的风格化表现效果。</p>
-                        <p>以规划能力的成长作为核心成长来源，难度适中，压力贴合一次轻松旅行的定位。</p>
+                        <p>以规划能力的成长作为核心成长来源，难度适中，压力贴合一次轻松旅行的定位，整体类似《Big Walk》这类澳大利亚旅行游戏轻松愉快的感觉。</p>
                         <p>一人一狗之间的陪伴感，是主线探索之外最想传递的情绪。</p>
                         <p>团队最早还讨论过一个语音交互的想法，程序策划想将通过语音和小狗交互作为主玩法，让玩家像现实里那样教小狗做事、下达指令、让它帮忙做事情，目前仍在评估是否纳入正式玩法。</p>
                         <p>游戏内的时间按完整的24小时运行，昼夜与场景明暗随这24小时自然变化，现实与游戏的时间换算尚未确定，我之后会在测试时根据地图路线和实际游玩节奏调整。</p>
@@ -326,16 +332,20 @@
                     </div>
 
                     <div class="gallery-container">
-                        <h3>概念氛围图</h3>
+                        <h3>初版概念图</h3>
+                        <p class="gallery-note">用于引擎原型场景的快速搭建与布局参考，之后会结合大量现实中野外旅行的地点来制作场景与触发事件。</p>
                         <div class="gallery-grid">
                             <div class="gallery-item">
-                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=stylized%20low-poly%203D%20game%20scene%2C%20a%20small%20cozy%20campsite%20on%20a%20grassy%20river%20terrace%2C%20one%20tiny%20tent%20and%20a%20ring%20of%20campfire%20stones%2C%20meandering%20shallow%20river%20with%20a%20pebble%20bar%2C%20soft%20yellow-green%20grass%2C%20distant%20white%20birch%20grove%2C%20warm%20golden%20morning%20light&image_size=square" alt="河谷营地">
+                                <img src="image/Trip/trip4.jpg" alt="初版概念图一">
                             </div>
                             <div class="gallery-item">
-                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=stylized%20low-poly%203D%20game%20scene%2C%20airy%20white%20birch%20forest%20on%20a%20gentle%20slope%2C%20slender%20white%20trunks%20with%20black%20horizontal%20marks%2C%20mossy%20fallen%20logs%2C%20dappled%20light%20on%20ferns%2C%20mint%20green%20and%20paper%20white%20palette%2C%20peaceful%20and%20healing&image_size=square" alt="白桦林">
+                                <img src="image/Trip/trip3.jpg" alt="初版概念图二">
                             </div>
                             <div class="gallery-item">
-                                <img src="https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=stylized%20low-poly%203D%20game%20scene%2C%20clifftop%20plateau%20at%20the%20edge%20of%20an%20escarpment%2C%20warm%20orange%20layered%20rock%20strata%2C%20sea%20of%20clouds%20below%2C%20distant%20mountains%20fading%20into%20haze%2C%20a%20cute%20corgi%20sitting%20beside%20a%20small%20tent%2C%20warm%20sunset%20light%2C%20huge%20sky&image_size=square" alt="悬崖远眺">
+                                <img src="image/Trip/trip6.jpg" alt="初版概念图三">
+                            </div>
+                            <div class="gallery-item">
+                                <img src="image/Trip/trip5.jpg" alt="初版概念图四">
                             </div>
                         </div>
                     </div>
