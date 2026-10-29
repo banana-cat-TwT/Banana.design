@@ -333,7 +333,7 @@
 
                     <div class="gallery-container">
                         <h3>初版概念图</h3>
-                        <p class="gallery-note">用于引擎原型场景的快速搭建与布局参考，之后会结合大量现实中野外旅行的地点来制作场景与触发事件。</p>
+                        <p class="gallery-note">这6张初版概念图是我在2026年10月26日自己出的，用于引擎原型场景的快速搭建与布局参考，之后会结合大量现实中野外旅行的地点来制作场景与触发事件。</p>
                         <div class="gallery-grid">
                             <div class="gallery-item">
                                 <img src="image/Trip/trip4.jpg" alt="初版概念图一">
@@ -354,6 +354,33 @@
                                 <img src="image/Trip/trip8.jpg" alt="初版概念图六">
                             </div>
                         </div>
+                    </div>
+
+                    <h2 class="section-title">开发杂记 · 2026年10月29日早晨</h2>
+                    <div class="section-content">
+                        <p>原本这个Unity我已经用2021.3.45f1搓了个带转动的自制晴天天空盒，卡通水体但还没做细节，后处理画面、对应的简单shader、策划要求的物品人物狗狗场景都有了。风效已经做好，但我还没挂在物体上。天空盒的白云因为后处理效果变得不白了，我也要把颜色改成白的，会更卡通一点。</p>
+                        <p style="text-align:center; color:#98641F; font-size:0.95rem; margin:0 0 0.75rem;">这是10月28日的一人一狗小场景展示</p>
+                        <video controls autoplay muted playsinline preload="auto" style="max-width:100%; width:100%; height:auto; display:block; border-radius:10px; border:1px solid #EAD3A2; box-shadow:0 5px 15px rgba(198,128,46,0.10); margin:0 auto 1.5rem;">
+                            <source src="videos/trip/10月28日一人一狗小场景展示.mp4" type="video/mp4">
+                        </video>
+                        <p>2026年10月29日根据策划的要求把Unity换成高版本6000.3.27f1。他终于建仓了（哭了，终于等到这一天，还以为他不建了）。</p>
+                        <p>2026年10月28日深夜，策划拉了个TA妹妹来帮我打杂，但我目前还没想好要给她派什么任务。大概会给她能胜任的中间旅行区域，以及部分后面区域的场景建模。我回家还得列需求表才行，感觉不像美术侧该干的事。原本我打算根据策划的想法定制四个探险区域，2026年10月27日已经给策划出了一版地图设计。</p>
+                        <p style="text-align:center; color:#98641F; font-size:0.95rem; margin:0 0 0.75rem;">我出的一版地图设计</p>
+                        <img src="image/Trip/自己出了一版地图.jpg" alt="我出的一版地图设计" style="max-width:100%; height:auto; display:block; margin:0 auto 1.25rem; border-radius:10px; border:1px solid #EAD3A2; box-shadow:0 5px 15px rgba(198,128,46,0.10);">
+                        <p style="text-align:center; color:#98641F; font-size:0.95rem; margin:0 0 0.75rem;">地图探索小圈示意</p>
+                        <img src="image/Trip/地图小圈.png" alt="地图探索小圈示意" style="max-width:70%; height:auto; display:block; margin:0 auto 1.5rem; border-radius:10px; border:1px solid #EAD3A2; box-shadow:0 5px 15px rgba(198,128,46,0.10);">
+                        <p>2026年10月28日深夜，文案老师询问这个地图整个的规划，我暂时用27号出的地图设计供她写关联事件的故事。</p>
+                        <p>现在已经是2026年10月29日早上了，第一块区域已经ok。人物和狗狗如果不需要改动，就已经可以用现在这一版有基本绑定动作的模型。反正也不是正式的商业项目，仔细想想现在所有工作量如果要按正式项目来做，是要打磨一年的。</p>
+                        <p>哎，主要是昨天深夜策划又想改整个探险地块的风格，改成中式公园那种。他给了两个参考视频，一个是杭州九溪，一个是天目山，我还没看完，但看地名大概知道长什么样，毕竟这些地方以前在国美的时候去过，有照片还大致记得。</p>
+                        <p style="text-align:center; color:#98641F; font-size:0.95rem; margin:1.25rem 0 0.5rem;">杭州九溪</p>
+                        <div style="text-align:center; margin:0 0 1.25rem;">
+                            <iframe src="https://player.bilibili.com/player.html?isOutside=true&amp;bvid=BV129ReB1ExM&amp;page=1&amp;autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="width:100%; max-width:720px; aspect-ratio:16/9; border:1px solid #EAD3A2; border-radius:10px; background:#000;"></iframe>
+                        </div>
+                        <p style="text-align:center; color:#98641F; font-size:0.95rem; margin:0 0 0.5rem;">天目山</p>
+                        <div style="text-align:center; margin:0 0 1.5rem;">
+                            <iframe src="https://player.bilibili.com/player.html?isOutside=true&amp;bvid=BV1iC4y187Ua&amp;page=1&amp;autoplay=0" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true" style="width:100%; max-width:720px; aspect-ratio:16/9; border:1px solid #EAD3A2; border-radius:10px; background:#000;"></iframe>
+                        </div>
+                        <p>由于这个旅行游戏有触发事件以及回忆，我可能还得列出需要做的卡通特效、触发前和触发后的变化。对了还要给模型加碰撞体，动画状态机也还没连。算了晚上再整吧，现在先写到这里。</p>
                     </div>
 
                     <a href="index.html#games" class="btn-back">返回小游戏列表</a>
