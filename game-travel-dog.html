@@ -375,6 +375,7 @@
                     <div class="section-content">
                         <p>项目于2026年10月26日启动。赛前团队原计划5人，一名3D成员在开赛前一天退出，开赛后实际为本人、程序策划、音乐音效、文案共4人，3D方向的全部工作因此落在本人一个人身上。本人承担所有与视觉美学相关的工作，包括引擎与渲染表现、全部3D美术（角色、场景、地编、绑定、动画、贴图、Shader、后处理）、关卡设计与地图布局设计，以及2D概念图、UI，并负责整体美术方案与艺术风格的确定。项目处于原型制作阶段。合作层面，本人不止跟程序策划对接，根据项目需要也会跟文案、音效对接。程序策划此前没有3D游戏开发经验，对场景的单日产能和制作流程缺乏概念，进度预期与实际出入较大，同时Unity版本、仓库搭建等程序侧的基础条件也迟迟未定，进一步拖慢了推进节奏。项目属于学生阶段的小体量合作，大家预算都有限，所以从没请过外包，实在忙不过来时顶多再拉一个人进来合作。</p>
                         <p>10月28日晚上，团队新加入一位 TA（与本人同期毕业，现居美国，属跨时区协作），主要分担场景资产的摆放与复用；3D 资产制作、引擎与渲染效果仍由本人承担，后续 UI 部分可交由对方分担。</p>
+                        <p>截至目前，队伍的构成与协作状态是：五人跨时区协作——发起者（兼任策划与程序）、本人（3D 美术 / 技术美术 / 地编 / 绑定动画）、技术美术 TA、文案、音乐音效。TA 负责场景资产的摆放与复用，并可分担 UI 与部分交互逻辑；文案负责叙事与对话文本；音效在确认画面基调后跟进。此前团队信息主要靠各自私聊传递、缺乏统一同步，因此我在推进美术的同时，也主动补起了进度同步、范围裁剪、分工对齐与统筹文档整理，把队伍重新拉回到同一页上。</p>
                     </div>
 
                     <div class="gallery-container">
@@ -437,8 +438,20 @@
                             <li>环境灯光、水体、天空盒、后处理，以及一个营地场景一个小山一个小河谷</li>
                             <li>每个物体对应的基础材质球</li>
                             <li>下午又调了一版颜色和水体密度，调完水体后做了座小山</li>
-                            <li>主人物骨骼绑定、待机走路跑步的基础动作已完成，只是这几天太忙一直没抽空做</li>
+                            <li>完成主人物骨骼绑定，以及待机、走路、跑步三套基础动作——10月31日当天接到动画需求、当天就交付。</li>
                         </ul>
+                        <p style="text-align:center; color:#98641F; font-size:0.95rem; margin:0 0 0.75rem;">待机动画 · 当天提需求、当天交付</p>
+                        <video controls loop muted playsinline preload="metadata" style="max-width:420px; width:100%; height:auto; display:block; border-radius:10px; border:1px solid #EAD3A2; box-shadow:0 5px 15px rgba(198,128,46,0.10); margin:0 auto 1rem;">
+                            <source src="videos/trip/1031当天提需求当天就交付但程序完全不用的人物待机动画.mp4" type="video/mp4">
+                        </video>
+                        <p style="text-align:center; color:#98641F; font-size:0.95rem; margin:0 0 0.75rem;">走路动画 · 当天提需求、当天交付</p>
+                        <video controls loop muted playsinline preload="metadata" style="max-width:420px; width:100%; height:auto; display:block; border-radius:10px; border:1px solid #EAD3A2; box-shadow:0 5px 15px rgba(198,128,46,0.10); margin:0 auto 1rem;">
+                            <source src="videos/trip/1031当天提需求当天就交付但程序完全不用的人物走路动画.mp4" type="video/mp4">
+                        </video>
+                        <p style="text-align:center; color:#98641F; font-size:0.95rem; margin:0 0 0.75rem;">跑步动画 · 当天提需求、当天交付</p>
+                        <video controls loop muted playsinline preload="metadata" style="max-width:420px; width:100%; height:auto; display:block; border-radius:10px; border:1px solid #EAD3A2; box-shadow:0 5px 15px rgba(198,128,46,0.10); margin:0 auto 1rem;">
+                            <source src="videos/trip/1031当天提需求当天就交付但程序完全不用的人物跑步动画.mp4" type="video/mp4">
+                        </video>
                         <p style="font-weight:bold; color:#A85F1C; margin:1.5rem 0 0.5rem; font-size:1.12rem;">二、协作与复用</p>
                         <p>另一位28号晚上新加进来的TA今早已经把她负责地图的白模搭好了，接下来主要是场景的摆放与复用。为了配合，当天我把原本合并在一起的场景按物体拆成独立组件。这一点其实是对方提醒我的：模型和贴图本身没问题，但之前为了赶工把场景合并成了一组、没有拆成可复用组件，导致她没法直接拿去摆。赶工时没留拆分的余量、也没及时意识到这次有另一位美术能分担，是这周记下的一个改进点。当晚我一开始是手工逐个拆，拆到一半发现量太大——整个营地几十个单体——干脆写了段批量导出脚本，把组件统一归位到零点、一次性导出成 FBX，只需两三分钟就全部出完，后面她拖进 Unity 搭起来就快了。</p>
                         <p style="font-weight:bold; color:#A85F1C; margin:1.5rem 0 0.5rem; font-size:1.12rem;">三、场景氛围与雾效</p>
@@ -449,7 +462,7 @@
                         <p style="font-weight:bold; color:#A85F1C; margin:1.5rem 0 0.5rem; font-size:1.12rem;">四、风险与反思</p>
                         <p>这周暴露出来的两个风险，值得记下来引以为戒：一是决策人反复要更改美术风格，一边想立马让我当天落地，一边又质疑我的能力。26号我就整理好了参考文档发到群里，参考图也挑好、确定下来了，问题是临近提交又被推翻重来，需求一直在摇摆；二是需求边界没有及时收敛，地图设计、观察点设计、整张地图走向这类本应由策划侧牵头的内容，一度也落到了美术侧。这些都该在开工前就对齐清楚，而不是拖到后面再补。</p>
                         <p>需求节奏上也拧着：动画相关的所有需求到10月31日凌晨2点半才用AI总结提出来给我，同一天31号晚上10点整就开始问进度落地；之前也提过再找一位能分担美术的，最后拉进来的是TA，不过对方主要只能帮着摆场景，建模、材质、动画这些核心的美术量还是得我这边一个人扛。更要紧的是，项目越往后，拍板做决策的慢慢变成了我，本该由发起者定夺的方向和取舍，最后都堆到了美术这边。开工前最该对齐的，除了需求，还有各自的职责和决策权。</p>
-                        <p>分工上的来回确认，其实也不止一两次了：即便事先已经把各自能做的事和分工清单都发过一遍，临到节点还是会被反复问“哪些归谁、是不是都得你来做”，信息对齐始终没能一次说清。</p>
+                        <p>分工上的来回确认，其实也不止一两次了：即便事先已经把各自能做的事和分工清单都发过一遍，临到节点还是会被反复问“哪些归谁、是不是都得你来做”，信息对齐始终没能一次说清；甚至临近交稿，仍有成员连策划案和策划是谁都还不清楚。</p>
                         <p>更值得警惕的是核心玩法方向的反复：临近交稿，原本的徒步玩法被临时推翻、改向解密方向，而地图草图始终没能定下来，前期做完的场景、白模和文案叙事都面临重新评估甚至返工。短周期项目里方向不定就开工，是成本最高的一种返工。</p>
                         <p>面对这个时间风险，我这边也同步准备了兜底方案——在自己的基础场景上直接搭一版可打包的休闲玩法，保证无论上游方向怎么变、进度怎么拖，到交稿时间至少能交出一个可以运行的 Demo。</p>
                         <p>下面留了几张当天的画面和进度记录。</p>
@@ -458,6 +471,9 @@
                         <p style="text-align:center; color:#98641F; font-size:0.95rem; margin:0 0 0.75rem;">发完进度后 · 又把水体密度及场景雾效调了一下</p>
                         <img src="image/Trip/屏幕截图 2026-10-31-4.png" alt="水体密度调整后的画面" style="max-width:520px; width:100%; height:auto; display:block; margin:0 auto 1.5rem; border-radius:10px; border:1px solid #EAD3A2; box-shadow:0 5px 15px rgba(198,128,46,0.10);">
                         <p>这张里没有前面的那条道路。前面雾效对比那三张是有路的，但这条路现在的走向看着太割裂了，我想再改一版先不把它放进场景。</p>
+                        <p style="text-align:center; color:#98641F; font-size:0.95rem; margin:0 0 0.75rem;">我这边分支里的场景地形进度</p>
+                        <img src="image/Trip/20261101我自己的引擎内部地形1.png" alt="我自己的引擎内部地形" style="max-width:520px; width:100%; height:auto; display:block; margin:0 auto 1.25rem; border-radius:10px; border:1px solid #EAD3A2; box-shadow:0 5px 15px rgba(198,128,46,0.10);">
+                        <img src="image/Trip/20261101我自己的引擎内部地形2.png" alt="我自己的引擎内部地形" style="max-width:520px; width:100%; height:auto; display:block; margin:0 auto 1.5rem; border-radius:10px; border:1px solid #EAD3A2; box-shadow:0 5px 15px rgba(198,128,46,0.10);">
                     </div>
 
                     <a href="index.html#games" class="btn-back">返回小游戏列表</a>
