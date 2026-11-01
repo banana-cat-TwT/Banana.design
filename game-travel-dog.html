@@ -301,37 +301,45 @@
                     <div class="section-content">
                         <p>除去核心玩法代码，从渲染管线、工具开发到角色动画、场景地编，再到团队流程与跨职能协调，基本都由我一人兜住——身份也远不止 3D 美术 / 技术美术 / 地编关卡这三样。具体如下：</p>
 
-                        <p style="font-weight:bold; color:#A85F1C; margin:1.5rem 0 0.5rem; font-size:1.12rem;">一、渲染管线与技术美术（TA）全流程搭建</p>
-                        <ul style="color:#7A5A38; line-height:1.8; margin:0 0 1.5rem; padding-left:1.5rem;">
-                            <li>入队初期主动提出采用 URP 渲染管线的技术方案，适配卡通风格开发需求，从技术选型层面保障后续美术流程顺畅。</li>
-                            <li>从 0 搭建整套卡通风格渲染体系：环境光照、水体效果、动态天空盒、卡通后处理参数，统一全场景基础材质球；主动校准偏重的色彩倾向，实现柔和治愈的统一画面调性。</li>
-                            <li>自主实现场景动态氛围效果：卡通风格粒子冒烟特效、自然物体轻微晃动动画，补全假光照烘焙效果，在保证移动端流畅运行的前提下兼顾画面表现力。</li>
-                            <li>开发美术自动化提效工具：借助 AI 辅助编写一键批处理自动化工具，支持批量拆分模型、坐标自动归零、按规范自动重命名、批量导出 FBX；导出时配置为直接覆盖 Unity 内旧资源且不修改 .meta 文件，保证已调好的材质与参数引用不被重置；内置预览模式，导出前可预览选中模型列表。这套工具把手动导出、调参的重复工作从数十分钟压缩到数秒，大幅提升场景迭代效率。</li>
-                            <li>主动修正贴图导出分辨率错误，重新上传高分辨率版本资源，适配 Unity 6000 版本工程规范，保障跨版本资源一致性。</li>
-                        </ul>
+                        <div style="background:#FFFBF1; border:1px solid #EAD3A2; border-left:4px solid #E3A54E; border-radius:10px; padding:1.25rem 1.5rem; margin:1.5rem 0 0;">
+                            <p style="font-weight:bold; color:#A85F1C; margin:0 0 0.75rem; font-size:1.15rem;">一、渲染管线与技术美术（TA）全流程搭建</p>
+                            <ul style="color:#7A5A38; line-height:1.9; margin:0; padding-left:1.5rem;">
+                                <li>入队初期主动提出采用 <strong style="color:#A85F1C;">URP 渲染管线</strong> 的技术方案，适配卡通风格开发需求，从技术选型层面保障后续美术流程顺畅。</li>
+                                <li><strong style="color:#A85F1C;">从 0 搭建整套卡通风格渲染体系</strong>：环境光照、水体效果、动态天空盒、卡通后处理参数，统一全场景基础材质球；主动校准偏重的色彩倾向，实现柔和治愈的统一画面调性。</li>
+                                <li>自主实现场景动态氛围效果：<strong style="color:#A85F1C;">卡通风格粒子冒烟特效、自然物体轻微晃动动画</strong>，补全假光照烘焙效果，在保证移动端流畅运行的前提下兼顾画面表现力。</li>
+                                <li>开发美术自动化提效工具：借助 AI 辅助编写 <span style="background:#F6E2B3; color:#98641F; font-weight:600; padding:0 4px; border-radius:4px;">一键批处理自动化工具</span>，支持批量拆分模型、坐标自动归零、按规范自动重命名、批量导出 FBX；导出时配置为直接覆盖 Unity 内旧资源且不修改 .meta 文件，保证已调好的材质与参数引用不被重置；内置预览模式，导出前可预览选中模型列表。这套工具把手动导出、调参的重复工作 <span style="background:#F6E2B3; color:#98641F; font-weight:600; padding:0 4px; border-radius:4px;">从数十分钟压缩到数秒</span>，大幅提升场景迭代效率。</li>
+                                <li>主动修正贴图导出分辨率错误，重新上传高分辨率版本资源，适配 Unity 6000 版本工程规范，保障跨版本资源一致性。</li>
+                            </ul>
+                        </div>
 
-                        <p style="font-weight:bold; color:#A85F1C; margin:1.5rem 0 0.5rem; font-size:1.12rem;">二、角色资产与动画制作</p>
-                        <ul style="color:#7A5A38; line-height:1.8; margin:0 0 1.5rem; padding-left:1.5rem;">
-                            <li>完成主角模型的骨骼绑定，为角色挂载背包等随身道具子节点，支持道具随角色动作自然联动。</li>
-                            <li>完成主角与陪伴宠物（小狗）的基础动画：待机、行走循环、跑跳循环，满足核心交互需求。</li>
-                        </ul>
+                        <div style="background:#FFFBF1; border:1px solid #EAD3A2; border-left:4px solid #E3A54E; border-radius:10px; padding:1.25rem 1.5rem; margin:1.25rem 0 0;">
+                            <p style="font-weight:bold; color:#A85F1C; margin:0 0 0.75rem; font-size:1.15rem;">二、角色资产与动画制作</p>
+                            <ul style="color:#7A5A38; line-height:1.9; margin:0; padding-left:1.5rem;">
+                                <li>完成主角模型的 <strong style="color:#A85F1C;">骨骼绑定</strong>，为角色挂载背包等随身道具子节点，支持道具随角色动作自然联动。</li>
+                                <li>完成主角与陪伴宠物（小狗）的基础动画：<strong style="color:#A85F1C;">待机、行走循环、跑跳循环</strong>，满足核心交互需求。</li>
+                            </ul>
+                        </div>
 
-                        <p style="font-weight:bold; color:#A85F1C; margin:1.5rem 0 0.5rem; font-size:1.12rem;">三、场景资产与地编工作</p>
-                        <ul style="color:#7A5A38; line-height:1.8; margin:0 0 1.5rem; padding-left:1.5rem;">
-                            <li>独立完成核心演示小场景的全流程搭建：自然地形、营地全套道具（帐篷、篝火、炊具、背包、野果）、植被山石等全套原创模型资产。</li>
-                            <li>将场景单体资产拆分为标准化可复用预制体，建立资产复用规范，为后续场景快速搭建节省约 40% 的重复工作量。</li>
-                            <li>在上游关卡方案缺失的情况下，主动调研同类休闲治愈游戏，输出珠链式全局旅行路线俯图与点位标注图，作为团队统一的地图设计参考。</li>
-                        </ul>
+                        <div style="background:#FFFBF1; border:1px solid #EAD3A2; border-left:4px solid #E3A54E; border-radius:10px; padding:1.25rem 1.5rem; margin:1.25rem 0 0;">
+                            <p style="font-weight:bold; color:#A85F1C; margin:0 0 0.75rem; font-size:1.15rem;">三、场景资产与地编工作</p>
+                            <ul style="color:#7A5A38; line-height:1.9; margin:0; padding-left:1.5rem;">
+                                <li>独立完成 <strong style="color:#A85F1C;">核心演示小场景的全流程搭建</strong>：自然地形、营地全套道具（帐篷、篝火、炊具、背包、野果）、植被山石等全套原创模型资产。</li>
+                                <li>将场景单体资产拆分为标准化可复用预制体，建立资产复用规范，为后续场景快速搭建 <span style="background:#F6E2B3; color:#98641F; font-weight:600; padding:0 4px; border-radius:4px;">节省约 40% 的重复工作量</span>。</li>
+                                <li>在上游关卡方案缺失的情况下，主动调研同类休闲治愈游戏，输出 <strong style="color:#A85F1C;">珠链式全局旅行路线俯图与点位标注图</strong>，作为团队统一的地图设计参考。</li>
+                            </ul>
+                        </div>
 
-                        <p style="font-weight:bold; color:#A85F1C; margin:1.5rem 0 0.5rem; font-size:1.12rem;">四、协作流程搭建与跨职能补位</p>
-                        <ul style="color:#7A5A38; line-height:1.8; margin:0 0 1.5rem; padding-left:1.5rem;">
-                            <li>入队第一天主动推动搭建 Git 工程仓库，跟进分支合并与资源上传规范，推动版本管理从 0 落地。</li>
-                            <li>全程在公开群内同步进度、技术选型与交付边界，做完整过程留痕，降低跨时区协作信息差、减少返工风险。</li>
-                            <li>跨时区对接新加入的技术美术，主动建立联系、对齐资产标准与分工边界；在美术方向未完全锁定的情况下，优先完成核心内容的可运行 Demo。</li>
-                            <li>主动确认场景必做元素清单，避免漏项返工；基于短周期约束提出「精简组件、不做冗余变体」的排期建议，帮助团队控制工作量。</li>
-                            <li>给文案同学同步场景进度与地图参考，支撑叙事内容开展；为演示视频补充材质说明，避免裸资源造成的画面风格误解。</li>
-                            <li>面向主策同步基础技术常识（手绘模型 / PBR / 烘焙 / 引擎版本差异），降低跨角色沟通的信息成本。</li>
-                        </ul>
+                        <div style="background:#FFFBF1; border:1px solid #EAD3A2; border-left:4px solid #E3A54E; border-radius:10px; padding:1.25rem 1.5rem; margin:1.25rem 0 0;">
+                            <p style="font-weight:bold; color:#A85F1C; margin:0 0 0.75rem; font-size:1.15rem;">四、协作流程搭建与跨职能补位</p>
+                            <ul style="color:#7A5A38; line-height:1.9; margin:0; padding-left:1.5rem;">
+                                <li>入队第一天主动推动搭建 <strong style="color:#A85F1C;">Git 工程仓库</strong>，跟进分支合并与资源上传规范，推动版本管理 <span style="background:#F6E2B3; color:#98641F; font-weight:600; padding:0 4px; border-radius:4px;">从 0 落地</span>。</li>
+                                <li>全程在公开群内同步进度、技术选型与交付边界，做完整过程留痕，降低跨时区协作信息差、减少返工风险。</li>
+                                <li>跨时区对接新加入的技术美术，主动建立联系、对齐资产标准与分工边界；在美术方向未完全锁定的情况下，优先完成核心内容的可运行 Demo。</li>
+                                <li>主动确认场景必做元素清单，避免漏项返工；基于短周期约束提出 <strong style="color:#A85F1C;">「精简组件、不做冗余变体」</strong> 的排期建议，帮助团队控制工作量。</li>
+                                <li>给文案同学同步场景进度与地图参考，支撑叙事内容开展；为演示视频补充材质说明，避免裸资源造成的画面风格误解。</li>
+                                <li>面向主策同步基础技术常识（手绘模型 / PBR / 烘焙 / 引擎版本差异），降低跨角色沟通的信息成本。</li>
+                            </ul>
+                        </div>
                     </div>
 
                     <h2 class="section-title">初版引擎地图布局</h2>
