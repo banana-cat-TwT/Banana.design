@@ -309,7 +309,7 @@
                                 <li>自主实现场景动态氛围效果：<strong style="color:#A85F1C;">卡通风格粒子冒烟特效、自然物体轻微晃动动画</strong>，补全假光照烘焙效果，在保证移动端流畅运行的前提下兼顾画面表现力。</li>
                                 <li>开发美术自动化提效工具：借助 AI 辅助编写 <span style="background:#F6E2B3; color:#98641F; font-weight:600; padding:0 4px; border-radius:4px;">一键批处理自动化工具</span>，支持批量拆分模型、坐标自动归零、按规范自动重命名、批量导出 FBX；导出时配置为直接覆盖 Unity 内旧资源且不修改 .meta 文件，保证已调好的材质与参数引用不被重置；内置预览模式，导出前可预览选中模型列表。这套工具把手动导出、调参的重复工作 <span style="background:#F6E2B3; color:#98641F; font-weight:600; padding:0 4px; border-radius:4px;">从数十分钟压缩到数秒</span>，大幅提升场景迭代效率。</li>
                                 <li>主动修正贴图导出分辨率错误，重新上传高分辨率版本资源，适配 Unity 6000 版本工程规范，保障跨版本资源一致性。</li>
-                                <li>借助 AI 辅助编写多段引擎内功能脚本：<strong style="color:#A85F1C;">动态天空盒转动、人物基础操控、基础动画状态驱动</strong>，让场景与角色能在引擎里实际跑起来。</li>
+                                <li>借助 AI 辅助编写多段引擎内功能脚本：<strong style="color:#A85F1C;">动态天空盒转动（编辑器内亦可预览）、人物基础操控、动画状态机与动画操控</strong>，让场景与角色能在引擎里实际跑起来。</li>
                             </ul>
                         </div>
 
@@ -318,9 +318,9 @@
                             <ul style="color:#7A5A38; line-height:1.9; margin:0; padding-left:1.5rem;">
                                 <li>独立制作 <strong style="color:#A85F1C;">主角与陪伴宠物（小狗）的角色模型、贴图与材质</strong>，从建模、贴图到底色全部由我完成。</li>
                                 <li>完成主角模型的 <strong style="color:#A85F1C;">骨骼绑定</strong>，为角色挂载背包等随身道具子节点，支撑道具随动作自然联动。</li>
-                                <li>完成 <strong style="color:#A85F1C;">待机、走路、跑步</strong> 三套基础动作，10月31日当天接到需求、当天交付。</li>
+                                <li>完成 <strong style="color:#A85F1C;">待机、走路、跑步、跳跃、躺、坐、起身</strong> 等整套基础动作，并自行搭建 <strong style="color:#A85F1C;">动画状态机</strong> 驱动动作切换，10月31日当天接到需求、当天交付。</li>
                                 <li>预留 <strong style="color:#A85F1C;">通用动作智能绑定</strong> 方案，其余动作可一次性复用到团队其他角色，省去重复绑定。</li>
-                                <li>设计 <strong style="color:#A85F1C;">开始界面的开场镜头与 UI 过渡</strong>：小小人坐在篝火旁发呆的循环动画 →「开始旅行」按钮 → 切入起身镜头，并先搭一版简单 UI。</li>
+                                <li>设计 <strong style="color:#A85F1C;">开始界面的开场镜头与 UI</strong>：小小人坐在篝火旁发呆、小锅煮饭冒烟的循环动画，配「开始旅行 / 退出」按钮 → 起身镜头与 loading 过场；复用自己写过的鼠标交互脚本与点击发光材质球，并在开始界面为全队成员保留制作人员表。</li>
                             </ul>
                         </div>
 
@@ -330,6 +330,8 @@
                                 <li>独立完成 <strong style="color:#A85F1C;">核心演示小场景的全流程搭建</strong>：自然地形、营地全套道具（帐篷、篝火、炊具、背包、野果）、植被山石等全套原创模型资产。</li>
                                 <li>将场景单体资产拆分为标准化可复用预制体，建立资产复用规范，为后续场景快速搭建 <span style="background:#F6E2B3; color:#98641F; font-weight:600; padding:0 4px; border-radius:4px;">节省约 40% 的重复工作量</span>。</li>
                                 <li>在上游关卡方案缺失的情况下，主动调研同类休闲治愈游戏，输出 <strong style="color:#A85F1C;">珠链式全局旅行路线俯图与点位标注图</strong>，作为团队统一的地图设计参考。</li>
+                                <li>为场景物体与人物统一配置 <strong style="color:#A85F1C;">碰撞体</strong>，保证角色移动、交互与碰撞在引擎内正常运转。</li>
+                                <li>用「<strong style="color:#A85F1C;">倒下的树 + 碰撞体</strong>」实现地图空气墙边界，以自然遮挡代替生硬隔断，让场景边缘过渡更自然。</li>
                             </ul>
                         </div>
 
@@ -351,6 +353,8 @@
                                 <li>在策划侧迟迟拿不出统一方案、信息主要靠各自私聊传递的时候，主动整理一份面向 <strong style="color:#A85F1C;">TA、文案、音效的统筹文档</strong>，补上分工、进度与范围裁剪，并逐个对接对齐。</li>
                                 <li>主动做 <strong style="color:#A85F1C;">范围裁剪与岗位搭补</strong>：把「只开放前面地区、其余用空气墙隔开」「交互逻辑可交由 TA 分担」这类排期与协作建议直接落地。</li>
                                 <li>面对临交稿上游方向仍不稳定，主动在自己的基础场景上准备一版 <span style="background:#F6E2B3; color:#98641F; font-weight:600; padding:0 4px; border-radius:4px;">可直接打包的休闲玩法</span>，并独立负责 <strong style="color:#A85F1C;">打包、包体检查与最终提交</strong>，保证项目无论如何都能按时交出一个能运行的 Demo。</li>
+                                <li>在上游统筹长期缺位的情况下，实际挑起 <strong style="color:#A85F1C;">项目负责人的角色</strong>：梳理现状、拉需求与分工、逐个同步并稳定团队，把原本分散的成员重新凝聚成一支能独立推进的交付小队。</li>
+                                <li>主动备份个人美术与脚本资产，做好版本保全，规避项目不确定带来的产出丢失风险。</li>
                             </ul>
                         </div>
                     </div>
