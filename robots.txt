@@ -114,6 +114,31 @@ Disallow: /
 User-agent: Gemini-Deep-Research
 Disallow: /
 
+# 2026 补充：华为 / xAI 及常见采集/营销爬虫
+User-agent: PetalBot
+Disallow: /
+
+User-agent: GrokCrawler
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+User-agent: BLEXBot
+Disallow: /
+
+User-agent: DataForSeoBot
+Disallow: /
+
 # 允许主流搜索引擎索引（仅索引，不训练）
 User-agent: Googlebot
 Allow: /

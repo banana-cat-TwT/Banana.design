@@ -4747,10 +4747,22 @@ function initCopyrightProtection() {
 // 启动版权保护
 initCopyrightProtection();
 
-// ===== 视频懒加载 + 自动播放修复（解决多视频被浏览器优化策略暂停的问题）=====
-// 浏览器对页面上的多视频会限制：不在视口内的视频只加载元数据（readyState=1），不加载视频数据
-// 用 Intersection Observer 监听视频进入视口，主动触发 load() + play()
+// ===== 视频懒加载 + 自动播放 =====
+// 手机端：不强制自动播放视频，避免滑动时视频突然弹出/抢占资源。
+// 桌面端：保持原有的懒加载自动播放逻辑。
+function isMobileViewport() {
+    return window.matchMedia('(max-width: 768px)').matches;
+}
+
 function setupVideoLazyLoad() {
+    // 手机端：不强制自动播放；并暂停角色/道具卡片背面的装饰视频，避免滑动或翻卡时视频突然弹出
+    if (isMobileViewport()) {
+        document.querySelectorAll('.character-back video, .item-back video').forEach(function(v) {
+            v.pause();
+            v.removeAttribute('autoplay');
+        });
+        return;
+    }
     if (!('IntersectionObserver' in window)) {
         // 老浏览器降级：直接全部播放
         document.querySelectorAll('video').forEach(function(v) {
@@ -4790,7 +4802,13 @@ function setupVideoLazyLoad() {
 }
 
 // 用户第一次触摸/点击时强制触发所有视频播放（绕过微信限制）
+// 手机端禁用，避免首次触摸（开始滑动）时所有视频一起弹出
 function onFirstVideoInteraction() {
+    if (isMobileViewport()) {
+        document.removeEventListener('touchstart', onFirstVideoInteraction);
+        document.removeEventListener('click', onFirstVideoInteraction);
+        return;
+    }
     document.querySelectorAll('video').forEach(function(v) {
         v.muted = true;
         if (v.readyState < 2) v.load();
@@ -4810,15 +4828,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // 切换标签页回来时重新触发
 document.addEventListener('visibilitychange', function() {
-    if (!document.hidden) {
-        setTimeout(function() {
-            document.querySelectorAll('video').forEach(function(v) {
-                v.muted = true;
-                var p = v.play();
-                if (p && p.catch) p.catch(function(){});
-            });
-        }, 200);
+    if (document.hidden || isMobileViewport()) {
+        return;
     }
+    setTimeout(function() {
+        document.querySelectorAll('video').forEach(function(v) {
+            v.muted = true;
+            var p = v.play();
+            if (p && p.catch) p.catch(function(){});
+        });
+    }, 200);
 });
 
 // ===== 微信号复制弹窗 =====

@@ -1,0 +1,12 @@
+# _headers · Banana.design
+# Cloudflare Pages 会在部署时自动读取本文件并注入响应头。
+# 说明：以下安全头只做“纵深防御”，并不能拦截陌生 IP 访问；
+# 真正拦截未知访问需在 Cloudflare 面板开启 Bot Fight Mode / WAF / IP 封锁。
+
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://*.51.la; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' data: blob: https:; frame-src 'self' https://player.bilibili.com https://www.bilibili.com; connect-src 'self' https://*.51.la https://ipwho.is https://freeipapi.com https://formspree.io; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io; frame-ancestors 'none'
