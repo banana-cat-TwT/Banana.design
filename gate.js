@@ -74,7 +74,7 @@
             '<div class="gate-card">' +
             '<h2>请输入访问密码</h2>' +
             '<p class="gate-desc">输入密码后即可进入网站</p>' +
-            '<p class="gate-note">本站自 2026年9月30日 起启用访问密码。此前收到分享链接的朋友，若还不知道密码，可以来问我，也可以在简历首页右下角查看。</p>' +
+            '<p class="gate-note">本站自 2026年9月30日 起启用访问密码。此前收到分享链接的朋友，若还不知道密码，可以来问我，也可以在作品集首页右下角查看。</p>' +
             '<input id="gate-input" type="password" inputmode="numeric" maxlength="4" placeholder="••••" autocomplete="off">' +
             '<button id="gate-btn" type="button">进入</button>' +
             '<div class="gate-error" id="gate-error"></div>' +
