@@ -632,7 +632,7 @@
                         <div style="background:#FAEFD2; border:1px solid #EAD3A2; border-left:4px solid #E3A54E; border-radius:10px; padding:1.25rem 1.5rem; margin:1.25rem 0 0;">
                             <p style="font-weight:bold; color:#A85F1C; margin:0 0 0.75rem; font-size:1.1rem;">E 键交互仲裁（EArbiter）</p>
                             <ul style="color:#7A5A38; line-height:1.9; margin:0; padding-left:1.5rem;">
-                                <li>场景里有几十个可交互资产，配套几百句对话、近十个小故事（宝箱、树枝、钓鱼、篝火、手帐收集点…）各自检测 E 键，玩家站在两个交互物重叠处按一次 E，会多个脚本同帧各响各的，导致对话重合、抢提示框、该开宝箱却弹出树枝。于是把各检测点改成只向一个全局仲裁器「报名」（距离 + 动作），仲裁器在 LateUpdate 里统一挑离玩家最近的那个执行、其余静默——LateUpdate 天然晚于同帧所有 Update，报名收齐后再判定，也不用管脚本执行顺序；执行再用 try/catch 兜底防崩。这套机制再配合 PickupItem（拾取）、DialogTrigger（对话）等，让交互既不冲突、也好扩展。</li>
+                                <li>场景里有几十个可交互资产、几百句对话、近十个小故事（宝箱、树枝、钓鱼、篝火、手帐收集点…）各自检测 E 键，玩家站在两个交互物重叠处按一次 E，会多个脚本同帧各响各的，导致对话重合、抢提示框、该开宝箱却弹出树枝。于是把各检测点统一改成只向一个全局静态类「报名」：<code style="background:#F6E2B3; color:#98641F; padding:0 4px; border-radius:4px;">EArbiter.Request(距离, 动作)</code>。它内部用一个 DontDestroyOnLoad 的迷你 Driver 在 LateUpdate 里挑离玩家最近的一个执行、其余静默——LateUpdate 天然晚于同帧所有 Update，报名收齐后再判定，完全不用管脚本执行顺序；执行动作再用 try/catch 兜底防崩。这套机制配合 PickupItem（拾取）、DialogTrigger（对话）等，让几十个交互点既不冲突、也好扩展。</li>
                             </ul>
                         </div>
 
@@ -644,9 +644,20 @@
                         </div>
 
                         <div style="background:#FAEFD2; border:1px solid #EAD3A2; border-left:4px solid #E3A54E; border-radius:10px; padding:1.25rem 1.5rem; margin:1.25rem 0 0;">
-                            <p style="font-weight:bold; color:#A85F1C; margin:0 0 0.75rem; font-size:1.1rem;">角色控制与陪伴</p>
+                            <p style="font-weight:bold; color:#A85F1C; margin:0 0 0.75rem; font-size:1.1rem;">输入与角色控制（InputHub + ThirdPersonController）</p>
                             <ul style="color:#7A5A38; line-height:1.9; margin:0; padding-left:1.5rem;">
-                                <li>ThirdPersonController 第三人称控制 + SimpleFollowCamera 跟随相机 + DogFollow 小狗自动跟随玩家，再配合 Animator 状态机切换走 / 跑 / 跳 / 躺 / 坐 / 起身等动作，把「带着小狗旅行」的核心体验跑通。</li>
+                                <li><strong style="color:#A85F1C;">双轨输入兼容</strong>：封装了一个 InputHub 静态层，用 <code style="background:#F6E2B3; color:#98641F; padding:0 4px; border-radius:4px;">#if ENABLE_INPUT_SYSTEM</code> 分支同时兼容旧 Input Manager 和新 Input System——工程开「纯新 Input System」时，老 API 的 Input.GetKeyDown 会直接抛异常，所以所有交互键（E / L / 空格 / C 拍照 / J 手帐 / 方向键翻目录等）都手动做了 KeyCode→Key 映射统一走这里，不必再去 Project Settings 改 Active Input Handling。</li>
+                                <li><strong style="color:#A85F1C;">第三人称移动</strong>：以相机前方为基准压平到水平面求移动方向，速度用 MoveTowards 平滑加减速；转身用 <code style="background:#F6E2B3; color:#98641F; padding:0 4px; border-radius:4px;">1 - exp(-turnSpeed·Δt)</code> 做帧率无关的 Slerp，高帧率下也不会转出鬼畜。</li>
+                                <li><strong style="color:#A85F1C;">出生自检 + 掉落救援</strong>：启动时向上打射线自动把人「顶」出被抬高的地表（收集自身碰撞盒做过滤）、向下 500m 打射线确认脚下有地面（没有就报错提示加 MeshCollider）；运行时一旦掉到出生点下方 25m，自动送回出生点并打日志给线索。这套「自检 + 兜底」让赶工期的场景地编敢频繁改动地面而不怕埋坑。</li>
+                            </ul>
+                        </div>
+
+                        <div style="background:#FAEFD2; border:1px solid #EAD3A2; border-left:4px solid #E3A54E; border-radius:10px; padding:1.25rem 1.5rem; margin:1.25rem 0 0;">
+                            <p style="font-weight:bold; color:#A85F1C; margin:0 0 0.75rem; font-size:1.1rem;">小狗 AI 与程序化动画（DogFollow）</p>
+                            <ul style="color:#7A5A38; line-height:1.9; margin:0; padding-left:1.5rem;">
+                                <li><strong style="color:#A85F1C;">BOSS 锁定式跟随</strong>：狗的跟随参数在运行时强制收紧——停止距离压到 0.7m（贴脚跟）、跑步 3m、瞬移 10m，速度随距离正比增长（越远越快、上限 1.6 倍防一帧瞬移半张图），保证狗永远贴身、绝不掉队。</li>
+                                <li><strong style="color:#A85F1C;">程序化小跑动画</strong>：没做正式动画也能动——移动时身体上下颠（用 |sin| 模拟「蹬地—落地」节奏而非正弦漂浮）+ 轻微前倾，并自动在所有子物体里找名字带 leg / paw / foot 的骨骼做交替摆动（简化版对角步态）。</li>
+                                <li><strong style="color:#A85F1C;">体型锁 + 卡死脱困</strong>：启动时缓存自身与全部子物体的缩放、LateUpdate 锁回原值，根治 FBX 导入时偷偷带出来的 Animator 缩放骨骼、把狗越跑越大的问题；并自动禁用模型自带 Animator/Rigidbody/NavMeshAgent 避免和跟随逻辑打架。若狗「明明在走却 2.5 秒没挪窝」（被卡住），直接瞬移到主角身边脱困。</li>
                             </ul>
                         </div>
 
@@ -658,14 +669,26 @@
                         </div>
 
                         <div style="background:#FAEFD2; border:1px solid #EAD3A2; border-left:4px solid #E3A54E; border-radius:10px; padding:1.25rem 1.5rem; margin:1.25rem 0 0;">
-                            <p style="font-weight:bold; color:#A85F1C; margin:0 0 0.75rem; font-size:1.1rem;">玩法系统脚本与编辑器工具链</p>
+                            <p style="font-weight:bold; color:#A85F1C; margin:0 0 0.75rem; font-size:1.1rem;">剧情演出系统（开场 / 进场 / 结局 + 双语）</p>
                             <ul style="color:#7A5A38; line-height:1.9; margin:0; padding-left:1.5rem;">
-                                <li>钓鱼点、睡袋（睡觉 / 起身）、拾取 + 背包栏（InventoryBar 运行时自动生成格子）、手帐系统（JournalSystem / JournalUI）、开场剧情 / 结尾 / 制作人员表（IntroSequence / EndingSequence / TeamCredits），以及公告栏、宝箱、梯子制作点等交互物脚本，把整个循环串起来。</li>
-                                <li>为加速铺量写了一批 Editor 工具（把对话表批量挂到 75+ 个物体、Loading 队伍生成、AudioListener 修复等），并整理了一份《脚本速查》文档，标注每个脚本挂哪、填什么，以及 InteractWithE 与 DialogTrigger 的冲突规避方式——方便深夜赶工时也能快速对齐。</li>
+                                <li><strong style="color:#A85F1C;">运行时纯代码搭 UI</strong>：开场、进场、结局三套剧情都用纯代码在运行时搭全屏 UI（Canvas + 排序 9999 + DontDestroyOnLoad），打字机逐字出字、按 E/空格/点击推进、打字中按一下补全整句；每句台词用「中文|英文」双行存，Split 后把英文缩成灰色小字缀在中文下方，一套数据同时服务双语。</li>
+                                <li><strong style="color:#A85F1C;">草图动画插画</strong>：剧情句子可挂循环 mp4（VideoPlayer 渲染到 RenderTexture 再喂给 RawImage），配合 AspectRatioFitter 等比适配；没视频的句子回退静态概念图或纯文字。</li>
+                                <li><strong style="color:#A85F1C;">三结局判定</strong>：结局按本局收集的「碎片数」判定——≥8 被救 / 3~7 再等一个季节 / 0~2 留在岛上，落款页展示结局名与碎片成绩；触发距离用 <code style="background:#F6E2B3; color:#98641F; padding:0 4px; border-radius:4px;">renderer.bounds.ClosestPoint</code> 而非锚点坐标（Max 导出的 FBX 缩放可达 191、锚点会被推离视觉模型几十米，用锚点测距玩家走到跟前也够不着）。</li>
+                                <li><strong style="color:#A85F1C;">切场景时序</strong>：放完必须先拆掉被 DontDestroyOnLoad 保护的 UI 再 LoadScene——否则「切完再拆」的代码永远执行不到，完结界面会钉死在屏幕上。</li>
                             </ul>
                         </div>
 
-                        <p style="color:#7A5A38; line-height:1.9; margin:1.25rem 0 0;">这些脚本连同打包输出（场景列表加全的 exe + _Data + UnityPlayer.dll）已随 Demo 交付，游戏现上线 itch.io（Paw&amp;Trail），可免费游玩。</p>
+                        <div style="background:#FAEFD2; border:1px solid #EAD3A2; border-left:4px solid #E3A54E; border-radius:10px; padding:1.25rem 1.5rem; margin:1.25rem 0 0;">
+                            <p style="font-weight:bold; color:#A85F1C; margin:0 0 0.75rem; font-size:1.1rem;">玩法系统与编辑器工具链</p>
+                            <ul style="color:#7A5A38; line-height:1.9; margin:0; padding-left:1.5rem;">
+                                <li><strong style="color:#A85F1C;">钓鱼 / 睡袋 / 拾取</strong>：钓鱼点抛竿后随机等待咬钩、再开一个 3 秒限时窗口按 E 才算钓到、鱼随机进背包并双语播报；睡袋做睡觉/起身、PickupItem 拾取并入包。</li>
+                                <li><strong style="color:#A85F1C;">背包栏</strong>：InventoryBar 运行时自动生成 12 格（格子、图标、文字全代码搭），同名物品自动合并成「木头 x3」；有图标就显示图标 + 右下角数量角标、没图标就中英两行显示名字，字体优先取系统微软雅黑。</li>
+                                <li><strong style="color:#A85F1C;">手帐系统</strong>：JournalSystem / JournalUI 做拍照、目录、贴纸收集，用「静态内存 + 一局一命」的设计和零场景污染的运行时接线（详见《手帐系统说明》）。</li>
+                                <li><strong style="color:#A85F1C;">Editor 工具链</strong>：为加速铺量写了一批一键菜单——「一键配开场剧情」会自动关掉任意键开始/清按钮监听、自动挂爪子光标、按关键词把概念图和草图动画配到对应台词并做数组对齐防越界；「一键加结局」自动绑触发点；还有把对话表批量挂到 75+ 个物体、Loading 队伍生成、AudioListener 修复等，并整理了一份《脚本速查》标注每个脚本挂哪、填什么、以及 InteractWithE 与 DialogTrigger 的冲突规避方式。</li>
+                            </ul>
+                        </div>
+
+                        <p style="color:#7A5A38; line-height:1.9; margin:1.25rem 0 0;">这些脚本连同打包输出（场景列表加全的 exe + _Data + UnityPlayer.dll）已随 Demo 交付，游戏现上线 <a href="https://bananacatonl1.itch.io/pawtrail" target="_blank" rel="noopener" style="color:#A85F1C; font-weight:bold; text-decoration:underline;">itch.io（Paw&amp;Trail）</a>，可免费游玩。</p>
                     </div>
 
                     <a href="index.html#games" class="btn-back">返回小游戏列表</a>

@@ -1715,6 +1715,29 @@ nav ul li a:hover::after {
     color: #FFE8C4;
 }
 
+.work-card-pawtrail {
+    background: linear-gradient(135deg, #FF9EC7, #FFC1A6);
+    border: 2px solid #FF86B3;
+}
+
+.work-card-pawtrail:hover {
+    box-shadow: 0 5px 25px rgba(255, 150, 180, 0.45);
+}
+
+.work-card-pawtrail .work-info h3 {
+    color: #FFF6F0;
+    text-shadow: 0 0 10px rgba(255, 120, 160, 0.5);
+}
+
+.work-card-pawtrail .work-info p {
+    color: #FFEDE6;
+}
+
+.work-card-pawtrail .work-tags .tag {
+    background: rgba(255, 255, 255, 0.30);
+    color: #FFF6F0;
+}
+
 .work-card-yuanying {
     background: linear-gradient(135deg, #2F1B25, #4A2A35);
     border: 2px solid #FF6B00;
