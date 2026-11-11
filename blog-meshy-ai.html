@@ -513,6 +513,126 @@
             </div>
 
             <div class="blog-section">
+                <h3>2026年11月11日 产品更新</h3>
+                <p>Meshy 发布本月产品更新，带来三个新能力：面向所有人的文字编辑 <strong>Meshy Edit</strong>、面向游戏开发者的风格化纹理 <strong>Meshy N1</strong>，以及面向 3D 打印与制作的 <strong>Relief</strong> 浮雕。</p>
+
+                <div class="feature-list">
+                    <div class="feature-item">
+                        <h4>Meshy Edit · 用文字编辑 3D 模型</h4>
+                        <p>编辑一部分、保留其余部分，无需为修复一个细节重新生成整个模型。精确选择要改的区域，用简单语言描述更改即可完成；所有用户可用，包含免费套餐。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>Meshy N1 · 风格化游戏纹理</h4>
+                        <p>首个原生 3D 纹理模型，直接把颜色绘制到模型表面（而非投射平面图像），因此接缝更少、清理更省。官方基准：中位数约 20 秒/模型（含 UV 展开），纹理清洁度得分 77%（次佳 59%）。专为风格化与低多边形设计，适合独立游戏、手机游戏与迷你游戏；每次运行 10 积分，全套餐可用，并已接入 API。</p>
+                    </div>
+                    <div class="feature-item">
+                        <h4>Relief · 图像转可制作浮雕</h4>
+                        <p>把照片、Logo 或艺术品约一分钟转为平面背景上的凸起浮雕，可 3D 打印、激光雕刻或 CNC。支持下载打印模型或深度图，免费实时预览微调深度与大小；分低浮雕（保留图案、徽章、印章细节）与高浮雕（人物肖像的醒目深度）两种。每次生成 20 积分，已接入 API。</p>
+                    </div>
+                </div>
+
+                <div class="highlight-box">
+                    <strong>要点小结：</strong>本次更新让 Meshy 的产品线从「生成」延伸到「编辑」与「制作」。其中 N1 对风格化 / 低多边形游戏资产比较有针对性——用表面直接上色替代平面投射，减少接缝与涂抹，正好对症此前测试里风格化角色纹理容易糊、接缝多的问题方向；Relief 则把手办、徽章、钥匙扣这类「图像 → 可制作浮雕」的需求做成了一条专门通路。追求照片级或 PBR 质感，官方仍推荐 Meshy 7。
+                </div>
+            </div>
+
+            <div class="blog-section">
+                <h3>测试11：高细节通道与 1 万三角面重拓扑（2026.11.11 晚）</h3>
+                <p>11 月 11 日晚上，再次用同一张正视图、同一个人物测试 Meshy 的「高细节通道」展示效果，并在高细节通道生成的人物模型基础上做 1 万（10k）三角面的重拓扑，观察高细节通道与重拓扑后的实际表现。</p>
+
+                <h4>一、高细节通道生成效果</h4>
+                <p>白模、标准光照正 / 背视图，以及基础颜色、粗糙度、金属度、法线四张贴图：</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/白模卡通人物正视图.png" alt="白模卡通人物正视图" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">白模 · 正视图</div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/标准光照卡通人物背视图.png" alt="标准光照卡通人物背视图" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">标准光照 · 背视图</div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/标准光照卡通人物正视图.png" alt="标准光照卡通人物正视图" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">标准光照 · 正视图</div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/基础颜色贴图卡通人物正视图.png" alt="基础颜色贴图卡通人物正视图" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">基础颜色贴图</div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/粗糙度贴图卡通人物正视图.png" alt="粗糙度贴图卡通人物正视图" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">粗糙度贴图</div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/金属度贴图卡通人物正视图.png" alt="金属度贴图卡通人物正视图" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">金属度贴图</div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/法线贴图卡通人物正视图.png" alt="法线贴图卡通人物正视图" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">法线贴图</div>
+                    </div>
+                </div>
+
+                <h4>二、1 万三角面重拓扑效果</h4>
+                <p>在高细节通道模型基础上做 10k 三角面重拓扑后的标准光照、白模、线框与各贴图：</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/重拓扑1万三角面的标准光照卡通人物正视图.png" alt="重拓扑1万三角面的标准光照卡通人物正视图" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">标准光照 · 正视图</div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/重拓扑1万三角面的标准光照卡通人物背视图.png" alt="重拓扑1万三角面的标准光照卡通人物背视图" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">标准光照 · 背视图</div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/重拓扑1万三角面的人物白模正视图.png" alt="重拓扑1万三角面的人物白模正视图" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">白模 · 正视图</div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/重拓扑1万三角面的人物线框正视图.png" alt="重拓扑1万三角面的人物线框正视图" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">线框 · 正视图</div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/重拓扑1万三角面的颜色贴图.png" alt="重拓扑1万三角面的颜色贴图" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">颜色贴图</div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/重拓扑1万三角面的粗糙度贴图.png" alt="重拓扑1万三角面的粗糙度贴图" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">粗糙度贴图</div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/重拓扑1万三角面的金属度贴图.png" alt="重拓扑1万三角面的金属度贴图" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">金属度贴图</div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/重拓扑1万三角面的法线贴图.png" alt="重拓扑1万三角面的法线贴图" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">法线贴图</div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/重拓扑1万三角面的法线贴图卡通人物正视图.png" alt="重拓扑1万三角面的法线贴图卡通人物正视图" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">法线贴图 · 正视图</div>
+                    </div>
+                </div>
+
+                <h4>三、重拓扑拓扑问题</h4>
+                <p>重拓扑后的白模在腿部仍暴露出拓扑问题，附提示截图：</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0;">
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/重拓扑1万三角面的人物白模腿部拓扑问题1.png" alt="重拓扑1万三角面的人物白模腿部拓扑问题1" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">白模腿部拓扑问题 1</div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/重拓扑1万三角面的人物白模腿部拓扑问题2.png" alt="重拓扑1万三角面的人物白模腿部拓扑问题2" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">白模腿部拓扑问题 2</div>
+                    </div>
+                    <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border);">
+                        <img src="image/meshy/202611112300/重拓扑1万三角面出现的拓扑问题提示截图.png" alt="重拓扑1万三角面出现的拓扑问题提示截图" style="width: 100%; height: auto; display: block;" oncontextmenu="return false;" draggable="false">
+                        <div style="padding: 0.6rem; text-align: center; font-size: 0.85rem; color: var(--text-secondary);">拓扑问题提示截图</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="blog-section">
                 <h3>角色绑定功能</h3>
                 <p>Meshy 自带角色绑定功能，界面让我想起了 Mixamo 的智能绑定。</p>
                 <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); max-width: 600px; margin: 1.5rem auto;">
@@ -539,6 +659,21 @@
                 </div>
                 <div class="highlight-box">
                     <strong>测试结果：</strong>绑定效果比混元好一点，前面的裙子没有出现穿模的情况，裙子模型表面也是光滑的。在 LOD 减面后依然能保持这种表现，说明绑定的稳定性不错。
+                </div>
+
+                <h4>动物绑定测试（2026.11.11）</h4>
+                <p>11 号又测了 Meshy 的动物绑定功能，用的是一只最简单的卡通 Q 版狗狗，跟 Tripo（Vest）同款动物对比。</p>
+                <div style="background: #f7fbf9; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); max-width: 600px; margin: 1.5rem auto;">
+                    <video src="videos/Meshy/20261111测试meshy动物绑定功能.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto;">
+                        您的浏览器不支持视频播放
+                    </video>
+                    <div style="padding: 1rem; text-align: center;">
+                        <h4 style="color: var(--primary); margin-bottom: 0.5rem;">Meshy 动物绑定测试</h4>
+                        <p style="font-size: 0.9rem; color: var(--text);">卡通 Q 版狗狗绑定演示</p>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <strong>对比 Tripo（Vest）：</strong>我依旧认为 Meshy 的绑定比 Tripo（Vest）效果好。同一个动物，Meshy 绑定的问题相对比较少——Tripo 的智能绑定总是乱定位点，后脚粘着前脚走、根本没绑定上；而 Meshy 的动物绑定相对快速、没什么大错，顶多尾巴的连接处凹进屁股里了，但总体来说可以正常走路。
                 </div>
             </div>
 
