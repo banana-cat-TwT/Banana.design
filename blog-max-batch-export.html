@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3ds Max批量导出插件：按元素拆分单个模型为FBX - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #fbf3e6, #f7ead6, #f0ddc2);
+            cursor: none;
+        }
+
+        .blog-detail-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .blog-detail-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #8a5a1a;
+            text-shadow: 0 0 20px rgba(196, 138, 58, 0.3);
+        }
+
+        .blog-detail-subtitle {
+            font-size: 1rem;
+            color: #a08050;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .blog-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(196, 138, 58, 0.12);
+            color: #8a5a2a;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(196, 138, 58, 0.25);
+        }
+
+        .blog-detail-content {
+            background: rgba(255, 255, 255, 0.65);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(196, 138, 58, 0.12);
+            border: 1px solid rgba(224, 180, 120, 0.35);
+            color: #5a4a2a;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #8a5a2a;
+            border-bottom: 1px solid rgba(196, 138, 58, 0.25);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .section-content {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .code-block {
+            background: rgba(180, 130, 60, 0.08);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            border-left: 3px solid #c08840;
+        }
+
+        .code-block pre {
+            margin: 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #5a4a2a;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .gallery-container {
+            margin-top: 2rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .gallery-item {
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(196, 138, 58, 0.15);
+            border: 1px solid rgba(224, 180, 120, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #c08840, #d8a858);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 1px solid rgba(196, 138, 58, 0.5);
+        }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(196, 138, 58, 0.35);
+        }
+
+        .highlight {
+            color: #b07a20;
+            font-weight: bold;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(196, 138, 58, 0.9) 0%, rgba(216, 168, 88, 0.7) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            box-shadow: 0 0 10px rgba(196, 138, 58, 0.5);
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(216, 168, 88, 0.9) 0%, rgba(196, 138, 58, 0.5) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 1s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.2);
+            }
+        }
+
+        .tip {
+            background: rgba(180, 150, 60, 0.1);
+            border-left: 3px solid #c0a040;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+
+    <!-- 51.la 访客统计 V6 -->
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"3Qu6OIFKMWrFWPyF",ck:"3Qu6OIFKMWrFWPyF"})</script>
+</head>
+<body>
+    <script src="gate.js"></script>
+    <!-- Watermark Canvas -->
+    <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.03;"></canvas>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">3ds Max批量导出插件：按元素拆分单个模型为FBX</h1>
+                <p class="blog-detail-subtitle">2026年10月 · MaxScript</p>
+                <div class="blog-tags">
+                    <span class="blog-tag">MaxScript</span>
+                    <span class="blog-tag">3dsMax插件</span>
+                    <span class="blog-tag">批量导出</span>
+                    <span class="blog-tag">资产管线</span>
+                    <span class="blog-tag">Paw&amp;Trail</span>
+                </div>
+            </div>
+
+            <div class="blog-detail-content">
+                <h2 class="section-title">项目背景</h2>
+                <div class="section-content">
+                    <p>在爪与迹（Paw&amp;Trail）营地场景的制作中，场景资产经常是「一个合并好的 mesh」——比如「营地场景1已uv1031.max」这样的文件，桌椅、帐篷、栅栏、火堆全都在同一个模型里。要把它们一个个拆出来、单独导出成 FBX 交给引擎或做后续整理，纯手动逐个拆分再导出，又慢又容易漏。</p>
+                    <p>于是写了一个 <span class="highlight">MaxScript 批量导出插件</span>，把「按元素拆散 → 逐个导出 → 清理临时节点」整条链路一键化，专门解决「合并 mesh 拆成独立单体」这一步。</p>
+                </div>
+
+                <h2 class="section-title">插件定位</h2>
+                <div class="section-content">
+                    <p>这套插件是 2026 年 3 月那批 Max 插件研究（<span class="highlight">批量统计顶点面数</span>、<span class="highlight">减面插件</span>）的<span class="highlight">更细分衍生物</span>——3 月那版偏「质检 / 减面」，这次偏「拆分导出」，专攻资产进引擎前的「拆分单体」环节。</p>
+                    <p>和 3 月那版「只是批量统计 / 减面」不同，这个插件不是单单的批量导出，而是带上了<span class="highlight">按元素（连通块）拆散合并 mesh</span> 的能力，属于资产管线里更靠前、更具体的「拆分」工序。</p>
+                </div>
+
+                <h2 class="section-title">三种导出粒度</h2>
+                <div class="section-content">
+                    <p>插件用单选按钮切三档导出粒度，覆盖不同拆分需求：</p>
+                    <ul>
+                        <li><span class="highlight">模式1 · 顶层节点：</span>把组 / 层级整体导出一个 FBX，保留原有层级关系；</li>
+                        <li><span class="highlight">模式2 · 每个几何体对象：</span>每个几何体对象单独导出一个 FBX；</li>
+                        <li><span class="highlight">模式3 · 按元素拆分：</span>把一个合并的 mesh 按连通块（Element）拆成多个独立单体，再逐个导出——这是本次的核心能力。</li>
+                    </ul>
+                    <p>配套选项包括：只处理当前选中对象、导出前把部件移到原点、仅预览清单（不写文件）、FBX 内嵌贴图、导出动画、模式3 导出后清理临时拆分对象、覆盖同名 FBX、导出前先清空目录旧 .fbx 等。</p>
+                </div>
+
+                <h2 class="section-title">关键实现</h2>
+                <div class="section-content">
+                    <ul>
+                        <li><span class="highlight">按元素拆分（模式3）：</span>复制一份原对象 → 转成 Editable Poly → 用 <code>polyop.getElementsUsingFace</code> 收集所有连通块的面集合 → 用 <code>polyop.detachFaces</code> 把每个连通块拆成独立节点 → 逐个导出 → 最后删掉临时节点。原对象全程不动，不会破坏源场景。</li>
+                        <li><span class="highlight">临时文件安全写入：</span>先写 <code>xxx__tmp.fbx</code>，成功后再 rename 成正式文件名。这样中途失败（比如文件正被 Unity / UE 占用）也不会把旧 FBX 写坏。</li>
+                        <li><span class="highlight">FBX 参数封装：</span>用 <code>FBXExporterSetParam</code> 统一设置动画、相机、灯光、内嵌贴图、UpAxis、Shape 等导出参数。</li>
+                        <li><span class="highlight">文件名安全化：</span><code>safeName</code> 把 <code>\ / : * ? " &lt; &gt; |</code> 等非法字符替换成下划线；重名自动加 <code>_1</code>、<code>_2</code> 后缀避让。</li>
+                        <li><span class="highlight">导出清单：</span>每次导出在输出目录生成 <code>_导出清单.txt</code>，记录源文件、时间、成功 / 失败数与逐项「源名 → 输出路径」映射，方便回溯。</li>
+                        <li><span class="highlight">隐藏状态保护：</span>导出前临时取消隐藏、导出后恢复每个对象的原始隐藏状态，保证场景观感不被改动。</li>
+                    </ul>
+                </div>
+
+                <h2 class="section-title">界面与使用流程</h2>
+                <div class="section-content">
+                    <p>插件是一个 3ds Max rollout 面板，顶部是输出目录与导出选项，底部是执行区。整体用法三步走：先点「① 刷新清单」确认待导出项对不对，再取消「仅预览」，最后点「② 开始导出」；日志同时打印在 MAXScript Listener（F11）里。</p>
+                </div>
+
+                <div class="gallery-container">
+                    <div class="gallery-grid">
+                        <div class="gallery-item">
+                            <img src="image/PawTrailmax批处理/2.0版本界面截图.png" alt="批量导出插件 2.0 版本界面截图">
+                        </div>
+                    </div>
+                    <p style="text-align:center; color:#a08050; font-size:0.9rem; margin-top:0.75rem;">批量导出单个模型为 FBX · 2.0 版本界面截图</p>
+                </div>
+
+                <h2 class="section-title">操作演示（1.0 版本）</h2>
+                <div class="section-content">
+                    <p>1.0 版本的两段操作演示：</p>
+                </div>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 1rem;">
+                    <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 5px 20px rgba(196, 138, 58, 0.15); border: 1px solid rgba(224, 180, 120, 0.3);">
+                        <video src="videos/PawTrailmax批处理/1.0版本操作1.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto; display: block;">
+                            您的浏览器不支持视频播放
+                        </video>
+                    </div>
+                    <div style="border-radius: 8px; overflow: hidden; box-shadow: 0 5px 20px rgba(196, 138, 58, 0.15); border: 1px solid rgba(224, 180, 120, 0.3);">
+                        <video src="videos/PawTrailmax批处理/1.0版本操作2.mp4" controls autoplay muted loop playsinline style="width: 100%; height: auto; display: block;">
+                            您的浏览器不支持视频播放
+                        </video>
+                    </div>
+                </div>
+
+                <a href="index.html#blog" class="btn-back">返回博客列表</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: <span class="js-banana-email"></span></p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+
+        <script>
+        // 联系方式混淆渲染：只对真人显示，爬虫抓源码拿不到
+        (function () {
+            var PHONE = '198' + '5925' + '6157';
+            var EMAIL = PHONE + '@' + '163' + '.com';
+            var n = document.querySelector('.js-banana-email');
+            if (n) n.textContent = EMAIL;
+        })();
+    </script>
+
+        <script>
+        // ===== 水印 =====
+        function generateWatermark() {
+            const canvas = document.getElementById('watermark-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const text = 'BananaCat Portfolio | ' + new Date().toLocaleDateString();
+            ctx.font = '24px Arial';
+            ctx.fillStyle = '#000';
+            ctx.globalAlpha = 0.5;
+            const spacing = 120;
+            const rotation = -Math.PI / 8;
+            for (let x = -200; x < canvas.width + 200; x += spacing) {
+                for (let y = -200; y < canvas.height + 200; y += spacing) {
+                    ctx.save();
+                    ctx.translate(x, y);
+                    ctx.rotate(rotation);
+                    ctx.fillText(text, 0, 0);
+                    ctx.restore();
+                }
+            }
+        }
+        generateWatermark();
+        setInterval(generateWatermark, 30000);
+        window.addEventListener('resize', generateWatermark);
+        </script>
+
+    <script>
+        const cursor = document.createElement('div');
+        cursor.className = 'custom-cursor';
+        document.body.appendChild(cursor);
+
+        let trailCount = 0;
+        const maxTrails = 50;
+
+        function createTrail(x, y) {
+            if (trailCount >= maxTrails) return;
+
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            trail.style.width = Math.random() * 6 + 4 + 'px';
+            trail.style.height = trail.style.width;
+            document.body.appendChild(trail);
+
+            trailCount++;
+
+            setTimeout(() => {
+                trail.remove();
+                trailCount--;
+            }, 600);
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            createTrail(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('mousedown', function() {
+            cursor.classList.add('clicking');
+        });
+
+        document.addEventListener('mouseup', function() {
+            cursor.classList.remove('clicking');
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
