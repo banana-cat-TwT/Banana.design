@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3ds Max纹理绘制与造型笔刷工具（MaxPaint） - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #e8f6f3, #dff2ee, #d2ebe6);
+            cursor: none;
+        }
+
+        .blog-detail-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .blog-detail-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #0f6a5a;
+            text-shadow: 0 0 20px rgba(26, 154, 122, 0.3);
+        }
+
+        .blog-detail-subtitle {
+            font-size: 1rem;
+            color: #4a8a7a;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .blog-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(15, 122, 106, 0.12);
+            color: #0f6a5a;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(15, 122, 106, 0.25);
+        }
+
+        .blog-detail-content {
+            background: rgba(255, 255, 255, 0.65);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(15, 122, 106, 0.12);
+            border: 1px solid rgba(120, 200, 180, 0.35);
+            color: #2a4a42;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #0f6a5a;
+            border-bottom: 1px solid rgba(15, 122, 106, 0.25);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .section-content {
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #1a9a7a, #3ab89a);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 1px solid rgba(15, 122, 106, 0.5);
+        }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(15, 122, 106, 0.35);
+        }
+
+        .highlight {
+            color: #0f8a70;
+            font-weight: bold;
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(15, 122, 106, 0.9) 0%, rgba(26, 154, 122, 0.7) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            box-shadow: 0 0 10px rgba(15, 122, 106, 0.5);
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(26, 154, 122, 0.9) 0%, rgba(15, 122, 106, 0.5) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 1s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.2);
+            }
+        }
+
+        .tip {
+            background: rgba(15, 122, 106, 0.08);
+            border-left: 3px solid #1a9a7a;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+    </style>
+
+    <!-- 51.la 访客统计 V6 -->
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"3Qu6OIFKMWrFWPyF",ck:"3Qu6OIFKMWrFWPyF"})</script>
+</head>
+<body>
+    <script src="gate.js"></script>
+    <!-- Watermark Canvas -->
+    <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.03;"></canvas>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">3ds Max纹理绘制与造型笔刷工具（MaxPaint）</h1>
+                <p class="blog-detail-subtitle">2026年10月 · MaxScript · 3ds Max 2022</p>
+                <div class="blog-tags">
+                    <span class="blog-tag">MaxScript</span>
+                    <span class="blog-tag">3dsMax插件</span>
+                    <span class="blog-tag">纹理绘制</span>
+                    <span class="blog-tag">造型笔刷</span>
+                    <span class="blog-tag">工具开发</span>
+                </div>
+            </div>
+
+            <div class="blog-detail-content">
+                <h2 class="section-title">由来与设想</h2>
+                <div class="section-content">
+                    <p>这套工具的想法，最早是 2026 年 8 月 1 日跟一些公司提的设想——做一个 BodyPaint 风格的 Max 笔刷工具，把「纹理绘制 + 造型笔刷」整合进 3ds Max，省掉在多个软件之间来回切的麻烦。10 月份把它落地成了 <span class="highlight">MaxPaint v1.0</span>，一个双面板的 MaxScript 工具，对应早期截图框架复刻而来。</p>
+                </div>
+
+                <h2 class="section-title">工具定位</h2>
+                <div class="section-content">
+                    <p>MaxPaint 是运行在 3ds Max 2022 里的 BodyPaint 风格工具，把 <span class="highlight">纹理绘制</span> 和 <span class="highlight">造型笔刷</span> 两件事合成一个工具，打开后出现两个面板：左边「MaxPaint 绘制面板」、右边「MaxPaint 造型笔刷」。整个工具是一份约 1020 行的 MaxScript（<span class="highlight">MaxPaint.ms</span>），拖进视口或 Scripting &gt; Run Script 即可运行。</p>
+                    <div class="tip">
+                        <p>必须在 Max 主界面内运行，不要用 3dsmaxbatch 后台跑（会触发激活弹窗）。</p>
+                    </div>
+                </div>
+
+                <h2 class="section-title">左面板：纹理绘制</h2>
+                <div class="section-content">
+                    <ul>
+                        <li><span class="highlight">纹理：</span>新建纹理（标准材质 + 1024 PNG）、输入纹理、UV 展开、UV 盒贴图、保存 / 另存为 / 打开目录 / 结束编辑；</li>
+                        <li><span class="highlight">笔刷：</span>贴图绘制 / 顶点色两种模式；大小（像素）、不透明度、硬度可调；软边 / 硬边 / 喷溅三种笔头；支持只画可见面、显示顶点色；</li>
+                        <li><span class="highlight">颜色：</span>拾色器、前景 / 背景互换、黑 / 白快捷键；</li>
+                        <li><span class="highlight">版本：</span>纹理快照，保存 / 恢复 / 删除版本（PNG 文件副本）。</li>
+                    </ul>
+                </div>
+
+                <h2 class="section-title">右面板：造型笔刷</h2>
+                <div class="section-content">
+                    <ul>
+                        <li><span class="highlight">笔刷模式：</span>推拉（抓取拖动改轮廓体积）/ 平滑 / 鼓起压低（Ctrl 反向）；</li>
+                        <li><span class="highlight">参数：</span>固定笔刷大小、大小（世界单位）、力度、渐变（中心 100% 到边缘 0%）；</li>
+                        <li><span class="highlight">选区：</span>仅编辑选中部分、冻结选中 / 清除冻结；</li>
+                        <li><span class="highlight">对称：</span>启用对称 + X / Y / Z 轴 + 中心坐标（默认取对象轴心）；</li>
+                        <li><span class="highlight">撤销：</span>Max 原生 Ctrl+Z / Ctrl+Y，外加撤销历史滑条（最近 22 步，可拖动回退）；</li>
+                        <li><span class="highlight">快照：</span>模型快照，保存 / 恢复 / 清空；</li>
+                        <li><span class="highlight">布局：</span>停靠左 / 停靠右 / 浮动 / 双列。</li>
+                    </ul>
+                    <p>视口内<span class="highlight">左键按住拖动</span>即笔刷生效（推拉是点击抓住表面后拖动）；右键 / Esc 退出笔刷；Shift 临时切平滑，Ctrl 在鼓起压低时反向；视口内黄色圆圈是笔刷范围预览。</p>
+                </div>
+
+                <h2 class="section-title">关键实现</h2>
+                <div class="section-content">
+                    <ul>
+                        <li><span class="highlight">造型笔刷：</span>推拉用「点击抓取 + 视图平面 delta 抓取权重列表」，平滑用邻接平均，鼓起压低沿顶点法线（Ctrl 反向），配渐变指数 falloff；对称采用「双 pass 镜像中心 / 镜像 delta」，冻结 / 仅编辑选中用 bitArray 蒙版控制。</li>
+                        <li><span class="highlight">纹理绘制：</span>基于 dotNet <code>System.Drawing</code> 的 Bitmap + Graphics，按 UV 重心插值落点，软边 / 硬边 / 喷溅笔头，PNG 存储后用 BitmapTexture 重建刷新视口；顶点色绘制走 <code>polyop.setVertColor</code>。</li>
+                        <li><span class="highlight">停靠布局：</span>用 dotNet <code>Screen.WorkingArea</code> 配合 GetDialogSize / SetDialogPos 实现左 / 右 / 浮动 / 双列四档布局。</li>
+                    </ul>
+                </div>
+
+                <h2 class="section-title">已知限制</h2>
+                <div class="section-content">
+                    <ul>
+                        <li>纹理以 PNG 存储（Max 无法纯脚本写 PSD，PS 可直接打开 PNG 再转）；</li>
+                        <li>PSD 图层、红色蒙版选区等高级功能未实现；</li>
+                        <li>大模型（10 万面以上）笔刷会有卡顿，建议先减面测试；</li>
+                        <li>自动 UV 展平依赖 Unwrap UVW 接口，个别版本签名不同会提示手动操作。</li>
+                    </ul>
+                </div>
+
+                <a href="index.html#blog" class="btn-back">返回博客列表</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: <span class="js-banana-email"></span></p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+
+        <script>
+        // 联系方式混淆渲染：只对真人显示，爬虫抓源码拿不到
+        (function () {
+            var PHONE = '198' + '5925' + '6157';
+            var EMAIL = PHONE + '@' + '163' + '.com';
+            var n = document.querySelector('.js-banana-email');
+            if (n) n.textContent = EMAIL;
+        })();
+    </script>
+
+        <script>
+        // ===== 水印 =====
+        function generateWatermark() {
+            const canvas = document.getElementById('watermark-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const text = 'BananaCat Portfolio | ' + new Date().toLocaleDateString();
+            ctx.font = '24px Arial';
+            ctx.fillStyle = '#000';
+            ctx.globalAlpha = 0.5;
+            const spacing = 120;
+            const rotation = -Math.PI / 8;
+            for (let x = -200; x < canvas.width + 200; x += spacing) {
+                for (let y = -200; y < canvas.height + 200; y += spacing) {
+                    ctx.save();
+                    ctx.translate(x, y);
+                    ctx.rotate(rotation);
+                    ctx.fillText(text, 0, 0);
+                    ctx.restore();
+                }
+            }
+        }
+        generateWatermark();
+        setInterval(generateWatermark, 30000);
+        window.addEventListener('resize', generateWatermark);
+        </script>
+
+    <script>
+        const cursor = document.createElement('div');
+        cursor.className = 'custom-cursor';
+        document.body.appendChild(cursor);
+
+        let trailCount = 0;
+        const maxTrails = 50;
+
+        function createTrail(x, y) {
+            if (trailCount >= maxTrails) return;
+
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            trail.style.width = Math.random() * 6 + 4 + 'px';
+            trail.style.height = trail.style.width;
+            document.body.appendChild(trail);
+
+            trailCount++;
+
+            setTimeout(() => {
+                trail.remove();
+                trailCount--;
+            }, 600);
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            createTrail(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('mousedown', function() {
+            cursor.classList.add('clicking');
+        });
+
+        document.addEventListener('mouseup', function() {
+            cursor.classList.remove('clicking');
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
