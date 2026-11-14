@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="style.css">
     <style>
         body {
-            background: #14161a;
-            color: #dfe3e6;
+            background: #F5FBF8;
+            color: #33443E;
         }
 
         .blog-detail-container {
@@ -25,12 +25,12 @@
         .blog-detail-title {
             font-size: 2rem;
             margin-bottom: 1rem;
-            color: #eceff1;
+            color: #21473C;
         }
 
         .blog-detail-subtitle {
             font-size: 1rem;
-            color: #8d959c;
+            color: #7C948C;
             margin-bottom: 1.5rem;
         }
 
@@ -43,27 +43,28 @@
         }
 
         .blog-tag {
-            padding: 0.4rem 0.8rem;
-            background: rgba(79, 195, 161, 0.10);
-            color: #7fd6bd;
-            border-radius: 4px;
+            padding: 0.4rem 0.85rem;
+            background: #E4F5EE;
+            color: #2C8F73;
+            border-radius: 20px;
             font-size: 0.85rem;
-            border: 1px solid rgba(79, 195, 161, 0.28);
+            border: 1px solid #C9EADC;
         }
 
         .blog-detail-content {
-            background: #1b1e23;
-            border-radius: 10px;
+            background: #FFFFFF;
+            border-radius: 14px;
             padding: 2rem;
-            border: 1px solid #2a2f36;
-            color: #cfd5da;
+            border: 1px solid #E2F0E9;
+            box-shadow: 0 4px 18px rgba(44, 143, 115, 0.06);
+            color: #44554F;
         }
 
         .section-title {
             font-size: 1.35rem;
             margin-bottom: 1rem;
-            color: #eceff1;
-            border-bottom: 1px solid #2a2f36;
+            color: #21473C;
+            border-bottom: 1px solid #E2F0E9;
             padding-bottom: 0.5rem;
             margin-top: 2.5rem;
         }
@@ -90,8 +91,16 @@
             margin-bottom: 0.5rem;
         }
 
+        .section-content code {
+            background: #EAF7F1;
+            color: #216B55;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
         .highlight {
-            color: #6fd2b4;
+            color: #2C8F73;
             font-weight: 600;
         }
 
@@ -103,53 +112,53 @@
         }
 
         .compare-table th, .compare-table td {
-            border: 1px solid #2a2f36;
+            border: 1px solid #E2F0E9;
             padding: 0.6rem 0.8rem;
             text-align: left;
             vertical-align: top;
         }
 
         .compare-table th {
-            background: #22262c;
-            color: #eceff1;
+            background: #E9F7F1;
+            color: #21473C;
             font-weight: 600;
         }
 
         .compare-table tr:nth-child(even) td {
-            background: #191c21;
+            background: #F7FCFA;
         }
 
         .tip {
-            background: #1f2329;
-            border-left: 3px solid #4fc3a1;
+            background: #F0FAF5;
+            border-left: 3px solid #5BC2A2;
             padding: 1rem;
             margin: 1rem 0;
-            border-radius: 0 6px 6px 0;
+            border-radius: 0 8px 8px 0;
         }
 
         .case-sub {
             font-size: 1.08rem;
-            color: #e2e6e9;
+            color: #21473C;
             margin: 1.6rem 0 0.6rem;
             font-weight: 600;
         }
 
         .case-block {
-            background: #1e2127;
-            border: 1px solid #2a2f36;
-            border-radius: 6px;
+            background: #F8FCFA;
+            border: 1px solid #E2F0E9;
+            border-radius: 10px;
             padding: 1rem 1.2rem;
             margin: 1rem 0;
         }
 
         .case-block .case-title {
-            color: #eceff1;
+            color: #21473C;
             font-weight: 600;
             margin-bottom: 0.5rem;
         }
 
         .faq-item {
-            border-bottom: 1px solid #2a2f36;
+            border-bottom: 1px solid #E2F0E9;
             padding: 0.9rem 0;
         }
 
@@ -158,43 +167,43 @@
         }
 
         .faq-q {
-            color: #eceff1;
+            color: #21473C;
             font-weight: 600;
             margin-bottom: 0.35rem;
         }
 
         .faq-q::before {
             content: "Q  ";
-            color: #4fc3a1;
+            color: #2C8F73;
             font-weight: 700;
         }
 
         .faq-a {
-            color: #aab2b9;
+            color: #5E736B;
             line-height: 1.8;
         }
 
         .faq-a::before {
             content: "A  ";
-            color: #4fc3a1;
+            color: #2C8F73;
             font-weight: 700;
         }
 
         .btn-back {
             display: inline-block;
             padding: 0.7rem 1.6rem;
-            background: #2a2f36;
-            color: #dfe3e6;
+            background: #2C8F73;
+            color: #ffffff;
             text-decoration: none;
-            border-radius: 6px;
+            border-radius: 24px;
             font-weight: 600;
             transition: background 0.2s ease;
             margin-top: 2rem;
-            border: 1px solid #3a4048;
+            border: 1px solid #27795F;
         }
 
         .btn-back:hover {
-            background: #343a42;
+            background: #27795F;
         }
 
         @media (max-width: 768px) {
@@ -225,7 +234,7 @@
 <body>
     <script src="gate.js"></script>
     <!-- Watermark Canvas -->
-    <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.04;"></canvas>
+    <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.06;"></canvas>
 
     <header>
         <h1>巴拿拿猫的个人网站</h1>
@@ -654,7 +663,7 @@
             canvas.height = window.innerHeight;
             const text = 'BananaCat Portfolio | ' + new Date().toLocaleDateString();
             ctx.font = '24px Arial';
-            ctx.fillStyle = '#fff';
+            ctx.fillStyle = '#2C8F73';
             ctx.globalAlpha = 0.5;
             const spacing = 120;
             const rotation = -Math.PI / 8;
