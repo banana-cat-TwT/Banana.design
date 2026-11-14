@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 3D 大模型研究日志（底层 · 数据 · 算法） - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #14162b, #1a1d3a, #20234a);
+            cursor: none;
+        }
+
+        .blog-detail-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .blog-detail-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #cfd4ff;
+            text-shadow: 0 0 24px rgba(120, 130, 255, 0.45);
+        }
+
+        .blog-detail-subtitle {
+            font-size: 1rem;
+            color: #8f96d0;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .blog-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(120, 130, 255, 0.12);
+            color: #aab0ff;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(120, 130, 255, 0.3);
+        }
+
+        .blog-detail-content {
+            background: rgba(30, 32, 62, 0.75);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(120, 130, 255, 0.25);
+            color: #c8cbe8;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #cfd4ff;
+            border-bottom: 1px solid rgba(120, 130, 255, 0.3);
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .section-content {
+            margin-bottom: 1.5rem;
+            line-height: 1.85;
+        }
+
+        .section-content p {
+            margin-bottom: 0.9rem;
+        }
+
+        .section-content ul, .section-content ol {
+            margin: 0.6rem 0 1rem 1.4rem;
+            padding: 0;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight {
+            color: #8f9bff;
+            font-weight: bold;
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .compare-table th, .compare-table td {
+            border: 1px solid rgba(120, 130, 255, 0.25);
+            padding: 0.6rem 0.8rem;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .compare-table th {
+            background: rgba(120, 130, 255, 0.14);
+            color: #cfd4ff;
+            font-weight: bold;
+        }
+
+        .compare-table tr:nth-child(even) td {
+            background: rgba(120, 130, 255, 0.05);
+        }
+
+        .tip {
+            background: rgba(120, 130, 255, 0.08);
+            border-left: 3px solid #8f9bff;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #4a55c0, #6a78e0);
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-top: 2rem;
+            border: 1px solid rgba(120, 130, 255, 0.5);
+        }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(120, 130, 255, 0.35);
+        }
+
+        .custom-cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(140, 150, 255, 0.95) 0%, rgba(90, 100, 220, 0.7) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+            box-shadow: 0 0 12px rgba(120, 130, 255, 0.6);
+        }
+
+        .custom-cursor.clicking {
+            transform: translate(-50%, -50%) scale(0.8);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(140, 150, 255, 0.9) 0%, rgba(90, 100, 220, 0.5) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            animation: trailFade 1s ease-out forwards;
+        }
+
+        @keyframes trailFade {
+            0% {
+                opacity: 1;
+                transform: translate(-50%, -50%) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(-50%, -50%) scale(0.2);
+            }
+        }
+    </style>
+
+    <!-- 51.la 访客统计 V6 -->
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"3Qu6OIFKMWrFWPyF",ck:"3Qu6OIFKMWrFWPyF"})</script>
+</head>
+<body>
+    <script src="gate.js"></script>
+    <!-- Watermark Canvas -->
+    <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.04;"></canvas>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">AI 3D 大模型研究日志（底层 · 数据 · 算法）</h1>
+                <p class="blog-detail-subtitle">2026年11月 · 研究整理 · 面向 AI 3D 技术岗位</p>
+                <div class="blog-tags">
+                    <span class="blog-tag">水密网格</span>
+                    <span class="blog-tag">法线约定</span>
+                    <span class="blog-tag">PBR</span>
+                    <span class="blog-tag">训练数据</span>
+                    <span class="blog-tag">多模态3D</span>
+                    <span class="blog-tag">数据技术美术</span>
+                </div>
+            </div>
+
+            <div class="blog-detail-content">
+                <h2 class="section-title">定位：这一篇和前面四篇有什么不同</h2>
+                <div class="section-content">
+                    <p>之前的 Meshy / Tripo / 混元3D / AI生成3D合集，是从<span class="highlight">应用层</span>记录各家平台的生成效果、功能与局限。这一篇换个角度，往下钻到<span class="highlight">底层</span>——大模型 3D 方向的岗位（多模态大模型 3D、数据技术美术、大模型算法、AI 3D 技术美术）每天都在跟哪些底层知识打交道：几何、网格、渲染约定、PBR、训练数据质量。</p>
+                    <p>这些底层知识决定了喂给模型的 3D 数据到底是<span class="highlight">「好数据」还是「坏数据」</span>，也决定了模型生成出来的资产能不能真正进引擎、能不能被渲染管线正确显示。下面按「几何 → 渲染约定 → 材质 → 数据质量 → 岗位」逐层整理。</p>
+                </div>
+
+                <h2 class="section-title">几何与网格：水密、流形、法线一致性</h2>
+                <div class="section-content">
+                    <p><span class="highlight">水密（Watertight）</span>指一个网格是「封闭的 2-流形」——没有边界边、没有破洞，能够明确地包住一个体积。判断标准：每条边恰好被两个面共享，从任意点出发不穿出表面。</p>
+                    <ul>
+                        <li><span class="highlight">为什么重要：</span>体素化（Voxelization）、符号距离场（SDF）、布尔运算、四面体网格、物理碰撞、3D 打印都假设表面是封闭的。很多 3D 生成模型的表示（占用场 Occupancy Field、SDF、tetrahedral）都需要水密输入。</li>
+                        <li><span class="highlight">非水密对训练的影响：</span>体积歧义、内外不明确、法线在破洞处乱翻，模型学到的「形状」会在开口处塌掉或出错。</li>
+                    </ul>
+                    <p><span class="highlight">流形（Manifold）</span>：局部上每个点都像一块平面（圆盘邻域）。非流形常见于——一条边被 3 个以上面共享、两个体只靠一个点/一条边相连（蝴蝶顶点/边）。非流形网格在重拓扑、展 UV、SDF 计算时都会崩。</p>
+                    <p><span class="highlight">法线一致性</span>：所有面法线应统一朝外。如果一半朝里一半朝外，光照和体积计算都会错。对训练数据来说，法线方向不一致是「脏数据」的直接来源。</p>
+                    <div class="tip">
+                        <p>数据质检第一关：把模型丢进「看背面 + 看线框 + 看边界边（boundary edge）」三个视图扫一遍，水密/流形/法线问题基本都能暴露。</p>
+                    </div>
+                </div>
+
+                <h2 class="section-title">渲染约定：为什么 OpenGL 和 DirectX 的法线方向不一样</h2>
+                <div class="section-content">
+                    <p>这是最典型的一个「底层约定」问题。法线贴图用 RGB 三个通道存切线空间法线：<span class="highlight">R = 切线 X，G = 副切线 Y，B = 法线 Z</span>。OpenGL 和 DirectX 的区别就出在 G（Y/上下）通道上。</p>
+                    <p><span class="highlight">根因是纹理坐标原点的约定不同</span>：OpenGL 把纹理坐标原点放在<span class="highlight">左下角</span>，DirectX 放在<span class="highlight">左上角</span>。这意味着两张图的 V 轴（竖直方向）是上下相反的。法线贴图既然存的是切线空间的 Y 分量，而 V 轴被翻转，那么同一个「朝上」的法线，在两种约定里存的 G 通道数值就正好<span class="highlight">符号相反</span>。</p>
+                    <table class="compare-table">
+                        <thead>
+                            <tr><th>维度</th><th>OpenGL 约定</th><th>DirectX 约定</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>纹理坐标原点</td><td>左下角 (0,0)</td><td>左上角 (0,0)</td></tr>
+                            <tr><td>法线贴图 G 通道（Y）</td><td>朝上（+Y 向上）</td><td>朝下（+Y 向下，G 取反）</td></tr>
+                            <tr><td>典型引擎</td><td>Unity（可导入时翻转）</td><td>Unreal（默认 DX 风格）</td></tr>
+                            <tr><td>用错的表现</td><td colspan="2">凹凸反向（凸变凹、凹变凸），在斜射光下、接缝处尤其明显</td></tr>
+                        </tbody>
+                    </table>
+                    <p><span class="highlight">对训练数据的影响</span>：如果数据库里两种约定的法线贴图混着用、又不做统一翻转，模型会学到<span class="highlight">互相矛盾的法线方向分布</span>，生成结果的法线会乱，进引擎后光影错乱。所以数据管线里「法线贴图约定统一」是必做的一步。</p>
+                </div>
+
+                <h2 class="section-title">PBR 与金属工作流</h2>
+                <div class="section-content">
+                    <p>PBR（Physically Based Rendering）的核心是<span class="highlight">能量守恒 + 微表面 BRDF</span>，把材质拆成一组物理量：Albedo（基础色）、Metallic（金属度）、Roughness（粗糙度）、Normal（法线）、AO（环境光遮蔽）。</p>
+                    <p><span class="highlight">金属工作流（Metallic/Roughness）</span>是当前主流：用一张 Metallic 贴图区分「金属 vs 电介质」，用 Roughness 控制微表面粗糙度。与之相对的是高光工作流（Specular/Glossiness），Unreal 早期常用，现在更推荐金属工作流。</p>
+                    <table class="compare-table">
+                        <thead>
+                            <tr><th>贴图</th><th>合理取值 / 判断</th><th>脏数据的典型表现</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Albedo 基础色</td><td>只含颜色，不含光照/阴影</td><td>把烘焙光照、阴影、高光烤进颜色图</td></tr>
+                            <tr><td>Metallic 金属度</td><td>基本是二值：0（电介质）/ 1（金属），过渡区只出现在金属边缘</td><td>到处是 0~1 的灰阶、金属与非金属边界糊成一团</td></tr>
+                            <tr><td>Roughness 粗糙度</td><td>0（镜面）~ 1（哑光）连续，但同一材质应统一</td><td>同一表面粗糙度忽高忽低、突然黑一块/白一块</td></tr>
+                            <tr><td>Normal 法线</td><td>约定统一（见上一节）</td><td>GL/DX 混用、接缝处方向翻转</td></tr>
+                        </tbody>
+                    </table>
+                    <p><span class="highlight">对训练数据的影响</span>：如果训练集的 Albedo 里混着光照残留、Metallic 数值乱、Roughness 突变，模型就会学到「光照当材质」「金属度灰阶」「粗糙度噪点」这些错误模式，生成结果再重新打光就会露馅。</p>
+                </div>
+
+                <h2 class="section-title">训练数据的好坏：什么让数据训出来是好模型</h2>
+                <div class="section-content">
+                    <p>把前面几节串起来，就是一条「数据质量 → 模型质量」的因果链。判断一批 3D 训练数据的好坏，基本看这五点：</p>
+                    <ul>
+                        <li><span class="highlight">几何干净：</span>水密、流形、无自相交、无退化三角形、法线统一朝外、面数分布合理（视觉中心给足面数撑剪影）。</li>
+                        <li><span class="highlight">贴图物理正确：</span>PBR 数值合理、Albedo 无光照残留、法线约定统一、无接缝、无烘焙阴影残留。</li>
+                        <li><span class="highlight">UV 布局合理：</span>无重叠、无拉伸、接缝放在不显眼处。</li>
+                        <li><span class="highlight">多视角一致：</span>多视图数据（图像→3D）要求不同视角下同一物体的几何/材质一致，否则模型学到矛盾外观。</li>
+                        <li><span class="highlight">标注规范：</span>命名、类别、标签一致，方便检索与配比。</li>
+                    </ul>
+                    <div class="tip">
+                        <p>一句话总结：<span class="highlight">好数据 = 几何上「可计算」（水密/流形/法线一致）+ 材质上「物理正确」（PBR 数值合理、约定统一）+ 视角上「可对齐」</span>。这三条任何一条塌了，模型都会把「脏」当成「规律」学进去。</p>
+                    </div>
+                </div>
+
+                <h2 class="section-title">岗位知识地图</h2>
+                <div class="section-content">
+                    <p>这套底层知识，正好对应大模型 3D 方向几类岗位的日常：</p>
+                    <ul>
+                        <li><span class="highlight">多模态大模型 3D 方向：</span>训练 / 微调 text-to-3D、image-to-3D、多视图重建模型，关心数据配比、表示方式（SDF / 占用场 / 四面体 / 高斯）、损失函数与生成质量。</li>
+                        <li><span class="highlight">数据技术美术（Data TA）：</span>数据清洗、标注、规范制定、渲染约定统一、几何质量检查——上面水密/法线/PBR 那套就是 TA 手里最常用的「筛子」。</li>
+                        <li><span class="highlight">大模型算法：</span>网络结构、训练策略、数据增强、评测指标，需要理解「什么样的输入会让模型学得好/学坏」。</li>
+                        <li><span class="highlight">AI 3D 技术美术：</span>把 AI 生成的资产接进引擎管线，修几何、补拓扑、PBR 化、统一法线约定，让「能看」的生成结果变成「能进项目用」的资产。</li>
+                    </ul>
+                    <p>这四个岗位的共同底座，就是「几何 + 渲染 + 材质 + 数据」这一整套底层知识。这也是这一篇要沉淀的东西。</p>
+                </div>
+
+                <h2 class="section-title">小结</h2>
+                <div class="section-content">
+                    <p>底层问题决定上层质量：<span class="highlight">水密/流形/法线</span>决定几何能不能算，<span class="highlight">OpenGL vs DX 约定</span>决定渲染对不对，<span class="highlight">PBR 金属工作流</span>决定材质正不正确，<span class="highlight">这三者合起来决定训练数据是好是坏</span>，最终决定大模型生成出来的 3D 资产能不能真正用起来。</p>
+                    <p>这一篇会持续补充——后面做工具、做数据、做算法时遇到的新问题，都会按这条「几何 → 渲染 → 材质 → 数据 → 算法」的主线继续往里填。</p>
+                </div>
+
+                <a href="index.html#blog" class="btn-back">返回博客列表</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: <span class="js-banana-email"></span></p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+
+        <script>
+        // 联系方式混淆渲染：只对真人显示，爬虫抓源码拿不到
+        (function () {
+            var PHONE = '198' + '5925' + '6157';
+            var EMAIL = PHONE + '@' + '163' + '.com';
+            var n = document.querySelector('.js-banana-email');
+            if (n) n.textContent = EMAIL;
+        })();
+    </script>
+
+        <script>
+        // ===== 水印 =====
+        function generateWatermark() {
+            const canvas = document.getElementById('watermark-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const text = 'BananaCat Portfolio | ' + new Date().toLocaleDateString();
+            ctx.font = '24px Arial';
+            ctx.fillStyle = '#fff';
+            ctx.globalAlpha = 0.5;
+            const spacing = 120;
+            const rotation = -Math.PI / 8;
+            for (let x = -200; x < canvas.width + 200; x += spacing) {
+                for (let y = -200; y < canvas.height + 200; y += spacing) {
+                    ctx.save();
+                    ctx.translate(x, y);
+                    ctx.rotate(rotation);
+                    ctx.fillText(text, 0, 0);
+                    ctx.restore();
+                }
+            }
+        }
+        generateWatermark();
+        setInterval(generateWatermark, 30000);
+        window.addEventListener('resize', generateWatermark);
+        </script>
+
+    <script>
+        const cursor = document.createElement('div');
+        cursor.className = 'custom-cursor';
+        document.body.appendChild(cursor);
+
+        let trailCount = 0;
+        const maxTrails = 50;
+
+        function createTrail(x, y) {
+            if (trailCount >= maxTrails) return;
+
+            const trail = document.createElement('div');
+            trail.className = 'cursor-trail';
+            trail.style.left = x + 'px';
+            trail.style.top = y + 'px';
+            trail.style.width = Math.random() * 6 + 4 + 'px';
+            trail.style.height = trail.style.width;
+            document.body.appendChild(trail);
+
+            trailCount++;
+
+            setTimeout(() => {
+                trail.remove();
+                trailCount--;
+            }, 600);
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            createTrail(e.clientX, e.clientY);
+        });
+
+        document.addEventListener('mousedown', function() {
+            cursor.classList.add('clicking');
+        });
+
+        document.addEventListener('mouseup', function() {
+            cursor.classList.remove('clicking');
+        });
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
