@@ -249,7 +249,23 @@
                 <h2 class="section-title">定位：这一篇和前面四篇有什么不同</h2>
                 <div class="section-content">
                     <p>之前的 Meshy / Tripo / 混元3D / AI生成3D合集，是从<span class="highlight">应用层</span>记录各家平台的生成效果、功能与局限。这一篇换个角度，往下钻到<span class="highlight">底层</span>——大模型 3D 方向的岗位（多模态大模型 3D、数据技术美术、大模型算法、AI 3D 技术美术）每天都在跟哪些底层知识打交道：几何、网格、渲染约定、PBR、训练数据质量。</p>
-                    <p>这些底层知识决定了喂给模型的 3D 数据到底是<span class="highlight">「好数据」还是「坏数据」</span>，也决定了模型生成出来的资产能不能真正进引擎、能不能被渲染管线正确显示。下面按「几何 → 渲染约定 → 材质 → 数据质量 → 岗位」逐层整理。</p>
+                    <p>这些底层知识决定了喂给模型的 3D 数据到底是<span class="highlight">「好数据」还是「坏数据」</span>，也决定了模型生成出来的资产能不能真正进引擎、能不能被渲染管线正确显示。下面按四层架构（数据 → 算法 → 评测 → 落地）逐层整理。</p>
+                </div>
+
+                <h2 class="section-title">四层架构总览</h2>
+                <div class="section-content">
+                    <p>AI 3D 生成是一条<span class="highlight">四层闭环</span>的数据链，不是单向流水线：数据层 → 算法层 → 评测层 → 落地层，而评测和落地的反馈会<span class="highlight">回流</span>给数据层与算法层。</p>
+                    <table class="compare-table">
+                        <thead>
+                            <tr><th>层</th><th>做什么</th><th>对应岗位</th><th>本日志章节</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>数据层</td><td>采集/合成 → 清洗 → 标注 → 配比</td><td>数据技术美术（Data TA）</td><td>几何 / 渲染约定 / PBR / 清洗案例</td></tr>
+                            <tr><td>算法层</td><td>表示 → 网络 → 训练 → 生成</td><td>大模型算法</td><td>下方「算法层」</td></tr>
+                            <tr><td>评测层</td><td>生成质量 + 数据质量两道评测</td><td>算法评测 / QA</td><td>下方「评测层」</td></tr>
+                            <tr><td>落地层</td><td>引擎接入 / 修拓扑 / PBR 化 / 管线自动化</td><td>AI 3D 技术美术</td><td>几何 / 渲染约定 / PBR</td></tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 <h2 class="section-title">几何与网格：水密、流形、法线一致性</h2>
@@ -424,6 +440,71 @@
                     <p>九个案例串起来就是一条可落地的清洗流水线：<span class="highlight">先修几何（水密 / 流形 / 法线）→ 再统一渲染约定（GL/DX 法线）→ 再清材质（去光照 / 数值规范化）→ 最后清 UV / 视角 / 去重</span>。这条流水线跑完，喂给模型的数据才谈得上「干净」。</p>
                 </div>
 
+                <h2 class="section-title">算法层：表示、网络与训练</h2>
+                <div class="section-content">
+                    <p>算法层的第一性问题不是网络，而是<span class="highlight">表示方式（Representation）</span>——同一个「3D 生成」任务，用什么数据结构来表征形状，直接决定了能生成什么、需要什么数据、以及生成结果能不能干净导出。</p>
+                </div>
+
+                <h3 class="case-sub">表示方式</h3>
+                <div class="section-content">
+                    <table class="compare-table">
+                        <thead>
+                            <tr><th>表示</th><th>特点</th><th>对数据的要求</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>SDF（符号距离场）</td><td>隐式、连续、水密友好，适合可变形 / 光滑表面；难出复杂拓扑</td><td>要求水密、法线一致</td></tr>
+                            <tr><td>占用场（Occupancy）</td><td>0/1 内外，实现简单，但边界不够精确</td><td>水密、内外明确</td></tr>
+                            <tr><td>四面体网格（Tetrahedral）</td><td>显式 + 体积，可直接进物理 / 有限元，内存大</td><td>水密、流形</td></tr>
+                            <tr><td>3D 高斯（3DGS）</td><td>渲染快、可微，适合新视角合成，但「表面」不严格</td><td>一致多视角、多视图对齐</td></tr>
+                            <tr><td>NeRF（神经辐射场）</td><td>连续体积、光照可学，训练慢、难导出干净 mesh</td><td>一致多视角、相机位姿</td></tr>
+                        </tbody>
+                    </table>
+                    <p>注意表示方式与数据层的强耦合：<span class="highlight">SDF / 占用场 / 四面体都要求水密输入</span>，这正是前面「破洞修复」那一系列几何清洗存在的根本原因。</p>
+                </div>
+
+                <h3 class="case-sub">网络结构与训练</h3>
+                <div class="section-content">
+                    <ul>
+                        <li><span class="highlight">扩散模型（Diffusion）：</span>当前 text-to-3D / image-to-3D 主流，逐步去噪生成；</li>
+                        <li><span class="highlight">Transformer / DiT：</span>多模态对齐、序列建模，常用作条件编码器或骨干；</li>
+                        <li><span class="highlight">多视图重建（如 MV-Dream 类）：</span>2D 扩散 + 多视图一致性约束，提升几何一致；</li>
+                        <li><span class="highlight">大重建模型（如 LRM 类）：</span>单张 / 少量图直接前馈出 3D，推理快、适合规模化；</li>
+                        <li><span class="highlight">训练要素：</span>损失函数（几何损失 / 渲染损失 / 感知损失 / 多视角一致性损失）、噪声与学习率调度、大模型蒸馏、数据配比（类别平衡、质量分层）。</li>
+                    </ul>
+                </div>
+
+                <h2 class="section-title">评测层：两道评测与指标</h2>
+                <div class="section-content">
+                    <p>评测层其实有<span class="highlight">两道</span>：训练前的<span class="highlight">数据质量评测</span>（决定哪些数据能进训练集），和训练后的<span class="highlight">生成质量评测</span>（决定模型好不好用）。</p>
+                </div>
+
+                <h3 class="case-sub">生成质量评测</h3>
+                <div class="section-content">
+                    <ul>
+                        <li><span class="highlight">几何质量：</span>水密率、流形率、面数合理性、拓扑干净度——回到数据层那套标准；</li>
+                        <li><span class="highlight">纹理质量：</span>PBR 数值合理、无接缝、无光照残留；</li>
+                        <li><span class="highlight">与参考相似度：</span>FID（2D 渲染图分布）、CLIP Score（文本-图像对齐）、几何相似度（Chamfer Distance、F-Score）；</li>
+                        <li><span class="highlight">主观 / 用户评分：</span>人工评测生成结果的观感与可用性。</li>
+                    </ul>
+                </div>
+
+                <h3 class="case-sub">下游可用性评测（落地层视角）</h3>
+                <div class="section-content">
+                    <ul>
+                        <li><span class="highlight">能否进引擎：</span>FBX / glTF 导出是否干净、PBR 贴图是否齐全；</li>
+                        <li><span class="highlight">能否绑定动画：</span>拓扑是否支持骨骼绑定、蒙皮；</li>
+                        <li><span class="highlight">能否重拓扑 / 减面：</span>重拓扑、减面后是否仍保持质量。</li>
+                    </ul>
+                </div>
+
+                <h3 class="case-sub">数据质量评测（训练前，回流到数据层）</h3>
+                <div class="section-content">
+                    <ul>
+                        <li><span class="highlight">数据质检打分：</span>水密 / 流形 / 法线 / 贴图数值的通过率；</li>
+                        <li><span class="highlight">回流作用：</span>这些指标直接决定「哪些数据可以进训练集」，是评测层回流数据层的第一道闸门。</li>
+                    </ul>
+                </div>
+
                 <h2 class="section-title">岗位知识地图</h2>
                 <div class="section-content">
                     <p>这套底层知识，正好对应大模型 3D 方向几类岗位的日常：</p>
@@ -439,7 +520,7 @@
                 <h2 class="section-title">小结</h2>
                 <div class="section-content">
                     <p>底层问题决定上层质量：<span class="highlight">水密/流形/法线</span>决定几何能不能算，<span class="highlight">OpenGL vs DX 约定</span>决定渲染对不对，<span class="highlight">PBR 金属工作流</span>决定材质正不正确，<span class="highlight">这三者合起来决定训练数据是好是坏</span>，最终决定大模型生成出来的 3D 资产能不能真正用起来。</p>
-                    <p>这一篇会持续补充——后面做工具、做数据、做算法时遇到的新问题，都会按这条「几何 → 渲染 → 材质 → 数据 → 算法」的主线继续往里填。</p>
+                    <p>至此四层已经补全：<span class="highlight">数据层</span>（几何 / 渲染 / 材质 / 清洗）→ <span class="highlight">算法层</span>（表示 / 网络 / 训练）→ <span class="highlight">评测层</span>（数据质检 + 生成质量）→ <span class="highlight">落地层</span>（引擎接入 / TA），外加一条「评测与落地反馈回流数据与算法」的闭环。这一篇会持续补充——后面做工具、做数据、做算法、做评测时遇到的新问题，都会按这条四层闭环继续往里填。</p>
                 </div>
 
                 <a href="index.html#blog" class="btn-back">返回博客列表</a>
