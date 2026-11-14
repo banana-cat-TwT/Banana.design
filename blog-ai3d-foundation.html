@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="style.css">
     <style>
         body {
-            background: linear-gradient(135deg, #14162b, #1a1d3a, #20234a);
-            cursor: none;
+            background: #14161a;
+            color: #dfe3e6;
         }
 
         .blog-detail-container {
@@ -25,13 +25,12 @@
         .blog-detail-title {
             font-size: 2rem;
             margin-bottom: 1rem;
-            color: #cfd4ff;
-            text-shadow: 0 0 24px rgba(120, 130, 255, 0.45);
+            color: #eceff1;
         }
 
         .blog-detail-subtitle {
             font-size: 1rem;
-            color: #8f96d0;
+            color: #8d959c;
             margin-bottom: 1.5rem;
         }
 
@@ -45,27 +44,26 @@
 
         .blog-tag {
             padding: 0.4rem 0.8rem;
-            background: rgba(120, 130, 255, 0.12);
-            color: #aab0ff;
-            border-radius: 20px;
+            background: rgba(79, 195, 161, 0.10);
+            color: #7fd6bd;
+            border-radius: 4px;
             font-size: 0.85rem;
-            border: 1px solid rgba(120, 130, 255, 0.3);
+            border: 1px solid rgba(79, 195, 161, 0.28);
         }
 
         .blog-detail-content {
-            background: rgba(30, 32, 62, 0.75);
-            border-radius: 12px;
+            background: #1b1e23;
+            border-radius: 10px;
             padding: 2rem;
-            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.4);
-            border: 1px solid rgba(120, 130, 255, 0.25);
-            color: #c8cbe8;
+            border: 1px solid #2a2f36;
+            color: #cfd5da;
         }
 
         .section-title {
-            font-size: 1.4rem;
+            font-size: 1.35rem;
             margin-bottom: 1rem;
-            color: #cfd4ff;
-            border-bottom: 1px solid rgba(120, 130, 255, 0.3);
+            color: #eceff1;
+            border-bottom: 1px solid #2a2f36;
             padding-bottom: 0.5rem;
             margin-top: 2.5rem;
         }
@@ -93,8 +91,8 @@
         }
 
         .highlight {
-            color: #8f9bff;
-            font-weight: bold;
+            color: #6fd2b4;
+            font-weight: 600;
         }
 
         .compare-table {
@@ -105,105 +103,117 @@
         }
 
         .compare-table th, .compare-table td {
-            border: 1px solid rgba(120, 130, 255, 0.25);
+            border: 1px solid #2a2f36;
             padding: 0.6rem 0.8rem;
             text-align: left;
             vertical-align: top;
         }
 
         .compare-table th {
-            background: rgba(120, 130, 255, 0.14);
-            color: #cfd4ff;
-            font-weight: bold;
+            background: #22262c;
+            color: #eceff1;
+            font-weight: 600;
         }
 
         .compare-table tr:nth-child(even) td {
-            background: rgba(120, 130, 255, 0.05);
+            background: #191c21;
         }
 
         .tip {
-            background: rgba(120, 130, 255, 0.08);
-            border-left: 3px solid #8f9bff;
+            background: #1f2329;
+            border-left: 3px solid #4fc3a1;
             padding: 1rem;
             margin: 1rem 0;
-            border-radius: 0 8px 8px 0;
+            border-radius: 0 6px 6px 0;
         }
 
         .case-sub {
-            font-size: 1.1rem;
-            color: #aab0ff;
+            font-size: 1.08rem;
+            color: #e2e6e9;
             margin: 1.6rem 0 0.6rem;
-            font-weight: bold;
+            font-weight: 600;
         }
 
         .case-block {
-            background: rgba(120, 130, 255, 0.06);
-            border: 1px solid rgba(120, 130, 255, 0.2);
-            border-radius: 10px;
+            background: #1e2127;
+            border: 1px solid #2a2f36;
+            border-radius: 6px;
             padding: 1rem 1.2rem;
             margin: 1rem 0;
         }
 
         .case-block .case-title {
-            color: #cfd4ff;
-            font-weight: bold;
+            color: #eceff1;
+            font-weight: 600;
             margin-bottom: 0.5rem;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #2a2f36;
+            padding: 0.9rem 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-q {
+            color: #eceff1;
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+        }
+
+        .faq-q::before {
+            content: "Q  ";
+            color: #4fc3a1;
+            font-weight: 700;
+        }
+
+        .faq-a {
+            color: #aab2b9;
+            line-height: 1.8;
+        }
+
+        .faq-a::before {
+            content: "A  ";
+            color: #4fc3a1;
+            font-weight: 700;
         }
 
         .btn-back {
             display: inline-block;
-            padding: 0.75rem 1.5rem;
-            background: linear-gradient(135deg, #4a55c0, #6a78e0);
-            color: #ffffff;
+            padding: 0.7rem 1.6rem;
+            background: #2a2f36;
+            color: #dfe3e6;
             text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            transition: all 0.3s ease;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: background 0.2s ease;
             margin-top: 2rem;
-            border: 1px solid rgba(120, 130, 255, 0.5);
+            border: 1px solid #3a4048;
         }
 
         .btn-back:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(120, 130, 255, 0.35);
+            background: #343a42;
         }
 
-        .custom-cursor {
-            position: fixed;
-            width: 20px;
-            height: 20px;
-            background: radial-gradient(circle, rgba(140, 150, 255, 0.95) 0%, rgba(90, 100, 220, 0.7) 50%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 999999;
-            transform: translate(-50%, -50%);
-            transition: transform 0.1s ease-out;
-            box-shadow: 0 0 12px rgba(120, 130, 255, 0.6);
-        }
-
-        .custom-cursor.clicking {
-            transform: translate(-50%, -50%) scale(0.8);
-        }
-
-        .cursor-trail {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: radial-gradient(circle, rgba(140, 150, 255, 0.9) 0%, rgba(90, 100, 220, 0.5) 50%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 999998;
-            animation: trailFade 1s ease-out forwards;
-        }
-
-        @keyframes trailFade {
-            0% {
-                opacity: 1;
-                transform: translate(-50%, -50%) scale(1);
+        @media (max-width: 768px) {
+            .blog-detail-container {
+                padding: 1rem;
             }
-            100% {
-                opacity: 0;
-                transform: translate(-50%, -50%) scale(0.2);
+
+            .blog-detail-content {
+                padding: 1.2rem;
+            }
+
+            .blog-detail-title {
+                font-size: 1.5rem;
+            }
+
+            .compare-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
             }
         }
     </style>
@@ -505,6 +515,79 @@
                     </ul>
                 </div>
 
+                <h2 class="section-title">常见问题速查</h2>
+                <div class="section-content">
+                    <p>把四层里最常踩的坑按「现象 → 原因 → 处理」收敛成一张速查表，遇到问题时先在这里对号。</p>
+                </div>
+
+                <h3 class="case-sub">几何类</h3>
+                <div class="section-content">
+                    <div class="faq-item">
+                        <p class="faq-q">模型进引擎后正面亮、背面黑，像被剖开？</p>
+                        <p class="faq-a">面法线内外混翻。统一法线朝外（Unify Normals），翻转错误面后重导入。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">模型能看，但一进 SDF / 体素化流程就报错或塌陷？</p>
+                        <p class="faq-a">网格不水密，有边界边或破洞，体积内外不明确。补洞（Cap Holes）、删内部面，做成封闭 2-流形。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">重拓扑或展 UV 时直接崩掉？</p>
+                        <p class="faq-a">存在非流形——一条边被 3 个以上面共享，或两个体只靠点/边相连。删多余面、焊接重合点、拆开仅点边相连的部件。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">重拓扑后脸部布线比身体还稀疏，剪影发糊？</p>
+                        <p class="faq-a">面数分配没有按视觉重要性走。脸部是视觉中心，应给足面数支撑剪影和表情；否则后续绑定、表情都会失真。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">重拓扑后腿部完全没法绑定？</p>
+                        <p class="faq-a">腿部布线不连续、缺少沿肢体走向的环线，关节处没有足够支撑。这类区域需要手工重建环线，不能直接吃自动重拓扑结果。</p>
+                    </div>
+                </div>
+
+                <h3 class="case-sub">渲染约定类</h3>
+                <div class="section-content">
+                    <div class="faq-item">
+                        <p class="faq-q">法线贴图一用就凹凸反向（凸变凹、凹变凸）？</p>
+                        <p class="faq-a">GL / DX 约定不匹配。OpenGL 纹理原点在左下、DirectX 在左上，导致 G 通道符号相反。按目标引擎统一翻转 G 通道。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">模型没贴错图，但表面出现细碎噪点、接缝处光影断裂？</p>
+                        <p class="faq-a">UV 分布稀烂 + 打了光滑组，导致法线在接缝处方向跳变。重展 UV、检查法线是否统一，必要时重算法线（带正确的硬/软边）。</p>
+                    </div>
+                </div>
+
+                <h3 class="case-sub">材质类</h3>
+                <div class="section-content">
+                    <div class="faq-item">
+                        <p class="faq-q">生成的贴图一重新打光就「脏」？</p>
+                        <p class="faq-a">Albedo 里烤进了阴影、高光或 AO。需要去光照（de-lighting），把纯基础色分离出来。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">同一块表面粗糙度忽高忽低，甚至突然黑一块？</p>
+                        <p class="faq-a">Roughness 贴图数值不一致。同一材质应保持统一的粗糙度区间，局部突变要在贴图层面平滑或重绘。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">金属度贴图满屏灰阶，金属和非金属糊成一片？</p>
+                        <p class="faq-a">Metallic 本应接近二值（0 或 1），过渡只出现在金属边缘。按材质语义重新阈值化。</p>
+                    </div>
+                </div>
+
+                <h3 class="case-sub">数据 / 算法 / 评测类</h3>
+                <div class="section-content">
+                    <div class="faq-item">
+                        <p class="faq-q">同一批数据训练出来的模型，风格与规范互相打架？</p>
+                        <p class="faq-a">数据内部约定不统一（法线 GL/DX 混用、PBR 数值标准不一）。进训练集前必须做一次全量约定归一。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">生成结果「看着还行」，但一进引擎就没法用？</p>
+                        <p class="faq-a">缺下游可用性评测。生成质量高 ≠ 可落地，必须额外测导出干净度、拓扑可绑定性、减面后质量保持。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">模型在某些类别上明显更差？</p>
+                        <p class="faq-a">训练数据类别不平衡或该类别质量偏低。重采样平衡类别，并对低质样本做质量分层或剔除。</p>
+                    </div>
+                </div>
+
                 <h2 class="section-title">岗位知识地图</h2>
                 <div class="section-content">
                     <p>这套底层知识，正好对应大模型 3D 方向几类岗位的日常：</p>
@@ -590,47 +673,6 @@
         window.addEventListener('resize', generateWatermark);
         </script>
 
-    <script>
-        const cursor = document.createElement('div');
-        cursor.className = 'custom-cursor';
-        document.body.appendChild(cursor);
-
-        let trailCount = 0;
-        const maxTrails = 50;
-
-        function createTrail(x, y) {
-            if (trailCount >= maxTrails) return;
-
-            const trail = document.createElement('div');
-            trail.className = 'cursor-trail';
-            trail.style.left = x + 'px';
-            trail.style.top = y + 'px';
-            trail.style.width = Math.random() * 6 + 4 + 'px';
-            trail.style.height = trail.style.width;
-            document.body.appendChild(trail);
-
-            trailCount++;
-
-            setTimeout(() => {
-                trail.remove();
-                trailCount--;
-            }, 600);
-        }
-
-        document.addEventListener('mousemove', function(e) {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top = e.clientY + 'px';
-            createTrail(e.clientX, e.clientY);
-        });
-
-        document.addEventListener('mousedown', function() {
-            cursor.classList.add('clicking');
-        });
-
-        document.addEventListener('mouseup', function() {
-            cursor.classList.remove('clicking');
-        });
-    </script>
     <script src="script.js"></script>
 </body>
 </html>
