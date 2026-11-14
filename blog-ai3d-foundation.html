@@ -129,6 +129,27 @@
             border-radius: 0 8px 8px 0;
         }
 
+        .case-sub {
+            font-size: 1.1rem;
+            color: #aab0ff;
+            margin: 1.6rem 0 0.6rem;
+            font-weight: bold;
+        }
+
+        .case-block {
+            background: rgba(120, 130, 255, 0.06);
+            border: 1px solid rgba(120, 130, 255, 0.2);
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .case-block .case-title {
+            color: #cfd4ff;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
         .btn-back {
             display: inline-block;
             padding: 0.75rem 1.5rem;
@@ -294,6 +315,113 @@
                     <div class="tip">
                         <p>一句话总结：<span class="highlight">好数据 = 几何上「可计算」（水密/流形/法线一致）+ 材质上「物理正确」（PBR 数值合理、约定统一）+ 视角上「可对齐」</span>。这三条任何一条塌了，模型都会把「脏」当成「规律」学进去。</p>
                     </div>
+                </div>
+
+                <h2 class="section-title">训练数据清洗：具体案例</h2>
+                <div class="section-content">
+                    <p>把上面三条标准落到具体动作上，沿「几何 → 渲染 → 材质 → 视角 / 标注」的主线，每个案例按<span class="highlight">「问题 → 识别 → 清洗 → 对训练的影响」</span>展开。</p>
+                </div>
+
+                <h3 class="case-sub">① 几何清洗</h3>
+
+                <div class="case-block">
+                    <p class="case-title">案例 1 · 破洞修复（水密化）</p>
+                    <ul>
+                        <li><span class="highlight">问题：</span>扫描或生成的模型有破洞，存在边界边（boundary edge），不是封闭体积。</li>
+                        <li><span class="highlight">识别：</span>Max 里用 <code>polyop.getNumOpenEdges</code> 数开放边、高亮边界边，或直接看线框破口。</li>
+                        <li><span class="highlight">清洗：</span>补洞（Cap Holes）、删掉内部/多余面，必要时重拓扑成水密体。</li>
+                        <li><span class="highlight">影响：</span>SDF / 占用场 / 四面体训练都要求水密；破洞会导致体积歧义，法线在洞口乱翻。</li>
+                    </ul>
+                </div>
+
+                <div class="case-block">
+                    <p class="case-title">案例 2 · 非流形修复</p>
+                    <ul>
+                        <li><span class="highlight">问题：</span>一条边被 3 个以上面共享，或两个体只靠一个点 / 一条边相连（蝴蝶顶点 / 边）。</li>
+                        <li><span class="highlight">识别：</span>流形检测、统计每条边的共享面数。</li>
+                        <li><span class="highlight">清洗：</span>删除多余面、焊接重复顶点、拆开仅点 / 边相连的部件。</li>
+                        <li><span class="highlight">影响：</span>非流形会让重拓扑、展 UV、SDF 计算直接崩掉。</li>
+                    </ul>
+                </div>
+
+                <div class="case-block">
+                    <p class="case-title">案例 3 · 法线方向统一</p>
+                    <ul>
+                        <li><span class="highlight">问题：</span>面法线内外混翻，一半朝里一半朝外。</li>
+                        <li><span class="highlight">识别：</span>双面光照 + 背面视图，看颜色异常的面。</li>
+                        <li><span class="highlight">清洗：</span>统一法线朝外（Unify Normals）、翻转错误面。</li>
+                        <li><span class="highlight">影响：</span>法线不一致是「脏数据」最直接的来源，渲染与体积计算都会错。</li>
+                    </ul>
+                </div>
+
+                <h3 class="case-sub">② 渲染约定清洗</h3>
+
+                <div class="case-block">
+                    <p class="case-title">案例 4 · GL / DX 法线贴图统一</p>
+                    <ul>
+                        <li><span class="highlight">问题：</span>库里混入 OpenGL 与 DirectX 两种约定的法线贴图（绿通道方向相反）。</li>
+                        <li><span class="highlight">识别：</span>看绿通道（G）朝上还是朝下，或进引擎对比凹凸方向。</li>
+                        <li><span class="highlight">清洗：</span>统一翻转到一种约定——Unreal 用 DX、Unity 用 GL，导入时选对，或批量翻转 G 通道。</li>
+                        <li><span class="highlight">影响：</span>约定混用会让模型学到互相矛盾的法线分布，生成结果法线乱、光影错乱。</li>
+                    </ul>
+                </div>
+
+                <h3 class="case-sub">③ 材质（PBR）清洗</h3>
+
+                <div class="case-block">
+                    <p class="case-title">案例 5 · Albedo 去光照</p>
+                    <ul>
+                        <li><span class="highlight">问题：</span>基础色图里烘焙了阴影、高光、AO。</li>
+                        <li><span class="highlight">识别：</span>Albedo 上能看到明显明暗 / 阴影区域。</li>
+                        <li><span class="highlight">清洗：</span>去光照（de-lighting），用光照估计 / 逆渲染把纯 albedo 分离出来。</li>
+                        <li><span class="highlight">影响：</span>光照残留会让模型把「打光」当成「材质」，重打光就露馅。</li>
+                    </ul>
+                </div>
+
+                <div class="case-block">
+                    <p class="case-title">案例 6 · Metallic / Roughness 规范化</p>
+                    <ul>
+                        <li><span class="highlight">问题：</span>metallic 到处是灰阶、roughness 在同一表面突变（忽高忽低、突然黑 / 白一块）。</li>
+                        <li><span class="highlight">识别：</span>灰度直方图看异常分布。</li>
+                        <li><span class="highlight">清洗：</span>metallic 阈值二值化、roughness 平滑统一。</li>
+                        <li><span class="highlight">影响：</span>数值乱会让模型学到错误材质分布（如粗糙度噪点）。</li>
+                    </ul>
+                </div>
+
+                <h3 class="case-sub">④ 视角 / 标注 / 去重</h3>
+
+                <div class="case-block">
+                    <p class="case-title">案例 7 · UV 重叠与拉伸</p>
+                    <ul>
+                        <li><span class="highlight">问题：</span>UV 重叠、拉伸严重、接缝位置不合理。</li>
+                        <li><span class="highlight">识别：</span>棋盘格贴图检查拉伸、重叠检测。</li>
+                        <li><span class="highlight">清洗：</span>重展 UV、修复重叠、把接缝移到不显眼处。</li>
+                        <li><span class="highlight">影响：</span>UV 烂会导致贴图烘焙 / 重投影质量差，接缝处脏。</li>
+                    </ul>
+                </div>
+
+                <div class="case-block">
+                    <p class="case-title">案例 8 · 多视角一致性</p>
+                    <ul>
+                        <li><span class="highlight">问题：</span>image-to-3D 的多视角图，同一物体在不同视角下材质 / 几何不一致。</li>
+                        <li><span class="highlight">识别：</span>跨视角对比同一特征点。</li>
+                        <li><span class="highlight">清洗：</span>剔除不一致视角、统一光照环境与相机。</li>
+                        <li><span class="highlight">影响：</span>视角不一致会让模型学到矛盾外观，重建产生歧义。</li>
+                    </ul>
+                </div>
+
+                <div class="case-block">
+                    <p class="case-title">案例 9 · 去重与类别平衡</p>
+                    <ul>
+                        <li><span class="highlight">问题：</span>数据集重复、低质样本、类别不平衡。</li>
+                        <li><span class="highlight">识别：</span>哈希去重、质量评分过滤、类别统计。</li>
+                        <li><span class="highlight">清洗：</span>去重、过滤低分样本、重采样平衡类别。</li>
+                        <li><span class="highlight">影响：</span>类别不平衡会让模型偏向高频类别，生成多样性下降。</li>
+                    </ul>
+                </div>
+
+                <div class="section-content">
+                    <p>九个案例串起来就是一条可落地的清洗流水线：<span class="highlight">先修几何（水密 / 流形 / 法线）→ 再统一渲染约定（GL/DX 法线）→ 再清材质（去光照 / 数值规范化）→ 最后清 UV / 视角 / 去重</span>。这条流水线跑完，喂给模型的数据才谈得上「干净」。</p>
                 </div>
 
                 <h2 class="section-title">岗位知识地图</h2>
