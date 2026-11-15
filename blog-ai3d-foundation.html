@@ -366,7 +366,7 @@
         <div class="blog-detail-container">
             <div class="blog-detail-header">
                 <h1 class="blog-detail-title">AI 3D 大模型研究日志（底层 · 数据 · 算法）</h1>
-                <p class="blog-detail-subtitle">2026年9月 · 研究整理 · 面向 AI 3D 技术岗位</p>
+                <p class="blog-detail-subtitle">2026年9月 · 研究整理 · AI 3D 的底层数据与管线</p>
                 <div class="blog-tags">
                     <span class="blog-tag">水密网格</span>
                     <span class="blog-tag">法线约定</span>
@@ -380,7 +380,7 @@
             <div class="blog-detail-content">
                 <h2 class="section-title">定位：这一篇和前面四篇有什么不同</h2>
                 <div class="section-content">
-                    <p>之前的 Meshy / Tripo / 混元3D / AI生成3D合集，是从<span class="highlight">应用层</span>记录各家平台的生成效果、功能与局限。这一篇换个角度，往下钻到<span class="highlight">底层</span> 大模型 3D 方向的岗位（多模态大模型 3D、数据技术美术、大模型算法、AI 3D 技术美术）每天都在跟哪些底层知识打交道：几何、网格、渲染约定、PBR、训练数据质量。</p>
+                    <p>之前的 Meshy / Tripo / 混元3D / AI生成3D合集，是从<span class="highlight">应用层</span>记录各家平台的生成效果、功能与局限。这一篇换个角度，往下钻到<span class="highlight">底层</span>：做 AI 3D 这条链路的人每天在跟哪些底层知识打交道，包括几何、网格、渲染约定、PBR、训练数据质量。</p>
                     <p>这些底层知识决定了喂给模型的 3D 数据到底是<span class="highlight">好数据还是坏数据</span>，也决定了模型生成出来的资产能不能真正进引擎、能不能被渲染管线正确显示。下面按四层架构（数据 → 算法 → 评测 → 落地）逐层整理。</p>
                 </div>
 
@@ -389,7 +389,7 @@
                     <p>AI 3D 生成是一条<span class="highlight">四层闭环</span>的数据链，不是单向流水线：数据层 → 算法层 → 评测层 → 落地层，而评测和落地的反馈会<span class="highlight">回流</span>给数据层与算法层。</p>
                     <table class="compare-table">
                         <thead>
-                            <tr><th>层</th><th>做什么</th><th>对应岗位</th><th>本日志章节</th></tr>
+                            <tr><th>层</th><th>做什么</th><th>常见分工</th><th>本日志章节</th></tr>
                         </thead>
                         <tbody>
                             <tr><td>数据层</td><td>采集/合成 → 清洗 → 标注 → 配比</td><td>数据技术美术（Data TA）</td><td>几何 / 渲染约定 / PBR / 清洗案例</td></tr>
@@ -402,12 +402,12 @@
 
                 <h2 class="section-title">几何与网格：水密、流形、法线一致性</h2>
                 <div class="section-content">
-                    <p><span class="highlight">水密（Watertight）</span>指一个网格是封闭的 2-流形 没有边界边、没有破洞，能够明确地包住一个体积。判断标准：每条边恰好被两个面共享，从任意点出发不穿出表面。</p>
+                    <p><span class="highlight">水密（Watertight）</span>指一个网格是封闭的 2-流形，没有边界边、没有破洞，能够明确地包住一个体积。判断标准：每条边恰好被两个面共享，从任意点出发不穿出表面。</p>
                     <ul>
                         <li><span class="highlight">为什么重要：</span>体素化（Voxelization）、符号距离场（SDF）、布尔运算、四面体网格、物理碰撞、3D 打印都假设表面是封闭的。很多 3D 生成模型的表示（占用场 Occupancy Field、SDF、tetrahedral）都需要水密输入。</li>
                         <li><span class="highlight">非水密对训练的影响：</span>体积歧义、内外不明确、法线在破洞处乱翻，模型学到的形状会在开口处塌掉或出错。</li>
                     </ul>
-                    <p><span class="highlight">流形（Manifold）</span>：局部上每个点都像一块平面（圆盘邻域）。非流形常见于 一条边被 3 个以上面共享、两个体只靠一个点/一条边相连（蝴蝶顶点/边）。非流形网格在重拓扑、展 UV、SDF 计算时都会崩。</p>
+                    <p><span class="highlight">流形（Manifold）</span>：局部上每个点都像一块平面（圆盘邻域）。非流形常见于：一条边被 3 个以上面共享、两个体只靠一个点或一条边相连（蝴蝶顶点/边）。非流形网格在重拓扑、展 UV、SDF 计算时都会崩。</p>
                     <p><span class="highlight">法线一致性</span>：所有面法线应统一朝外。如果一半朝里一半朝外，光照和体积计算都会错。对训练数据来说，法线方向不一致是脏数据的直接来源。</p>
                     <div class="tip">
                         <p>数据质检第一关：把模型丢进看背面 + 看线框 + 看边界边（boundary edge）三个视图扫一遍，水密/流形/法线问题基本都能暴露。</p>
@@ -613,7 +613,7 @@
                 <h3 class="case-sub">生成质量评测</h3>
                 <div class="section-content">
                     <ul>
-                        <li><span class="highlight">几何质量：</span>水密率、流形率、面数合理性、拓扑干净度 回到数据层那套标准；</li>
+                        <li><span class="highlight">几何质量：</span>水密率、流形率、面数合理性、拓扑干净度，回到数据层那套标准；</li>
                         <li><span class="highlight">纹理质量：</span>PBR 数值合理、无接缝、无光照残留；</li>
                         <li><span class="highlight">与参考相似度：</span>FID（2D 渲染图分布）、CLIP Score（文本-图像对齐）、几何相似度（Chamfer Distance、F-Score）；</li>
                         <li><span class="highlight">主观 / 用户评分：</span>人工评测生成结果的观感与可用性。</li>
@@ -639,93 +639,222 @@
 
                 <h2 class="section-title">常见问题速查</h2>
                 <div class="section-content">
-                    <p>把四层里最常踩的坑按现象 → 原因 → 处理收敛成一张速查表，遇到问题时先在这里对号。</p>
+                    <p>把四层里最常踩的坑按现象、原因、处理三步收敛，遇到问题先在这里对号。后面接情景题，给一个具体场景判断该怎么做。</p>
                 </div>
 
-                <h3 class="case-sub">几何类</h3>
+                <h3 class="case-sub">一、几何类</h3>
                 <div class="section-content">
                     <div class="faq-item">
                         <p class="faq-q">模型进引擎后正面亮、背面黑，像被剖开？</p>
-                        <p class="faq-a">面法线内外混翻。统一法线朝外（Unify Normals），翻转错误面后重导入。</p>
+                        <p class="faq-a">面法线内外混翻。统一法线朝外（Unify Normals），翻转错误面后重导入。判断方式：背面剔除打开后从外看有空洞，就是法线朝内。</p>
                     </div>
                     <div class="faq-item">
-                        <p class="faq-q">模型能看，但一进 SDF / 体素化流程就报错或塌陷？</p>
-                        <p class="faq-a">网格不水密，有边界边或破洞，体积内外不明确。补洞（Cap Holes）、删内部面，做成封闭 2-流形。</p>
+                        <p class="faq-q">模型能看，一进 SDF 或体素化流程就报错或塌陷？</p>
+                        <p class="faq-a">网格不水密，有边界边或破洞，体积内外不明确。补洞（Cap Holes）、删内部面，做成封闭 2-流形。注意不是所有破洞都要补，朝下的开口有时是设计本身，要先确认语义。</p>
                     </div>
                     <div class="faq-item">
                         <p class="faq-q">重拓扑或展 UV 时直接崩掉？</p>
-                        <p class="faq-a">存在非流形 一条边被 3 个以上面共享，或两个体只靠点/边相连。删多余面、焊接重合点、拆开仅点边相连的部件。</p>
+                        <p class="faq-a">存在非流形：一条边被三个以上面共享，或两个体只靠点、边相连。删多余面、焊接重合点、拆开仅点边相连的部件，再跑重拓扑。</p>
                     </div>
                     <div class="faq-item">
                         <p class="faq-q">重拓扑后脸部布线比身体还稀疏，剪影发糊？</p>
-                        <p class="faq-a">面数分配没有按视觉重要性走。脸部是视觉中心，应给足面数支撑剪影和表情；否则后续绑定、表情都会失真。</p>
+                        <p class="faq-a">面数分配没按视觉重要性走。脸是视觉中心，要给足面数撑剪影和表情；否则后续绑定与表情都会失真。</p>
                     </div>
                     <div class="faq-item">
                         <p class="faq-q">重拓扑后腿部完全没法绑定？</p>
-                        <p class="faq-a">腿部布线不连续、缺少沿肢体走向的环线，关节处没有足够支撑。这类区域需要手工重建环线，不能直接吃自动重拓扑结果。</p>
+                        <p class="faq-a">腿部布线不连续，缺少沿肢体走向的环线，关节处没有足够支撑。这类区域要手工重建环线，不能直接吃自动重拓扑结果。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">生成模型一减面就破面、塌角？</p>
+                        <p class="faq-a">原网格本身三角面质量差，存在细长三角形、重叠面和零面积面。减面会在这些地方优先塌陷。先做清理（移除重合顶点、删除零面积面、修复自交），再减面。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">模型好几个部件互相穿插，内部还残留看不见的面？</p>
+                        <p class="faq-a">生成阶段没有做部件级约束，也没删内部几何。内部面会让体积计算、碰撞和烘焙都出错。按部件检查穿插，做布尔或手工修，内部面直接删掉。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">模型导进引擎后尺寸不对，差了一百倍？</p>
+                        <p class="faq-a">单位不一致。导出时源文件按厘米、导入端按米，或者导出没应用缩放变换。导入前统一单位，导出时应用变换并确认轴向设置。</p>
                     </div>
                 </div>
 
-                <h3 class="case-sub">渲染约定类</h3>
+                <h3 class="case-sub">二、渲染约定类</h3>
                 <div class="section-content">
                     <div class="faq-item">
-                        <p class="faq-q">法线贴图一用就凹凸反向（凸变凹、凹变凸）？</p>
-                        <p class="faq-a">GL / DX 约定不匹配。OpenGL 纹理原点在左下、DirectX 在左上，导致 G 通道符号相反。按目标引擎统一翻转 G 通道。</p>
+                        <p class="faq-q">法线贴图一用就凹凸反向，凸变凹、凹变凸？</p>
+                        <p class="faq-a">GL 与 DX 约定不匹配。OpenGL 纹理原点在左下、DirectX 在左上，导致 G 通道符号相反。按目标引擎统一翻转 G 通道，不要逐张图手改，写进导出流程。</p>
                     </div>
                     <div class="faq-item">
-                        <p class="faq-q">模型没贴错图，但表面出现细碎噪点、接缝处光影断裂？</p>
-                        <p class="faq-a">UV 分布稀烂 + 打了光滑组，导致法线在接缝处方向跳变。重展 UV、检查法线是否统一，必要时重算法线（带正确的硬/软边）。</p>
+                        <p class="faq-q">模型没贴错图，表面却有细碎噪点、接缝处光影断裂？</p>
+                        <p class="faq-a">UV 分布差加上打了光滑组，法线在接缝处方向跳变。重展 UV、检查法线是否统一，必要时重算法线并明确硬边与软边。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">法线贴图进 Unity 后颜色发紫发亮，效果完全不对？</p>
+                        <p class="faq-a">贴图没有被识别为 Normal Map。导入设置里把 Texture Type 改成 Normal map，并把 sRGB 关掉，否则会被当成颜色图解码。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">同一张颜色贴图在 DCC 和引擎里色差明显？</p>
+                        <p class="faq-a">色彩空间没对齐。颜色贴图用 sRGB，数据贴图（粗糙度、金属度、法线）用线性。标错会导致整体偏灰或偏亮，且会污染训练标签。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">烘焙出来的法线贴图换个角度看就有裂缝？</p>
+                        <p class="faq-a">高低模的切线空间不一致，或 UV 接缝处没有做边缘填充（padding）。统一切线设置，导出时给 UV 接缝留出边距。</p>
                     </div>
                 </div>
 
-                <h3 class="case-sub">材质类</h3>
+                <h3 class="case-sub">三、材质类</h3>
                 <div class="section-content">
                     <div class="faq-item">
                         <p class="faq-q">生成的贴图一重新打光就脏？</p>
-                        <p class="faq-a">Albedo 里烤进了阴影、高光或 AO。需要去光照（de-lighting），把纯基础色分离出来。</p>
+                        <p class="faq-a">Albedo 里烤进了阴影、高光或 AO。需要去光照（de-lighting），把纯基础色分离出来。扫描件和截屏转的贴图几乎都有这个问题。</p>
                     </div>
                     <div class="faq-item">
                         <p class="faq-q">同一块表面粗糙度忽高忽低，甚至突然黑一块？</p>
-                        <p class="faq-a">Roughness 贴图数值不一致。同一材质应保持统一的粗糙度区间，局部突变要在贴图层面平滑或重绘。</p>
+                        <p class="faq-a">Roughness 数值不一致。同一材质应保持统一区间，局部突变要在贴图层面平滑或重绘。注意是局部黑一块，不是渐变，这种通常是训练残留而不是真实材质。</p>
                     </div>
                     <div class="faq-item">
-                        <p class="faq-q">金属度贴图满屏灰阶，金属和非金属糊成一片？</p>
-                        <p class="faq-a">Metallic 本应接近二值（0 或 1），过渡只出现在金属边缘。按材质语义重新阈值化。</p>
+                        <p class="faq-q">金属度满屏灰阶，金属和非金属糊成一片？</p>
+                        <p class="faq-a">Metallic 本应接近二值，只在金属边缘有过渡。按材质语义重新阈值化，并把中间灰阶改为对应的 0 或 1。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">一张贴图被很多模型复用，材质语义互相冲突？</p>
+                        <p class="faq-a">贴图集式复用会把不同材质的数值混在一起。生成任务里要按材质 ID 分开，不能靠一张图贴所有部件。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">导入引擎后金属度和粗糙度显示错位？</p>
+                        <p class="faq-a">通道打包顺序不一致，常见有 ORM、RMA、MRAO 几种排法。按目标管线的顺序重排通道，并在规范里写死，不要靠记忆。</p>
                     </div>
                 </div>
 
-                <h3 class="case-sub">数据 / 算法 / 评测类</h3>
+                <h3 class="case-sub">四、数据、算法、评测类</h3>
                 <div class="section-content">
                     <div class="faq-item">
-                        <p class="faq-q">同一批数据训练出来的模型，风格与规范互相打架？</p>
-                        <p class="faq-a">数据内部约定不统一（法线 GL/DX 混用、PBR 数值标准不一）。进训练集前必须做一次全量约定归一。</p>
+                        <p class="faq-q">同一批数据训出来的模型，风格与规范互相打架？</p>
+                        <p class="faq-a">数据内部约定不统一，法线 GL 与 DX 混用、PBR 数值标准不一。进训练集前必须做一次全量约定归一，并且把归一规则固化成脚本。</p>
                     </div>
                     <div class="faq-item">
-                        <p class="faq-q">生成结果看着还行，但一进引擎就没法用？</p>
-                        <p class="faq-a">缺下游可用性评测。生成质量高 ≠ 可落地，必须额外测导出干净度、拓扑可绑定性、减面后质量保持。</p>
+                        <p class="faq-q">生成结果看着还行，一进引擎就没法用？</p>
+                        <p class="faq-a">缺下游可用性评测。生成质量高不等于可落地，还要测导出干净度、拓扑可绑定性、减面后的质量保持。</p>
                     </div>
                     <div class="faq-item">
                         <p class="faq-q">模型在某些类别上明显更差？</p>
-                        <p class="faq-a">训练数据类别不平衡或该类别质量偏低。重采样平衡类别，并对低质样本做质量分层或剔除。</p>
+                        <p class="faq-a">类别不平衡或该类别样本质量偏低。重采样平衡类别，对低质样本做质量分层或剔除，再单独看这个类别验证集的表现。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">数据集看着很大，训练效果却上不去？</p>
+                        <p class="faq-a">有效样本少。大量近重复模型、同一资产的多个视角重复计入、低质或残缺模型占比高。去重加质量分层之后，有效数据量往往只剩一小半。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">模型之间只差一点点，评测分数却分不出来？</p>
+                        <p class="faq-a">指标分辨率不够，或者指标与感知不一致。要补下游可用性指标和人工盲测，不能只看单一的几何相似度。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">换了一版数据，分数涨了，美术却说更差了？</p>
+                        <p class="faq-a">指标被数据分布带偏。比如新数据里简单样本变多，平均分自然上升。要分组看指标，并按难度和类别分层对比。</p>
                     </div>
                 </div>
 
-                <h2 class="section-title">岗位知识地图</h2>
+                <h2 class="section-title">情景题：给一个场景，判断该怎么做</h2>
                 <div class="section-content">
-                    <p>这套底层知识，正好对应大模型 3D 方向几类岗位的日常：</p>
-                    <ul>
-                        <li><span class="highlight">多模态大模型 3D 方向：</span>训练 / 微调 text-to-3D、image-to-3D、多视图重建模型，关心数据配比、表示方式（SDF / 占用场 / 四面体 / 高斯）、损失函数与生成质量。</li>
-                        <li><span class="highlight">数据技术美术（Data TA）：</span>数据清洗、标注、规范制定、渲染约定统一、几何质量检查 上面水密/法线/PBR 那套就是 TA 手里最常用的筛子。</li>
-                        <li><span class="highlight">大模型算法：</span>网络结构、训练策略、数据增强、评测指标，需要理解什么样的输入会让模型学得好/学坏。</li>
-                        <li><span class="highlight">AI 3D 技术美术：</span>把 AI 生成的资产接进引擎管线，修几何、补拓扑、PBR 化、统一法线约定，让能看的生成结果变成能进项目用的资产。</li>
-                    </ul>
-                    <p>这四个岗位的共同底座，就是几何 + 渲染 + 材质 + 数据这一整套底层知识。这也是这一篇要沉淀的东西。</p>
+                    <p>下面这些不是查表能答的，要先判断问题落在哪一层，再定动作顺序。每条都带一句如果没有某个条件时的替代做法。</p>
+                </div>
+
+                <div class="section-content">
+                    <div class="faq-item">
+                        <p class="faq-q">供应商一次交付五万个模型，只给三天，怎么定清洗优先级？</p>
+                        <p class="faq-a">先做统计而不是逐个看。第一遍只跑可自动判定的硬指标：水密、非流形、法线一致性、贴图缺失、单位与缩放。按不合格率排序，先修占比最高的那一类，因为它对整体质量影响最大。三天不够全清是正常的，产出应该是带质量分层的可用子集，而不是一批全都半清的数据。<br>如果没有自动检测脚本，就先按类别抽样一百个，人工统计不合格类型的分布，再决定先写哪个检测脚本，不要五个都写。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">没有现成的水密修复工具，数据又必须进体素流程，怎么办？</p>
+                        <p class="faq-a">先降级方案而不是硬修。不水密的模型不进体素流程，改用多视角渲染加深度图作为替代监督，或者只取水密的那部分做三维监督。同时评估缺口规模，如果破洞集中在少数几类资产，就针对性写补洞脚本，而不是追求全自动。<br>举一反三：任何必须的预处理能力缺失时，先问能不能绕过这一步换一种表示，其次才是补工具。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">只有 CPU 环境，没法训练也没法快速渲染，怎么验证数据可用？</p>
+                        <p class="faq-a">把验证拆成不依赖 GPU 的部分：几何拓扑检查、UV 重叠计算、贴图统计、法线方向判定都是纯数值计算，CPU 完全够用。渲染相关的检查可以抽样少量交给在线环境或直接跳过，用数值指标代替目视。<br>关键是把可验证的部分先验证掉，不要让整条流程卡在一个不具备的条件上。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">算法说指标达标，美术说生成的脸不能用，怎么对齐？</p>
+                        <p class="faq-a">先确认两边说的不是同一件事。算法看的是整体几何与纹理相似度，美术看的是视觉中心有没有面数支撑、剪影是否成立。要把美术的判断翻译成可测指标，比如脸部区域的面密度、眼口鼻区域的曲率误差。然后补一条分区指标，而不是继续用全局平均。<br>这类分歧基本都来自指标没有分区。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">两个团队标注标准不一致，同一批数据标出两种结果，怎么定规范？</p>
+                        <p class="faq-a">先拿二十个争议样本做共同评审，找出分歧点在哪一条定义上，通常是边界情况没有写清楚。然后把定义改写成可判定的规则，附正反例。规范定完要跑一次双盲重标，算一致率，一致率不达标就说明规则还有歧义。<br>没有人力做双盲时，至少让双方各自标同一批小样本，直接比对差异条目。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">要求两万面以内、还要能绑表情，这两条能同时满足吗？</p>
+                        <p class="faq-a">能，但要重新分配面数。两万面里优先保证脸部和关节环线，躯干和配件降密度。先做分区预算表，再按预算重拓扑，而不是先重拓扑再整体减面。<br>如果预算实在不够，就要提出取舍：减少配件细节，或者降低表情精度要求，把选择权交回需求方。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">数据里三成是扫描件，Albedo 自带光照，没有去光照工具？</p>
+                        <p class="faq-a">先把这批数据隔离，不要混进主训练集。可以用它们在几何任务上做监督，纹理任务单独处理。纹理侧的最低成本方案是统一做一次强光下的重渲染，把光照方向归一化，虽不完美但比直接混用可控。<br>同时评估这部分数据值不值得修，如果只占三成且质量参差，剔除往往比修复更划算。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">手上只有原始模型库，没有标注也没有评测集，从零怎么建？</p>
+                        <p class="faq-a">先建质量分层而不是建标签。用自动指标把模型分成可用、待修、废弃三层，再从可用层里按类别和风格抽样，形成小规模评测集。评测集要先于训练集被固定下来，否则后面无法比较。<br>没有人工标注时，先用规则标注加少量人工抽检，规则标注要能解释，不要用黑盒结果当标签。</p>
+                    </div>
+                </div>
+
+                <h2 class="section-title">同一件事，对三种角色怎么说</h2>
+                <div class="section-content">
+                    <p>同一个问题要在三种语境里各说一遍，说错对象等于没说。对算法讲数值与分布，对评测讲判定规则与复现步骤，对产品讲影响与交付。</p>
+                    <table class="compare-table">
+                        <thead>
+                            <tr><th>对象</th><th>关注点</th><th>表达方式</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>算法</td><td>数值分布是否违背假设，会不会污染梯度</td><td>给统计量、给假设、给对训练的影响</td></tr>
+                            <tr><td>评测</td><td>怎么判定合格，怎么复现，通过率多少</td><td>给阈值、给抽样方法、给判定规则</td></tr>
+                            <tr><td>产品与美术</td><td>看起来怎么样，什么时候能好，要多少成本</td><td>给现象、给影响、给工期与取舍</td></tr>
+                        </tbody>
+                    </table>
+                    <div class="block">
+                        <p class="block-title">示例：金属度贴图满屏灰阶</p>
+                        <p><span class="highlight">对算法：</span>金属度通道取值分布偏离二值假设，均值偏低、中间段占比过高，等于把介质反射率混进了导体项，训练时这部分梯度基本是噪声。</p>
+                        <p><span class="highlight">对评测：</span>判定规则是取样一百张，统计金属度落在 0.1 到 0.9 区间的像素占比，超过百分之五判不合格；复现步骤是固定随机种子抽样后跑同一段统计脚本。</p>
+                        <p><span class="highlight">对产品：</span>这版资产金属感会发灰，看着像塑料不像金属，返工需要重跑一次材质生成，人工修图另算。</p>
+                    </div>
+                    <div class="tip">
+                        <p>同一个结论说三遍不是重复劳动，三句话的接收方不同，动作也不同：算法会去改损失或过滤样本，评测会去补一条判定规则，产品会去调排期。少说一种，这条信息就等于没传到位。</p>
+                    </div>
+                </div>
+
+                <h2 class="section-title">几个职能的日常</h2>
+                <div class="section-content">
+                    <p>这些底层知识落到日常，大致分成四类工作，彼此交接的是数据、结论和资产。</p>
+                    <table class="compare-table">
+                        <thead>
+                            <tr><th>职能</th><th>每天在做什么</th><th>交付物</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>模型侧</td>
+                                <td>看训练曲线与损失，调数据配比，跑消融，翻 bad case，判断是数据问题还是结构问题</td>
+                                <td>训练好的模型、失败样本归因</td>
+                            </tr>
+                            <tr>
+                                <td>数据侧</td>
+                                <td>收数据、跑清洗与质检脚本、定标注与命名规范、抽样验收，处理供应商交付的批次</td>
+                                <td>干净可用的训练数据、规范文档</td>
+                            </tr>
+                            <tr>
+                                <td>评测侧</td>
+                                <td>建评测集、定指标与阈值、跑新旧对比、人工盲测、写结论与复现步骤</td>
+                                <td>评测报告、可复现的判定规则</td>
+                            </tr>
+                            <tr>
+                                <td>落地侧</td>
+                                <td>接需求，把生成资产修到能进引擎，做减面、UV、拓扑与材质规范化，处理性能与兼容</td>
+                                <td>能进项目的资产、管线脚本</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>四类工作共享同一套语言：几何是否成立、渲染约定是否统一、材质是否物理正确、数据是否可测。这四条不通，交接就会反复来回。</p>
                 </div>
 
                 <h2 class="section-title">小结</h2>
                 <div class="section-content">
                     <p>底层问题决定上层质量：<span class="highlight">水密/流形/法线</span>决定几何能不能算，<span class="highlight">OpenGL vs DX 约定</span>决定渲染对不对，<span class="highlight">PBR 金属工作流</span>决定材质正不正确，<span class="highlight">这三者合起来决定训练数据是好是坏</span>，最终决定大模型生成出来的 3D 资产能不能真正用起来。</p>
-                    <p>至此四层已经补全：<span class="highlight">数据层</span>（几何 / 渲染 / 材质 / 清洗）→ <span class="highlight">算法层</span>（表示 / 网络 / 训练）→ <span class="highlight">评测层</span>（数据质检 + 生成质量）→ <span class="highlight">落地层</span>（引擎接入 / TA），外加一条评测与落地反馈回流数据与算法的闭环。这一篇会持续补充 后面做工具、做数据、做算法、做评测时遇到的新问题，都会按这条四层闭环继续往里填。</p>
+                    <p>至此四层已经补全：<span class="highlight">数据层</span>（几何 / 渲染 / 材质 / 清洗）→ <span class="highlight">算法层</span>（表示 / 网络 / 训练）→ <span class="highlight">评测层</span>（数据质检 + 生成质量）→ <span class="highlight">落地层</span>（引擎接入 / TA），外加一条评测与落地反馈回流数据与算法的闭环。这一篇会持续补充，后面做工具、做数据、做算法、做评测时遇到的新问题，都会按这条四层闭环继续往里填。</p>
                 </div>
 
                 <a href="index.html#blog" class="btn-back">返回博客列表</a>
