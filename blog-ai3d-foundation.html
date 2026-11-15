@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang=zh-CN>
+<html lang="zh-CN">
 <head>
-    <meta charset=UTF-8>
-    <meta name=viewport content=width=device-width, initial-scale=1.0>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI 3D 大模型研究日志（底层 · 数据 · 算法） - 巴拿拿猫的个人网站</title>
-    <link rel=stylesheet href=style.css>
+    <link rel="stylesheet" href="style.css">
     <style>
         body {
             background: #F5FBF8;
@@ -178,7 +178,7 @@
         }
 
         .faq-q::before {
-            content: Q  ;
+            content: "Q";
             color: #2C8F73;
             font-weight: 700;
         }
@@ -189,7 +189,7 @@
         }
 
         .faq-a::before {
-            content: A  ;
+            content: "A";
             color: #2C8F73;
             font-weight: 700;
         }
@@ -336,56 +336,56 @@
     </style>
 
     <!-- 51.la 访客统计 V6 -->
-    <script charset=UTF-8 id=LA_COLLECT src=//sdk.51.la/js-sdk-pro.min.js></script>
-    <script>LA.init({id:3Qu6OIFKMWrFWPyF,ck:3Qu6OIFKMWrFWPyF})</script>
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"3Qu6OIFKMWrFWPyF",ck:"3Qu6OIFKMWrFWPyF"})</script>
 </head>
 <body>
-    <script src=gate.js></script>
+    <script src="gate.js"></script>
     <!-- Watermark Canvas -->
-    <canvas id=watermark-canvas style=position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9998; opacity: 0.06;></canvas>
+    <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 500; opacity: 0.06;"></canvas>
 
     <header>
         <h1>巴拿拿猫的个人网站</h1>
         <nav>
             <ul>
-                <li><a href=index.html#works>作品展示</a></li>
-                <li><a href=index.html#characters>角色展示</a></li>
-                <li><a href=index.html#games>小游戏</a></li>
-                <li><a href=index.html#blog>开发日志</a></li>
-                <li><a href=index.html#about>关于我</a></li>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
             </ul>
         </nav>
     </header>
 
     <main>
-        <nav class=toc-nav id=tocNav aria-label=章节导航>
-            <div class=toc-nav-title>章节导航</div>
+        <nav class="toc-nav" id="tocNav" aria-label="章节导航">
+            <div class="toc-nav-title">章节导航</div>
         </nav>
-        <div class=blog-detail-container>
-            <div class=blog-detail-header>
-                <h1 class=blog-detail-title>AI 3D 大模型研究日志（底层 · 数据 · 算法）</h1>
-                <p class=blog-detail-subtitle>2026年9月 · 研究整理 · 面向 AI 3D 技术岗位</p>
-                <div class=blog-tags>
-                    <span class=blog-tag>水密网格</span>
-                    <span class=blog-tag>法线约定</span>
-                    <span class=blog-tag>PBR</span>
-                    <span class=blog-tag>训练数据</span>
-                    <span class=blog-tag>多模态3D</span>
-                    <span class=blog-tag>数据技术美术</span>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">AI 3D 大模型研究日志（底层 · 数据 · 算法）</h1>
+                <p class="blog-detail-subtitle">2026年9月 · 研究整理 · 面向 AI 3D 技术岗位</p>
+                <div class="blog-tags">
+                    <span class="blog-tag">水密网格</span>
+                    <span class="blog-tag">法线约定</span>
+                    <span class="blog-tag">PBR</span>
+                    <span class="blog-tag">训练数据</span>
+                    <span class="blog-tag">多模态3D</span>
+                    <span class="blog-tag">数据技术美术</span>
                 </div>
             </div>
 
-            <div class=blog-detail-content>
-                <h2 class=section-title>定位：这一篇和前面四篇有什么不同</h2>
-                <div class=section-content>
-                    <p>之前的 Meshy / Tripo / 混元3D / AI生成3D合集，是从<span class=highlight>应用层</span>记录各家平台的生成效果、功能与局限。这一篇换个角度，往下钻到<span class=highlight>底层</span> 大模型 3D 方向的岗位（多模态大模型 3D、数据技术美术、大模型算法、AI 3D 技术美术）每天都在跟哪些底层知识打交道：几何、网格、渲染约定、PBR、训练数据质量。</p>
-                    <p>这些底层知识决定了喂给模型的 3D 数据到底是<span class=highlight>好数据还是坏数据</span>，也决定了模型生成出来的资产能不能真正进引擎、能不能被渲染管线正确显示。下面按四层架构（数据 → 算法 → 评测 → 落地）逐层整理。</p>
+            <div class="blog-detail-content">
+                <h2 class="section-title">定位：这一篇和前面四篇有什么不同</h2>
+                <div class="section-content">
+                    <p>之前的 Meshy / Tripo / 混元3D / AI生成3D合集，是从<span class="highlight">应用层</span>记录各家平台的生成效果、功能与局限。这一篇换个角度，往下钻到<span class="highlight">底层</span> 大模型 3D 方向的岗位（多模态大模型 3D、数据技术美术、大模型算法、AI 3D 技术美术）每天都在跟哪些底层知识打交道：几何、网格、渲染约定、PBR、训练数据质量。</p>
+                    <p>这些底层知识决定了喂给模型的 3D 数据到底是<span class="highlight">好数据还是坏数据</span>，也决定了模型生成出来的资产能不能真正进引擎、能不能被渲染管线正确显示。下面按四层架构（数据 → 算法 → 评测 → 落地）逐层整理。</p>
                 </div>
 
-                <h2 class=section-title>四层架构总览</h2>
-                <div class=section-content>
-                    <p>AI 3D 生成是一条<span class=highlight>四层闭环</span>的数据链，不是单向流水线：数据层 → 算法层 → 评测层 → 落地层，而评测和落地的反馈会<span class=highlight>回流</span>给数据层与算法层。</p>
-                    <table class=compare-table>
+                <h2 class="section-title">四层架构总览</h2>
+                <div class="section-content">
+                    <p>AI 3D 生成是一条<span class="highlight">四层闭环</span>的数据链，不是单向流水线：数据层 → 算法层 → 评测层 → 落地层，而评测和落地的反馈会<span class="highlight">回流</span>给数据层与算法层。</p>
+                    <table class="compare-table">
                         <thead>
                             <tr><th>层</th><th>做什么</th><th>对应岗位</th><th>本日志章节</th></tr>
                         </thead>
@@ -398,25 +398,25 @@
                     </table>
                 </div>
 
-                <h2 class=section-title>几何与网格：水密、流形、法线一致性</h2>
-                <div class=section-content>
-                    <p><span class=highlight>水密（Watertight）</span>指一个网格是封闭的 2-流形 没有边界边、没有破洞，能够明确地包住一个体积。判断标准：每条边恰好被两个面共享，从任意点出发不穿出表面。</p>
+                <h2 class="section-title">几何与网格：水密、流形、法线一致性</h2>
+                <div class="section-content">
+                    <p><span class="highlight">水密（Watertight）</span>指一个网格是封闭的 2-流形 没有边界边、没有破洞，能够明确地包住一个体积。判断标准：每条边恰好被两个面共享，从任意点出发不穿出表面。</p>
                     <ul>
-                        <li><span class=highlight>为什么重要：</span>体素化（Voxelization）、符号距离场（SDF）、布尔运算、四面体网格、物理碰撞、3D 打印都假设表面是封闭的。很多 3D 生成模型的表示（占用场 Occupancy Field、SDF、tetrahedral）都需要水密输入。</li>
-                        <li><span class=highlight>非水密对训练的影响：</span>体积歧义、内外不明确、法线在破洞处乱翻，模型学到的形状会在开口处塌掉或出错。</li>
+                        <li><span class="highlight">为什么重要：</span>体素化（Voxelization）、符号距离场（SDF）、布尔运算、四面体网格、物理碰撞、3D 打印都假设表面是封闭的。很多 3D 生成模型的表示（占用场 Occupancy Field、SDF、tetrahedral）都需要水密输入。</li>
+                        <li><span class="highlight">非水密对训练的影响：</span>体积歧义、内外不明确、法线在破洞处乱翻，模型学到的形状会在开口处塌掉或出错。</li>
                     </ul>
-                    <p><span class=highlight>流形（Manifold）</span>：局部上每个点都像一块平面（圆盘邻域）。非流形常见于 一条边被 3 个以上面共享、两个体只靠一个点/一条边相连（蝴蝶顶点/边）。非流形网格在重拓扑、展 UV、SDF 计算时都会崩。</p>
-                    <p><span class=highlight>法线一致性</span>：所有面法线应统一朝外。如果一半朝里一半朝外，光照和体积计算都会错。对训练数据来说，法线方向不一致是脏数据的直接来源。</p>
-                    <div class=tip>
+                    <p><span class="highlight">流形（Manifold）</span>：局部上每个点都像一块平面（圆盘邻域）。非流形常见于 一条边被 3 个以上面共享、两个体只靠一个点/一条边相连（蝴蝶顶点/边）。非流形网格在重拓扑、展 UV、SDF 计算时都会崩。</p>
+                    <p><span class="highlight">法线一致性</span>：所有面法线应统一朝外。如果一半朝里一半朝外，光照和体积计算都会错。对训练数据来说，法线方向不一致是脏数据的直接来源。</p>
+                    <div class="tip">
                         <p>数据质检第一关：把模型丢进看背面 + 看线框 + 看边界边（boundary edge）三个视图扫一遍，水密/流形/法线问题基本都能暴露。</p>
                     </div>
                 </div>
 
-                <h2 class=section-title>渲染约定：为什么 OpenGL 和 DirectX 的法线方向不一样</h2>
-                <div class=section-content>
-                    <p>这是最典型的一个底层约定问题。法线贴图用 RGB 三个通道存切线空间法线：<span class=highlight>R = 切线 X，G = 副切线 Y，B = 法线 Z</span>。OpenGL 和 DirectX 的区别就出在 G（Y/上下）通道上。</p>
-                    <p><span class=highlight>根因是纹理坐标原点的约定不同</span>：OpenGL 把纹理坐标原点放在<span class=highlight>左下角</span>，DirectX 放在<span class=highlight>左上角</span>。这意味着两张图的 V 轴（竖直方向）是上下相反的。法线贴图既然存的是切线空间的 Y 分量，而 V 轴被翻转，那么同一个朝上的法线，在两种约定里存的 G 通道数值就正好<span class=highlight>符号相反</span>。</p>
-                    <table class=compare-table>
+                <h2 class="section-title">渲染约定：为什么 OpenGL 和 DirectX 的法线方向不一样</h2>
+                <div class="section-content">
+                    <p>这是最典型的一个底层约定问题。法线贴图用 RGB 三个通道存切线空间法线：<span class="highlight">R = 切线 X，G = 副切线 Y，B = 法线 Z</span>。OpenGL 和 DirectX 的区别就出在 G（Y/上下）通道上。</p>
+                    <p><span class="highlight">根因是纹理坐标原点的约定不同</span>：OpenGL 把纹理坐标原点放在<span class="highlight">左下角</span>，DirectX 放在<span class="highlight">左上角</span>。这意味着两张图的 V 轴（竖直方向）是上下相反的。法线贴图既然存的是切线空间的 Y 分量，而 V 轴被翻转，那么同一个朝上的法线，在两种约定里存的 G 通道数值就正好<span class="highlight">符号相反</span>。</p>
+                    <table class="compare-table">
                         <thead>
                             <tr><th>维度</th><th>OpenGL 约定</th><th>DirectX 约定</th></tr>
                         </thead>
@@ -424,17 +424,17 @@
                             <tr><td>纹理坐标原点</td><td>左下角 (0,0)</td><td>左上角 (0,0)</td></tr>
                             <tr><td>法线贴图 G 通道（Y）</td><td>朝上（+Y 向上）</td><td>朝下（+Y 向下，G 取反）</td></tr>
                             <tr><td>典型引擎</td><td>Unity（可导入时翻转）</td><td>Unreal（默认 DX 风格）</td></tr>
-                            <tr><td>用错的表现</td><td colspan=2>凹凸反向（凸变凹、凹变凸），在斜射光下、接缝处尤其明显</td></tr>
+                            <tr><td>用错的表现</td><td colspan="2">凹凸反向（凸变凹、凹变凸），在斜射光下、接缝处尤其明显</td></tr>
                         </tbody>
                     </table>
-                    <p><span class=highlight>对训练数据的影响</span>：如果数据库里两种约定的法线贴图混着用、又不做统一翻转，模型会学到<span class=highlight>互相矛盾的法线方向分布</span>，生成结果的法线会乱，进引擎后光影错乱。所以数据管线里法线贴图约定统一是必做的一步。</p>
+                    <p><span class="highlight">对训练数据的影响</span>：如果数据库里两种约定的法线贴图混着用、又不做统一翻转，模型会学到<span class="highlight">互相矛盾的法线方向分布</span>，生成结果的法线会乱，进引擎后光影错乱。所以数据管线里法线贴图约定统一是必做的一步。</p>
                 </div>
 
-                <h2 class=section-title>PBR 与金属工作流</h2>
-                <div class=section-content>
-                    <p>PBR（Physically Based Rendering）的核心是<span class=highlight>能量守恒 + 微表面 BRDF</span>，把材质拆成一组物理量：Albedo（基础色）、Metallic（金属度）、Roughness（粗糙度）、Normal（法线）、AO（环境光遮蔽）。</p>
-                    <p><span class=highlight>金属工作流（Metallic/Roughness）</span>是当前主流：用一张 Metallic 贴图区分金属 vs 电介质，用 Roughness 控制微表面粗糙度。与之相对的是高光工作流（Specular/Glossiness），Unreal 早期常用，现在更推荐金属工作流。</p>
-                    <table class=compare-table>
+                <h2 class="section-title">PBR 与金属工作流</h2>
+                <div class="section-content">
+                    <p>PBR（Physically Based Rendering）的核心是<span class="highlight">能量守恒 + 微表面 BRDF</span>，把材质拆成一组物理量：Albedo（基础色）、Metallic（金属度）、Roughness（粗糙度）、Normal（法线）、AO（环境光遮蔽）。</p>
+                    <p><span class="highlight">金属工作流（Metallic/Roughness）</span>是当前主流：用一张 Metallic 贴图区分金属 vs 电介质，用 Roughness 控制微表面粗糙度。与之相对的是高光工作流（Specular/Glossiness），Unreal 早期常用，现在更推荐金属工作流。</p>
+                    <table class="compare-table">
                         <thead>
                             <tr><th>贴图</th><th>合理取值 / 判断</th><th>脏数据的典型表现</th></tr>
                         </thead>
@@ -445,139 +445,139 @@
                             <tr><td>Normal 法线</td><td>约定统一（见上一节）</td><td>GL/DX 混用、接缝处方向翻转</td></tr>
                         </tbody>
                     </table>
-                    <p><span class=highlight>对训练数据的影响</span>：如果训练集的 Albedo 里混着光照残留、Metallic 数值乱、Roughness 突变，模型就会学到光照当材质金属度灰阶粗糙度噪点这些错误模式，生成结果再重新打光就会露馅。</p>
+                    <p><span class="highlight">对训练数据的影响</span>：如果训练集的 Albedo 里混着光照残留、Metallic 数值乱、Roughness 突变，模型就会学到光照当材质金属度灰阶粗糙度噪点这些错误模式，生成结果再重新打光就会露馅。</p>
                 </div>
 
-                <h2 class=section-title>训练数据的好坏：什么让数据训出来是好模型</h2>
-                <div class=section-content>
+                <h2 class="section-title">训练数据的好坏：什么让数据训出来是好模型</h2>
+                <div class="section-content">
                     <p>把前面几节串起来，就是一条数据质量 → 模型质量的因果链。判断一批 3D 训练数据的好坏，基本看这五点：</p>
                     <ul>
-                        <li><span class=highlight>几何干净：</span>水密、流形、无自相交、无退化三角形、法线统一朝外、面数分布合理（视觉中心给足面数撑剪影）。</li>
-                        <li><span class=highlight>贴图物理正确：</span>PBR 数值合理、Albedo 无光照残留、法线约定统一、无接缝、无烘焙阴影残留。</li>
-                        <li><span class=highlight>UV 布局合理：</span>无重叠、无拉伸、接缝放在不显眼处。</li>
-                        <li><span class=highlight>多视角一致：</span>多视图数据（图像→3D）要求不同视角下同一物体的几何/材质一致，否则模型学到矛盾外观。</li>
-                        <li><span class=highlight>标注规范：</span>命名、类别、标签一致，方便检索与配比。</li>
+                        <li><span class="highlight">几何干净：</span>水密、流形、无自相交、无退化三角形、法线统一朝外、面数分布合理（视觉中心给足面数撑剪影）。</li>
+                        <li><span class="highlight">贴图物理正确：</span>PBR 数值合理、Albedo 无光照残留、法线约定统一、无接缝、无烘焙阴影残留。</li>
+                        <li><span class="highlight">UV 布局合理：</span>无重叠、无拉伸、接缝放在不显眼处。</li>
+                        <li><span class="highlight">多视角一致：</span>多视图数据（图像→3D）要求不同视角下同一物体的几何/材质一致，否则模型学到矛盾外观。</li>
+                        <li><span class="highlight">标注规范：</span>命名、类别、标签一致，方便检索与配比。</li>
                     </ul>
-                    <div class=tip>
-                        <p>一句话总结：<span class=highlight>好数据 = 几何上可计算（水密/流形/法线一致）+ 材质上物理正确（PBR 数值合理、约定统一）+ 视角上可对齐</span>。这三条任何一条塌了，模型都会把脏当成规律学进去。</p>
+                    <div class="tip">
+                        <p>一句话总结：<span class="highlight">好数据 = 几何上可计算（水密/流形/法线一致）+ 材质上物理正确（PBR 数值合理、约定统一）+ 视角上可对齐</span>。这三条任何一条塌了，模型都会把脏当成规律学进去。</p>
                     </div>
                 </div>
 
-                <h2 class=section-title>训练数据清洗：具体案例</h2>
-                <div class=section-content>
-                    <p>把上面三条标准落到具体动作上，沿几何 → 渲染 → 材质 → 视角 / 标注的主线，每个案例按<span class=highlight>问题 → 识别 → 清洗 → 对训练的影响</span>展开。</p>
+                <h2 class="section-title">训练数据清洗：具体案例</h2>
+                <div class="section-content">
+                    <p>把上面三条标准落到具体动作上，沿几何 → 渲染 → 材质 → 视角 / 标注的主线，每个案例按<span class="highlight">问题 → 识别 → 清洗 → 对训练的影响</span>展开。</p>
                 </div>
 
-                <h3 class=case-sub>① 几何清洗</h3>
+                <h3 class="case-sub">① 几何清洗</h3>
 
-                <div class=case-block>
-                    <p class=case-title>案例 1 · 破洞修复（水密化）</p>
+                <div class="case-block">
+                    <p class="case-title">案例 1 · 破洞修复（水密化）</p>
                     <ul>
-                        <li><span class=highlight>问题：</span>扫描或生成的模型有破洞，存在边界边（boundary edge），不是封闭体积。</li>
-                        <li><span class=highlight>识别：</span>Max 里用 <code>polyop.getNumOpenEdges</code> 数开放边、高亮边界边，或直接看线框破口。</li>
-                        <li><span class=highlight>清洗：</span>补洞（Cap Holes）、删掉内部/多余面，必要时重拓扑成水密体。</li>
-                        <li><span class=highlight>影响：</span>SDF / 占用场 / 四面体训练都要求水密；破洞会导致体积歧义，法线在洞口乱翻。</li>
+                        <li><span class="highlight">问题：</span>扫描或生成的模型有破洞，存在边界边（boundary edge），不是封闭体积。</li>
+                        <li><span class="highlight">识别：</span>Max 里用 <code>polyop.getNumOpenEdges</code> 数开放边、高亮边界边，或直接看线框破口。</li>
+                        <li><span class="highlight">清洗：</span>补洞（Cap Holes）、删掉内部/多余面，必要时重拓扑成水密体。</li>
+                        <li><span class="highlight">影响：</span>SDF / 占用场 / 四面体训练都要求水密；破洞会导致体积歧义，法线在洞口乱翻。</li>
                     </ul>
                 </div>
 
-                <div class=case-block>
-                    <p class=case-title>案例 2 · 非流形修复</p>
+                <div class="case-block">
+                    <p class="case-title">案例 2 · 非流形修复</p>
                     <ul>
-                        <li><span class=highlight>问题：</span>一条边被 3 个以上面共享，或两个体只靠一个点 / 一条边相连（蝴蝶顶点 / 边）。</li>
-                        <li><span class=highlight>识别：</span>流形检测、统计每条边的共享面数。</li>
-                        <li><span class=highlight>清洗：</span>删除多余面、焊接重复顶点、拆开仅点 / 边相连的部件。</li>
-                        <li><span class=highlight>影响：</span>非流形会让重拓扑、展 UV、SDF 计算直接崩掉。</li>
+                        <li><span class="highlight">问题：</span>一条边被 3 个以上面共享，或两个体只靠一个点 / 一条边相连（蝴蝶顶点 / 边）。</li>
+                        <li><span class="highlight">识别：</span>流形检测、统计每条边的共享面数。</li>
+                        <li><span class="highlight">清洗：</span>删除多余面、焊接重复顶点、拆开仅点 / 边相连的部件。</li>
+                        <li><span class="highlight">影响：</span>非流形会让重拓扑、展 UV、SDF 计算直接崩掉。</li>
                     </ul>
                 </div>
 
-                <div class=case-block>
-                    <p class=case-title>案例 3 · 法线方向统一</p>
+                <div class="case-block">
+                    <p class="case-title">案例 3 · 法线方向统一</p>
                     <ul>
-                        <li><span class=highlight>问题：</span>面法线内外混翻，一半朝里一半朝外。</li>
-                        <li><span class=highlight>识别：</span>双面光照 + 背面视图，看颜色异常的面。</li>
-                        <li><span class=highlight>清洗：</span>统一法线朝外（Unify Normals）、翻转错误面。</li>
-                        <li><span class=highlight>影响：</span>法线不一致是脏数据最直接的来源，渲染与体积计算都会错。</li>
+                        <li><span class="highlight">问题：</span>面法线内外混翻，一半朝里一半朝外。</li>
+                        <li><span class="highlight">识别：</span>双面光照 + 背面视图，看颜色异常的面。</li>
+                        <li><span class="highlight">清洗：</span>统一法线朝外（Unify Normals）、翻转错误面。</li>
+                        <li><span class="highlight">影响：</span>法线不一致是脏数据最直接的来源，渲染与体积计算都会错。</li>
                     </ul>
                 </div>
 
-                <h3 class=case-sub>② 渲染约定清洗</h3>
+                <h3 class="case-sub">② 渲染约定清洗</h3>
 
-                <div class=case-block>
-                    <p class=case-title>案例 4 · GL / DX 法线贴图统一</p>
+                <div class="case-block">
+                    <p class="case-title">案例 4 · GL / DX 法线贴图统一</p>
                     <ul>
-                        <li><span class=highlight>问题：</span>库里混入 OpenGL 与 DirectX 两种约定的法线贴图（绿通道方向相反）。</li>
-                        <li><span class=highlight>识别：</span>看绿通道（G）朝上还是朝下，或进引擎对比凹凸方向。</li>
-                        <li><span class=highlight>清洗：</span>统一翻转到一种约定 Unreal 用 DX、Unity 用 GL，导入时选对，或批量翻转 G 通道。</li>
-                        <li><span class=highlight>影响：</span>约定混用会让模型学到互相矛盾的法线分布，生成结果法线乱、光影错乱。</li>
+                        <li><span class="highlight">问题：</span>库里混入 OpenGL 与 DirectX 两种约定的法线贴图（绿通道方向相反）。</li>
+                        <li><span class="highlight">识别：</span>看绿通道（G）朝上还是朝下，或进引擎对比凹凸方向。</li>
+                        <li><span class="highlight">清洗：</span>统一翻转到一种约定 Unreal 用 DX、Unity 用 GL，导入时选对，或批量翻转 G 通道。</li>
+                        <li><span class="highlight">影响：</span>约定混用会让模型学到互相矛盾的法线分布，生成结果法线乱、光影错乱。</li>
                     </ul>
                 </div>
 
-                <h3 class=case-sub>③ 材质（PBR）清洗</h3>
+                <h3 class="case-sub">③ 材质（PBR）清洗</h3>
 
-                <div class=case-block>
-                    <p class=case-title>案例 5 · Albedo 去光照</p>
+                <div class="case-block">
+                    <p class="case-title">案例 5 · Albedo 去光照</p>
                     <ul>
-                        <li><span class=highlight>问题：</span>基础色图里烘焙了阴影、高光、AO。</li>
-                        <li><span class=highlight>识别：</span>Albedo 上能看到明显明暗 / 阴影区域。</li>
-                        <li><span class=highlight>清洗：</span>去光照（de-lighting），用光照估计 / 逆渲染把纯 albedo 分离出来。</li>
-                        <li><span class=highlight>影响：</span>光照残留会让模型把打光当成材质，重打光就露馅。</li>
+                        <li><span class="highlight">问题：</span>基础色图里烘焙了阴影、高光、AO。</li>
+                        <li><span class="highlight">识别：</span>Albedo 上能看到明显明暗 / 阴影区域。</li>
+                        <li><span class="highlight">清洗：</span>去光照（de-lighting），用光照估计 / 逆渲染把纯 albedo 分离出来。</li>
+                        <li><span class="highlight">影响：</span>光照残留会让模型把打光当成材质，重打光就露馅。</li>
                     </ul>
                 </div>
 
-                <div class=case-block>
-                    <p class=case-title>案例 6 · Metallic / Roughness 规范化</p>
+                <div class="case-block">
+                    <p class="case-title">案例 6 · Metallic / Roughness 规范化</p>
                     <ul>
-                        <li><span class=highlight>问题：</span>metallic 到处是灰阶、roughness 在同一表面突变（忽高忽低、突然黑 / 白一块）。</li>
-                        <li><span class=highlight>识别：</span>灰度直方图看异常分布。</li>
-                        <li><span class=highlight>清洗：</span>metallic 阈值二值化、roughness 平滑统一。</li>
-                        <li><span class=highlight>影响：</span>数值乱会让模型学到错误材质分布（如粗糙度噪点）。</li>
+                        <li><span class="highlight">问题：</span>metallic 到处是灰阶、roughness 在同一表面突变（忽高忽低、突然黑 / 白一块）。</li>
+                        <li><span class="highlight">识别：</span>灰度直方图看异常分布。</li>
+                        <li><span class="highlight">清洗：</span>metallic 阈值二值化、roughness 平滑统一。</li>
+                        <li><span class="highlight">影响：</span>数值乱会让模型学到错误材质分布（如粗糙度噪点）。</li>
                     </ul>
                 </div>
 
-                <h3 class=case-sub>④ 视角 / 标注 / 去重</h3>
+                <h3 class="case-sub">④ 视角 / 标注 / 去重</h3>
 
-                <div class=case-block>
-                    <p class=case-title>案例 7 · UV 重叠与拉伸</p>
+                <div class="case-block">
+                    <p class="case-title">案例 7 · UV 重叠与拉伸</p>
                     <ul>
-                        <li><span class=highlight>问题：</span>UV 重叠、拉伸严重、接缝位置不合理。</li>
-                        <li><span class=highlight>识别：</span>棋盘格贴图检查拉伸、重叠检测。</li>
-                        <li><span class=highlight>清洗：</span>重展 UV、修复重叠、把接缝移到不显眼处。</li>
-                        <li><span class=highlight>影响：</span>UV 烂会导致贴图烘焙 / 重投影质量差，接缝处脏。</li>
+                        <li><span class="highlight">问题：</span>UV 重叠、拉伸严重、接缝位置不合理。</li>
+                        <li><span class="highlight">识别：</span>棋盘格贴图检查拉伸、重叠检测。</li>
+                        <li><span class="highlight">清洗：</span>重展 UV、修复重叠、把接缝移到不显眼处。</li>
+                        <li><span class="highlight">影响：</span>UV 烂会导致贴图烘焙 / 重投影质量差，接缝处脏。</li>
                     </ul>
                 </div>
 
-                <div class=case-block>
-                    <p class=case-title>案例 8 · 多视角一致性</p>
+                <div class="case-block">
+                    <p class="case-title">案例 8 · 多视角一致性</p>
                     <ul>
-                        <li><span class=highlight>问题：</span>image-to-3D 的多视角图，同一物体在不同视角下材质 / 几何不一致。</li>
-                        <li><span class=highlight>识别：</span>跨视角对比同一特征点。</li>
-                        <li><span class=highlight>清洗：</span>剔除不一致视角、统一光照环境与相机。</li>
-                        <li><span class=highlight>影响：</span>视角不一致会让模型学到矛盾外观，重建产生歧义。</li>
+                        <li><span class="highlight">问题：</span>image-to-3D 的多视角图，同一物体在不同视角下材质 / 几何不一致。</li>
+                        <li><span class="highlight">识别：</span>跨视角对比同一特征点。</li>
+                        <li><span class="highlight">清洗：</span>剔除不一致视角、统一光照环境与相机。</li>
+                        <li><span class="highlight">影响：</span>视角不一致会让模型学到矛盾外观，重建产生歧义。</li>
                     </ul>
                 </div>
 
-                <div class=case-block>
-                    <p class=case-title>案例 9 · 去重与类别平衡</p>
+                <div class="case-block">
+                    <p class="case-title">案例 9 · 去重与类别平衡</p>
                     <ul>
-                        <li><span class=highlight>问题：</span>数据集重复、低质样本、类别不平衡。</li>
-                        <li><span class=highlight>识别：</span>哈希去重、质量评分过滤、类别统计。</li>
-                        <li><span class=highlight>清洗：</span>去重、过滤低分样本、重采样平衡类别。</li>
-                        <li><span class=highlight>影响：</span>类别不平衡会让模型偏向高频类别，生成多样性下降。</li>
+                        <li><span class="highlight">问题：</span>数据集重复、低质样本、类别不平衡。</li>
+                        <li><span class="highlight">识别：</span>哈希去重、质量评分过滤、类别统计。</li>
+                        <li><span class="highlight">清洗：</span>去重、过滤低分样本、重采样平衡类别。</li>
+                        <li><span class="highlight">影响：</span>类别不平衡会让模型偏向高频类别，生成多样性下降。</li>
                     </ul>
                 </div>
 
-                <div class=section-content>
-                    <p>九个案例串起来就是一条可落地的清洗流水线：<span class=highlight>先修几何（水密 / 流形 / 法线）→ 再统一渲染约定（GL/DX 法线）→ 再清材质（去光照 / 数值规范化）→ 最后清 UV / 视角 / 去重</span>。这条流水线跑完，喂给模型的数据才谈得上干净。</p>
+                <div class="section-content">
+                    <p>九个案例串起来就是一条可落地的清洗流水线：<span class="highlight">先修几何（水密 / 流形 / 法线）→ 再统一渲染约定（GL/DX 法线）→ 再清材质（去光照 / 数值规范化）→ 最后清 UV / 视角 / 去重</span>。这条流水线跑完，喂给模型的数据才谈得上干净。</p>
                 </div>
 
-                <h2 class=section-title>算法层：表示、网络与训练</h2>
-                <div class=section-content>
-                    <p>算法层的第一性问题不是网络，而是<span class=highlight>表示方式（Representation）</span> 同一个3D 生成任务，用什么数据结构来表征形状，直接决定了能生成什么、需要什么数据、以及生成结果能不能干净导出。</p>
+                <h2 class="section-title">算法层：表示、网络与训练</h2>
+                <div class="section-content">
+                    <p>算法层的第一性问题不是网络，而是<span class="highlight">表示方式（Representation）</span> 同一个3D 生成任务，用什么数据结构来表征形状，直接决定了能生成什么、需要什么数据、以及生成结果能不能干净导出。</p>
                 </div>
 
-                <h3 class=case-sub>表示方式</h3>
-                <div class=section-content>
-                    <table class=compare-table>
+                <h3 class="case-sub">表示方式</h3>
+                <div class="section-content">
+                    <table class="compare-table">
                         <thead>
                             <tr><th>表示</th><th>特点</th><th>对数据的要求</th></tr>
                         </thead>
@@ -589,169 +589,169 @@
                             <tr><td>NeRF（神经辐射场）</td><td>连续体积、光照可学，训练慢、难导出干净 mesh</td><td>一致多视角、相机位姿</td></tr>
                         </tbody>
                     </table>
-                    <p>注意表示方式与数据层的强耦合：<span class=highlight>SDF / 占用场 / 四面体都要求水密输入</span>，这正是前面破洞修复那一系列几何清洗存在的根本原因。</p>
+                    <p>注意表示方式与数据层的强耦合：<span class="highlight">SDF / 占用场 / 四面体都要求水密输入</span>，这正是前面破洞修复那一系列几何清洗存在的根本原因。</p>
                 </div>
 
-                <h3 class=case-sub>网络结构与训练</h3>
-                <div class=section-content>
+                <h3 class="case-sub">网络结构与训练</h3>
+                <div class="section-content">
                     <ul>
-                        <li><span class=highlight>扩散模型（Diffusion）：</span>当前 text-to-3D / image-to-3D 主流，逐步去噪生成；</li>
-                        <li><span class=highlight>Transformer / DiT：</span>多模态对齐、序列建模，常用作条件编码器或骨干；</li>
-                        <li><span class=highlight>多视图重建（如 MV-Dream 类）：</span>2D 扩散 + 多视图一致性约束，提升几何一致；</li>
-                        <li><span class=highlight>大重建模型（如 LRM 类）：</span>单张 / 少量图直接前馈出 3D，推理快、适合规模化；</li>
-                        <li><span class=highlight>训练要素：</span>损失函数（几何损失 / 渲染损失 / 感知损失 / 多视角一致性损失）、噪声与学习率调度、大模型蒸馏、数据配比（类别平衡、质量分层）。</li>
+                        <li><span class="highlight">扩散模型（Diffusion）：</span>当前 text-to-3D / image-to-3D 主流，逐步去噪生成；</li>
+                        <li><span class="highlight">Transformer / DiT：</span>多模态对齐、序列建模，常用作条件编码器或骨干；</li>
+                        <li><span class="highlight">多视图重建（如 MV-Dream 类）：</span>2D 扩散 + 多视图一致性约束，提升几何一致；</li>
+                        <li><span class="highlight">大重建模型（如 LRM 类）：</span>单张 / 少量图直接前馈出 3D，推理快、适合规模化；</li>
+                        <li><span class="highlight">训练要素：</span>损失函数（几何损失 / 渲染损失 / 感知损失 / 多视角一致性损失）、噪声与学习率调度、大模型蒸馏、数据配比（类别平衡、质量分层）。</li>
                     </ul>
                 </div>
 
-                <h2 class=section-title>评测层：两道评测与指标</h2>
-                <div class=section-content>
-                    <p>评测层其实有<span class=highlight>两道</span>：训练前的<span class=highlight>数据质量评测</span>（决定哪些数据能进训练集），和训练后的<span class=highlight>生成质量评测</span>（决定模型好不好用）。</p>
+                <h2 class="section-title">评测层：两道评测与指标</h2>
+                <div class="section-content">
+                    <p>评测层其实有<span class="highlight">两道</span>：训练前的<span class="highlight">数据质量评测</span>（决定哪些数据能进训练集），和训练后的<span class="highlight">生成质量评测</span>（决定模型好不好用）。</p>
                 </div>
 
-                <h3 class=case-sub>生成质量评测</h3>
-                <div class=section-content>
+                <h3 class="case-sub">生成质量评测</h3>
+                <div class="section-content">
                     <ul>
-                        <li><span class=highlight>几何质量：</span>水密率、流形率、面数合理性、拓扑干净度 回到数据层那套标准；</li>
-                        <li><span class=highlight>纹理质量：</span>PBR 数值合理、无接缝、无光照残留；</li>
-                        <li><span class=highlight>与参考相似度：</span>FID（2D 渲染图分布）、CLIP Score（文本-图像对齐）、几何相似度（Chamfer Distance、F-Score）；</li>
-                        <li><span class=highlight>主观 / 用户评分：</span>人工评测生成结果的观感与可用性。</li>
+                        <li><span class="highlight">几何质量：</span>水密率、流形率、面数合理性、拓扑干净度 回到数据层那套标准；</li>
+                        <li><span class="highlight">纹理质量：</span>PBR 数值合理、无接缝、无光照残留；</li>
+                        <li><span class="highlight">与参考相似度：</span>FID（2D 渲染图分布）、CLIP Score（文本-图像对齐）、几何相似度（Chamfer Distance、F-Score）；</li>
+                        <li><span class="highlight">主观 / 用户评分：</span>人工评测生成结果的观感与可用性。</li>
                     </ul>
                 </div>
 
-                <h3 class=case-sub>下游可用性评测（落地层视角）</h3>
-                <div class=section-content>
+                <h3 class="case-sub">下游可用性评测（落地层视角）</h3>
+                <div class="section-content">
                     <ul>
-                        <li><span class=highlight>能否进引擎：</span>FBX / glTF 导出是否干净、PBR 贴图是否齐全；</li>
-                        <li><span class=highlight>能否绑定动画：</span>拓扑是否支持骨骼绑定、蒙皮；</li>
-                        <li><span class=highlight>能否重拓扑 / 减面：</span>重拓扑、减面后是否仍保持质量。</li>
+                        <li><span class="highlight">能否进引擎：</span>FBX / glTF 导出是否干净、PBR 贴图是否齐全；</li>
+                        <li><span class="highlight">能否绑定动画：</span>拓扑是否支持骨骼绑定、蒙皮；</li>
+                        <li><span class="highlight">能否重拓扑 / 减面：</span>重拓扑、减面后是否仍保持质量。</li>
                     </ul>
                 </div>
 
-                <h3 class=case-sub>数据质量评测（训练前，回流到数据层）</h3>
-                <div class=section-content>
+                <h3 class="case-sub">数据质量评测（训练前，回流到数据层）</h3>
+                <div class="section-content">
                     <ul>
-                        <li><span class=highlight>数据质检打分：</span>水密 / 流形 / 法线 / 贴图数值的通过率；</li>
-                        <li><span class=highlight>回流作用：</span>这些指标直接决定哪些数据可以进训练集，是评测层回流数据层的第一道闸门。</li>
+                        <li><span class="highlight">数据质检打分：</span>水密 / 流形 / 法线 / 贴图数值的通过率；</li>
+                        <li><span class="highlight">回流作用：</span>这些指标直接决定哪些数据可以进训练集，是评测层回流数据层的第一道闸门。</li>
                     </ul>
                 </div>
 
-                <h2 class=section-title>常见问题速查</h2>
-                <div class=section-content>
+                <h2 class="section-title">常见问题速查</h2>
+                <div class="section-content">
                     <p>把四层里最常踩的坑按现象 → 原因 → 处理收敛成一张速查表，遇到问题时先在这里对号。</p>
                 </div>
 
-                <h3 class=case-sub>几何类</h3>
-                <div class=section-content>
-                    <div class=faq-item>
-                        <p class=faq-q>模型进引擎后正面亮、背面黑，像被剖开？</p>
-                        <p class=faq-a>面法线内外混翻。统一法线朝外（Unify Normals），翻转错误面后重导入。</p>
+                <h3 class="case-sub">几何类</h3>
+                <div class="section-content">
+                    <div class="faq-item">
+                        <p class="faq-q">模型进引擎后正面亮、背面黑，像被剖开？</p>
+                        <p class="faq-a">面法线内外混翻。统一法线朝外（Unify Normals），翻转错误面后重导入。</p>
                     </div>
-                    <div class=faq-item>
-                        <p class=faq-q>模型能看，但一进 SDF / 体素化流程就报错或塌陷？</p>
-                        <p class=faq-a>网格不水密，有边界边或破洞，体积内外不明确。补洞（Cap Holes）、删内部面，做成封闭 2-流形。</p>
+                    <div class="faq-item">
+                        <p class="faq-q">模型能看，但一进 SDF / 体素化流程就报错或塌陷？</p>
+                        <p class="faq-a">网格不水密，有边界边或破洞，体积内外不明确。补洞（Cap Holes）、删内部面，做成封闭 2-流形。</p>
                     </div>
-                    <div class=faq-item>
-                        <p class=faq-q>重拓扑或展 UV 时直接崩掉？</p>
-                        <p class=faq-a>存在非流形 一条边被 3 个以上面共享，或两个体只靠点/边相连。删多余面、焊接重合点、拆开仅点边相连的部件。</p>
+                    <div class="faq-item">
+                        <p class="faq-q">重拓扑或展 UV 时直接崩掉？</p>
+                        <p class="faq-a">存在非流形 一条边被 3 个以上面共享，或两个体只靠点/边相连。删多余面、焊接重合点、拆开仅点边相连的部件。</p>
                     </div>
-                    <div class=faq-item>
-                        <p class=faq-q>重拓扑后脸部布线比身体还稀疏，剪影发糊？</p>
-                        <p class=faq-a>面数分配没有按视觉重要性走。脸部是视觉中心，应给足面数支撑剪影和表情；否则后续绑定、表情都会失真。</p>
+                    <div class="faq-item">
+                        <p class="faq-q">重拓扑后脸部布线比身体还稀疏，剪影发糊？</p>
+                        <p class="faq-a">面数分配没有按视觉重要性走。脸部是视觉中心，应给足面数支撑剪影和表情；否则后续绑定、表情都会失真。</p>
                     </div>
-                    <div class=faq-item>
-                        <p class=faq-q>重拓扑后腿部完全没法绑定？</p>
-                        <p class=faq-a>腿部布线不连续、缺少沿肢体走向的环线，关节处没有足够支撑。这类区域需要手工重建环线，不能直接吃自动重拓扑结果。</p>
-                    </div>
-                </div>
-
-                <h3 class=case-sub>渲染约定类</h3>
-                <div class=section-content>
-                    <div class=faq-item>
-                        <p class=faq-q>法线贴图一用就凹凸反向（凸变凹、凹变凸）？</p>
-                        <p class=faq-a>GL / DX 约定不匹配。OpenGL 纹理原点在左下、DirectX 在左上，导致 G 通道符号相反。按目标引擎统一翻转 G 通道。</p>
-                    </div>
-                    <div class=faq-item>
-                        <p class=faq-q>模型没贴错图，但表面出现细碎噪点、接缝处光影断裂？</p>
-                        <p class=faq-a>UV 分布稀烂 + 打了光滑组，导致法线在接缝处方向跳变。重展 UV、检查法线是否统一，必要时重算法线（带正确的硬/软边）。</p>
+                    <div class="faq-item">
+                        <p class="faq-q">重拓扑后腿部完全没法绑定？</p>
+                        <p class="faq-a">腿部布线不连续、缺少沿肢体走向的环线，关节处没有足够支撑。这类区域需要手工重建环线，不能直接吃自动重拓扑结果。</p>
                     </div>
                 </div>
 
-                <h3 class=case-sub>材质类</h3>
-                <div class=section-content>
-                    <div class=faq-item>
-                        <p class=faq-q>生成的贴图一重新打光就脏？</p>
-                        <p class=faq-a>Albedo 里烤进了阴影、高光或 AO。需要去光照（de-lighting），把纯基础色分离出来。</p>
+                <h3 class="case-sub">渲染约定类</h3>
+                <div class="section-content">
+                    <div class="faq-item">
+                        <p class="faq-q">法线贴图一用就凹凸反向（凸变凹、凹变凸）？</p>
+                        <p class="faq-a">GL / DX 约定不匹配。OpenGL 纹理原点在左下、DirectX 在左上，导致 G 通道符号相反。按目标引擎统一翻转 G 通道。</p>
                     </div>
-                    <div class=faq-item>
-                        <p class=faq-q>同一块表面粗糙度忽高忽低，甚至突然黑一块？</p>
-                        <p class=faq-a>Roughness 贴图数值不一致。同一材质应保持统一的粗糙度区间，局部突变要在贴图层面平滑或重绘。</p>
-                    </div>
-                    <div class=faq-item>
-                        <p class=faq-q>金属度贴图满屏灰阶，金属和非金属糊成一片？</p>
-                        <p class=faq-a>Metallic 本应接近二值（0 或 1），过渡只出现在金属边缘。按材质语义重新阈值化。</p>
+                    <div class="faq-item">
+                        <p class="faq-q">模型没贴错图，但表面出现细碎噪点、接缝处光影断裂？</p>
+                        <p class="faq-a">UV 分布稀烂 + 打了光滑组，导致法线在接缝处方向跳变。重展 UV、检查法线是否统一，必要时重算法线（带正确的硬/软边）。</p>
                     </div>
                 </div>
 
-                <h3 class=case-sub>数据 / 算法 / 评测类</h3>
-                <div class=section-content>
-                    <div class=faq-item>
-                        <p class=faq-q>同一批数据训练出来的模型，风格与规范互相打架？</p>
-                        <p class=faq-a>数据内部约定不统一（法线 GL/DX 混用、PBR 数值标准不一）。进训练集前必须做一次全量约定归一。</p>
+                <h3 class="case-sub">材质类</h3>
+                <div class="section-content">
+                    <div class="faq-item">
+                        <p class="faq-q">生成的贴图一重新打光就脏？</p>
+                        <p class="faq-a">Albedo 里烤进了阴影、高光或 AO。需要去光照（de-lighting），把纯基础色分离出来。</p>
                     </div>
-                    <div class=faq-item>
-                        <p class=faq-q>生成结果看着还行，但一进引擎就没法用？</p>
-                        <p class=faq-a>缺下游可用性评测。生成质量高 ≠ 可落地，必须额外测导出干净度、拓扑可绑定性、减面后质量保持。</p>
+                    <div class="faq-item">
+                        <p class="faq-q">同一块表面粗糙度忽高忽低，甚至突然黑一块？</p>
+                        <p class="faq-a">Roughness 贴图数值不一致。同一材质应保持统一的粗糙度区间，局部突变要在贴图层面平滑或重绘。</p>
                     </div>
-                    <div class=faq-item>
-                        <p class=faq-q>模型在某些类别上明显更差？</p>
-                        <p class=faq-a>训练数据类别不平衡或该类别质量偏低。重采样平衡类别，并对低质样本做质量分层或剔除。</p>
+                    <div class="faq-item">
+                        <p class="faq-q">金属度贴图满屏灰阶，金属和非金属糊成一片？</p>
+                        <p class="faq-a">Metallic 本应接近二值（0 或 1），过渡只出现在金属边缘。按材质语义重新阈值化。</p>
                     </div>
                 </div>
 
-                <h2 class=section-title>岗位知识地图</h2>
-                <div class=section-content>
+                <h3 class="case-sub">数据 / 算法 / 评测类</h3>
+                <div class="section-content">
+                    <div class="faq-item">
+                        <p class="faq-q">同一批数据训练出来的模型，风格与规范互相打架？</p>
+                        <p class="faq-a">数据内部约定不统一（法线 GL/DX 混用、PBR 数值标准不一）。进训练集前必须做一次全量约定归一。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">生成结果看着还行，但一进引擎就没法用？</p>
+                        <p class="faq-a">缺下游可用性评测。生成质量高 ≠ 可落地，必须额外测导出干净度、拓扑可绑定性、减面后质量保持。</p>
+                    </div>
+                    <div class="faq-item">
+                        <p class="faq-q">模型在某些类别上明显更差？</p>
+                        <p class="faq-a">训练数据类别不平衡或该类别质量偏低。重采样平衡类别，并对低质样本做质量分层或剔除。</p>
+                    </div>
+                </div>
+
+                <h2 class="section-title">岗位知识地图</h2>
+                <div class="section-content">
                     <p>这套底层知识，正好对应大模型 3D 方向几类岗位的日常：</p>
                     <ul>
-                        <li><span class=highlight>多模态大模型 3D 方向：</span>训练 / 微调 text-to-3D、image-to-3D、多视图重建模型，关心数据配比、表示方式（SDF / 占用场 / 四面体 / 高斯）、损失函数与生成质量。</li>
-                        <li><span class=highlight>数据技术美术（Data TA）：</span>数据清洗、标注、规范制定、渲染约定统一、几何质量检查 上面水密/法线/PBR 那套就是 TA 手里最常用的筛子。</li>
-                        <li><span class=highlight>大模型算法：</span>网络结构、训练策略、数据增强、评测指标，需要理解什么样的输入会让模型学得好/学坏。</li>
-                        <li><span class=highlight>AI 3D 技术美术：</span>把 AI 生成的资产接进引擎管线，修几何、补拓扑、PBR 化、统一法线约定，让能看的生成结果变成能进项目用的资产。</li>
+                        <li><span class="highlight">多模态大模型 3D 方向：</span>训练 / 微调 text-to-3D、image-to-3D、多视图重建模型，关心数据配比、表示方式（SDF / 占用场 / 四面体 / 高斯）、损失函数与生成质量。</li>
+                        <li><span class="highlight">数据技术美术（Data TA）：</span>数据清洗、标注、规范制定、渲染约定统一、几何质量检查 上面水密/法线/PBR 那套就是 TA 手里最常用的筛子。</li>
+                        <li><span class="highlight">大模型算法：</span>网络结构、训练策略、数据增强、评测指标，需要理解什么样的输入会让模型学得好/学坏。</li>
+                        <li><span class="highlight">AI 3D 技术美术：</span>把 AI 生成的资产接进引擎管线，修几何、补拓扑、PBR 化、统一法线约定，让能看的生成结果变成能进项目用的资产。</li>
                     </ul>
                     <p>这四个岗位的共同底座，就是几何 + 渲染 + 材质 + 数据这一整套底层知识。这也是这一篇要沉淀的东西。</p>
                 </div>
 
-                <h2 class=section-title>小结</h2>
-                <div class=section-content>
-                    <p>底层问题决定上层质量：<span class=highlight>水密/流形/法线</span>决定几何能不能算，<span class=highlight>OpenGL vs DX 约定</span>决定渲染对不对，<span class=highlight>PBR 金属工作流</span>决定材质正不正确，<span class=highlight>这三者合起来决定训练数据是好是坏</span>，最终决定大模型生成出来的 3D 资产能不能真正用起来。</p>
-                    <p>至此四层已经补全：<span class=highlight>数据层</span>（几何 / 渲染 / 材质 / 清洗）→ <span class=highlight>算法层</span>（表示 / 网络 / 训练）→ <span class=highlight>评测层</span>（数据质检 + 生成质量）→ <span class=highlight>落地层</span>（引擎接入 / TA），外加一条评测与落地反馈回流数据与算法的闭环。这一篇会持续补充 后面做工具、做数据、做算法、做评测时遇到的新问题，都会按这条四层闭环继续往里填。</p>
+                <h2 class="section-title">小结</h2>
+                <div class="section-content">
+                    <p>底层问题决定上层质量：<span class="highlight">水密/流形/法线</span>决定几何能不能算，<span class="highlight">OpenGL vs DX 约定</span>决定渲染对不对，<span class="highlight">PBR 金属工作流</span>决定材质正不正确，<span class="highlight">这三者合起来决定训练数据是好是坏</span>，最终决定大模型生成出来的 3D 资产能不能真正用起来。</p>
+                    <p>至此四层已经补全：<span class="highlight">数据层</span>（几何 / 渲染 / 材质 / 清洗）→ <span class="highlight">算法层</span>（表示 / 网络 / 训练）→ <span class="highlight">评测层</span>（数据质检 + 生成质量）→ <span class="highlight">落地层</span>（引擎接入 / TA），外加一条评测与落地反馈回流数据与算法的闭环。这一篇会持续补充 后面做工具、做数据、做算法、做评测时遇到的新问题，都会按这条四层闭环继续往里填。</p>
                 </div>
 
-                <a href=index.html#blog class=btn-back>返回博客列表</a>
+                <a href="index.html#blog" class="btn-back">返回博客列表</a>
             </div>
         </div>
     </main>
 
     <footer>
-        <div class=footer-content>
-            <div class=footer-section>
+        <div class="footer-content">
+            <div class="footer-section">
                 <h3>BananaCatOnl1</h3>
                 <p>探索技术与创作的边界</p>
                 <p>记录开发者的成长历程</p>
             </div>
-            <div class=footer-section>
+            <div class="footer-section">
                 <h3>联系方式</h3>
-                <p>邮箱: <span class=js-banana-email></span></p>
+                <p>邮箱: <span class="js-banana-email"></span></p>
             </div>
-            <div class=footer-section>
+            <div class="footer-section">
                 <h3>社交媒体</h3>
-                <div class=social-links>
-                    <a href=# class=social-icon icon-wechat></a>
-                    <a href=# class=social-icon icon-weibo></a>
-                    <a href=# class=social-icon icon-github></a>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
                 </div>
             </div>
         </div>
-        <p class=footer-bottom>&copy; 2026 巴拿拿猫的个人网站</p>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
     </footer>
 
         <script>
@@ -842,6 +842,6 @@
         })();
     </script>
 
-    <script src=script.js></script>
+    <script src="script.js"></script>
 </body>
 </html>
