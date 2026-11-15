@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<!--
+  SPDX-License-Identifier: MIT
+  SPDX-FileCopyrightText: 2026 巴拿拿猫 (BananaCat) · Banana.design (https://banana.design)
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人机交互开发日志：声音与手部 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* 交互研究日志（清透青蓝配色） */
+        body { background: #F2F9FC; color: #2E4A55; }
+
+        .blog-detail-container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .blog-detail-title {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+            color: #17556B;
+        }
+
+        .blog-detail-subtitle {
+            font-size: 1.1rem;
+            color: #4E7C8C;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-detail-meta {
+            font-size: 0.92rem;
+            color: #6E8D99;
+            line-height: 1.9;
+        }
+
+        .blog-content {
+            background: #FFFFFF;
+            border: 1px solid #D6E9F1;
+            border-radius: 14px;
+            padding: 2rem;
+            box-shadow: 0 8px 26px rgba(23, 85, 107, 0.07);
+        }
+
+        .section-title {
+            font-size: 1.45rem;
+            margin: 2.2rem 0 1rem;
+            color: #17556B;
+            border-left: 4px solid #3FA9C9;
+            padding-left: 0.7rem;
+        }
+
+        .section-title:first-child { margin-top: 0; }
+
+        .section-content {
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-content p { margin: 0.7rem 0; }
+
+        .section-content ul { margin: 0.6rem 0 0.9rem 1.2rem; }
+        .section-content li { margin: 0.4rem 0; }
+
+        .highlight {
+            color: #0F6E8C;
+            font-weight: 600;
+        }
+
+        code {
+            background: #EAF5FA;
+            color: #17556B;
+            padding: 0.1rem 0.35rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .tip {
+            background: #EDF8FB;
+            border-left: 3px solid #3FA9C9;
+            border-radius: 6px;
+            padding: 0.9rem 1.1rem;
+            margin: 1rem 0;
+        }
+
+        .tip p { margin: 0; }
+
+        .flow-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0 1.4rem;
+            font-size: 0.94rem;
+        }
+
+        .flow-table th,
+        .flow-table td {
+            border: 1px solid #D6E9F1;
+            padding: 0.6rem 0.8rem;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .flow-table th {
+            background: #EAF5FA;
+            color: #17556B;
+        }
+
+        .flow-table tr:nth-child(even) td { background: #F8FCFE; }
+
+        .block {
+            background: #F8FCFE;
+            border: 1px solid #E1EFF5;
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .block-title {
+            font-weight: 700;
+            color: #17556B;
+            margin: 0 0 0.5rem;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 0.7rem 1.6rem;
+            background: #17556B;
+            color: #F2F9FC;
+            text-decoration: none;
+            border-radius: 24px;
+            font-weight: 600;
+            margin-top: 1.8rem;
+            transition: transform 0.25s ease;
+        }
+
+        .btn-back:hover { transform: translateY(-2px); }
+
+        @media (max-width: 768px) {
+            .blog-detail-container { padding: 1rem; }
+            .blog-content { padding: 1.2rem; }
+            .blog-detail-title { font-size: 1.8rem; }
+            .flow-table { font-size: 0.88rem; }
+        }
+    </style>
+
+    <!-- 51.la 访客统计 V6 -->
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"3Qu6OIFKMWrFWPyF",ck:"3Qu6OIFKMWrFWPyF"})</script>
+</head>
+<body>
+    <script src="gate.js"></script>
+    <div class="ash-container" id="ashContainer"></div>
+
+    <nav class="side-nav" id="sideNav">
+        <div class="side-nav-panel">
+            <div class="nav-header">
+                <h3>导航目录</h3>
+                <button class="nav-close-btn" id="navCloseBtn">×</button>
+            </div>
+            <ul class="side-nav-list">
+                <li class="side-nav-item">
+                    <a href="index.html#hero" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">首页</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#works" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">作品展示</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#games" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">小游戏</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#blog" class="side-nav-link active">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">开发日志</span>
+                    </a>
+                </li>
+                <li class="side-nav-item">
+                    <a href="index.html#about" class="side-nav-link">
+                        <span class="nav-dot"></span>
+                        <span class="nav-text">关于我</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">人机交互开发日志：用声音和手来控制</h1>
+                <p class="blog-detail-subtitle">语音驱动角色 + 摄像头手势识别 · 交互研究记录</p>
+                <div class="blog-detail-meta">
+                    <span>发布日期：2026年11月15日</span> |
+                    <span>分类：人机交互 / Web 前端 / 实时音视频</span> |
+                    <span>方向：语音输入 · 手势交互 · 界面联动</span>
+                </div>
+            </div>
+
+            <div class="blog-content">
+                <h2 class="section-title">想做的东西</h2>
+                <div class="section-content">
+                    <p>键鼠和触屏之外，还有两种很自然的输入：<span class="highlight">声音</span>和<span class="highlight">手</span>。这次想验证两条链路。</p>
+                    <ul>
+                        <li>用<span class="highlight">声音大小</span>驱动游戏角色，类似王者荣耀里朵莉亚那种用喊声控制技能强度的玩法。早前在手机上做传声筒时，是通过麦克风接口读输入电平来判断喊得多大声，思路可以沿用。</li>
+                        <li>用<span class="highlight">摄像头识别手</span>，手掌和手指的位置能推动界面上下移动，手停在某个交互点上就能触发页面上的动态交互。</li>
+                    </ul>
+                    <p>两条链路最终要落到同一件事：把人体信号变成稳定、可预期的输入事件。</p>
+                </div>
+
+                <h2 class="section-title">语音链路：从麦克风电平到角色行为</h2>
+                <div class="section-content">
+                    <p>先拆开看，声音输入其实只有三件事：<span class="highlight">采集</span>、<span class="highlight">量化</span>、<span class="highlight">映射</span>。</p>
+                    <table class="flow-table">
+                        <thead>
+                            <tr><th>环节</th><th>做法</th><th>产出</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>采集</td>
+                                <td><code>getUserMedia({ audio: true })</code> 拿到音轨，接进 <code>AudioContext</code>，经 <code>AnalyserNode</code> 取时域波形</td>
+                                <td>每帧一串 0 到 255 的采样值</td>
+                            </tr>
+                            <tr>
+                                <td>量化</td>
+                                <td>对波形求 RMS，再做包络平滑（起音快、释放慢），滤掉单帧抖动</td>
+                                <td>一个稳定的 0 到 1 音量值</td>
+                            </tr>
+                            <tr>
+                                <td>映射</td>
+                                <td>按阈值分段，映射成技能蓄力、持续施法、打断三种状态</td>
+                                <td>角色行为与 UI 反馈</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>量化这一步决定了手感。直接用瞬时音量会让技能条疯狂抖动，所以要做<span class="highlight">包络跟随</span>：声音变大时快速跟上，声音变小时缓慢回落，视觉上才像在蓄力，而不是在闪烁。</p>
+                    <div class="block">
+                        <p class="block-title">映射层的设计</p>
+                        <ul>
+                            <li><span class="highlight">阈值分段</span>：轻喊进入预备态，中等音量持续蓄力，超过高阈值直接释放。</li>
+                            <li><span class="highlight">滞回</span>：上升和下降用不同的阈值，避免在临界点上反复触发。</li>
+                            <li><span class="highlight">上限约束</span>：音量持续拉满要封顶，否则麦克风爆音会一瞬间打满整条技能条。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h2 class="section-title">语音链路的坑</h2>
+                <div class="section-content">
+                    <ul>
+                        <li><span class="highlight">浏览器的自动增益</span>：默认开启的 <code>autoGainControl</code> 会把小声拉大、大声压小，音量曲线被抹平，必须显式关掉；<code>echoCancellation</code> 和 <code>noiseSuppression</code> 同样会削掉一部分有效信号，按用途决定。</li>
+                        <li><span class="highlight">底噪</span>：安静房间也有电流声，阈值不能写死，需要开局先采集一小段静音算出底噪基线。</li>
+                        <li><span class="highlight">授权时机</span>：麦克风权限必须由用户手势触发，页面加载时直接申请会被浏览器拦掉。</li>
+                        <li><span class="highlight">设备差异</span>：不同麦克风的灵敏度和频响差别很大，同一套阈值在手机上能用、在笔记本上就失灵，所以阈值要跟着基线走。</li>
+                        <li><span class="highlight">延迟</span>：从发声到画面响应有几十毫秒的感知延迟，UI 上要用即时的波形或音量条先把反馈给出去。</li>
+                    </ul>
+                    <div class="tip">
+                        <p>校准流程：静音采样一秒取底噪，再让用户持续发声两秒取峰值，两者之间插值出低中高三档阈值。一次校准就能适配大部分设备。</p>
+                    </div>
+                </div>
+
+                <h2 class="section-title">手势链路：摄像头到界面</h2>
+                <div class="section-content">
+                    <p>摄像头这条路，用的是<span class="highlight">手部关键点检测</span>：从视频帧里回归出手的 21 个关键点，包括手腕、五根手指的每个关节和指尖。拿到坐标之后，剩下的事就是纯前端的坐标映射与命中判定。</p>
+                    <table class="flow-table">
+                        <thead>
+                            <tr><th>步骤</th><th>做法</th><th>注意点</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>取帧</td>
+                                <td>摄像头视频流喂给推理模型，逐帧检测</td>
+                                <td>分辨率不用高，降采样反而更稳更快</td>
+                            </tr>
+                            <tr>
+                                <td>取点</td>
+                                <td>食指指尖与掌心作为两个控制点</td>
+                                <td>指尖适合指向，掌心适合整体拖动</td>
+                            </tr>
+                            <tr>
+                                <td>映射</td>
+                                <td>归一化坐标乘上视口宽高，水平方向做镜像</td>
+                                <td>不做镜像会左右反向，操作立刻别扭</td>
+                            </tr>
+                            <tr>
+                                <td>平滑</td>
+                                <td>指数滑动平均或单欧元滤波，抑制手抖</td>
+                                <td>平滑太强会拖影，太弱会抖，要按场景调</td>
+                            </tr>
+                            <tr>
+                                <td>命中</td>
+                                <td>指尖坐标换算成页面坐标，做悬停与捏合判定</td>
+                                <td>捏合比点击更自然，阈值要按手的尺寸做归一化</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="block">
+                        <p class="block-title">交互手势</p>
+                        <ul>
+                            <li><span class="highlight">悬停</span>：指尖落在交互点上，元素放大、发光，表示可以触发。</li>
+                            <li><span class="highlight">捏合</span>：拇指与食指距离小于一个相对阈值，判定为点击。</li>
+                            <li><span class="highlight">上下推移</span>：掌心纵向位移映射成页面滚动，位移速度控制滚动速度，抬手即停。</li>
+                            <li><span class="highlight">停留触发</span>：指尖在交互点上停留固定时长，用于不方便捏合的场景。</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h2 class="section-title">手势链路的坑</h2>
+                <div class="section-content">
+                    <ul>
+                        <li><span class="highlight">抖动与误触</span>：原始关键点每秒都在小幅跳动，不做平滑会把界面点得一片乱。</li>
+                        <li><span class="highlight">光照与遮挡</span>：逆光、手部出画、手指交叉，都会让关键点瞬间丢失，需要做丢帧保持而不是立刻判定抬手。</li>
+                        <li><span class="highlight">缩放不一致</span>：手离镜头远近会改变掌心尺寸，所有距离阈值都要用掌宽做归一化，不能写死像素。</li>
+                        <li><span class="highlight">性能</span>：推理跑在主线程会卡住动画，要按帧率节流，或者放到 Worker 与离屏渲染里。</li>
+                        <li><span class="highlight">隐私</span>：视频帧只在本地推理，不上传服务器，页面上明确提示摄像头已开启并随时可以关闭。</li>
+                    </ul>
+                </div>
+
+                <h2 class="section-title">两条链路怎么合起来</h2>
+                <div class="section-content">
+                    <p>声音和手势不是并列的两个功能，而是一套统一的输入状态机：</p>
+                    <ul>
+                        <li>手势负责<span class="highlight">指向与选择</span>，决定现在关注哪个对象；</li>
+                        <li>声音负责<span class="highlight">强度与施放</span>，决定对这个对象做多大力度的操作；</li>
+                        <li>两者都退出时回到空闲态，界面收回悬停反馈。</li>
+                    </ul>
+                    <p>状态机的好处是所有输入最终都收敛成有限的几个状态，调试时能一眼看出卡在哪一步，而不是在回调里互相打架。</p>
+                </div>
+
+                <h2 class="section-title">阶段小结</h2>
+                <div class="section-content">
+                    <p>语音那条链路的难点不在采集，而在<span class="highlight">量化和映射</span>：把连续的音量变成离散又稳定的技能状态，手感才立得住。手势那条链路的难点不在识别，而在<span class="highlight">平滑与命中判定</span>：模型给出的坐标是准确的，但人手本身在抖，交互的容错要由界面层兜住。</p>
+                    <p>这两条链路后续还可以继续往下做：声音做频谱而不是只有音量，识别音高与音色；手势从单手 21 点扩到双手与姿态，做抓取、旋转这类更复杂的手势。等实测素材整理出来，再把具体的调参记录和数据补进这一篇。</p>
+                </div>
+
+                <a href="index.html#blog" class="btn-back">返回开发日志</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>这个小家正在装修中噢</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: <span class="js-banana-email"></span></p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="cursor.js" data-color="63,169,201"></script>
+</body>
+</html>
