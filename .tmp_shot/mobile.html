@@ -9,6 +9,11 @@
 </style>
 </head>
 <body>
-<iframe src="../gate-3d.html"></iframe>
+<iframe id="f" src="../gate-3d.html"></iframe>
+<script>
+  // 把外层查询串透传给 iframe，方便截 focus 视图
+  var q = location.search;
+  if (q) document.getElementById('f').src = '../gate-3d.html' + q;
+</script>
 </body>
 </html>
