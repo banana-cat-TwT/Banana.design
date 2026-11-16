@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>unlock check</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #EDE7DC; }
+  iframe { display: block; width: 1170px; height: 780px; border: 0; }
+</style>
+</head>
+<body>
+<iframe id="f" src="../gate-3d.html"></iframe>
+<script>
+  document.getElementById('f').addEventListener('load', function () {
+    var win = this.contentWindow, d = this.contentDocument;
+    setTimeout(function () {
+      var c = d.getElementById('gate-card');
+      if (c) c.classList.add('leaving');
+      d.querySelectorAll('.pill, .brand, .guide, .toolbar, .stepper, .tool-hint').forEach(function (el) {
+        el.classList.add('hide');
+      });
+      if (win.__gate3d && win.__gate3d.celebrate) win.__gate3d.celebrate();
+    }, 1200);
+  });
+</script>
+</body>
+</html>

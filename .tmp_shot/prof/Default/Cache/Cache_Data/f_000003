@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<!--
+  SPDX-License-Identifier: MIT
+  SPDX-FileCopyrightText: 2026 巴拿拿猫 (BananaCat) · Banana.design (https://banana.design)
+
+  第二层·防删保护标识
+    BANANA_DESIGN_BUILD_SIGNATURE :: Banana.design-personal-portfolio-website, ts:20261116
+    3D 交互密码门 gate-3d.html · 等距沙盘 · 可拖拽旋转缩放 · 标签跟随 3D 锚点 · 底部时间轴联动
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="author" content="巴拿拿猫 BananaCat · Banana.design">
+    <meta name="copyright" content="© 2026 巴拿拿猫 (BananaCat) · Banana.design">
+    <title>请先验证 · 巴拿拿猫的小窝</title>
+    <style>
+        :root {
+            --sand: #E6D3B3;
+            --sand-dark: #D9C29B;
+            --grass: #9BC99B;
+            --grass-deep: #7FB87F;
+            --water: #8FC8E8;
+            --roof: #E8A87C;
+            --roof-deep: #D98E63;
+            --cream: #F7EFE3;
+            --ink: #4A3F33;
+            --ink-soft: #8A7A68;
+            --glass: rgba(255, 253, 248, 0.74);
+            --glass-line: rgba(255, 255, 255, 0.82);
+            --shadow: 0 14px 34px rgba(90, 74, 44, 0.16);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background:
+                radial-gradient(120% 90% at 50% 0%, #FFFBF2 0%, rgba(255,251,242,0) 62%),
+                linear-gradient(180deg, #FBF4E8 0%, #EAF2EE 58%, #DDE8E2 100%);
+            color: var(--ink);
+            -webkit-font-smoothing: antialiased;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        #scene-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            z-index: 0;
+            cursor: grab;
+            touch-action: none;
+        }
+        #scene-canvas.grabbing { cursor: grabbing; }
+
+        .vignette {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+            background: radial-gradient(120% 95% at 50% 46%, rgba(255,255,255,0) 52%, rgba(120, 104, 78, 0.16) 100%);
+        }
+
+        /* 顶部品牌 */
+        .brand {
+            position: fixed;
+            top: 22px;
+            left: 28px;
+            z-index: 12;
+            pointer-events: none;
+        }
+        .brand h1 { font-size: 1.05rem; letter-spacing: 2px; font-weight: 700; }
+        .brand span {
+            display: block;
+            font-size: 0.68rem;
+            letter-spacing: 4px;
+            color: var(--ink-soft);
+            margin-top: 4px;
+        }
+
+        /* 右上角操作提示 */
+        .guide {
+            position: fixed;
+            top: 22px;
+            right: 24px;
+            z-index: 12;
+            padding: 12px 15px;
+            border-radius: 15px;
+            background: var(--glass);
+            backdrop-filter: blur(12px) saturate(1.1);
+            -webkit-backdrop-filter: blur(12px) saturate(1.1);
+            border: 1px solid var(--glass-line);
+            box-shadow: var(--shadow);
+            font-size: 0.72rem;
+            line-height: 1.95;
+            color: var(--ink-soft);
+            letter-spacing: 0.4px;
+            pointer-events: none;
+        }
+        .guide b { color: var(--ink); font-weight: 600; }
+
+        /* 左侧工具栏 */
+        .toolbar {
+            position: fixed;
+            left: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 16;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 10px 8px;
+            border-radius: 19px;
+            background: var(--glass);
+            backdrop-filter: blur(14px) saturate(1.1);
+            -webkit-backdrop-filter: blur(14px) saturate(1.1);
+            border: 1px solid var(--glass-line);
+            box-shadow: var(--shadow);
+        }
+        .tool {
+            position: relative;
+            width: 38px;
+            height: 38px;
+            border: none;
+            border-radius: 12px;
+            background: transparent;
+            color: var(--ink-soft);
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            transition: background .18s, color .18s, transform .18s;
+        }
+        .tool svg {
+            width: 19px; height: 19px;
+            fill: none; stroke: currentColor;
+            stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
+        }
+        .tool:hover { background: rgba(240, 176, 120, 0.2); color: var(--ink); }
+        .tool.active {
+            background: linear-gradient(135deg, #F3BB84, #E08B5A);
+            color: #fff;
+            box-shadow: 0 6px 15px rgba(224, 139, 90, 0.38);
+        }
+        .tool::after {
+            content: attr(data-tip);
+            position: absolute;
+            left: calc(100% + 12px);
+            top: 50%;
+            transform: translateY(-50%) translateX(-4px);
+            white-space: nowrap;
+            font-size: 0.7rem;
+            letter-spacing: 1px;
+            padding: 5px 9px;
+            border-radius: 8px;
+            background: rgba(74, 63, 51, 0.9);
+            color: #fff;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .18s, transform .18s;
+        }
+        .tool:hover::after { opacity: 1; transform: translateY(-50%) translateX(0); }
+
+        .tool-hint {
+            position: fixed;
+            left: 84px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 16;
+            padding: 8px 13px;
+            border-radius: 12px;
+            background: rgba(74, 63, 51, 0.88);
+            color: #fff;
+            font-size: 0.74rem;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity .5s;
+        }
+        .tool-hint.show { opacity: 1; }
+        .tool-hint::before {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: 50%;
+            margin-top: -5px;
+            width: 9px; height: 9px;
+            background: inherit;
+            transform: rotate(45deg);
+        }
+
+        /* 中央密码卡 */
+        .gate-wrap {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            pointer-events: none;
+        }
+        .gate-card {
+            pointer-events: auto;
+            width: min(348px, 86vw);
+            padding: 1.55rem 1.75rem 1.5rem;
+            text-align: center;
+            background: rgba(255, 253, 248, 0.75);
+            backdrop-filter: blur(16px) saturate(1.15);
+            -webkit-backdrop-filter: blur(16px) saturate(1.15);
+            border: 1px solid rgba(255, 255, 255, 0.72);
+            border-radius: 22px;
+            box-shadow: 0 22px 58px rgba(90, 74, 44, 0.2), inset 0 1px 0 rgba(255,255,255,0.65);
+        }
+        .card-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.62rem;
+            letter-spacing: 2.2px;
+            color: var(--ink-soft);
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(240, 176, 120, 0.16);
+            border: 1px solid rgba(232, 168, 124, 0.35);
+            margin-bottom: 0.85rem;
+        }
+        .card-tag i {
+            width: 5px; height: 5px;
+            border-radius: 50%;
+            background: var(--roof-deep);
+            animation: blink 2s ease-in-out infinite;
+        }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
+
+        .gate-card h2 { font-size: 1.28rem; letter-spacing: 1px; margin-bottom: 0.32rem; }
+        .gate-desc { color: var(--ink-soft); font-size: 0.84rem; margin-bottom: 1.15rem; }
+        .gate-input {
+            width: 100%;
+            text-align: center;
+            font-size: 1.7rem;
+            letter-spacing: 0.52em;
+            padding: 0.55rem 0 0.55rem 0.52em;
+            border: 1px solid rgba(200, 180, 150, 0.7);
+            border-radius: 13px;
+            outline: none;
+            color: var(--ink);
+            background: rgba(255, 251, 243, 0.88);
+            transition: border-color .2s, box-shadow .2s;
+        }
+        .gate-input:focus {
+            border-color: var(--roof);
+            box-shadow: 0 0 0 3px rgba(232, 168, 124, 0.22);
+        }
+        .gate-btn {
+            margin-top: 0.95rem;
+            width: 100%;
+            padding: 0.7rem;
+            background: linear-gradient(135deg, #F3BB84, #E08B5A);
+            color: #fff;
+            border: none;
+            border-radius: 13px;
+            font-size: 0.98rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: transform .15s, box-shadow .2s, filter .2s;
+            box-shadow: 0 8px 18px rgba(224, 139, 90, 0.34);
+        }
+        .gate-btn:hover { transform: translateY(-1px); box-shadow: 0 11px 24px rgba(224, 139, 90, 0.44); filter: brightness(1.03); }
+        .gate-btn:active { transform: translateY(0) scale(.99); }
+        .gate-error { color: #D4722E; font-size: 0.8rem; line-height: 1.4; min-height: 1.15em; margin-top: 0.6rem; }
+        .gate-note { margin-top: 0.7rem; color: var(--ink-soft); font-size: 0.71rem; line-height: 1.7; }
+
+        /* 3D 锚点标签（JS 投影定位） */
+        .pill {
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 15;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            padding: 8px 13px 8px 9px;
+            border: 1px solid rgba(255, 255, 255, 0.85);
+            border-radius: 15px;
+            background: rgba(255, 253, 248, 0.84);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--ink);
+            box-shadow: 0 10px 26px rgba(90, 74, 44, 0.15), inset 0 1px 0 rgba(255,255,255,0.7);
+            cursor: pointer;
+            will-change: transform;
+            transition: background .2s, box-shadow .2s, opacity .35s;
+        }
+        .pill::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            bottom: -5px;
+            margin-left: -5px;
+            width: 9px; height: 9px;
+            background: inherit;
+            border-right: 1px solid rgba(255, 255, 255, 0.85);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.85);
+            transform: rotate(45deg);
+            border-bottom-right-radius: 2px;
+        }
+        .pill .n {
+            width: 28px; height: 28px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, #F3BB84, #E08B5A);
+            color: #fff;
+            font-size: 0.86rem;
+            font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            flex: 0 0 auto;
+            box-shadow: 0 3px 8px rgba(224, 139, 90, 0.35);
+            transition: transform .2s;
+        }
+        .pill .t { display: flex; flex-direction: column; line-height: 1.22; text-align: left; }
+        .pill .t b { font-size: 0.82rem; font-weight: 700; }
+        .pill .t span { font-size: 0.63rem; letter-spacing: 1.4px; color: var(--ink-soft); }
+        .pill:hover { background: #fffdf8; box-shadow: 0 14px 30px rgba(90, 74, 44, 0.22); }
+        .pill:hover .n { transform: scale(1.07) rotate(-4deg); }
+        .pill.on {
+            background: #fffdf8;
+            border-color: rgba(232, 168, 124, 0.85);
+            box-shadow: 0 14px 34px rgba(224, 139, 90, 0.3), 0 0 0 3px rgba(232, 168, 124, 0.16);
+        }
+
+        /* 底部时间轴 */
+        .stepper {
+            position: fixed;
+            left: 50%;
+            bottom: 20px;
+            transform: translateX(-50%) translateY(8px);
+            z-index: 16;
+            width: min(880px, calc(100vw - 120px));
+            padding: 9px 20px 13px;
+            border-radius: 17px;
+            background: var(--glass);
+            backdrop-filter: blur(14px) saturate(1.1);
+            -webkit-backdrop-filter: blur(14px) saturate(1.1);
+            border: 1px solid var(--glass-line);
+            box-shadow: var(--shadow);
+            opacity: 0;
+            transition: opacity .5s ease, transform .5s ease;
+        }
+        .stepper.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .stepper-head {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.66rem;
+            letter-spacing: 0.8px;
+            color: var(--ink-soft);
+            margin-bottom: 9px;
+            padding-left: 2px;
+        }
+        .stepper-head i {
+            width: 6px; height: 6px;
+            border-radius: 50%;
+            background: #9ECFA0;
+            box-shadow: 0 0 0 3px rgba(158, 207, 160, 0.25);
+        }
+        .stepper-head b { color: var(--ink); font-weight: 600; }
+        .stepper-head .sep { opacity: .45; }
+
+        .steps { position: relative; display: flex; align-items: flex-start; }
+        .step {
+            position: relative;
+            flex: 0 0 auto;
+            width: 62px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--ink-soft);
+            font-family: inherit;
+            padding: 0;
+        }
+        .step i {
+            width: 24px; height: 24px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 0.68rem;
+            font-style: normal;
+            font-weight: 700;
+            background: rgba(255, 255, 255, 0.7);
+            border: 1px dashed rgba(160, 142, 118, 0.6);
+            color: var(--ink-soft);
+            transition: all .25s;
+        }
+        .step em {
+            font-style: normal;
+            font-size: 0.66rem;
+            letter-spacing: 0.6px;
+            white-space: nowrap;
+            transition: color .25s;
+        }
+        .step:hover i { border-color: var(--roof-deep); color: var(--roof-deep); }
+        .step:hover em { color: var(--ink); }
+        .step.on i {
+            background: linear-gradient(135deg, #F3BB84, #E08B5A);
+            border: 1px solid transparent;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(224, 139, 90, 0.42);
+            transform: scale(1.08);
+        }
+        .step.on em { color: var(--ink); font-weight: 600; }
+
+        .step-line {
+            flex: 1 1 auto;
+            height: 1px;
+            margin-top: 12px;
+            border-top: 1px dashed rgba(160, 142, 118, 0.45);
+            min-width: 8px;
+        }
+
+        .pencil {
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 15px;
+            height: 15px;
+            color: var(--roof-deep);
+            transform: translateX(-50%) rotate(-14deg);
+            transition: left .45s cubic-bezier(.4, 0, .2, 1);
+            opacity: 0;
+        }
+        .pencil.show { opacity: 1; }
+        .pencil svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+
+        /* 入场动画 */
+        .gate-card, .brand, .guide, .toolbar {
+            opacity: 0;
+            animation: fadeIn .9s ease forwards;
+        }
+        .brand { animation-delay: .1s; }
+        .guide { animation-delay: .25s; }
+        .toolbar { animation-delay: .35s; }
+        .gate-card { animation-delay: .3s; }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        .gate-card.leaving {
+            transition: opacity .45s ease, transform .45s ease;
+            opacity: 0;
+            transform: scale(.9) translateY(-8px);
+        }
+        .pill.hide, .brand.hide, .guide.hide, .toolbar.hide, .stepper.hide, .tool-hint.hide {
+            transition: opacity .45s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @media (max-width: 860px) {
+            .brand { top: 16px; left: 18px; }
+            .brand h1 { font-size: 0.95rem; }
+            .guide { display: none; }
+            .toolbar { left: 12px; padding: 8px 6px; gap: 4px; }
+            .tool { width: 32px; height: 32px; border-radius: 10px; }
+            .tool svg { width: 16px; height: 16px; }
+            .tool::after { display: none; }
+            .tool-hint { display: none; }
+            .pill { padding: 6px 10px 6px 7px; gap: 7px; border-radius: 12px; }
+            .pill .n { width: 22px; height: 22px; border-radius: 7px; font-size: 0.72rem; }
+            .pill .t b { font-size: 0.73rem; }
+            .pill .t span { font-size: 0.56rem; letter-spacing: 1px; }
+            .stepper { width: calc(100vw - 88px); bottom: 12px; padding: 7px 12px 11px; }
+            .stepper-head { display: none; }
+            .step { width: 46px; }
+            .step i { width: 20px; height: 20px; font-size: 0.6rem; }
+            .step em { font-size: 0.56rem; letter-spacing: 0; }
+            .step-line { margin-top: 10px; }
+            .pencil { display: none; }
+            .gate-card { padding: 1.35rem 1.4rem 1.3rem; }
+        }
+
+        @media (max-height: 620px) {
+            .stepper { display: none; }
+        }
+    </style>
+
+    <!-- 51.la 访客统计 V6 -->
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"3Qu6OIFKMWrFWPyF",ck:"3Qu6OIFKMWrFWPyF"})</script>
+</head>
+<body>
+    <canvas id="scene-canvas"></canvas>
+    <div class="vignette"></div>
+
+    <div class="brand">
+        <h1>巴拿拿猫的个人网站</h1>
+        <span>BANANA.DESIGN</span>
+    </div>
+
+    <div class="guide">
+        <div><b>拖拽</b> 旋转沙盘</div>
+        <div><b>滚轮</b> 拉近拉远</div>
+        <div><b>点标签</b> 聚焦分区</div>
+    </div>
+
+    <div class="toolbar">
+        <button class="tool active" id="tool-orbit" type="button" data-tip="自由视角">
+            <svg viewBox="0 0 20 20"><path d="M16.5 10a6.5 6.5 0 1 1-2.2-4.9"/><path d="M16.8 3.2v4.2h-4.2"/></svg>
+        </button>
+        <button class="tool" id="tool-pan" type="button" data-tip="平移画面">
+            <svg viewBox="0 0 20 20"><path d="M10 2.6v14.8M2.6 10h14.8"/><path d="M10 2.6 7.6 5M10 2.6 12.4 5M10 17.4 7.6 15M10 17.4 12.4 15M2.6 10 5 7.6M2.6 10 5 12.4M17.4 10 15 7.6M17.4 10 15 12.4"/></svg>
+        </button>
+        <button class="tool active" id="tool-auto" type="button" data-tip="自动巡航">
+            <svg viewBox="0 0 20 20"><path d="M7 4.4 15.4 10 7 15.6z"/></svg>
+        </button>
+        <button class="tool" id="tool-reset" type="button" data-tip="复位视角">
+            <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="4.6"/><path d="M10 1.8v3M10 15.2v3M1.8 10h3M15.2 10h3"/></svg>
+        </button>
+        <button class="tool" id="tool-full" type="button" data-tip="全屏">
+            <svg viewBox="0 0 20 20"><path d="M3 7.4V3h4.4M17 7.4V3h-4.4M3 12.6V17h4.4M17 12.6V17h-4.4"/></svg>
+        </button>
+    </div>
+    <div class="tool-hint" id="tool-hint">拖拽 · 自由视角</div>
+
+    <div class="pill" data-i="0" role="button" tabindex="0"><span class="n">1</span><span class="t"><b>作品展示</b><span>PORTFOLIO</span></span></div>
+    <div class="pill" data-i="1" role="button" tabindex="0"><span class="n">2</span><span class="t"><b>角色展示</b><span>CHARACTERS</span></span></div>
+    <div class="pill" data-i="2" role="button" tabindex="0"><span class="n">3</span><span class="t"><b>小游戏</b><span>MINI GAMES</span></span></div>
+    <div class="pill" data-i="3" role="button" tabindex="0"><span class="n">4</span><span class="t"><b>开发日志</b><span>DEV LOG</span></span></div>
+    <div class="pill" data-i="4" role="button" tabindex="0"><span class="n">5</span><span class="t"><b>关于我</b><span>ABOUT ME</span></span></div>
+
+    <div class="gate-wrap">
+        <div class="gate-card" id="gate-card">
+            <div class="card-tag"><i></i>3D SANDBOX · 需要通行密码</div>
+            <h2>请输入访问密码</h2>
+            <p class="gate-desc">解锁后进入我的小窝</p>
+            <input id="gate-input" class="gate-input" type="password" inputmode="numeric" maxlength="4" placeholder="••••" autocomplete="off">
+            <button id="gate-btn" class="gate-btn" type="button">进 入</button>
+            <div class="gate-error" id="gate-error"></div>
+            <p class="gate-note">本站自 2026年9月30日 起启用访问密码。<br>还不知道密码的话，可以来问我，或到作品集首页右下角查看。</p>
+        </div>
+    </div>
+
+    <div class="stepper" id="stepper">
+        <div class="stepper-head">
+            <i></i>
+            <b>通行证</b><span class="sep">/</span>
+            <span id="stepper-state">未解锁，拖动沙盘四处看看</span>
+        </div>
+        <div class="steps" id="steps">
+            <button class="step on" type="button" data-i="0"><i>1</i><em>作品展示</em></button>
+            <span class="step-line"></span>
+            <button class="step" type="button" data-i="1"><i>2</i><em>角色展示</em></button>
+            <span class="step-line"></span>
+            <button class="step" type="button" data-i="2"><i>3</i><em>小游戏</em></button>
+            <span class="step-line"></span>
+            <button class="step" type="button" data-i="3"><i>4</i><em>开发日志</em></button>
+            <span class="step-line"></span>
+            <button class="step" type="button" data-i="4"><i>5</i><em>关于我</em></button>
+            <div class="pencil" id="pencil">
+                <svg viewBox="0 0 16 16"><path d="M2.6 13.4 3.4 10l7.2-7.2 2.6 2.6L6 12.6z"/><path d="M9.8 3.8 12.2 6.2"/></svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- 认证逻辑：与 gate.js 保持一致（djb2 哈希 + 4 小时 / 每日失效） -->
+    <script>
+        (function () {
+            var GATE_HASH = '7c7c2e23'; // 密码 7896 的 djb2 哈希
+            var STORAGE_KEY = 'bc_site_pass';
+            var MAX_AGE = 4 * 60 * 60 * 1000;
+
+            function hashPin(s) {
+                var h = 5381;
+                for (var i = 0; i < s.length; i++) {
+                    h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
+                }
+                return h.toString(16);
+            }
+            function isSameDay(a, b) {
+                var d1 = new Date(a), d2 = new Date(b);
+                return d1.getFullYear() === d2.getFullYear() &&
+                    d1.getMonth() === d2.getMonth() &&
+                    d1.getDate() === d2.getDate();
+            }
+            function isGranted() {
+                try {
+                    var t = parseInt(localStorage.getItem(STORAGE_KEY), 10);
+                    if (!t) return false;
+                    return (Date.now() - t < MAX_AGE) && isSameDay(t, Date.now());
+                } catch (e) { return false; }
+            }
+            function getNext() {
+                var next = new URLSearchParams(location.search).get('next');
+                if (!next) return 'index.html';
+                try {
+                    var u = new URL(next, location.origin);
+                    if (u.origin === location.origin && !/^(javascript|data|vbscript):/i.test(next)) return next;
+                } catch (e) {}
+                return 'index.html';
+            }
+
+            var input = document.getElementById('gate-input');
+            var btn = document.getElementById('gate-btn');
+            var err = document.getElementById('gate-error');
+            var card = document.getElementById('gate-card');
+
+            // 已放行则直接回跳，不展示密码门
+            if (isGranted()) {
+                location.replace(getNext());
+                return;
+            }
+
+            function allow() {
+                try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch (e) {}
+                card.classList.add('leaving');
+                document.querySelectorAll('.pill, .brand, .guide, .toolbar, .stepper, .tool-hint').forEach(function (el) {
+                    el.classList.add('hide');
+                });
+                var st = document.getElementById('stepper-state');
+                if (st) st.textContent = '解锁成功，正在进入';
+                // 镜头推近沙盘做收尾
+                if (window.__gate3d && window.__gate3d.celebrate) window.__gate3d.celebrate();
+                setTimeout(function () { location.replace(getNext()); }, 1000);
+            }
+            function deny() {
+                err.textContent = '密码不正确，请重试';
+                input.value = '';
+                input.focus();
+                card.animate(
+                    [{ transform: 'translateX(0)' }, { transform: 'translateX(-9px)' }, { transform: 'translateX(9px)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(5px)' }, { transform: 'translateX(0)' }],
+                    { duration: 340, easing: 'ease-in-out' }
+                );
+            }
+            function check() {
+                if (hashPin(input.value) === GATE_HASH) allow(); else deny();
+            }
+
+            btn.addEventListener('click', check);
+            input.addEventListener('keydown', function (e) { if (e.key === 'Enter') check(); });
+            input.focus();
+        })();
+    </script>
+    <!-- 3D 沙盘场景（Three.js，独立模块，加载失败不影响认证） -->
+    <script type="importmap">
+        { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+    </script>
+    <script type="module">
+        let THREE = null;
+        try {
+            THREE = await import('three');
+        } catch (e) {
+            console.warn('[gate3d] three 加载失败，密码功能不受影响', e);
+        }
+        if (THREE) initSandbox(THREE);
+
+        function initSandbox(THREE) {
+            const canvas = document.getElementById('scene-canvas');
+            const probe = document.createElement('canvas');
+            if (!(probe.getContext('webgl2') || probe.getContext('webgl'))) return;
+
+            /* ══════════ 渲染器 / 场景 / 相机 ══════════ */
+            const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+            renderer.setSize(innerWidth, innerHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.02;
+            if ('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(27, innerWidth / innerHeight, 1, 460);
+
+            /* ══════════ 光照 ══════════ */
+            scene.add(new THREE.HemisphereLight(0xFFFBF0, 0xD8C6AB, 1.0));
+            const sun = new THREE.DirectionalLight(0xFFF3E2, 2.15);
+            sun.position.set(17, 27, 13);
+            sun.castShadow = true;
+            sun.shadow.mapSize.set(1536, 1536);
+            sun.shadow.camera.near = 4;
+            sun.shadow.camera.far = 110;
+            sun.shadow.camera.left = -24;
+            sun.shadow.camera.right = 24;
+            sun.shadow.camera.top = 24;
+            sun.shadow.camera.bottom = -24;
+            sun.shadow.camera.updateProjectionMatrix();
+            sun.shadow.bias = -0.0006;
+            sun.shadow.normalBias = 0.03;
+            scene.add(sun);
+
+            const fill = new THREE.DirectionalLight(0xD9ECF6, 0.5);
+            fill.position.set(-19, 11, -15);
+            scene.add(fill);
+
+            /* ══════════ 材质 ══════════ */
+            function mat(color, extra) {
+                return new THREE.MeshStandardMaterial(Object.assign({ color: color, roughness: 0.9, metalness: 0 }, extra || {}));
+            }
+            const M = {
+                sandTop: mat(0xF0E2C9), sandSide: mat(0xE2CDAB), sandEdge: mat(0xD2B893),
+                grass: mat(0xA9D0A3), grassB: mat(0x95C790), grassC: mat(0xBCDCB0),
+                water: mat(0x93CBE8, { roughness: 0.22, metalness: 0.02 }),
+                waterBank: mat(0xCBB08A),
+                cream: mat(0xFBF4E6), wall: mat(0xF8EBD8),
+                roof: mat(0xE9A87C), roofB: mat(0xD98E63), accent: mat(0xF3BC84),
+                wood: mat(0xBE9067), woodD: mat(0x9C7249),
+                leaf: mat(0x8CC787), leafB: mat(0x6FB173), leafC: mat(0xB7D99F),
+                pink: mat(0xF2B3AC), purple: mat(0xC3B0DE), yellow: mat(0xF7D882),
+                ink: mat(0x6B5947), white: mat(0xFFFFFF),
+                screen: mat(0xAFD9EB, { emissive: 0x5E9DBC, emissiveIntensity: 0.45 }),
+                glow: new THREE.MeshStandardMaterial({ color: 0xFFE3B0, emissive: 0xFFB35E, emissiveIntensity: 1.5, roughness: 0.4 })
+            };
+
+            /* ══════════ 几何小工具 ══════════ */
+            function mesh(geo, mt, cast) {
+                const o = new THREE.Mesh(geo, mt);
+                o.castShadow = cast !== false;
+                o.receiveShadow = true;
+                return o;
+            }
+            const box = (w, h, d, mt) => mesh(new THREE.BoxGeometry(w, h, d), mt);
+            const cyl = (rt, rb, h, mt, seg) => mesh(new THREE.CylinderGeometry(rt, rb, h, seg || 16), mt);
+            const cone = (r, h, mt, seg) => mesh(new THREE.ConeGeometry(r, h, seg || 14), mt);
+            const sph = (r, mt, seg) => mesh(new THREE.SphereGeometry(r, seg || 14, seg || 14), mt);
+            const cap = (r, h, mt) => mesh(new THREE.CapsuleGeometry(r, h, 5, 12), mt);
+            // 四坡屋顶：四段圆锥旋转 45 度，底面方形边长约为半径的 1.414 倍
+            function prism(w, h, mt) {
+                const o = mesh(new THREE.ConeGeometry(w * 0.712, h, 4), mt);
+                o.rotation.y = Math.PI / 4;
+                return o;
+            }
+
+            // 固定种子随机，保证每次刷新布局一致
+            function rng(seed) {
+                return function () {
+                    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+                    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+                    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+                    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+                };
+            }
+            const rand = rng(20261116);
+            const rr = (a, b) => a + rand() * (b - a);
+
+            const world = new THREE.Group();
+            scene.add(world);
+
+            /* ══════════ 分层底座 ══════════ */
+            const slabTop = box(30, 0.9, 22, M.sandTop);
+            slabTop.position.y = -0.45;
+            world.add(slabTop);
+            const slabMid = box(29, 0.72, 21, M.sandSide);
+            slabMid.position.y = -1.26;
+            world.add(slabMid);
+            const slabBot = box(27.8, 0.62, 19.8, M.sandEdge);
+            slabBot.position.y = -1.93;
+            world.add(slabBot);
+            const rim = box(30.5, 0.18, 22.5, M.sandEdge);
+            rim.position.y = -0.02;
+            world.add(rim);
+
+            /* ══════════ 草地斑块 ══════════ */
+            const grassPads = [
+                [-9.5, -5.5, 4.6], [-10.4, 4.2, 4.0], [-3.2, 6.4, 3.4], [4.6, -6.2, 4.2],
+                [10.4, -4.0, 3.8], [11.2, 5.6, 4.4], [2.2, 7.6, 2.8], [-14.2, -0.4, 2.6],
+                [14.6, 1.2, 2.6], [-6.2, 1.2, 3.0], [6.8, 1.4, 2.8], [0.4, -3.4, 2.6],
+                [-12.6, 8.0, 2.4], [13.4, -8.4, 2.4]
+            ];
+            grassPads.forEach(function (p, i) {
+                const pad = cyl(p[2], p[2] * 1.03, 0.22, i % 3 === 0 ? M.grassC : (i % 3 === 1 ? M.grass : M.grassB), 26);
+                pad.position.set(p[0], 0.06, p[1]);
+                world.add(pad);
+            });
+
+            /* ══════════ 河流（自定义带状网格） ══════════ */
+            function ribbon(curve, opts) {
+                const segs = opts.segments || 70;
+                const pos = [], nor = [], idx = [];
+                for (let i = 0; i <= segs; i++) {
+                    const t = i / segs;
+                    const p = curve.getPointAt(t);
+                    const tg = curve.getTangentAt(t);
+                    tg.y = 0; tg.normalize();
+                    const nx = -tg.z, nz = tg.x;
+                    const w = (opts.w0 + (opts.w1 - opts.w0) * t) * 0.5;
+                    pos.push(p.x + nx * w, opts.y, p.z + nz * w);
+                    pos.push(p.x - nx * w, opts.y, p.z - nz * w);
+                    nor.push(0, 1, 0, 0, 1, 0);
+                }
+                for (let i = 0; i < segs; i++) {
+                    const a = i * 2;
+                    idx.push(a, a + 2, a + 1, a + 1, a + 2, a + 3);
+                }
+                const g = new THREE.BufferGeometry();
+                g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+                g.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3));
+                g.setIndex(idx);
+                const mm = new THREE.Mesh(g, opts.mat);
+                mm.receiveShadow = true;
+                return mm;
+            }
+
+            const riverCurve = new THREE.CatmullRomCurve3([
+                new THREE.Vector3(-16.4, 0, -7.6),
+                new THREE.Vector3(-10.4, 0, -5.6),
+                new THREE.Vector3(-5.0, 0, -2.8),
+                new THREE.Vector3(-0.6, 0, 0.6),
+                new THREE.Vector3(4.4, 0, 2.8),
+                new THREE.Vector3(10.2, 0, 4.9),
+                new THREE.Vector3(16.2, 0, 6.9)
+            ]);
+            world.add(ribbon(riverCurve, { y: 0.19, w0: 3.4, w1: 3.9, mat: M.waterBank, segments: 74 }));
+            world.add(ribbon(riverCurve, { y: 0.235, w0: 2.5, w1: 2.9, mat: M.water, segments: 74 }));
+
+            /* ══════════ 分区定义 ══════════ */
+            const ZONES = [
+                { key: 'portfolio', name: '作品展示', en: 'PORTFOLIO', ang: -144, r: 8.7, anchorY: 3.1 },
+                { key: 'character', name: '角色展示', en: 'CHARACTERS', ang: -72, r: 8.7, anchorY: 2.9 },
+                { key: 'games', name: '小游戏', en: 'MINI GAMES', ang: 0, r: 8.7, anchorY: 3.2 },
+                { key: 'blog', name: '开发日志', en: 'DEV LOG', ang: 72, r: 8.7, anchorY: 4.4 },
+                { key: 'about', name: '关于我', en: 'ABOUT ME', ang: 144, r: 8.7, anchorY: 3.4 }
+            ];
+            ZONES.forEach(function (z) {
+                const a = z.ang * Math.PI / 180;
+                z.x = Math.cos(a) * z.r;
+                z.z = Math.sin(a) * z.r;
+            });
+
+            /* ══════════ 环形巡游虚线 ══════════ */
+            const routeCurve = new THREE.CatmullRomCurve3(
+                ZONES.map(function (z) { return new THREE.Vector3(z.x * 0.9, 0.31, z.z * 0.9); }), true
+            );
+            (function routeDashes() {
+                const count = 96;
+                for (let i = 0; i < count; i++) {
+                    const t = i / count;
+                    const p = routeCurve.getPointAt(t);
+                    const tg = routeCurve.getTangentAt(t);
+                    const d = box(0.32, 0.055, 0.11, M.sandEdge);
+                    d.position.set(p.x, 0.31, p.z);
+                    d.rotation.y = Math.atan2(-tg.z, tg.x);
+                    world.add(d);
+                }
+            })();
+
+            /* ══════════ 道具：树 / 灌木 / 石头 / 花 / 小人 ══════════ */
+            function tree(x, z, s, kind) {
+                const g = new THREE.Group();
+                const h = 0.95 * s;
+                const trunk = cyl(0.085 * s, 0.13 * s, h, M.woodD, 8);
+                trunk.position.y = h / 2;
+                g.add(trunk);
+                if (kind === 0) {
+                    const a = cone(0.52 * s, 0.92 * s, M.leaf, 12); a.position.y = h + 0.3 * s; g.add(a);
+                    const b = cone(0.37 * s, 0.7 * s, M.leafB, 12); b.position.y = h + 0.74 * s; g.add(b);
+                } else if (kind === 1) {
+                    const a = sph(0.5 * s, M.leafB); a.position.y = h + 0.32 * s; a.scale.y = 0.9; g.add(a);
+                    const b = sph(0.32 * s, M.leaf); b.position.set(0.3 * s, h + 0.12 * s, 0.12 * s); g.add(b);
+                } else {
+                    const a = sph(0.48 * s, M.leafC); a.position.y = h + 0.28 * s; g.add(a);
+                }
+                g.position.set(x, 0.15, z);
+                world.add(g);
+                return g;
+            }
+            function bush(x, z, s) {
+                const g = new THREE.Group();
+                const a = sph(0.34 * s, M.leaf); a.position.y = 0.26 * s; a.scale.y = 0.78; g.add(a);
+                const b = sph(0.25 * s, M.leafB); b.position.set(0.32 * s, 0.2 * s, 0.1 * s); b.scale.y = 0.8; g.add(b);
+                g.position.set(x, 0.15, z);
+                world.add(g);
+            }
+            function rock(x, z, s) {
+                const a = mesh(new THREE.IcosahedronGeometry(0.3 * s, 0), M.sandSide);
+                a.position.set(x, 0.2 * s, z);
+                a.rotation.set(rand() * 2, rand() * 3, rand() * 2);
+                a.scale.set(1, 0.7, 1.1);
+                world.add(a);
+            }
+            function flower(x, z) {
+                const stem = cyl(0.016, 0.016, 0.2, M.leafB, 5);
+                stem.position.set(x, 0.24, z);
+                world.add(stem);
+                const head = sph(0.065, rand() > 0.55 ? M.pink : (rand() > 0.5 ? M.yellow : M.white), 8);
+                head.position.set(x, 0.36, z);
+                head.castShadow = false;
+                world.add(head);
+            }
+            function person(x, z, shirt) {
+                const g = new THREE.Group();
+                const body = cap(0.075, 0.16, shirt);
+                body.position.y = 0.2;
+                g.add(body);
+                const head = sph(0.075, M.cream, 10);
+                head.position.y = 0.38;
+                g.add(head);
+                g.position.set(x, 0.15, z);
+                g.rotation.y = rand() * Math.PI * 2;
+                world.add(g);
+            }
+
+            // 散落植被（避开分区中心）
+            const treeSpots = [
+                [-12.4, -8.2, 1.25, 0], [-6.6, -8.6, 1.0, 1], [-1.2, -8.0, 1.15, 0], [3.6, -8.8, 0.95, 2],
+                [8.6, -8.2, 1.2, 1], [13.2, -6.6, 1.05, 0], [-13.8, 3.6, 1.1, 0], [-8.2, 8.4, 1.2, 1],
+                [-2.4, 9.0, 1.0, 0], [3.4, 9.2, 1.15, 2], [9.0, 8.8, 1.05, 0], [14.0, 4.6, 1.0, 1],
+                [-14.6, -3.4, 0.9, 2], [15.0, -1.6, 0.95, 0], [-11.2, 0.6, 0.85, 1], [11.6, 0.4, 0.9, 2]
+            ];
+            treeSpots.forEach(function (t) { tree(t[0], t[1], t[2], t[3]); });
+
+            const bushSpots = [
+                [-10.8, -3.0, 1.1], [-4.4, 4.6, 1.0], [1.6, 5.4, 1.15], [7.2, -3.0, 1.0],
+                [12.4, 2.6, 1.05], [-6.8, 7.2, 0.95], [5.8, 6.8, 1.0], [-12.8, 6.2, 0.9], [9.8, -6.6, 0.95]
+            ];
+            bushSpots.forEach(function (b) { bush(b[0], b[1], b[2]); });
+
+            const rockSpots = [[-8.0, -7.2, 1.2], [1.0, -6.0, 0.9], [9.4, 7.4, 1.1], [-14.0, 1.6, 0.8], [6.2, -8.4, 1.0]];
+            rockSpots.forEach(function (r) { rock(r[0], r[1], r[2]); });
+
+            for (let i = 0; i < 46; i++) {
+                const a = rand() * Math.PI * 2;
+                const rad = 3.4 + rand() * 11;
+                const x = Math.cos(a) * rad, z = Math.sin(a) * rad;
+                if (Math.abs(x) > 14 || Math.abs(z) > 10) continue;
+                flower(x, z);
+            }
+
+            const shirts = [M.pink, M.purple, M.yellow, M.grassB, M.roof, M.screen];
+            for (let i = 0; i < 16; i++) {
+                const a = rand() * Math.PI * 2;
+                const rad = 2.6 + rand() * 11.4;
+                const x = Math.cos(a) * rad, z = Math.sin(a) * rad;
+                if (Math.abs(x) > 13.6 || Math.abs(z) > 9.6) continue;
+                person(x, z, shirts[i % shirts.length]);
+            }
+
+            /* ══════════ 五个分区建筑 ══════════ */
+            function buildPortfolio(g) {
+                const body = box(2.7, 1.5, 2.0, M.wall); body.position.y = 0.78; g.add(body);
+                const roof = prism(2.5, 0.95, M.roof); roof.position.y = 1.98; g.add(roof);
+                const awning = box(2.9, 0.1, 0.8, M.roofB); awning.position.set(0, 1.5, 1.28); awning.rotation.x = 0.07; g.add(awning);
+                const frame = box(1.2, 0.9, 0.1, M.cream); frame.position.set(0, 0.86, 1.03); g.add(frame);
+                const art = box(0.88, 0.6, 0.06, M.accent); art.position.set(0, 0.86, 1.09); g.add(art);
+                const pole = cyl(0.04, 0.04, 1.5, M.woodD, 6); pole.position.set(-1.55, 2.2, -0.7); g.add(pole);
+                const flag = box(0.62, 0.36, 0.04, M.pink); flag.position.set(-1.22, 2.65, -0.7); g.add(flag);
+            }
+
+            function buildCharacter(g) {
+                const ped = cyl(1.02, 1.18, 0.52, M.cream); ped.position.y = 0.26; g.add(ped);
+                const ped2 = cyl(0.88, 0.96, 0.12, M.accent); ped2.position.y = 0.58; g.add(ped2);
+                const body = cap(0.3, 0.42, M.purple); body.position.y = 1.12; g.add(body);
+                const head = sph(0.29, M.cream); head.position.y = 1.62; g.add(head);
+                const hair = sph(0.31, M.ink); hair.position.y = 1.69; hair.scale.set(1, 0.72, 1); g.add(hair);
+                [-1.75, 1.75].forEach(function (x) {
+                    const p = box(0.1, 1.05, 0.08, M.woodD); p.position.set(x, 0.62, 0.1); g.add(p);
+                    const scr = box(0.06, 0.72, 0.56, M.screen); scr.position.set(x, 0.92, 0.1); g.add(scr);
+                    const base = box(0.34, 0.08, 0.34, M.wood); base.position.set(x, 0.1, 0.1); g.add(base);
+                });
+            }
+
+            function buildGames(g) {
+                const cab = box(2.4, 2.3, 1.4, M.wood); cab.position.y = 1.2; g.add(cab);
+                const scr = box(1.8, 1.15, 0.08, M.screen); scr.position.set(0, 1.68, 0.73); g.add(scr);
+                const panel = box(2.02, 0.34, 0.48, M.cream); panel.position.set(0, 0.95, 0.92); panel.rotation.x = -0.2; g.add(panel);
+                const stick = cyl(0.05, 0.05, 0.3, M.ink, 6); stick.position.set(-0.46, 1.22, 0.94); stick.rotation.x = -0.16; g.add(stick);
+                const knob = sph(0.11, M.pink); knob.position.set(-0.44, 1.38, 0.92); g.add(knob);
+                [[0.16, M.water], [0.48, M.yellow]].forEach(function (b) {
+                    const btn = cyl(0.1, 0.1, 0.07, b[1], 12);
+                    btn.position.set(b[0], 1.16, 0.98);
+                    btn.rotation.x = Math.PI / 2 - 0.2;
+                    g.add(btn);
+                });
+                for (let i = 0; i < 6; i++) {
+                    const stripe = box(0.42, 0.13, 1.02, i % 2 ? M.cream : M.pink);
+                    stripe.position.set(-1.05 + i * 0.42, 2.62, 0.16);
+                    g.add(stripe);
+                }
+                const post1 = cyl(0.05, 0.05, 0.3, M.woodD, 6); post1.position.set(-1.1, 2.46, -0.5); g.add(post1);
+                const post2 = cyl(0.05, 0.05, 0.3, M.woodD, 6); post2.position.set(1.1, 2.46, -0.5); g.add(post2);
+            }
+
+            function buildBlog(g) {
+                const tower = cyl(0.76, 0.96, 3.0, M.cream, 18); tower.position.y = 1.52; g.add(tower);
+                for (let i = 0; i < 3; i++) {
+                    const band = cyl(0.83, 0.91, 0.26, i % 2 ? M.roof : M.roofB, 18);
+                    band.position.y = 0.62 + i * 0.86;
+                    g.add(band);
+                }
+                const lampBase = cyl(0.96, 0.82, 0.2, M.ink, 18); lampBase.position.y = 3.13; g.add(lampBase);
+                const lamp = sph(0.42, M.glow); lamp.position.y = 3.5; g.add(lamp);
+                const capTop = cone(0.62, 0.56, M.roofB, 18); capTop.position.y = 3.98; g.add(capTop);
+                const door = box(0.5, 0.82, 0.08, M.woodD); door.position.set(0, 0.42, 0.94); g.add(door);
+                const step = box(0.9, 0.1, 0.4, M.sandSide); step.position.set(0, 0.06, 1.06); g.add(step);
+            }
+
+            function buildAbout(g) {
+                const body = box(2.2, 1.2, 1.8, M.wall); body.position.set(-0.25, 0.62, 0); g.add(body);
+                const roof = prism(2.15, 0.85, M.roofB); roof.position.set(-0.25, 1.4, 0); g.add(roof);
+                const door = box(0.44, 0.7, 0.08, M.wood); door.position.set(-0.25, 0.36, 0.92); g.add(door);
+                const win = box(0.4, 0.36, 0.08, M.glow); win.position.set(0.52, 0.78, 0.92); g.add(win);
+                const trunk = cyl(0.16, 0.23, 1.6, M.woodD, 9); trunk.position.set(1.55, 0.82, 0.1); g.add(trunk);
+                const c1 = sph(0.92, M.leafB); c1.position.set(1.55, 2.05, 0.1); g.add(c1);
+                const c2 = sph(0.62, M.leaf); c2.position.set(2.1, 1.8, 0.4); g.add(c2);
+                const c3 = sph(0.56, M.leafC); c3.position.set(1.0, 1.9, -0.42); g.add(c3);
+                const bench = box(0.9, 0.08, 0.32, M.wood); bench.position.set(0.35, 0.36, 1.32); g.add(bench);
+                const leg1 = box(0.08, 0.3, 0.28, M.woodD); leg1.position.set(0.02, 0.18, 1.32); g.add(leg1);
+                const leg2 = box(0.08, 0.3, 0.28, M.woodD); leg2.position.set(0.68, 0.18, 1.32); g.add(leg2);
+                const mailbox = box(0.22, 0.28, 0.22, M.pink); mailbox.position.set(-1.6, 0.62, 0.5); g.add(mailbox);
+                const mpole = cyl(0.04, 0.04, 0.5, M.woodD, 6); mpole.position.set(-1.6, 0.26, 0.5); g.add(mpole);
+            }
+
+            const BUILDERS = [buildPortfolio, buildCharacter, buildGames, buildBlog, buildAbout];
+            const zoneGroups = [];
+            const rings = [];
+            const anchors = [];
+
+            ZONES.forEach(function (z, i) {
+                const g = new THREE.Group();
+                g.position.set(z.x, 0.16, z.z);
+                // 地台
+                const pad = cyl(2.95, 3.1, 0.3, i % 2 ? M.grassB : M.grass, 28);
+                pad.position.y = 0.04;
+                g.add(pad);
+                const padTop = cyl(2.6, 2.7, 0.1, i % 2 ? M.grassC : M.grass, 28);
+                padTop.position.y = 0.2;
+                g.add(padTop);
+                BUILDERS[i](g);
+                world.add(g);
+                zoneGroups.push(g);
+
+                // 地面光环
+                const halo = new THREE.Mesh(
+                    new THREE.CircleGeometry(3.05, 44),
+                    new THREE.MeshBasicMaterial({ color: 0xF3BC84, transparent: true, opacity: 0.13, depthWrite: false })
+                );
+                halo.rotation.x = -Math.PI / 2;
+                halo.position.set(z.x, 0.305, z.z);
+                world.add(halo);
+
+                const ring = new THREE.Mesh(
+                    new THREE.TorusGeometry(3.05, 0.06, 8, 56),
+                    new THREE.MeshStandardMaterial({ color: 0xF3BC84, emissive: 0xE08B5A, emissiveIntensity: 0.1, roughness: 0.6 })
+                );
+                ring.rotation.x = -Math.PI / 2;
+                ring.position.set(z.x, 0.31, z.z);
+                world.add(ring);
+                rings.push(ring);
+
+                anchors.push(new THREE.Vector3(z.x, z.anchorY + 0.16, z.z));
+            });
+
+            /* ══════════ 场景里的小装饰 ══════════ */
+            const floats = [];
+            function addFloat(geo, mt, x, y, z, amp, speed, phase) {
+                const o = new THREE.Mesh(geo, mt);
+                o.position.set(x, y, z);
+                o.castShadow = true;
+                world.add(o);
+                floats.push({ o: o, base: y, amp: amp, speed: speed, phase: phase });
+            }
+            addFloat(new THREE.BoxGeometry(0.34, 0.34, 0.34), M.accent, -3.4, 2.6, 5.4, 0.3, 1.2, 0);
+            addFloat(new THREE.TorusGeometry(0.26, 0.09, 8, 20), M.roof, 5.2, 3.0, -3.4, 0.26, 1.5, 1.4);
+            addFloat(new THREE.OctahedronGeometry(0.3), M.leafB, -6.6, 2.8, -1.6, 0.32, 1.1, 2.2);
+            addFloat(new THREE.IcosahedronGeometry(0.26), M.water, 2.0, 3.2, -6.0, 0.28, 1.35, 0.7);
+
+            // 河里的小船
+            (function boats() {
+                [[-8.4, -4.4], [2.4, 1.7], [11.0, 5.3]].forEach(function (b, i) {
+                    const g = new THREE.Group();
+                    const hull = box(0.72, 0.16, 0.34, M.roofB); hull.position.y = 0.06; g.add(hull);
+                    const mast = cyl(0.022, 0.022, 0.6, M.woodD, 5); mast.position.y = 0.4; g.add(mast);
+                    const sail = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.46, 3), i % 2 ? M.cream : M.pink);
+                    sail.position.set(0.02, 0.44, 0); sail.rotation.y = Math.PI / 2; sail.castShadow = true; g.add(sail);
+                    g.position.set(b[0], 0.24, b[1]);
+                    g.rotation.y = -0.5 + i * 0.4;
+                    world.add(g);
+                    floats.push({ o: g, base: 0.24, amp: 0.03, speed: 1.1 + i * 0.2, phase: i * 1.7 });
+                });
+            })();
+
+            // 河上小桥
+            (function bridge() {
+                const p = riverCurve.getPointAt(0.42);
+                const g = new THREE.Group();
+                const deck = box(1.0, 0.12, 3.0, M.wood); deck.position.y = 0.72; g.add(deck);
+                for (let i = 0; i < 5; i++) {
+                    const plank = box(1.06, 0.05, 0.42, M.woodD);
+                    plank.position.set(0, 0.8, -1.2 + i * 0.6);
+                    g.add(plank);
+                }
+                [-0.56, 0.56].forEach(function (x) {
+                    const rail = box(0.07, 0.07, 3.0, M.woodD); rail.position.set(x, 1.12, 0); g.add(rail);
+                    [-1.3, 0, 1.3].forEach(function (z) {
+                        const post = cyl(0.045, 0.045, 0.5, M.woodD, 5);
+                        post.position.set(x, 0.95, z);
+                        g.add(post);
+                    });
+                });
+                [-1.35, 1.35].forEach(function (z) {
+                    const pier = box(0.9, 0.7, 0.18, M.woodD); pier.position.set(0, 0.38, z); g.add(pier);
+                });
+                const ang = Math.atan2(1, 1);
+                g.position.set(p.x - 0.4, 0, p.z - 0.4);
+                g.rotation.y = ang + 1.35;
+                world.add(g);
+            })();
+
+            /* ══════════ 相机状态与取景 ══════════ */
+            const HOME = { yaw: 0.62, pitch: 0.94 };
+            const view = {
+                yaw: HOME.yaw, pitch: HOME.pitch, dist: 52,
+                tYaw: HOME.yaw, tPitch: HOME.pitch, tDist: 52,
+                cx: 0, cz: 0, tcx: 0, tcz: 0
+            };
+            const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+            function fitDistance() {
+                const tan = Math.tan(camera.fov * Math.PI / 360);
+                const dH = 12.7 / tan;
+                const dW = 16.6 / (tan * camera.aspect);
+                return Math.max(dH, dW) * 1.02;
+            }
+            const minDist = () => fitDistance() * 0.56;
+            const maxDist = () => fitDistance() * 1.5;
+
+            view.dist = view.tDist = fitDistance();
+
+            let auto = true;
+            let dragging = false;
+            let idle = 0;
+            let mode = 'orbit';
+            let active = 0;
+            let celebrated = false;
+
+            function resetView() {
+                view.tYaw = HOME.yaw;
+                view.tPitch = HOME.pitch;
+                view.tDist = fitDistance();
+                view.tcx = 0;
+                view.tcz = 0;
+            }
+
+            /* ══════════ 指针交互（拖拽旋转 / 平移 / 双指缩放 / 滚轮） ══════════ */
+            const pointers = new Map();
+            let lastPinch = 0;
+
+            canvas.addEventListener('pointerdown', function (e) {
+                pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+                if (canvas.setPointerCapture) canvas.setPointerCapture(e.pointerId);
+                dragging = true;
+                idle = 0;
+                canvas.classList.add('grabbing');
+                hideHint(true);
+            });
+
+            canvas.addEventListener('pointermove', function (e) {
+                const p = pointers.get(e.pointerId);
+                if (!p) return;
+                const dx = e.clientX - p.x;
+                const dy = e.clientY - p.y;
+                p.x = e.clientX;
+                p.y = e.clientY;
+                idle = 0;
+
+                if (pointers.size >= 2) {
+                    const pts = Array.from(pointers.values());
+                    const d = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y);
+                    if (lastPinch) {
+                        const ratio = lastPinch / Math.max(d, 1);
+                        view.tDist = clamp(view.tDist * ratio, minDist(), maxDist());
+                    }
+                    lastPinch = d;
+                    return;
+                }
+                if (!dragging) return;
+
+                if (mode === 'orbit') {
+                    view.tYaw -= dx * 0.006;
+                    view.tPitch = clamp(view.tPitch + dy * 0.004, 0.52, 1.3);
+                } else {
+                    const k = view.dist * 0.0016;
+                    view.tcx = clamp(view.tcx - dx * k * Math.cos(view.yaw) - dy * k * Math.sin(view.yaw), -9.5, 9.5);
+                    view.tcz = clamp(view.tcz + dx * k * Math.sin(view.yaw) - dy * k * Math.cos(view.yaw), -8.5, 8.5);
+                }
+            });
+
+            function endPointer(e) {
+                pointers.delete(e.pointerId);
+                if (pointers.size === 0) {
+                    dragging = false;
+                    canvas.classList.remove('grabbing');
+                }
+                lastPinch = 0;
+            }
+            canvas.addEventListener('pointerup', endPointer);
+            canvas.addEventListener('pointercancel', endPointer);
+            canvas.addEventListener('pointerleave', function (e) {
+                if (pointers.size === 1) endPointer(e);
+            });
+
+            canvas.addEventListener('wheel', function (e) {
+                e.preventDefault();
+                view.tDist = clamp(view.tDist * (1 + e.deltaY * 0.0009), minDist(), maxDist());
+                idle = 0;
+            }, { passive: false });
+
+            canvas.addEventListener('dblclick', resetView);
+
+            /* ══════════ 标签投影 ══════════ */
+            const pillEls = Array.from(document.querySelectorAll('.pill'));
+            const stepEls = Array.from(document.querySelectorAll('.step'));
+            const stepperEl = document.getElementById('stepper');
+            const pencilEl = document.getElementById('pencil');
+            const projV = new THREE.Vector3();
+            let cardRect = null;
+
+            function measureCard() {
+                const c = document.getElementById('gate-card');
+                if (c) cardRect = c.getBoundingClientRect();
+            }
+            pillEls.forEach(function (p) { p.style.opacity = '0'; });
+
+            function updatePills() {
+                const W = innerWidth, H = innerHeight;
+                for (let i = 0; i < pillEls.length; i++) {
+                    const v = projV.copy(anchors[i]).project(camera);
+                    if (v.z > 1) { pillEls[i].style.opacity = '0'; continue; }
+                    let x = (v.x * 0.5 + 0.5) * W;
+                    let y = (-v.y * 0.5 + 0.5) * H;
+                    let cy = y - 46;
+
+                    // 躲开中间的密码卡，避免标签压住输入框
+                    if (cardRect) {
+                        const l = cardRect.left - 14, r = cardRect.right + 14;
+                        const t = cardRect.top - 14, b = cardRect.bottom + 14;
+                        if (x > l && x < r && cy > t && cy < b) {
+                            const dUp = cy - t, dDown = b - cy, dLeft = x - l, dRight = r - x;
+                            const mn = Math.min(dUp, dDown, dLeft, dRight);
+                            if (mn === dUp) cy = t;
+                            else if (mn === dDown) cy = b;
+                            else if (mn === dLeft) x = l;
+                            else x = r;
+                        }
+                    }
+                    x = Math.max(70, Math.min(W - 70, x));
+                    cy = Math.max(70, Math.min(H - 96, cy));
+
+                    const el = pillEls[i];
+                    el.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + (cy + 46).toFixed(1) + 'px,0) translate(-50%,-100%)';
+                    el.style.opacity = '';
+                }
+            }
+
+            /* ══════════ UI 联动 ══════════ */
+            function syncUI(i) {
+                stepEls.forEach(function (s, k) { s.classList.toggle('on', k === i); });
+                pillEls.forEach(function (p, k) { p.classList.toggle('on', k === i); });
+                const st = stepEls[i];
+                if (st && pencilEl) {
+                    pencilEl.style.left = (st.offsetLeft + st.offsetWidth / 2) + 'px';
+                    pencilEl.classList.add('show');
+                }
+            }
+
+            function focusZone(i) {
+                const z = ZONES[i];
+                active = i;
+                idle = 0;
+                view.tYaw = Math.atan2(z.x, z.z) + 0.42;
+                view.tPitch = 0.9;
+                view.tDist = fitDistance() * 0.72;
+                view.tcx = z.x * 0.16;
+                view.tcz = z.z * 0.16;
+                syncUI(i);
+            }
+
+            pillEls.forEach(function (p) {
+                p.addEventListener('click', function () { focusZone(parseInt(p.dataset.i, 10)); });
+                p.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        focusZone(parseInt(p.dataset.i, 10));
+                    }
+                });
+            });
+            stepEls.forEach(function (s) {
+                s.addEventListener('click', function () { focusZone(parseInt(s.dataset.i, 10)); });
+            });
+
+            /* ══════════ 工具栏 ══════════ */
+            const toolOrbit = document.getElementById('tool-orbit');
+            const toolPan = document.getElementById('tool-pan');
+            const toolAuto = document.getElementById('tool-auto');
+            const toolReset = document.getElementById('tool-reset');
+            const toolFull = document.getElementById('tool-full');
+            const hintEl = document.getElementById('tool-hint');
+            let hintTimer = null;
+
+            function hideHint(forever) {
+                if (hintEl) hintEl.classList.remove('show');
+                if (forever && hintTimer) { clearTimeout(hintTimer); hintTimer = null; }
+            }
+            hintTimer = setTimeout(function () {
+                if (hintEl) hintEl.classList.add('show');
+                setTimeout(function () { hideHint(false); }, 4200);
+            }, 1400);
+
+            function setMode(nv) {
+                mode = nv;
+                toolOrbit.classList.toggle('active', nv === 'orbit');
+                toolPan.classList.toggle('active', nv === 'pan');
+                if (hintEl) hintEl.textContent = nv === 'orbit' ? '拖拽 · 自由视角' : '拖拽 · 平移画面';
+            }
+            toolOrbit.addEventListener('click', function () { setMode('orbit'); });
+            toolPan.addEventListener('click', function () { setMode('pan'); });
+            toolAuto.addEventListener('click', function () {
+                auto = !auto;
+                toolAuto.classList.toggle('active', auto);
+                idle = 0;
+            });
+            toolReset.addEventListener('click', resetView);
+            toolFull.addEventListener('click', function () {
+                if (!document.fullscreenElement) {
+                    if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
+                } else if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            });
+
+            /* ══════════ 主循环 ══════════ */
+            const clock = new THREE.Clock();
+            let firstFrame = true;
+
+            function frame() {
+                const dt = Math.min(clock.getDelta(), 0.06);
+                const t = clock.elapsedTime;
+
+                if (auto && !dragging && !celebrated) {
+                    idle += dt;
+                    if (idle > 2.4) view.tYaw += dt * 0.085;
+                }
+
+                const s = Math.min(1, dt * 7.5);
+                view.yaw += (view.tYaw - view.yaw) * s;
+                view.pitch += (view.tPitch - view.pitch) * s;
+                view.dist += (view.tDist - view.dist) * s;
+                view.cx += (view.tcx - view.cx) * s;
+                view.cz += (view.tcz - view.cz) * s;
+
+                const cp = Math.cos(view.pitch);
+                camera.position.set(
+                    view.cx + Math.sin(view.yaw) * cp * view.dist,
+                    Math.sin(view.pitch) * view.dist,
+                    view.cz + Math.cos(view.yaw) * cp * view.dist
+                );
+                camera.lookAt(view.cx, 1.5, view.cz);
+
+                // 当前分区的光环呼吸 + 轻微抬升
+                for (let i = 0; i < zoneGroups.length; i++) {
+                    const on = i === active;
+                    const ty = on ? 0.24 + Math.sin(t * 1.5) * 0.05 : 0.16;
+                    zoneGroups[i].position.y += (ty - zoneGroups[i].position.y) * 0.08;
+                    rings[i].material.emissiveIntensity = on ? 0.34 + Math.sin(t * 2.8) * 0.2 : 0.07;
+                }
+
+                for (let i = 0; i < floats.length; i++) {
+                    const f = floats[i];
+                    f.o.position.y = f.base + Math.sin(t * f.speed + f.phase) * f.amp;
+                }
+                for (let i = 0; i < 4; i++) floats[i].o.rotation.y += dt * 0.5;
+
+                updatePills();
+                renderer.render(scene, camera);
+
+                if (firstFrame) {
+                    firstFrame = false;
+                    measureCard();
+                    syncUI(0);
+                    stepperEl.classList.add('show');
+                }
+            }
+            renderer.setAnimationLoop(frame);
+
+            /* ══════════ 尺寸变化 ══════════ */
+            function onResize() {
+                camera.aspect = innerWidth / innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(innerWidth, innerHeight);
+                view.tDist = clamp(view.tDist, minDist(), maxDist());
+                view.dist = clamp(view.dist, minDist(), maxDist());
+                measureCard();
+                if (pencilEl && stepEls[active]) {
+                    pencilEl.style.left = (stepEls[active].offsetLeft + stepEls[active].offsetWidth / 2) + 'px';
+                }
+            }
+            addEventListener('resize', onResize);
+            addEventListener('orientationchange', function () { setTimeout(onResize, 260); });
+            if (window.visualViewport) visualViewport.addEventListener('resize', onResize);
+            setTimeout(onResize, 400);
+
+            /* ══════════ 对外接口（解锁庆祝） ══════════ */
+            window.__gate3d = {
+                celebrate: function () {
+                    celebrated = true;
+                    auto = false;
+                    view.tDist = fitDistance() * 0.62;
+                    view.tPitch = 0.8;
+                    view.tYaw = view.yaw + 1.15;
+                    view.tcx = 0;
+                    view.tcz = 0;
+                    if (stepEls[active]) pencilEl.classList.remove('show');
+                },
+                focus: focusZone
+            };
+        }
+    </script>
+</body>
+</html>

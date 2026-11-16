@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>no card check</title>
+<style>
+  html, body { margin: 0; padding: 0; }
+  iframe { display: block; width: 1440px; height: 900px; border: 0; }
+</style>
+</head>
+<body>
+<iframe id="f" src="../gate-3d.html?focus=4"></iframe>
+<script>
+  document.getElementById('f').addEventListener('load', function () {
+    var d = this.contentDocument;
+    setTimeout(function () {
+      var w = d.querySelector('.gate-wrap');
+      if (w) w.style.display = 'none';
+    }, 2000);
+  });
+</script>
+</body>
+</html>
