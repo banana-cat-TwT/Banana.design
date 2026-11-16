@@ -1155,6 +1155,7 @@ function slideNews(tab, direction) {
 
 // ===== 往期视频板块 =====
 const videoArchiveData = [
+    { bvid: 'BV15mWQ6vEZy', title: '《GTA6》最新20秒演示，海滨大道慢行', desc: 'Rockstar《GTA6》最新20秒实机演示，海滨大道慢行片段', date: '2026-11-12' },
     { bvid: 'BV1vm4f6bETN', title: 'Grand Theft Auto VI：分量十足的一瞥', desc: 'Rockstar《GTA6》全新预告，展示 Vice City 及其周边更为庞大的开放世界', date: '2026-08-28' },
     { bvid: 'BV1XAhL65E5h', title: '《巫师 3：狂猎 — 重制版》｜官宣预告片', desc: 'CDPR《巫师3：狂猎》重制版官宣预告片，PS5 Pro 90帧+PSSR升频、主机首次官方MOD支持，已购原版免费升级，9/29发售', date: '2026-08-26' },
     { bvid: 'BV1kS8H6VERt', title: '《黑神话：钟馗》15分钟实机演示', desc: '游戏科学8/20放出首支15分钟实机演示，白衣道士主角，剑术战斗+道法施法+格挡闪避，BOSS"大蚌真君"战，小鬼召唤+附身切换动作模组，末尾混剪出现骑乘猛虎的钟馗形象', date: '2026-08-20' },

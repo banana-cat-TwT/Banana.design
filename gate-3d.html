@@ -1317,65 +1317,88 @@
 
                 const live = list.filter(Boolean);
 
-                function separatePills() {
-                    for (let a = 0; a < live.length; a++) {
-                        for (let b = a + 1; b < live.length; b++) {
-                            const A = live[a], B = live[b];
+                // 可用范围：左边避开工具栏，下边避开时间轴
+                const padL = W < 860 ? 70 : 76;
+                const minX = padL, maxX = W - 14;
+                const minC = 14, maxC = H - 74;
+                const clampX = p => { p.x = Math.min(Math.max(p.x, minX + p.hw), maxX - p.hw); };
+                const clampY = p => { p.cy = Math.min(Math.max(p.cy, minC + p.hh), maxC - p.hh); };
+
+                live.forEach(clampX);
+                live.forEach(clampY);
+
+                function hitsCard(p) {
+                    if (!cardRect) return false;
+                    const L = cardRect.left - 10, R = cardRect.right + 10;
+                    const T = cardRect.top - 10, B = cardRect.bottom + 10;
+                    return p.x + p.hw > L && p.x - p.hw < R && p.cy + p.hh > T && p.cy - p.hh < B;
+                }
+
+                // 向上让位时，把上方会撞上的标签一起顶上去，免得被互斥逻辑又推回卡片
+                function liftTogether(p, need) {
+                    const cluster = [p];
+                    for (let i = 0; i < cluster.length; i++) {
+                        const A = cluster[i];
+                        for (let j = 0; j < live.length; j++) {
+                            const B = live[j];
+                            if (B === A || cluster.indexOf(B) !== -1) continue;
                             const ox = Math.min(A.x + A.hw, B.x + B.hw) - Math.max(A.x - A.hw, B.x - B.hw);
+                            if (ox <= 2) continue;
+                            if (B.cy <= A.cy && A.cy - A.hh + 2 - need < B.cy + B.hh) cluster.push(B);
+                        }
+                    }
+                    let top = Infinity;
+                    for (let i = 0; i < cluster.length; i++) top = Math.min(top, cluster[i].cy - cluster[i].hh);
+                    const d = Math.min(need, Math.max(0, top - minC - 2));
+                    for (let i = 0; i < cluster.length; i++) cluster[i].cy -= d;
+                }
+
+                // 躲卡：优先整体上下平移（离哪边近走哪边），实在放不下才左右推
+                function pushOffCard(p) {
+                    if (!hitsCard(p)) return;
+                    const L = cardRect.left - 10, R = cardRect.right + 10;
+                    const T = cardRect.top - 10, B = cardRect.bottom + 10;
+                    const dUp = (p.cy + p.hh) - T;
+                    const dDown = B - (p.cy - p.hh);
+                    const upOK = p.cy - dUp - p.hh >= minC;
+                    const downOK = p.cy + dDown + p.hh <= maxC;
+                    if (upOK && (!downOK || dUp <= dDown)) liftTogether(p, dUp + 4);
+                    else if (downOK) p.cy += dDown + 4;
+                    else {
+                        if ((p.x + p.hw) - L <= R - (p.x - p.hw)) p.x -= (p.x + p.hw) - L + 4;
+                        else p.x += R - (p.x - p.hw) + 4;
+                        clampX(p);
+                    }
+                }
+
+                // 标签互压：只做单向下移，避免左右来回打架
+                function separateDown() {
+                    const order = live.slice().sort(function (a, b) { return a.cy - b.cy; });
+                    for (let i = 0; i < order.length; i++) {
+                        const A = order[i];
+                        let moved = false;
+                        for (let j = 0; j < i; j++) {
+                            const B = order[j];
+                            const ox = Math.min(A.x + A.hw, B.x + B.hw) - Math.max(A.x - A.hw, B.x - B.hw);
+                            if (ox <= 2) continue;
                             const oy = Math.min(A.cy + A.hh, B.cy + B.hh) - Math.max(A.cy - A.hh, B.cy - B.hh);
-                            if (ox > 2 && oy > -4) {
-                                const push = (oy + 6) / 2;
-                                if (A.cy <= B.cy) { A.cy -= push; B.cy += push; }
-                                else { A.cy += push; B.cy -= push; }
+                            if (oy > 0) {
+                                A.cy = B.cy + B.hh + A.hh + 4;
+                                moved = true;
                             }
                         }
+                        if (moved) clampY(A);
                     }
                 }
 
-                function avoidCard() {
-                    if (!cardRect) return;
-                    const L = cardRect.left - 12, R = cardRect.right + 12;
-                    const T = cardRect.top - 12, B = cardRect.bottom + 12;
-                    for (let i = 0; i < live.length; i++) {
-                        const p = live[i];
-                        if (p.x + p.hw > L && p.x - p.hw < R && p.cy + p.hh > T && p.cy - p.hh < B) {
-                            const dLeft = (p.x + p.hw) - L;
-                            const dRight = R - (p.x - p.hw);
-                            const dUp = (p.cy + p.hh) - T;
-                            const dDown = B - (p.cy - p.hh);
-                            // 横向让位超过 130px 就会离锚点太远，宁可改走上下
-                            const cand = [];
-                            if (W >= 720) {
-                                if (dLeft <= 130) cand.push({ k: 'L', d: dLeft });
-                                if (dRight <= 130) cand.push({ k: 'R', d: dRight });
-                            }
-                            cand.push({ k: 'U', d: dUp }, { k: 'D', d: dDown });
-                            cand.sort(function (m, n) { return m.d - n.d; });
-                            const pick = cand[0].k;
-                            if (pick === 'L') p.x -= dLeft + 2;
-                            else if (pick === 'R') p.x += dRight + 2;
-                            else if (pick === 'U') p.cy -= dUp + 2;
-                            else p.cy += dDown + 2;
-                        }
-                    }
+                for (let pass = 0; pass < 3; pass++) {
+                    live.forEach(pushOffCard);
+                    separateDown();
+                    live.forEach(clampX);
                 }
-
-                function clampPills() {
-                    // 左侧留出工具栏宽度，别让标签压在图标上
-                    const padL = p => p.hw + (W < 860 ? 62 : 76);
-                    for (let i = 0; i < live.length; i++) {
-                        const p = live[i];
-                        p.x = Math.max(padL(p), Math.min(W - p.hw - 14, p.x));
-                        p.cy = Math.max(p.hh + 14, Math.min(H - p.hh - 74, p.cy));
-                    }
-                }
-
-                // 分离、躲卡、收边循环几轮，让两者同时满足
-                for (let pass = 0; pass < 6; pass++) {
-                    separatePills();
-                    avoidCard();
-                    clampPills();
-                }
+                // 收尾：互斥可能把标签又推回卡片上方，最后再避一次
+                live.forEach(pushOffCard);
+                live.forEach(clampX);
 
                 for (let i = 0; i < live.length; i++) {
                     const p = live[i];
@@ -1404,7 +1427,8 @@
                 view.tYaw = -Math.atan2(z.z, z.x);
                 view.tYaw += Math.round((view.yaw - view.tYaw) / (Math.PI * 2)) * Math.PI * 2;
                 view.tPitch = 0.88;
-                view.tDist = fitDistance() * 0.93;
+                // 聚焦时给一点拉远：分区转到对角位置后，沙盘横向占宽会变大
+                view.tDist = fitDistance() * 1.14;
                 view.tcx = 0;
                 view.tcz = 0;
                 syncUI(i);
@@ -1468,7 +1492,9 @@
             let firstFrame = true;
 
             function frame() {
-                const dt = Math.min(clock.getDelta(), 0.06);
+                let dt = clock.getDelta();
+                if (!(dt > 0)) dt = 1 / 60; // 少数环境会给出 0，兜底避免补间停住
+                dt = Math.min(dt, 0.06);
                 const t = clock.elapsedTime;
 
                 if (auto && !dragging && !celebrated) {
@@ -1489,8 +1515,8 @@
                     Math.sin(view.pitch) * view.dist,
                     view.cz + Math.cos(view.yaw) * cp * view.dist
                 );
-                // 竖屏时视线压低，让沙盘整体上移，露出上方空间
-                const lookY = 0.6 + (camera.aspect < 0.95 ? -2.0 : 0);
+                // 竖屏时视线压低，让沙盘整体上移，给底部卡片腾出空间
+                const lookY = 0.6 + (camera.aspect < 0.95 ? -3.3 : 0);
                 camera.lookAt(view.cx, lookY, view.cz);
 
                 // 当前分区的光环呼吸 + 轻微抬升
@@ -1556,26 +1582,14 @@
             if (!isNaN(fp) && fp >= 0 && fp < ZONES.length) {
                 auto = false;
                 toolAuto.classList.remove('active');
-                setTimeout(function () { focusZone(fp); }, 900);
+                setTimeout(function () {
+                    focusZone(fp);
+                    // 深链直接到位，不做补间
+                    view.yaw = view.tYaw; view.pitch = view.tPitch; view.dist = view.tDist;
+                    view.cx = view.tcx; view.cz = view.tcz;
+                }, 900);
             }
 
-            // TEMP DEBUG
-            if (new URLSearchParams(location.search).get('debug') === '1') {
-                const dbg = document.createElement('pre');
-                dbg.style.cssText = 'position:fixed;left:10px;top:110px;z-index:99;background:#fff;color:#111;font:600 17px/1.35 monospace;padding:10px;border:2px solid #333;max-width:760px;white-space:pre-wrap';
-                document.body.appendChild(dbg);
-                setInterval(function () {
-                    const lines = ['W=' + innerWidth + ' H=' + innerHeight + ' yaw=' + view.yaw.toFixed(2) + ' dist=' + view.dist.toFixed(1) + ' card=' + (cardRect ? cardRect.left.toFixed(0) + ',' + cardRect.right.toFixed(0) : 'null')];
-                    for (let i = 0; i < anchors.length; i++) {
-                        const v = projV.copy(anchors[i]).project(camera);
-                        lines.push(i + ' ax=' + anchors[i].x.toFixed(1) + ' az=' + anchors[i].z.toFixed(1) +
-                            ' sx=' + ((v.x * 0.5 + 0.5) * innerWidth).toFixed(0) +
-                            ' sy=' + ((-v.y * 0.5 + 0.5) * innerHeight).toFixed(0) +
-                            ' | ' + pillEls[i].style.transform + ' op=' + (pillEls[i].style.opacity || '1'));
-                    }
-                    dbg.textContent = lines.join('\n');
-                }, 400);
-            }
         }
     </script>
 </body>
