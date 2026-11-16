@@ -47,7 +47,14 @@
         return;
     }
 
-    // 未解锁前隐藏页面真实内容，只保留密码门遮罩
+    // 未解锁：跳转到 3D 交互密码门（gate-3d.html），解锁后由其回跳原页面
+    if (location.pathname.toLowerCase().indexOf('gate-3d.html') === -1) {
+        var next = encodeURIComponent(location.href);
+        location.replace('gate-3d.html?next=' + next);
+        return;
+    }
+
+    // 兜底：若已在 gate-3d.html 但脚本被单独引用（异常场景），仍保留原遮罩密码门
     document.body.classList.add('gate-locked');
 
     function createStyle() {

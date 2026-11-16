@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<!--
+  SPDX-License-Identifier: MIT
+  SPDX-FileCopyrightText: 2026 巴拿拿猫 (BananaCat) · Banana.design (https://banana.design)
+
+  第二层·防删保护标识
+    BANANA_DESIGN_BUILD_SIGNATURE :: Banana.design-personal-portfolio-website, ts:20260726
+    3D 交互密码门 gate-3d.html · 等距沙盘风格 · 悬浮密码卡
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="巴拿拿猫 BananaCat · Banana.design">
+    <meta name="copyright" content="© 2026 巴拿拿猫 (BananaCat) · Banana.design">
+    <title>请先验证 · 巴拿拿猫的小窝</title>
+    <style>
+        :root {
+            --sand: #E6D3B3;
+            --sand-dark: #D9C29B;
+            --grass: #9BC99B;
+            --grass-deep: #7FB87F;
+            --water: #8FC8E8;
+            --roof: #E8A87C;
+            --cream: #F7EFE3;
+            --ink: #4A3F33;
+            --ink-soft: #8A7A68;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(180deg, #FBF4E8 0%, #EAF2EE 55%, #DFE9E4 100%);
+            color: var(--ink);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 3D 画布铺满 */
+        #scene-canvas {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: block;
+            z-index: 0;
+        }
+
+        /* ── 顶部品牌 ── */
+        .brand {
+            position: fixed;
+            top: 22px;
+            left: 26px;
+            z-index: 10;
+            pointer-events: none;
+        }
+        .brand h1 {
+            font-size: 1.1rem;
+            letter-spacing: 2px;
+            color: var(--ink);
+            font-weight: 700;
+        }
+        .brand span {
+            display: block;
+            font-size: 0.72rem;
+            letter-spacing: 4px;
+            color: var(--ink-soft);
+            margin-top: 3px;
+        }
+
+        /* ── 中央毛玻璃密码卡 ── */
+        .gate-wrap {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20;
+            pointer-events: none;
+        }
+        .gate-card {
+            pointer-events: auto;
+            width: min(360px, 88vw);
+            padding: 2.2rem 2rem 1.9rem;
+            text-align: center;
+            background: rgba(255, 253, 248, 0.72);
+            backdrop-filter: blur(14px) saturate(1.15);
+            -webkit-backdrop-filter: blur(14px) saturate(1.15);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 20px;
+            box-shadow: 0 18px 50px rgba(90, 74, 44, 0.18), inset 0 1px 0 rgba(255,255,255,0.6);
+        }
+        .gate-card h2 {
+            font-size: 1.35rem;
+            color: var(--ink);
+            margin-bottom: 0.4rem;
+            letter-spacing: 1px;
+        }
+        .gate-desc {
+            color: var(--ink-soft);
+            font-size: 0.88rem;
+            margin-bottom: 1.4rem;
+        }
+        .gate-input {
+            width: 100%;
+            text-align: center;
+            font-size: 1.8rem;
+            letter-spacing: 0.5em;
+            padding: 0.6rem 0 0.6rem 0.5em;
+            border: 1px solid rgba(200, 180, 150, 0.7);
+            border-radius: 12px;
+            outline: none;
+            color: var(--ink);
+            background: rgba(255, 251, 243, 0.85);
+            box-sizing: border-box;
+            transition: border-color .2s, box-shadow .2s;
+        }
+        .gate-input:focus {
+            border-color: var(--roof);
+            box-shadow: 0 0 0 3px rgba(232, 168, 124, 0.22);
+        }
+        .gate-btn {
+            margin-top: 1.1rem;
+            width: 100%;
+            padding: 0.75rem;
+            background: linear-gradient(135deg, #F0B078, #E08B5A);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: transform .15s, box-shadow .2s;
+            box-shadow: 0 6px 16px rgba(224, 139, 90, 0.35);
+        }
+        .gate-btn:hover { transform: translateY(-1px); box-shadow: 0 9px 22px rgba(224, 139, 90, 0.45); }
+        .gate-btn:active { transform: translateY(0); }
+        .gate-error {
+            color: #D4722E;
+            font-size: 0.84rem;
+            line-height: 1.4;
+            min-height: 1.2em;
+            margin-top: 0.75rem;
+        }
+        .gate-note {
+            margin-top: 0.9rem;
+            color: var(--ink-soft);
+            font-size: 0.74rem;
+            line-height: 1.6;
+        }
+
+        /* ── 漂浮标签（呼应参考图的编号节点） ── */
+        .pill {
+            position: fixed;
+            z-index: 15;
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 14px;
+            background: rgba(255, 253, 248, 0.68);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            border-radius: 999px;
+            font-size: 0.8rem;
+            color: var(--ink);
+            box-shadow: 0 6px 18px rgba(90, 74, 44, 0.10);
+            animation: floatPill 6s ease-in-out infinite;
+        }
+        .pill .n {
+            width: 20px; height: 20px;
+            border-radius: 50%;
+            background: var(--roof);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            flex: 0 0 auto;
+        }
+        .pill.p1 { top: 18%; left: 12%; animation-delay: 0s; }
+        .pill.p2 { top: 30%; left: 78%; animation-delay: -1.5s; }
+        .pill.p3 { top: 68%; left: 10%; animation-delay: -3s; }
+        .pill.p4 { top: 78%; left: 76%; animation-delay: -4.5s; }
+        .pill.p5 { top: 12%; left: 46%; animation-delay: -2.2s; }
+
+        @keyframes floatPill {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-9px) rotate(1.5deg); }
+        }
+
+        .gate-card, .brand, .pill { opacity: 0; animation: fadeIn .9s ease forwards; }
+        .brand { animation-delay: .1s; }
+        .pill.p1 { animation-delay: .2s; }
+        .pill.p2 { animation-delay: .35s; }
+        .pill.p3 { animation-delay: .5s; }
+        .pill.p4 { animation-delay: .65s; }
+        .pill.p5 { animation-delay: .8s; }
+        .gate-card { animation-delay: .4s; }
+
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        /* 成功后的淡出 */
+        .gate-card.leaving { transition: opacity .5s ease, transform .5s ease; opacity: 0; transform: scale(.92); }
+        .pill.hide, .brand.hide { transition: opacity .5s ease; opacity: 0; }
+
+        @media (max-width: 768px) {
+            .pill.p2, .pill.p4 { display: none; }
+            .pill { font-size: 0.72rem; padding: 5px 11px; }
+            .brand { top: 16px; left: 18px; }
+        }
+    </style>
+
+    <!-- 51.la 访客统计 V6 -->
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"3Qu6OIFKMWrFWPyF",ck:"3Qu6OIFKMWrFWPyF"})</script>
+</head>
+<body>
+    <canvas id="scene-canvas"></canvas>
+
+    <div class="brand">
+        <h1>巴拿拿猫的个人网站</h1>
+        <span>BANANA.DESIGN</span>
+    </div>
+
+    <div class="pill p1"><span class="n">1</span>作品展示</div>
+    <div class="pill p2"><span class="n">2</span>角色展示</div>
+    <div class="pill p3"><span class="n">3</span>小游戏</div>
+    <div class="pill p4"><span class="n">4</span>开发日志</div>
+    <div class="pill p5"><span class="n">5</span>关于我</div>
+
+    <div class="gate-wrap">
+        <div class="gate-card" id="gate-card">
+            <h2>请输入访问密码</h2>
+            <p class="gate-desc">解锁后进入我的小窝</p>
+            <input id="gate-input" class="gate-input" type="password" inputmode="numeric" maxlength="4" placeholder="••••" autocomplete="off">
+            <button id="gate-btn" class="gate-btn" type="button">进 入</button>
+            <div class="gate-error" id="gate-error"></div>
+            <p class="gate-note">本站自 2026年9月30日 起启用访问密码。<br>还不知道密码的话，可以来问我，或到作品集首页右下角查看。</p>
+        </div>
+    </div>
+
+    <!-- 认证逻辑：与 gate.js 保持一致（djb2 哈希 + 4 小时 / 每日失效） -->
+    <script>
+        (function () {
+            var GATE_HASH = '7c7c2e23'; // 密码 7896 的 djb2 哈希
+            var STORAGE_KEY = 'bc_site_pass';
+            var MAX_AGE = 4 * 60 * 60 * 1000;
+
+            function hashPin(s) {
+                var h = 5381;
+                for (var i = 0; i < s.length; i++) {
+                    h = ((h << 5) + h + s.charCodeAt(i)) >>> 0;
+                }
+                return h.toString(16);
+            }
+            function isSameDay(a, b) {
+                var d1 = new Date(a), d2 = new Date(b);
+                return d1.getFullYear() === d2.getFullYear() &&
+                    d1.getMonth() === d2.getMonth() &&
+                    d1.getDate() === d2.getDate();
+            }
+            function isGranted() {
+                try {
+                    var t = parseInt(localStorage.getItem(STORAGE_KEY), 10);
+                    if (!t) return false;
+                    return (Date.now() - t < MAX_AGE) && isSameDay(t, Date.now());
+                } catch (e) { return false; }
+            }
+            function getNext() {
+                var next = new URLSearchParams(location.search).get('next');
+                if (!next) return 'index.html';
+                try {
+                    var u = new URL(next, location.origin);
+                    if (u.origin === location.origin && !/^(javascript|data|vbscript):/i.test(next)) return next;
+                } catch (e) {}
+                return 'index.html';
+            }
+
+            var input = document.getElementById('gate-input');
+            var btn = document.getElementById('gate-btn');
+            var err = document.getElementById('gate-error');
+            var card = document.getElementById('gate-card');
+
+            // 已放行则直接回跳，不展示密码门
+            if (isGranted()) {
+                location.replace(getNext());
+                return;
+            }
+
+            function allow() {
+                try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch (e) {}
+                card.classList.add('leaving');
+                document.querySelectorAll('.pill, .brand').forEach(function (el) { el.classList.add('hide'); });
+                setTimeout(function () { location.replace(getNext()); }, 520);
+            }
+            function deny() {
+                err.textContent = '密码不正确，请重试';
+                input.value = '';
+                input.focus();
+                card.animate(
+                    [{ transform: 'translateX(0)' }, { transform: 'translateX(-8px)' }, { transform: 'translateX(8px)' }, { transform: 'translateX(-5px)' }, { transform: 'translateX(5px)' }, { transform: 'translateX(0)' }],
+                    { duration: 320, easing: 'ease-in-out' }
+                );
+            }
+            function check() {
+                if (hashPin(input.value) === GATE_HASH) allow(); else deny();
+            }
+
+            btn.addEventListener('click', check);
+            input.addEventListener('keydown', function (e) { if (e.key === 'Enter') check(); });
+            input.focus();
+        })();
+    </script>
+
+    <!-- 3D 沙盘场景（Three.js，独立模块，加载失败不影响认证） -->
+    <script type="importmap">
+        { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+    </script>
+    <script type="module">
+        import * as THREE from 'three';
+
+        const canvas = document.getElementById('scene-canvas');
+        const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(innerWidth, innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.05;
+
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0xEAF2EE, 34, 96);
+
+        const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 200);
+        camera.position.set(0, 10, 16);
+
+        // ── 光照 ──
+        scene.add(new THREE.HemisphereLight(0xFFFFFF, 0xE8D5B5, 0.85));
+        const sun = new THREE.DirectionalLight(0xFFF6E8, 2.0);
+        sun.position.set(14, 20, 10);
+        sun.castShadow = true;
+        sun.shadow.mapSize.set(1024, 1024);
+        sun.shadow.camera.near = 1;
+        sun.shadow.camera.far = 80;
+        sun.shadow.camera.left = -20;
+        sun.shadow.camera.right = 20;
+        sun.shadow.camera.top = 20;
+        sun.shadow.camera.bottom = -20;
+        sun.shadow.bias = -0.0004;
+        sun.shadow.normalBias = 0.02;
+        scene.add(sun);
+
+        // ── 材质 ──
+        const M = {
+            sand: new THREE.MeshStandardMaterial({ color: 0xE6D3B3, roughness: 0.95 }),
+            sandDark: new THREE.MeshStandardMaterial({ color: 0xD9C29B, roughness: 0.95 }),
+            grass: new THREE.MeshStandardMaterial({ color: 0x9BC99B, roughness: 0.9 }),
+            grassDeep: new THREE.MeshStandardMaterial({ color: 0x7FB87F, roughness: 0.9 }),
+            water: new THREE.MeshStandardMaterial({ color: 0x8FC8E8, roughness: 0.2, metalness: 0.05 }),
+            roof: new THREE.MeshStandardMaterial({ color: 0xE8A87C, roughness: 0.7 }),
+            wall: new THREE.MeshStandardMaterial({ color: 0xF5E9D6, roughness: 0.8 }),
+            trunk: new THREE.MeshStandardMaterial({ color: 0x8B6B4A, roughness: 0.9 }),
+            leaf: new THREE.MeshStandardMaterial({ color: 0x7BBF7B, roughness: 0.9 }),
+            leaf2: new THREE.MeshStandardMaterial({ color: 0x5FA85F, roughness: 0.9 }),
+            accent: new THREE.MeshStandardMaterial({ color: 0xF0B078, roughness: 0.6 }),
+        };
+
+        function box(w, h, d, mat) { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat); m.castShadow = true; m.receiveShadow = true; return m; }
+        function cyl(rt, rb, h, mat, seg = 20) { const m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), mat); m.castShadow = true; m.receiveShadow = true; return m; }
+        function cone(r, h, mat, seg = 20) { const m = new THREE.Mesh(new THREE.ConeGeometry(r, h, seg), mat); m.castShadow = true; m.receiveShadow = true; return m; }
+        function sphere(r, mat, seg = 18) { const m = new THREE.Mesh(new THREE.SphereGeometry(r, seg, seg), mat); m.castShadow = true; m.receiveShadow = true; return m; }
+
+        // ── 底座沙盘 ──
+        const base = cyl(13, 13.6, 0.6, M.sand, 48);
+        base.position.y = -0.3;
+        base.receiveShadow = true;
+        scene.add(base);
+
+        // 底座装饰环
+        const ring = new THREE.Mesh(new THREE.TorusGeometry(10.5, 0.14, 8, 60), M.sandDark);
+        ring.rotation.x = -Math.PI / 2;
+        ring.position.y = 0.02;
+        ring.receiveShadow = true;
+        scene.add(ring);
+
+        // ── 草地地块 + 主题物件 ──
+        const plots = [
+            { ang: -72, r: 6.4, mat: M.grass, type: 'studio' },   // 作品展示
+            { ang: -144, r: 6.4, mat: M.grassDeep, type: 'character' }, // 角色展示
+            { ang: 144, r: 6.4, mat: M.grass, type: 'game' },     // 小游戏
+            { ang: 72, r: 6.4, mat: M.grassDeep, type: 'blog' },  // 开发日志
+            { ang: 178, r: 6.9, mat: M.grass, type: 'about' },    // 关于我
+        ];
+
+        function addPlot(p) {
+            const x = Math.cos(p.ang * Math.PI / 180) * p.r;
+            const z = Math.sin(p.ang * Math.PI / 180) * p.r;
+            const g = new THREE.Group();
+            const pad = cyl(1.7, 1.9, 0.4, p.mat);
+            pad.position.set(x, 0.2, z);
+            scene.add(pad);
+
+            switch (p.type) {
+                case 'studio': {
+                    const b = box(1.5, 1.3, 1.1, M.wall); b.position.set(x, 0.85, z); scene.add(b);
+                    const r = new THREE.Mesh(new THREE.ConeGeometry(1.15, 0.7, 4), M.roof); r.position.set(x, 1.85, z); r.rotation.y = Math.PI / 4; r.castShadow = true; scene.add(r);
+                    const door = box(0.4, 0.55, 0.06, M.trunk); door.position.set(x, 0.55, z + 0.56); scene.add(door);
+                    break;
+                }
+                case 'character': {
+                    const ped = cyl(0.6, 0.7, 0.5, M.wall); ped.position.set(x, 0.65, z); scene.add(ped);
+                    const head = sphere(0.42, M.accent); head.position.set(x, 1.25, z); scene.add(head);
+                    break;
+                }
+                case 'game': {
+                    const b = box(1.4, 1.2, 1.2, M.wall); b.position.set(x, 0.8, z); scene.add(b);
+                    const r = new THREE.Mesh(new THREE.ConeGeometry(1.0, 0.9, 4), M.leaf2); r.position.set(x, 1.75, z); r.rotation.y = Math.PI / 4; r.castShadow = true; scene.add(r);
+                    break;
+                }
+                case 'blog': {
+                    const t = cyl(0.55, 0.7, 2.6, M.wall); t.position.set(x, 1.5, z); scene.add(t);
+                    const top = cone(0.85, 0.8, M.roof); top.position.set(x, 3.1, z); scene.add(top);
+                    const light = sphere(0.22, M.accent); light.position.set(x, 3.35, z); scene.add(light);
+                    break;
+                }
+                case 'about': {
+                    const b = box(1.3, 1.0, 1.0, M.wall); b.position.set(x, 0.7, z); scene.add(b);
+                    const r = new THREE.Mesh(new THREE.ConeGeometry(1.0, 0.75, 4), M.roof); r.position.set(x, 1.45, z); r.rotation.y = Math.PI / 4; r.castShadow = true; scene.add(r);
+                    break;
+                }
+            }
+
+            // 每块地种 2-3 棵树
+            const treeCount = 2 + Math.floor(Math.random() * 2);
+            for (let i = 0; i < treeCount; i++) {
+                const a = Math.random() * Math.PI * 2;
+                const rr = 1.1 + Math.random() * 1.1;
+                const tx = x + Math.cos(a) * rr;
+                const tz = z + Math.sin(a) * rr;
+                const th = 0.5 + Math.random() * 0.5;
+                const trunk = cyl(0.09, 0.12, th, M.trunk); trunk.position.set(tx, 0.2 + th / 2, tz); scene.add(trunk);
+                const leaf = cone(0.32 + Math.random() * 0.14, 0.7 + Math.random() * 0.3, Math.random() > 0.5 ? M.leaf : M.leaf2);
+                leaf.position.set(tx, 0.2 + th + 0.28, tz); scene.add(leaf);
+            }
+        }
+        plots.forEach(addPlot);
+
+        // ── 中央小池塘 ──
+        const pond = cyl(1.6, 1.6, 0.12, M.water, 28);
+        pond.position.set(0, 0.06, 3.2);
+        pond.receiveShadow = true;
+        scene.add(pond);
+        const pondRim = new THREE.Mesh(new THREE.TorusGeometry(1.6, 0.1, 8, 40), M.sandDark);
+        pondRim.rotation.x = -Math.PI / 2;
+        pondRim.position.set(0, 0.05, 3.2);
+        scene.add(pondRim);
+
+        // ── 散落小树 ──
+        for (let i = 0; i < 10; i++) {
+            const a = Math.random() * Math.PI * 2;
+            const r = 3.2 + Math.random() * 6;
+            const tx = Math.cos(a) * r;
+            const tz = Math.sin(a) * r;
+            const th = 0.4 + Math.random() * 0.5;
+            const trunk = cyl(0.08, 0.1, th, M.trunk); trunk.position.set(tx, 0.3 + th / 2, tz); scene.add(trunk);
+            const leaf = cone(0.26 + Math.random() * 0.14, 0.6 + Math.random() * 0.3, Math.random() > 0.5 ? M.leaf : M.leaf2);
+            leaf.position.set(tx, 0.3 + th + 0.24, tz); scene.add(leaf);
+        }
+
+        // ── 漂浮装饰（带浮动动画） ──
+        const floaters = [];
+        function addFloater(geo, mat, x, y, z, amp, speed, phase) {
+            const m = new THREE.Mesh(geo, mat);
+            m.position.set(x, y, z);
+            m.castShadow = true;
+            scene.add(m);
+            floaters.push({ m, baseY: y, amp, speed, phase });
+        }
+        addFloater(new THREE.BoxGeometry(0.4, 0.4, 0.4), M.accent, -3.5, 2.2, 2.5, 0.35, 1.3, 0);
+        addFloater(new THREE.TorusGeometry(0.3, 0.1, 10, 24), M.roof, 3.4, 2.6, 2.0, 0.3, 1.6, 1.5);
+        addFloater(new THREE.OctahedronGeometry(0.34), M.leaf2, 4.2, 2.4, -2.6, 0.4, 1.1, 2.4);
+        addFloater(new THREE.IcosahedronGeometry(0.3), M.water, -4.4, 2.5, -2.2, 0.32, 1.4, 0.8);
+
+        // ── 云朵 ──
+        const clouds = [];
+        function addCloud(x, y, z, s) {
+            const g = new THREE.Group();
+            const m = new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 1 });
+            const parts = [[0,0,0,1.1,0.5,0.8],[0.7,0.1,0.1,0.7,0.4,0.55],[-0.6,0.05,-0.1,0.75,0.42,0.6],[0.25,0.15,-0.3,0.5,0.32,0.45]];
+            parts.forEach(function (p) {
+                const s2 = new THREE.Mesh(new THREE.SphereGeometry(1, 12, 10), m);
+                s2.scale.set(p[3] * s, p[4] * s, p[5] * s);
+                s2.position.set(p[0] * s, p[1] * s, p[2] * s);
+                s2.castShadow = false;
+                g.add(s2);
+            });
+            g.position.set(x, y, z);
+            scene.add(g);
+            clouds.push({ g, x, speed: 0.05 + Math.random() * 0.06, drift: Math.random() * 6 });
+        }
+        addCloud(-7, 8.5, -4, 1.0);
+        addCloud(6, 9, 2, 0.85);
+        addCloud(2, 9.5, -8, 1.15);
+        addCloud(-4, 8, 7, 0.9);
+
+        // ── 鼠标视差 ──
+        const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+        addEventListener('pointermove', function (e) {
+            mouse.tx = (e.clientX / innerWidth) * 2 - 1;
+            mouse.ty = (e.clientY / innerHeight) * 2 - 1;
+        });
+
+        // ── 动画 ──
+        const clock = new THREE.Clock();
+        let orbit = 0.3;
+        renderer.setAnimationLoop(function () {
+            const t = clock.getElapsedTime();
+            orbit += 0.0009;
+
+            mouse.x += (mouse.tx - mouse.x) * 0.05;
+            mouse.y += (mouse.ty - mouse.y) * 0.05;
+
+            const r = 16.5;
+            const camX = Math.cos(orbit) * r + mouse.x * 1.3;
+            const camZ = Math.sin(orbit) * r;
+            const camY = 10 - mouse.y * 0.8;
+            camera.position.set(camX, camY, camZ);
+            camera.lookAt(0, 1.1, 0);
+
+            for (const f of floaters) {
+                f.m.position.y = f.baseY + Math.sin(t * f.speed + f.phase) * f.amp;
+                f.m.rotation.y = t * 0.6;
+            }
+            for (const c of clouds) {
+                c.g.position.x = c.x + Math.sin(t * c.speed + c.drift) * 2.5;
+            }
+
+            renderer.render(scene, camera);
+        });
+
+        addEventListener('resize', function () {
+            camera.aspect = innerWidth / innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(innerWidth, innerHeight);
+        });
+    </script>
+</body>
+</html>

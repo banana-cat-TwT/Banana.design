@@ -2760,14 +2760,26 @@ let currentArchiveDate = null;
 let currentArchiveYear = 2026;
 let currentArchiveMonth = 8;
 
+function getLatestMonth(category) {
+    // 返回该分类下最新有数据的年月（键为 YYYY-MM-DD，字符串比较即日期比较）
+    if (!archiveData[category]) return { year: 2026, month: 8 };
+    let latestKey = '';
+    for (const key in archiveData[category]) {
+        if (key > latestKey) latestKey = key;
+    }
+    if (!latestKey) return { year: 2026, month: 8 };
+    return { year: parseInt(latestKey.slice(0, 4), 10), month: parseInt(latestKey.slice(5, 7), 10) };
+}
+
 function showArchive() {
     const archiveModal = document.getElementById('archiveModal');
     if (archiveModal) {
         archiveModal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         currentArchiveTab = 'ai';
-        currentArchiveYear = 2026;
-        currentArchiveMonth = 8;
+        const latest = getLatestMonth('ai');
+        currentArchiveYear = latest.year;
+        currentArchiveMonth = latest.month;
         document.querySelector('.archive-tab:nth-child(1)').classList.add('active');
         document.querySelector('.archive-tab:nth-child(2)').classList.remove('active');
         backToCalendar();
