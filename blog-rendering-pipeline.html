@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<!-- SPDX-License-Identifier: MIT -->
+<!-- SPDX-FileCopyrightText: 2026 巴拿拿猫 (BananaCat) · Banana.design -->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实时渲染管线研究日志（图形学 · 面试题库） - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: #F4F9FC;
+            color: #33454F;
+        }
+
+        .blog-detail-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .blog-detail-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #1E4F73;
+        }
+
+        .blog-detail-subtitle {
+            font-size: 1rem;
+            color: #7C8F9C;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .blog-tag {
+            padding: 0.4rem 0.85rem;
+            background: #E4F0F9;
+            color: #2B6C9C;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid #C9DFF0;
+        }
+
+        .blog-detail-content {
+            background: #FFFFFF;
+            border-radius: 14px;
+            padding: 2rem;
+            border: 1px solid #DCE8F3;
+            box-shadow: 0 4px 18px rgba(43, 108, 156, 0.06);
+            color: #445159;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .section-title {
+            font-size: 1.35rem;
+            margin-bottom: 1rem;
+            color: #1E4F73;
+            border-bottom: 1px solid #DCE8F3;
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+            scroll-margin-top: 100px;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .section-content {
+            margin-bottom: 1.5rem;
+            line-height: 1.85;
+        }
+
+        .section-content p {
+            margin-bottom: 0.9rem;
+        }
+
+        .section-content ul, .section-content ol {
+            margin: 0.6rem 0 1rem 1.4rem;
+            padding: 0;
+        }
+
+        .section-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .section-content code {
+            background: #EAF3FA;
+            color: #1F5C87;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .highlight {
+            color: #2B6C9C;
+            font-weight: 600;
+        }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .compare-table th, .compare-table td {
+            border: 1px solid #DCE8F3;
+            padding: 0.6rem 0.8rem;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .compare-table th {
+            background: #E9F3FA;
+            color: #1E4F73;
+            font-weight: 600;
+        }
+
+        .compare-table tr:nth-child(even) td {
+            background: #F7FBFD;
+        }
+
+        .tip {
+            background: #EFF7FC;
+            border-left: 3px solid #4E9AD1;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .case-sub {
+            font-size: 1.08rem;
+            color: #1E4F73;
+            margin: 1.6rem 0 0.6rem;
+            font-weight: 600;
+        }
+
+        .case-block {
+            background: #F8FBFE;
+            border: 1px solid #DCE8F3;
+            border-radius: 10px;
+            padding: 1rem 1.2rem;
+            margin: 1rem 0;
+        }
+
+        .case-block .case-title {
+            color: #1E4F73;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #DCE8F3;
+            padding: 0.9rem 0;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+
+        .faq-q {
+            color: #1E4F73;
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+        }
+
+        .faq-q::before {
+            content: "Q";
+            color: #2B6C9C;
+            font-weight: 700;
+        }
+
+        .faq-a {
+            color: #5C7285;
+            line-height: 1.8;
+        }
+
+        .faq-a::before {
+            content: "A";
+            color: #2B6C9C;
+            font-weight: 700;
+        }
+
+        .formula {
+            background: #F2F8FD;
+            border: 1px solid #DCE8F3;
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+            margin: 0.8rem 0 1rem;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 0.9rem;
+            color: #1F5C87;
+            overflow-x: auto;
+            line-height: 1.9;
+        }
+
+        .btn-back {
+            display: inline-block;
+            padding: 0.7rem 1.6rem;
+            background: #2B6C9C;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 24px;
+            font-weight: 600;
+            transition: background 0.2s ease;
+            margin-top: 2rem;
+            border: 1px solid #27618C;
+        }
+
+        .btn-back:hover {
+            background: #27618C;
+        }
+
+        /* 右侧章节导航 */
+        .toc-nav {
+            position: fixed;
+            top: 96px;
+            right: 28px;
+            width: 196px;
+            max-height: calc(100vh - 140px);
+            overflow-y: auto;
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid #DCE8F3;
+            border-radius: 12px;
+            padding: 14px 10px;
+            box-shadow: 0 4px 18px rgba(43, 108, 156, 0.07);
+            z-index: 900;
+        }
+
+        .toc-nav-title {
+            font-size: 0.72rem;
+            letter-spacing: 2px;
+            color: #9AB0BE;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .toc-nav .toc-link {
+            display: block;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.8rem;
+            line-height: 1.45;
+            color: #5C7285;
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            border-left: 2px solid transparent;
+            transition: all 0.18s ease;
+        }
+
+        .toc-nav .toc-link:hover {
+            background: #EFF7FC;
+            color: #2B6C9C;
+        }
+
+        .toc-nav .toc-link.active {
+            background: #E9F3FA;
+            color: #2B6C9C;
+            font-weight: 600;
+            border-left-color: #2B6C9C;
+        }
+
+        @media (max-width: 1360px) {
+            main {
+                padding-bottom: 64px;
+            }
+
+            .toc-nav {
+                top: auto;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                max-height: none;
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                overflow-x: auto;
+                overflow-y: hidden;
+                border-radius: 0;
+                border: none;
+                border-top: 1px solid #DCE8F3;
+                padding: 8px 12px;
+                box-shadow: 0 -4px 14px rgba(43, 108, 156, 0.08);
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .toc-nav-title {
+                display: none;
+            }
+
+            .toc-nav .toc-link {
+                white-space: nowrap;
+                width: auto;
+                flex: 0 0 auto;
+                font-size: 0.76rem;
+                padding: 5px 12px;
+                background: #F4F9FC;
+                border: 1px solid #DCE8F3;
+                border-left: 1px solid #DCE8F3;
+                border-radius: 999px;
+                text-align: center;
+            }
+
+            .toc-nav .toc-link.active {
+                background: #2B6C9C;
+                color: #ffffff;
+                border-color: #2B6C9C;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .blog-detail-container {
+                padding: 1rem;
+            }
+
+            .blog-detail-content {
+                padding: 1.2rem;
+            }
+
+            .blog-detail-title {
+                font-size: 1.5rem;
+            }
+
+            .compare-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+    </style>
+
+    <!-- 51.la 访客统计 V6 -->
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"3Qu6OIFKMWrFWPyF",ck:"3Qu6OIFKMWrFWPyF"})</script>
+</head>
+<body>
+    <script src="gate.js"></script>
+    <!-- Watermark Canvas -->
+    <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0.05;"></canvas>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <nav class="toc-nav" id="tocNav" aria-label="章节导航">
+            <div class="toc-nav-title">章节导航</div>
+        </nav>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">实时渲染管线研究日志（图形学 · 面试题库）</h1>
+                <p class="blog-detail-subtitle">2026年11月 · 技术整理 · 从 BRDF 到光追的工程取舍</p>
+                <div class="blog-tags">
+                    <span class="blog-tag">微表面 BRDF</span>
+                    <span class="blog-tag">Forward / Deferred</span>
+                    <span class="blog-tag">全局光照</span>
+                    <span class="blog-tag">阴影走样</span>
+                    <span class="blog-tag">后处理</span>
+                    <span class="blog-tag">光线追踪</span>
+                </div>
+            </div>
+
+            <div class="blog-detail-content">
+
+                <h2 class="section-title">先交代这一篇的位置</h2>
+                <div class="section-content">
+                    <p>前面那篇 <a href="blog-ai3d-foundation.html" class="highlight">AI 3D 大模型研究日志</a> 解决的是「资产怎么被生成出来、生成得对不对」；这一篇解决的是另一个问题——<span class="highlight">资产进引擎之后，怎么被正确地、划算地画到屏幕上</span>。两件事的评判标准完全不同：前者看几何和材质数据本身干不干净，后者看画面结果和每帧预算。</p>
+                    <p>这一套题集中在实时渲染管线，是技术美术、渲染向客户端、引擎工具这几个岗位的公共底座。我按同一个口径来答每一题：</p>
+                    <ul>
+                        <li><span class="highlight">一句话定义</span>：先能用一句话说清它是什么，证明概念没糊；</li>
+                        <li><span class="highlight">物理 / 数学意义</span>：公式里每一项到底在补偿什么现实，而不是背符号；</li>
+                        <li><span class="highlight">工程取舍</span>：什么条件下用它、什么条件下换成别的；</li>
+                        <li><span class="highlight">踩坑点</span>：真做项目时会在哪里翻车。</li>
+                    </ul>
+                    <p>之所以要「取舍」这一层，是因为渲染没有标准答案，只有预算分配。同一个画面，PC 上可以硬追光线，手机上只能预烘焙 + 探针；说得出为什么，才算真懂。</p>
+                </div>
+
+                <h2 class="section-title">微表面模型：GGX、几何遮蔽与菲涅尔</h2>
+                <div class="section-content">
+                    <p>先给定义：<span class="highlight">微表面模型（Microfacet Model）把粗糙表面看成无数个朝向各异的微小完美镜面</span>，用统计分布描述这些微面朝向，最后对它们积分，得到一个只靠「粗糙度」一个参数就能解释从镜面到粗糙漫反射连续变化的 BRDF。它的意义在于——真实材质表面在微观上本来就不平，微表面模型是把「不平」这件事数学化的标准做法。</p>
+
+                    <h3 class="case-sub">Cook-Torrance 的完整形式</h3>
+                    <p>实时渲染里最常用的是 Cook-Torrance 形式，把 BRDF 拆成漫反射 + 镜面两部分：</p>
+                    <div class="formula">
+f_r = k_d · (c / π)  +  k_s · [ D(h) · G(l,v,h) · F(v,h) ] / [ 4 · (n·l) · (n·v) ]
+                    </div>
+                    <p>其中 <code>D</code> 是法线分布函数（NDF），<code>G</code> 是几何遮蔽函数，<code>F</code> 是菲涅尔项。<span class="highlight">这三项分别回答三个独立的问题：微面朝向怎么分布、微面之间怎么互相挡住、镜面反射率随角度怎么变。</span>少任何一项，画面都会出问题。</p>
+
+                    <h3 class="case-sub">三项各自在补偿什么</h3>
+                    <table class="compare-table">
+                        <thead>
+                            <tr><th>项</th><th>物理意义</th><th>常用形式</th><th>删掉 / 写错之后的症状</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>D</code>（NDF，GGX）</td>
+                                <td>微表面法线朝向半角向量 h 的概率密度，决定高光的<b>宽度、形状和拖尾</b></td>
+                                <td>D = α² / (π · ((n·h)²(α²−1)+1)²)</td>
+                                <td>高光变成均匀一团、没有锐利核心和外圈衰减，塑料感消失</td>
+                            </tr>
+                            <tr>
+                                <td><code>G</code>（几何遮蔽）</td>
+                                <td>微面之间的<b>相互遮挡与投影</b>（masking &amp; shadowing），能量在掠射角下的补偿</td>
+                                <td>Smith + Schlick-GGX：G1(x) = (n·x) / ((n·x)(1−k)+k)，k=(α+1)²/8</td>
+                                <td>掠射角边缘异常发亮、能量不守恒，边缘出现一圈「亮边」</td>
+                            </tr>
+                            <tr>
+                                <td><code>F</code>（菲涅尔）</td>
+                                <td>反射率随<b>观察角度</b>变化：正对看是 F0，掠射角趋近 1</td>
+                                <td>Schlick：F = F0 + (1−F0)(1−v·h)⁵</td>
+                                <td>没有边缘反光，所有材质像贴纸；地面、水面失去「越平视越亮」的感觉</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 class="case-sub">三个最容易答错的点</h3>
+                    <p><span class="highlight">第一，roughness 不等于 α。</span>业界普遍做了一次 remap：<code>α = roughness²</code>（Unity、UE 及多数 PBR 管线都这么干）。如果直接把美术给的 roughness 当 α 用，中间粗糙度区间的高光会异常宽、看着像被磨砂糊住。这一题如果能主动说出这层 remap，基本就区分出「背过公式」和「真调过材质」。</p>
+                    <p><span class="highlight">第二，分母 4(n·l)(n·v) 不是归一化系数。</span>它是从微表面分布到宏观 BRDF 的立体角变换雅可比。写成「除以 4 是为了归一化」是常见错误答案。</p>
+                    <p><span class="highlight">第三，F0 不是 0。</span>非金属的 F0 约 0.04（常见近似），金属的 F0 直接用基色 albedo。而 <code>k_s = F</code>、<code>k_d = (1−F)(1−metallic)</code> 才是能量守恒写法——金属没有漫反射正是这条式子推出来的，不是单独规定。GGX 的 D 有一条很长的尾巴，这既是真实高光的来源（金属反光有拖尾），也是画面出现 fireflies 亮点的来源，所以它和后面要讲的降噪、TAA 是连着的问题。</p>
+
+                    <div class="tip">
+                        <p>工程上最常见的事故不是公式写错，而是<span class="highlight">贴图色彩空间错了</span>：roughness / metallic / AO 是数据贴图，必须按线性（Linear / Non-Color / sRGB 关闭）采样；albedo 才是 sRGB。这一条错了，整批材质会「看起来都差一点」，而且怎么调参数都调不回来。</p>
+                    </div>
+                </div>
+
+                <h2 class="section-title">渲染路径选型：Forward、Deferred 与 Forward+</h2>
+                <div class="section-content">
+                    <p>三者的差别只有一句话：<span class="highlight">光照计算发生在几何着色的那一次 pass 里，还是拆成「先写几何信息、再算光照」两步，以及光源列表是全局给还是按屏幕分块给。</span></p>
+
+                    <table class="compare-table">
+                        <thead>
+                            <tr><th>维度</th><th>Forward（前向）</th><th>Deferred（延迟）</th><th>Forward+（分块前向）</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>基本做法</td>
+                                <td>逐物体、逐光源，直接在着色 pass 里算完光照</td>
+                                <td>先写 G-Buffer（albedo / normal / roughness+metallic / depth），再全屏逐光源算光照</td>
+                                <td>先按屏幕 tile（或 3D cluster）剔除出影响该块的光源表，forward pass 只遍历这张表</td>
+                            </tr>
+                            <tr>
+                                <td>光源扩展性</td>
+                                <td>差。光源越多，着色重复越多、shader 变体越爆</td>
+                                <td>好。光照成本 ≈ 屏幕像素 × 光源覆盖，与几何复杂度基本解耦</td>
+                                <td>较好。接近 deferred 的可扩展性，但有上限</td>
+                            </tr>
+                            <tr>
+                                <td>带宽</td>
+                                <td>低</td>
+                                <td>高。G-Buffer 多张 RT 写出再读回，移动端 TBDR 上极不友好</td>
+                                <td>中。需要一次光源列表构建（compute）</td>
+                            </tr>
+                            <tr>
+                                <td>MSAA</td>
+                                <td>原生支持</td>
+                                <td>不友好，通常要靠 TAA / 超采样代替</td>
+                                <td>原生支持</td>
+                            </tr>
+                            <tr>
+                                <td>透明与半透</td>
+                                <td>天然支持</td>
+                                <td>不支持，必须另开 forward 通道补</td>
+                                <td>天然支持</td>
+                            </tr>
+                            <tr>
+                                <td>材质灵活性</td>
+                                <td>高。每个材质可以写自己的光照模型（NPR、次表面、布料到头发）</td>
+                                <td>低。G-Buffer 参数集固定，特殊材质要额外通道</td>
+                                <td>高</td>
+                            </tr>
+                            <tr>
+                                <td>典型场景</td>
+                                <td>移动端、VR（必须 MSAA）、光源少、风格化 / 卡通渲染</td>
+                                <td>PC / 主机 3A、大量动态光源、强依赖屏幕空间效果（SSAO / SSR / SSGI）</td>
+                                <td>移动 / VR + 多光源、URP Forward+、需要 MSAA 又要光源数量撑住</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 class="case-sub">为什么移动端几乎不用 Deferred</h3>
+                    <p>因为移动 GPU（PowerVR / Mali / Adreno）是 <span class="highlight">TBDR（Tile-Based Deferred Rendering）</span>架构：把屏幕切成小块，在片上 tile memory 里完成着色，尽量不写系统内存。Deferred 的 G-Buffer 恰恰要求把多张大 RT 写出去再读回来，<span class="highlight">带宽直接被击穿</span>，还会连带破坏 TBDR 的「深度预通道 + 隐藏面剔除」优势。所以移动端要么 forward，要么 Vulkan subpass 里做片上 deferred，要么就走 Forward+ / cluster。</p>
+
+                    <h3 class="case-sub">Forward+ 到底「+」在哪</h3>
+                    <p>它不是新的着色模型，而是<span class="highlight">光照剔除策略</span>的升级：传统 forward 每个物体都要遍历场景全部光源，Forward+ 先用 compute 把屏幕划成 tile（典型 16×16）或 3D cluster，算出「哪些光源真的照到这一块」，生成 light index 列表，forward pass 里只查这张表。这样既保留了 forward 的 MSAA、透明、材质自由，又把「光源数量」这个最痛的扩展性问题解决掉了大半。</p>
+                    <p>代价是：光源列表要每帧重建；光源大量重叠、或单个光源影响范围极大的场景下收益会掉；复杂反射/多层透明依旧不如 deferred 好用。</p>
+
+                    <div class="tip">
+                        <p>面试时说选型的正确姿势不是「Deferred 更先进」，而是<span class="highlight">先说平台约束、再说光源规模、再说是否需要 MSAA 和透明、最后才落到方案</span>。真实工程几乎都是混合：UE 默认 deferred，但透明和特殊材质走 forward 通道；移动端 forward+，靠 depth prepass 压 overdraw。</p>
+                    </div>
+                </div>
+
+                <h2 class="section-title">全局光照：从烘焙到实时光追</h2>
+                <div class="section-content">
+                    <p>全局光照（GI）指的是<span class="highlight">除了直接从光源打到表面的光之外，所有经过一次以上弹射才到达表面的光</span>——包括漫反射互反射、镜面反射互相映照、以及由遮挡产生的间接明暗关系。实时渲染追求的是渲染方程的一个可算近似：</p>
+                    <div class="formula">
+L_o(x, ω_o) = L_e(x) + ∫_Ω f_r(x, ω_i, ω_o) · L_i(x, ω_i) · (n·ω_i) dω_i
+                    </div>
+                    <p>直接光只算了 <code>L_i</code> 里来自光源的那一小块；<span class="highlight">GI 要补的是 L_i 里「其他表面反射过来的光」</span>。难点在于这个积分要对整个半球做递归，实时根本算不完，所以所有实时方案都是在「怎么用最便宜的方式近似这个积分」上做文章。</p>
+
+                    <table class="compare-table">
+                        <thead>
+                            <tr><th>方法</th><th>原理</th><th>动态性</th><th>主要缺陷</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>光照贴图 Lightmap</td>
+                                <td>离线烘焙每个纹素的间接光，运行时只采样</td>
+                                <td>静态。光照或几何一变就得重烘</td>
+                                <td>占显存/UV 第二套；动态物体完全用不了</td>
+                            </tr>
+                            <tr>
+                                <td>光照探针 Light Probe</td>
+                                <td>用球谐（SH，通常 L2 共 9 系数）在空间稀疏点存低频间接光，动态物体就近插值</td>
+                                <td>支持光照渐变、时间变化</td>
+                                <td>只能表达低频；<b>插值泄漏</b>（隔墙互相串光）、接触处没有遮挡细节</td>
+                            </tr>
+                            <tr>
+                                <td>反射探针 Reflection Probe</td>
+                                <td>预捕获 cubemap，运行时按粗糙度选 mip 做反射；Box Projection 修正视差</td>
+                                <td>静态捕获，可做局部更新</td>
+                                <td>反射内容不会随场景动态变化；接缝和视差错误</td>
+                            </tr>
+                            <tr>
+                                <td>Voxel GI</td>
+                                <td>把场景体素化，运行时用 cone tracing 采样体素，近似多次弹射的漫反射与遮挡</td>
+                                <td>支持光照变化，几何变化需重建</td>
+                                <td>体素分辨率决定精度，薄结构必漏光；内存大</td>
+                            </tr>
+                            <tr>
+                                <td>SDFGI</td>
+                                <td>运行时构建多级 signed distance field（clipmap），ray march 求间接光，支持多弹射</td>
+                                <td>高。动态几何可自动重建</td>
+                                <td>构建有开销；SDF 表达不了薄面与细节 → 漏光、细节处发灰</td>
+                            </tr>
+                            <tr>
+                                <td>SSGI（屏幕空间）</td>
+                                <td>只用已渲染的深度/法线/颜色做屏幕空间 ray march</td>
+                                <td>完全动态</td>
+                                <td>屏幕外、被遮挡背面的信息不存在 → 信息缺失、边缘拖拽色带</td>
+                            </tr>
+                            <tr>
+                                <td>RTGI / DDGI</td>
+                                <td>硬件光追真实发射光线求交；DDGI 用探针 + 光线 + 时域累积更新球谐</td>
+                                <td>完全动态</td>
+                                <td>成本高、必须降噪；DDGI 有探针滞后与泄漏</td>
+                            </tr>
+                            <tr>
+                                <td>Lumen 类混合方案</td>
+                                <td>屏幕空间 trace + 表面缓存 / 距离场场景 + 可选硬件光追，多弹射近似</td>
+                                <td>高</td>
+                                <td>复杂、内存占用大；极端场景仍会漏光</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 class="case-sub">评估一套 GI 方案，看五个指标</h3>
+                    <ul>
+                        <li><span class="highlight">动态性</span>：光源变不变、几何动不动。这一条直接砍掉一大半方案。</li>
+                        <li><span class="highlight">弹射次数</span>：一次弹射只解决「物体侧面有环境色」，多次弹射才有封闭空间里的自然衰减。</li>
+                        <li><span class="highlight">漏光</span>：几乎所有实时 GI 的通病，越依赖低频表示（探针、SDF、体素）越严重。</li>
+                        <li><span class="highlight">性能与稳定性</span>：不只是平均帧率，还有帧时间抖动。</li>
+                        <li><span class="highlight">内存</span>：体素和探针方案经常是内存先爆，而不是先掉帧。</li>
+                    </ul>
+                    <p>一句话的选型口径：<span class="highlight">全静态 → 烘焙最划算；有动态物体 → 静态烘焙 + 探针；光照会变 → 体素 / SDFGI；高端平台要真实感 → 硬件光追 + 降噪。</span></p>
+                </div>
+
+                <h2 class="section-title">阴影贴图：走样从哪来，怎么治</h2>
+                <div class="section-content">
+                    <p>Shadow Map 的原理一句话：<span class="highlight">从光源视角渲染一张深度图，再从相机视角把像素投影回这张图，比较深度判断是否被遮挡。</span>问题在于——这张图是「用光源视角的均匀网格去表示相机视角看到的画面」，两个视角的采样密度天然不匹配，于是产生走样。</p>
+
+                    <h3 class="case-sub">四类走样，成因不同，药也不同</h3>
+                    <table class="compare-table">
+                        <thead>
+                            <tr><th>走样类型</th><th>成因</th><th>表现</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>透视走样</td>
+                                <td>阴影图在光源空间均匀分配纹素，相机视角下近处/远处投影密度差异巨大</td>
+                                <td>远处阴影边缘粗、近处细；大范围场景分辨率永远不够</td>
+                            </tr>
+                            <tr>
+                                <td>投影走样</td>
+                                <td>表面与光线方向夹角大，一个纹素斜着贴到表面上被拉长</td>
+                                <td>斜面上出现阶梯状锯齿</td>
+                            </tr>
+                            <tr>
+                                <td>自阴影走样（acne）</td>
+                                <td>纹素内深度被当成常数，表面与自身深度比较时误判为被遮挡</td>
+                                <td>表面出现条纹状斑纹</td>
+                            </tr>
+                            <tr>
+                                <td>闪烁 / 滑动（shimmering）</td>
+                                <td>相机或光源移动时，阴影图纹素网格相对场景滑动</td>
+                                <td>阴影边缘持续爬行、抖动，静止时也不安分</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3 class="case-sub">对应解法</h3>
+                    <table class="compare-table">
+                        <thead>
+                            <tr><th>技术</th><th>治什么</th><th>代价 / 副作用</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>提高分辨率 + 收紧投影范围</td>
+                                <td>透视走样</td>
+                                <td>显存与渲染开销线性上升，只能缓解不能根治</td>
+                            </tr>
+                            <tr>
+                                <td>CSM 级联阴影</td>
+                                <td>透视走样</td>
+                                <td>把视锥按距离切 3–4 级，每级单独正交投影，近处精度高。级联之间需要 blend band 过渡，否则能看到接缝</td>
+                            </tr>
+                            <tr>
+                                <td>纹素网格对齐（texel snapping）</td>
+                                <td>闪烁 / 滑动</td>
+                                <td>把投影中心按纹素尺寸取整，牺牲一点精度换稳定性。这一条最容易被漏掉，但它才是 CSM 能不能用的关键</td>
+                            </tr>
+                            <tr>
+                                <td>Depth Bias / Normal Offset Bias</td>
+                                <td>自阴影 acne</td>
+                                <td>bias 太小仍有斑纹，太大则阴影与物体脱离（peter-panning）。法线偏移比常深度偏移更不容易脱影，是更好的选择</td>
+                            </tr>
+                            <tr>
+                                <td>PCF 百分比渐近滤波</td>
+                                <td>硬边锯齿</td>
+                                <td>在阴影图里做多次比较再取比例，用采样数换软边。半径固定，近处软远处更软，不物理</td>
+                            </tr>
+                            <tr>
+                                <td>PCSS 软阴影</td>
+                                <td>硬边 + 半影不物理</td>
+                                <td>先 blocker search 求平均遮挡深度，再按相似三角形算半影宽度 w=(d_recv−d_block)/d_block · w_light，用这个宽度做 PCF。接触处硬、越远越软才物理正确，但开销是普通 PCF 的数倍，通常配低分辨率 + 时域累积</td>
+                            </tr>
+                            <tr>
+                                <td>VSM / EVSM</td>
+                                <td>硬边，且可预滤波</td>
+                                <td>存深度的一二阶矩，可 mip 预滤波一次采样出软阴影。但漏光（light bleeding）明显，深度分布复杂时崩</td>
+                            </tr>
+                            <tr>
+                                <td>虚拟阴影图（VSM / Virtual Shadow Map）</td>
+                                <td>分辨率与走样的根本矛盾</td>
+                                <td>按屏幕需求动态分配 page，等效分辨率远超单张图，配合缓存只更新变化区域。实现复杂、显存占用大</td>
+                            </tr>
+                            <tr>
+                                <td>屏幕空间接触阴影 / 光追阴影</td>
+                                <td>小尺度接触处的细节</td>
+                                <td>补 shadow map 表达不了的接触暗部；光追阴影质量最高但成本也最高</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="tip">
+                        <p>这题想拿高分，关键是把<span class="highlight">「bias 只能治 acne，治不了走样」</span>说清楚。很多人一遇到阴影问题就调 bias，结果斑纹没了、影子飞了，边缘锯齿一个没少。走样的根因是采样率不匹配，只有分辨率、级联、滤波这些手段能动它。</p>
+                    </div>
+                </div>
+
+                <h2 class="section-title">后处理管线：从 HDR 到屏幕</h2>
+                <div class="section-content">
+                    <p>后处理管线指的是<span class="highlight">场景渲染完成之后，对整张图像做的一串全屏 pass</span>，把 HDR 线性空间的结果转成能在显示器上正确显示的画面，并叠加上镜头与眼睛才会有的效果。它之所以必须存在，是因为渲染输出的数值范围远超显示器能表达的 0–1，且人眼/镜头本身有光学特性。</p>
+
+                    <h3 class="case-sub">典型顺序</h3>
+                    <div class="formula">
+场景（HDR 线性） → SSAO / SSR → Bloom → 自动曝光 → Tone Mapping → 色彩分级（LUT） → 抗锯齿 / 锐化 → 景深、运动模糊、暗角、颗粒 → 输出编码（Linear → sRGB）
+                    </div>
+                    <p>顺序本身就是知识点：<span class="highlight">Bloom 必须在 Tone Mapping 之前</span>（要在 HDR 里取亮部，否则亮部已经被压成 1，全图一起发光）；<span class="highlight">曝光必须在 Tone Mapping 之前</span>（曝光是调整 HDR 输入，色调映射是压缩到 LDR）；<span class="highlight">色彩分级在 Tone Mapping 之后</span>（针对显示范围做创作性调整）。顺序错了，症状很典型，一测就能看出来。</p>
+
+                    <h3 class="case-sub">四个必答特效的原理</h3>
+                    <table class="compare-table">
+                        <thead>
+                            <tr><th>特效</th><th>原理</th><th>关键约束</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Bloom 泛光</td>
+                                <td>把超过阈值（threshold + knee 平滑过渡）的亮部提取出来 → 多级降采样 + 模糊（mip chain / 双层滤波）→ 逐级上采样叠加 → 加回原图</td>
+                                <td>必须在 HDR 与 Tone Mapping 之前；阈值定太高没有光晕，太低整个画面发雾</td>
+                            </tr>
+                            <tr>
+                                <td>SSAO 屏幕空间环境光遮蔽</td>
+                                <td>用深度重建视空间位置 + 法线，在半球内采样若干点，比较采样点深度与几何表面，统计被遮挡比例得到 AO 因子，乘到间接光/环境光上</td>
+                                <td>只有屏幕内信息 → 屏幕边缘和屏幕外遮挡会丢失；有噪点需模糊或时域累积；本质是<b>遮蔽近似</b>不是真实 GI</td>
+                            </tr>
+                            <tr>
+                                <td>TAA 时域抗锯齿</td>
+                                <td>每帧给投影矩阵加亚像素抖动（Halton 序列），累积多帧历史；用 motion vector 把上一帧重投影到当前帧，做邻域 clamp / 方差裁剪后与当前帧混合</td>
+                                <td>必须有 velocity buffer；clamp 太松出鬼影（ghosting），太紧又退化成单帧；快速运动下会拖影。它同时也是 SSR / SSGI / 光追降噪的时域基础</td>
+                            </tr>
+                            <tr>
+                                <td>Tone Mapping 色调映射</td>
+                                <td>把 HDR 值用一条 S 形曲线压进 [0,1]，同时尽量保持色相与感知对比。ACES 偏电影感、AgX 高光过渡自然且色彩保持好、Reinhard 最简单但容易发灰</td>
+                                <td>不能简单 clamp（会死白、色彩断层）；通常配合自动曝光——按场景平均亮度（log 平均值或直方图）调整曝光，模拟人眼适应</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <p>顺带能把工程细节说出来会加分：<span class="highlight">中间 RT 应该是 float16 的 HDR 格式</span>（LDR 格式存不下超过 1 的亮度，Bloom 直接失效）；<span class="highlight">全屏 pass 的采样要用双线性 + 尽量合并 pass</span>（移动端每次全屏读写都是带宽）；<span class="highlight">低分辨率做 AO / Bloom / 光追</span>，最后再合成。</p>
+                </div>
+
+                <h2 class="section-title">光线追踪：降噪与混合渲染</h2>
+                <div class="section-content">
+                    <p>光线追踪的定义：<span class="highlight">从相机（或光源）发射光线，与场景求交，命中点再按 BRDF 采样方向继续发射（或终止），最终累积得到像素颜色。</span>它天然处理遮挡、软阴影、多次反射、折射和焦散——这些用光栅化要一个个 hack 出来，光追是直接算出来的。</p>
+
+                    <h3 class="case-sub">实时化的两个真问题</h3>
+                    <p>第一是求交加速，靠 <span class="highlight">BVH</span>（每个网格一棵 BLAS，场景级 TLAS 管实例）加硬件 fixed-function 遍历单元（DXR / Vulkan RT / Metal）。第二才是真正的难点：<span class="highlight">每像素只能发很少的样本，结果必然是噪的</span>。路径追踪的方差跟样本数成反比，1 spp 的画面基本是雪花点。</p>
+
+                    <h3 class="case-sub">降噪（Denoising）的三种路线</h3>
+                    <table class="compare-table">
+                        <thead>
+                            <tr><th>路线</th><th>做法</th><th>优点 / 风险</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>空间滤波</td>
+                                <td>双边滤波、à-trous 小波（SVGF 一系）、guided filter：用深度 / 法线 / 材质作为 edge-stopping 函数，只在相似像素间平均</td>
+                                <td>单帧可用；但边缘守不住就会糊掉细节，强滤波会出现「蜡像感」</td>
+                            </tr>
+                            <tr>
+                                <td>时域累积</td>
+                                <td>复用历史帧：重投影 + 方差估计 + 自适应混合权重，噪声在时间上平均掉</td>
+                                <td>效率最高；但遮挡变化处必须靠 clamp 处理，否则出现拖影/鬼影</td>
+                            </tr>
+                            <tr>
+                                <td>学习式 / 神经网络</td>
+                                <td>NRD（ReBLUR / RELAX）、DLSS Ray Reconstruction 一类，用网络替代手工滤波</td>
+                                <td>质量与稳定性明显更好，尤其薄结构和镜面；依赖特定硬件与模型，可控性下降</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>降噪器的输入端其实是同一份东西：<span class="highlight">G-Buffer（深度、法线、运动矢量）+ 材质参数 + 噪声颜色 + 样本数/方差</span>。所以「降噪做不好」很多时候不是滤波算法的问题，而是运动矢量不准或材质 ID 缺失。</p>
+
+                    <h3 class="case-sub">混合渲染（Hybrid Rendering）在混什么</h3>
+                    <p>核心思想：<span class="highlight">不用光追替换光栅化，而是让光栅化做它擅长的、光追只补它只有它能做的</span>，并且光追部分一律降分辨率、配时域累积。</p>
+                    <table class="compare-table">
+                        <thead>
+                            <tr><th>任务</th><th>通常谁做</th><th>混合策略</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>不透明几何、深度、法线</td>
+                                <td>光栅化</td>
+                                <td>光追只读这份 G-Buffer，不自己重新求交</td>
+                            </tr>
+                            <tr>
+                                <td>直接光与主阴影</td>
+                                <td>光栅化 + Shadow Map</td>
+                                <td>只有接触细节或高质量需求才追加光追阴影</td>
+                            </tr>
+                            <tr>
+                                <td>反射</td>
+                                <td>SSR 优先</td>
+                                <td>SSR 未命中 / 屏幕外时才发一条光追射线（fallback），避免为少数像素全屏开光追</td>
+                            </tr>
+                            <tr>
+                                <td>漫反射 GI</td>
+                                <td>探针 / 距离场 / 表面缓存</td>
+                                <td>用低成本的场景表示做多次弹射，硬件光追只在需要精度时介入</td>
+                            </tr>
+                            <tr>
+                                <td>透明、半透、毛发</td>
+                                <td>光栅化 forward</td>
+                                <td>光追对 alpha 与细分几何代价极高，继续走光栅</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>Lumen 就是这套思路的典型工程实现：<span class="highlight">屏幕空间 trace 拿近距离高频信息，表面缓存 + 距离场负责屏幕外和多次弹射，硬件光追作为可选加速</span>。DDGI（动态漫反射 GI）也是同一逻辑——探针负责稀疏采样、光线负责更新探针、时域负责收敛。</p>
+
+                    <div class="tip">
+                        <p>这一题最容易被问的追问是「既然光追更准，为什么不全部用光追」。答案是<span class="highlight">预算和方差</span>：全路径追踪要达到可用画质需要的样本数，远超当前实时预算；而光栅化在「确定的、大面积的、单次弹射」这件事上几乎没有浪费。混合渲染本质是把有限的 trace 预算花在观感收益最高的地方——反射、间接光、接触阴影。</p>
+                    </div>
+                </div>
+
+                <h2 class="section-title">面试口述速查</h2>
+                <div class="section-content">
+                    <p>上面是完整版，这里是压缩到 3–5 句的口述版，面试被追问时按这个结构讲：</p>
+
+                    <div class="faq-item">
+                        <div class="faq-q">什么是微表面模型？D、G、F 分别管什么？</div>
+                        <div class="faq-a">把粗糙表面看成无数朝向各异的微小镜面，用统计分布描述朝向，从而用一个粗糙度解释从镜面到漫反射的连续过渡，Cook-Torrance 形式是 f = kd·c/π + ks·D·G·F/(4(n·l)(n·v))。GGX 的 D 管微面朝向分布，决定高光宽度和拖尾；G 管微面之间的相互遮挡，补偿掠射角的能量；F 管反射率随角度变化，正对是 F0、掠射趋近 1。三项一起才保证能量守恒，其中 α 通常等于 roughness 的平方。</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-q">Forward、Deferred、Forward+ 怎么选？</div>
+                        <div class="faq-a">Forward 一次 pass 算完光照，MSAA、透明、自定义光照模型都友好，但光源一多就爆炸；Deferred 先写 G-Buffer 再全屏算光照，光源扩展性最好，代价是带宽大、MSAA 和透明不友好、材质受限；Forward+ 是分块剔除光源的 forward，兼顾前者的灵活和后者的扩展性，代价是每帧要构建光源列表。移动端因为 TBDR 带宽限制，基本不用 deferred；PC 3A 用 deferred；VR 和移动多光源用 Forward+。</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-q">实时 GI 有哪些方法，怎么评估？</div>
+                        <div class="faq-a">按动态性排：全静态用 lightmap；有动态物体用光照探针（球谐存低频）加反射探针；光照会变用体素 GI 或 SDFGI；屏幕空间 SSGI 便宜但屏幕外信息必然丢失；硬件光追 RTGI / DDGI 质量最高但要降噪。评估看五点：动态性、弹射次数、漏光程度、性能稳定性、内存。所有实时 GI 的共同缺陷是漏光，越依赖低频表示越严重。</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-q">Shadow Map 的走样怎么产生的，怎么优化？</div>
+                        <div class="faq-a">根因是光源视角的均匀纹素网格和相机视角的采样密度不匹配，分透视走样、投影走样、自阴影 acne、以及移动时的闪烁四类。透视走样用提高分辨率、收紧投影范围、CSM 级联解决；闪烁必须靠把投影对齐到纹素网格；acne 靠 depth bias 或更好的 normal offset bias，但要小心 peter-panning；软边用 PCF，要物理半影就上 PCSS（blocker search 算半影宽度）；再往上就是虚拟阴影图或者光追阴影。注意 bias 只治 acne，治不了走样。</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-q">后处理管线是什么，Bloom / SSAO / TAA / Tone Mapping 原理？</div>
+                        <div class="faq-a">是场景渲染完之后对整张图做的一串全屏 pass，把 HDR 结果转成正确显示的画面。顺序很关键：SSAO/SSR → Bloom → 曝光 → Tone Mapping → 色彩分级 → 抗锯齿。Bloom 在 HDR 里提亮部、多级模糊叠加，必须在色调映射前；SSAO 用深度重建位置、半球采样估遮挡比例，只有屏幕内信息；TAA 靠投影亚像素抖动 + motion vector 重投影历史帧 + 邻域 clamp 混合；Tone Mapping 用 S 曲线把 HDR 压进 0–1，配合自动曝光，绝不能直接 clamp。</div>
+                    </div>
+
+                    <div class="faq-item">
+                        <div class="faq-q">光线追踪的降噪和混合渲染是什么？</div>
+                        <div class="faq-a">光追是发光线求交，天然处理遮挡、反射、软阴影和 GI，求交靠 BVH 和硬件遍历单元加速。实时下真正的瓶颈是样本数不足带来的噪声，所以必须降噪：空间滤波（双边/à-trous，用深度法线守边缘）、时域累积（重投影 + clamp）、或学习式（NRD、DLSS RR），输入都是 G-Buffer + 材质 + 运动矢量。混合渲染是让光栅化做几何、直接光、透明，光追只补反射和间接光，并且 SSR 未命中才发光线、低分辨率 + 时域累积——本质是把有限的采样预算花在观感收益最高的地方。</div>
+                    </div>
+                </div>
+
+                <h2 class="section-title">小结</h2>
+                <div class="section-content">
+                    <p>这六题串起来其实是一条完整的画面生成链：<span class="highlight">微表面模型决定一个像素的表面长什么样</span>，<span class="highlight">渲染路径决定这些像素用什么方式组织计算</span>，<span class="highlight">GI 和阴影决定光照关系对不对</span>，<span class="highlight">后处理决定最后能不能正确地显示出来</span>，<span class="highlight">光追与混合渲染则是把前四步里最难的部分用另一种算法补上</span>。</p>
+                    <p>回头看，所有答案的落点都不是「哪个技术更先进」，而是<span class="highlight">同一笔预算怎么分</span>：分给分辨率还是分给光源数，分给烘焙还是分给实时，分给滤波还是分给采样。能把取舍讲清楚，比记住公式有用得多。</p>
+                </div>
+
+                <a href="index.html#blog" class="btn-back">返回博客列表</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: <span class="js-banana-email"></span></p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+
+    <script>
+        // 联系方式混淆渲染：只对真人显示，爬虫抓源码拿不到
+        (function () {
+            var PHONE = '198' + '5925' + '6157';
+            var EMAIL = PHONE + '@' + '163' + '.com';
+            var n = document.querySelector('.js-banana-email');
+            if (n) n.textContent = EMAIL;
+        })();
+    </script>
+
+    <script>
+        // ===== 水印 =====
+        function generateWatermark() {
+            const canvas = document.getElementById('watermark-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const text = 'BananaCat Portfolio | ' + new Date().toLocaleDateString();
+            ctx.font = '24px Arial';
+            ctx.fillStyle = '#2B6C9C';
+            ctx.globalAlpha = 0.5;
+            const spacing = 120;
+            const rotation = -Math.PI / 8;
+            for (let x = -200; x < canvas.width + 200; x += spacing) {
+                for (let y = -200; y < canvas.height + 200; y += spacing) {
+                    ctx.save();
+                    ctx.translate(x, y);
+                    ctx.rotate(rotation);
+                    ctx.fillText(text, 0, 0);
+                    ctx.restore();
+                }
+            }
+        }
+        generateWatermark();
+        setInterval(generateWatermark, 30000);
+        window.addEventListener('resize', generateWatermark);
+    </script>
+
+    <script>
+        // 章节导航：自动从正文 h2 生成，滚动时高亮当前章节
+        (function () {
+            var nav = document.getElementById('tocNav');
+            if (!nav) return;
+            var titles = document.querySelectorAll('.section-title');
+            var links = [];
+            var offset = 110;
+
+            titles.forEach(function (h, i) {
+                if (!h.id) h.id = 'sec-' + i;
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'toc-link';
+                btn.textContent = h.textContent;
+                btn.addEventListener('click', function () {
+                    var docTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+                    var top = h.getBoundingClientRect().top + docTop - offset;
+                    if (top < 0) top = 0;
+                    window.scrollTo(0, top);
+                    document.documentElement.scrollTop = top;
+                    document.body.scrollTop = top;
+                });
+                nav.appendChild(btn);
+                links.push({ el: h, link: btn });
+            });
+
+            function updateActive() {
+                var pos = window.pageYOffset + offset + 20;
+                var current = links[0];
+                links.forEach(function (item) {
+                    if (item.el.offsetTop <= pos) current = item;
+                });
+                links.forEach(function (item) {
+                    item.link.classList.toggle('active', item === current);
+                });
+                if (nav.scrollWidth > nav.clientWidth && current) {
+                    var target = current.link.offsetLeft - nav.clientWidth / 2 + current.link.offsetWidth / 2;
+                    nav.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+                }
+            }
+
+            window.addEventListener('scroll', updateActive, { passive: true });
+            window.addEventListener('resize', updateActive);
+            updateActive();
+        })();
+    </script>
+
+    <script src="script.js"></script>
+</body>
+</html>
