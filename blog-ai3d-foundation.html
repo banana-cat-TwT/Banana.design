@@ -689,6 +689,225 @@
                     </ul>
                 </div>
 
+                <h2 class="section-title">管线实战：从生成产物到可用资产的 5 个难题</h2>
+                <div class="section-content">
+                    <p>这 5 题是 3D 技术美术（AI 方向）在真实产线里最常被问到的：<span class="highlight">AI 生成出来的东西，怎么变成美术真能用的资产</span>。它们串起来正好是一条完整的分诊线——先清理几何（Q1）、再压住生成阶段的幻觉（Q2）、然后统一尺度与落地（Q3）、接着解决风格同质化（Q4）、最后交给程序化系统拼装（Q5）。每一题的答案都不是「换个更好的模型」，而是<span class="highlight">在模型外面补一套能自动跑的工程约束</span>。</p>
+                    <table class="compare-table">
+                        <thead>
+                            <tr><th>问题</th><th>卡在哪</th><th>核心手段</th><th>量化验收</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Q1 几何清理</td><td>面数超标、黏连、内部空腔</td><td>连通分量 + 可见性剔除 + 重展 UV 重烘</td><td>自动通过率 ≥ 85%</td></tr>
+                            <tr><td>Q2 Janus 幻觉</td><td>多视角各自收敛，背面崩</td><td>多视角共享采样 + 法线/深度约束 + 对称先验</td><td>多脸检出率</td></tr>
+                            <tr><td>Q3 尺度与落地</td><td>没有真实尺寸，pivot 乱飞</td><td>类别先验 + 等比归一 + RANSAC 找支撑面</td><td>尺寸误差、倾斜角</td></tr>
+                            <tr><td>Q4 风格同质化</td><td>通用模型只会写实</td><td>风格 LoRA + NPR 合成数据反哺 + 控制网格</td><td>风格相似度、剪影 IoU</td></tr>
+                            <tr><td>Q5 批量拼装</td><td>部件之间拼不准</td><td>AI 出部件库 + Houdini PCG 装配规则</td><td>缝隙可见率、复用率</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="case-sub">Q1｜Image-to-3D 的面数超标、黏连、内部空腔，怎么设计全自动清理过滤器</h3>
+                <div class="section-content">
+                    <p>先说清楚为什么要「过滤器」而不是「修复工具」：开放世界的植被和场景道具有<span class="highlight">几千上万件</span>，人工修一件十分钟就崩了。所以这套东西的设计目标不是修得最好，而是<span class="highlight">在无人值守的情况下把 85% 以上的资产修到能进引擎，剩下 15% 精准打回人工队列</span>。</p>
+                    <p>整条流水线按顺序分七道闸：</p>
+                    <ul>
+                        <li><span class="highlight">分诊打分。</span>进来先算一组硬指标——面数、水密率、流形边数量、连通分量数、自交数量、包围盒长宽比。按指标直接分成「可直接用 / 可自动修 / 人工」。这一步决定了后面所有环节的工作量。</li>
+                        <li><span class="highlight">连通分量清理。</span>分离所有连通块，丢掉面数低于阈值的碎块，这就是去 floaters。注意植被不能一刀切——树叶本来就是一堆独立面片，要按材质槽或语义先判类，再决定「合并」还是「保留」。</li>
+                        <li><span class="highlight">内部空腔剔除。</span>这是最容易漏的一步。做法是从物体外部多个方向做射线可见性采样，统计每个面被看到次数，<span class="highlight">完全不可见的内壳整块删掉</span>。生成的石头、树干内部经常藏着一层完整的内壁，白白吃掉一半面数。</li>
+                        <li><span class="highlight">黏连分割。</span>相邻物体被生成成一坨是常见问题。用凹度分析加区域生长（region growing）做面片分割，以法线突变和平面拟合误差作为切割判据，把「椅子腿和椅子面长在一起」拆开。拆不开的再走 SDF/VDB 的连通分析。</li>
+                        <li><span class="highlight">水密化与去畸变。</span>补洞用边界环加最小面积三角化；非流形边逐条修；自交用 voxel remesh 后 shrinkwrap 回原表面，比直接做布尔稳健得多。去畸变专门抓三类：法线翻转、退化三角形（面积趋零）、尖刺（局部曲率异常）。</li>
+                        <li><span class="highlight">重展 UV 并回烘。</span>这一步很多人会跳过，但必须做。生成模型自带的 UV 基本不可用，清理完几何后要用 xatlas 或 UVAtlas 重新展开，<span class="highlight">再把原贴图烘焙到新 UV 上</span>，否则纹理全错位。</li>
+                        <li><span class="highlight">面数归一 + LOD + 碰撞。</span>按资产类别设目标面数，用 QEM 简化并保护 UV seam 和硬边；顺带生成三级 LOD 与简化碰撞体，一步到位。</li>
+                    </ul>
+                    <div class="tip">
+                        <p>工程上两个决定成败的点：一是<span class="highlight">每个环节都要输出指标并能回退</span>，任何一步质量下降超过阈值就直接打回人工，不要让错误往下游传；二是<span class="highlight">植被走另一条支线</span>——Alpha card 植被不该当实体几何清理，应该走 cutout 加 billboard，简化时还要保护边界顶点，否则枝条一减就断。整套用 Python 配 trimesh / libigl / Open3D 就能 headless 批跑。</p>
+                    </div>
+                </div>
+
+                <h3 class="case-sub">Q2｜不重训基座，怎么在生成前置阶段压住 Janus 问题</h3>
+                <div class="section-content">
+                    <p>Janus 的成因要先讲对：不是模型「不会画脸」，而是<span class="highlight">每个视角各自独立收敛</span>。2D 先验在任意视角下都会本能地补一张脸，多视角之间又没有任何通信机制，于是正面一张、背面再来一张。既然根因是「视角之间没通信」，解法就都围绕<span class="highlight">建立跨视角约束</span>展开，不需要动基座权重。</p>
+                    <p><span class="highlight">第一招，改采样方式。</span>不要在球面上随机撒独立视角，改成沿同一纬度的<span class="highlight">环绕轨迹采样</span>，并且让同一 batch 内的多视角共享噪声和潜变量，通过 multi-view attention 或 epipolar attention 互相看得见。MVDream、SyncDreamer 这一代的核心改进就在这。</p>
+                    <p><span class="highlight">第二招，加法线约束。</span>用 2D 法线估计模型（StableNormal、Marigold normals 那类）从参考图和多视角图里提取法线，作为几何监督项，约束「渲染法线」和「估计法线」一致。这一招对多脸特别有效，因为背面那张脸的朝向和真实背面法线天然冲突，约束一加就被压下去了。</p>
+                    <p><span class="highlight">第三招，加深度一致性。</span>用单目深度（Depth Anything 一类）估计参考图深度，在多个渲染视角上做尺度对齐后的相对深度约束。深度比法线更直接地约束「背面在哪」，能有效防止背部长出多余结构。也可以把深度当 ControlNet 条件塞进多视角生成。</p>
+                    <p><span class="highlight">第四招，加对称性先验。</span>先用 PCA 加反射一致性检测出对称平面，然后对几何加镜像对称正则——左右点云做 Chamfer 或直接惩罚偏离量。对称性是个极强的先验，大多数角色和道具都该对称，一旦约束上去，背面的自由度会被大幅压缩。</p>
+                    <p><span class="highlight">第五招，后处理检出兜底。</span>生成完，绕物体转一圈渲染 8 到 12 个视角，跑 2D 人脸检测器数脸数。超过 1 张就判定失败，触发重采样或局部重生成。<span class="highlight">这一步是必须的</span>，因为前面的约束都是软约束，永远会有漏网的。</p>
+                    <div class="tip">
+                        <p>这套方案不重训基座的代价是<span class="highlight">推理变慢</span>：多视角渲染次数从个位数涨到几十次，约束项也让优化更难收敛。所以生产上通常分级——先跑便宜的多视角一致性，检测到 Janus 再启用完整的法线加深度加对称约束。关键是「Janus 检测器」这个指标要先建起来，没有它就无法知道约束到底有没有用。</p>
+                    </div>
+                </div>
+
+                <h3 class="case-sub">Q3｜尺度归一化与地面贴合，怎么在 DCC 后处理里全自动做</h3>
+                <div class="section-content">
+                    <p>AI 生成的模型有个根本特性：<span class="highlight">它没有真实尺寸这个概念</span>。尺度是相对的，pivot 通常在原点，朝向是随机的。而游戏资产对这三样都有硬约定，所以必须有一套自动化后处理把它们拉回规范。</p>
+                    <p><span class="highlight">第一步，单位与坐标系归一。</span>先判断资产是按米、厘米还是英寸建的，再判断 up 轴是 Y-up 还是 Z-up，用一套转换矩阵统一到项目规范。这一步不做，后面所有数值都白算。</p>
+                    <p><span class="highlight">第二步，类别先验定尺度。</span>既然模型自己不知道大小，就从<span class="highlight">类别</span>反推。做法是对渲染图跑 CLIP 分类，或者直接读生成时的 prompt 里的类别词，然后查一张「类别—典型尺寸」表：椅子座高 0.45m、门高 2.1m、行道树 6 到 8m、垃圾桶 1m。把包围盒的主维度等比缩放到该尺寸。</p>
+                    <p>这里必须强调<span class="highlight">等比缩放</span>。绝对不能按每个轴独立拉，那会把椅子压扁、把树拉成竹竿，还会让法线全部失真（非等比缩放后法线必须重新归一化才有效）。</p>
+                    <p><span class="highlight">第三步，Pivot 修正。</span>生成模型的 pivot 基本都在几何原点，但游戏资产的约定完全不一样，要按类别分：</p>
+                    <ul>
+                        <li>站立物（椅子、桌子、垃圾桶）：pivot 移到<span class="highlight">包围盒底面中心</span>，脚底接地；</li>
+                        <li>悬挂物（吊灯、路牌）：pivot 放到<span class="highlight">顶部挂点</span>；</li>
+                        <li>可拾取物（道具、捡起物）：pivot 放在<span class="highlight">体积重心</span>，手感和旋转才自然。</li>
+                    </ul>
+                    <p>重心要用体积积分算，不能只用顶点平均——顶点分布是不均匀的，顶点平均中心常常明显偏离真实重心。</p>
+                    <p><span class="highlight">第四步，Snap-to-Ground 的感觉要准。</span>不能直接取最低点，因为一个尖刺就能让整件资产悬空。正确做法是取包围盒<span class="highlight">底部 5% 高度的顶点</span>，用 RANSAC 拟合平面：</p>
+                    <ul>
+                        <li>如果拟合出的平面法线与 up 轴夹角小于 15°，说明有平底，直接把该平面贴到 y=0，同时把资产旋正；</li>
+                        <li>如果底部是曲面（石头、树根），退化成用<span class="highlight">最低点的 1% 分位</span>作为落地点，抗孤立尖刺；</li>
+                        <li>两种情况都要把倾斜角修正掉，否则资产是歪的。</li>
+                    </ul>
+                    <p><span class="highlight">第五步，朝向统一。</span>用 PCA 主轴确定主方向，再用对称性判断正反——对称物体以对称面为基准对齐，非对称物体用「特征面朝向」判定，统一成项目约定的朝向（比如面向 -Y）。</p>
+                    <div class="tip">
+                        <p>三个必踩的坑：一是缩放后<span class="highlight">一定要 apply transform</span>，引擎里 scale 不是 1 会引发一堆物理和烘焙问题；二是 pivot 改了要<span class="highlight">同步到碰撞体和挂点</span>，否则子弹打上去是空的；三是落地后再检查一遍<span class="highlight">包围盒与贴花/阴影的对齐</span>，倾斜修正有时会带来微小偏移。输出报告要带上 bbox 尺寸、pivot 位置、残余倾斜角三个数，超阈值打回。</p>
+                    </div>
+                </div>
+
+                <h3 class="case-sub">Q4｜通用模型风格同质化，怎么建专有风格化生成子管线</h3>
+                <div class="section-content">
+                    <p>开源 3D 大模型的输出高度同质化，是因为它们训练数据基本是写实扫描件。想让模型生成二次元赛璐珞或者特定暗黑写实，光靠 prompt 是不够的——<span class="highlight">风格不是一句话能描述的，是一整套渲染约定</span>。所以正确做法是建一条「风格化子管线」，而不是调一个参数。</p>
+                    <p><span class="highlight">第一环，把风格写成规范。</span>先固化风格定义：色板（有限色阶）、描边宽度与颜色、光影阶梯数（赛璐珞通常 2 到 3 阶）、边缘光规则、材质简化程度（哪些细节必须删）。这份规范是后面所有环节的验收基准，没有它，训出来的模型只能说「感觉不对」。</p>
+                    <p><span class="highlight">第二环，合成数据渲染反哺，这是整条管线最关键的一环。</span>用项目已有的高模资产，在<span class="highlight">统一的 NPR shader</span> 下绕圈渲染多视角，得到大量「风格化图像 + 真实几何」的配对数据。核心要求是<span class="highlight">渲染参数必须完全固定</span>——光照方向、色阶阈值、描边宽度全部写死，这样 2D 先验学到的是风格本身，而不是某一次打光。</p>
+                    <p><span class="highlight">第三环，双 LoRA 微调。</span>不要在 3D 基座上直接硬训，成本高且容易崩。推荐两层：先在 SDXL 这类 2D 先验上训一个<span class="highlight">风格 LoRA</span>，再训一个<span class="highlight">类别/结构 LoRA</span>。两个分开的好处是风格可以迁移到新类别，不会一换类别就得重训。</p>
+                    <p><span class="highlight">第四环，控制网格嵌入。</span>对二次元角色来说，<span class="highlight">剪影比细节重要得多</span>——轮廓错了，贴图再精细也不像。所以要用控制网格或参考轮廓做几何条件：把控制网格渲染成深度图和法线图，作为 ControlNet 条件注入生成，强制轮廓一致；或者直接以模板网格做几何锚定，只让模型负责表面细节。这一步是把艺术家的意图硬性灌进去，而不是指望模型猜。</p>
+                    <p><span class="highlight">第五环，PBR 转 NPR。</span>生成出来的还是 PBR 贴图，必须做转换：albedo 用 posterize 压缩到有限色阶再映射到色板，去掉高光和法线细节，描边单独走一个 pass（inverted hull 或后处理边缘检测）。这一步不做，风格就只停留在「模型长得像」，渲染出来还是写实的。</p>
+                    <div class="tip">
+                        <p>两个常见翻车点：一是<span class="highlight">风格 LoRA 过拟合到训练资产的具体造型</span>，生成的永远像你拿来训的那几件东西。解法是训练集里混入大量不同造型、只共享风格。二是<span class="highlight">描边宽度依赖分辨率</span>，靠近看粗、拉远看细，必须做成屏幕空间恒定宽度。验收看三个指标：CLIP 风格相似度、与控制网格的剪影 IoU、美术盲测通过率。</p>
+                    </div>
+                </div>
+
+                <h3 class="case-sub">Q5｜生成式 AI 怎么和 Houdini PCG 融合，批量出废墟与风化岩石</h3>
+                <div class="section-content">
+                    <p>这题的关键认知是：<span class="highlight">AI 和 PCG 不该抢同一件事</span>。AI 的强项是「造出没见过的东西」，弱项是「精确、可复现、可参数控制」；Houdini PCG 恰好相反。所以正确的分工是——<span class="highlight">AI 负责部件级的多样性，PCG 负责装配级的规则与精度</span>。</p>
+                    <p><span class="highlight">第一层，AI 出部件库。</span>不要直接生成「一整栋废墟」，而是生成可复用的模块：砖块、断墙、断裂梁、瓦砾、石块。每类出 20 到 50 个变体，一起进库。这里有三条硬约束，缺一条后面就拼不上：</p>
+                    <ul>
+                        <li><span class="highlight">严格统一尺度</span>——砖就是砖的尺寸，不能每个变体大小不一；</li>
+                        <li><span class="highlight">严格统一 pivot</span>——一律归到底面中心，方便 copy to points；</li>
+                        <li><span class="highlight">严格统一材质与命名</span>——按 @material 属性规范，方便 PCG 驱动。</li>
+                    </ul>
+                    <p>出库前先跑 Q1 那套清理管线，把 LOD 和碰撞一起生成好。</p>
+                    <p><span class="highlight">第二层，Houdini 封装装配规则。</span>用 HDA 把「怎么拼」写成规则。比如断墙：墙基按一定间距布砖 → 中间层按 <span class="highlight">@damage</span> 参数从库里按权重抽破损变体 → 顶部做不规则切割 → 地面撒瓦砾（数量和分布由 @damage 驱动）。整个过程用 Attribute Wrangle 控制，一个滑杆就把「轻微破损」推到「彻底坍塌」。</p>
+                    <p><span class="highlight">第三层，拼接精度的解法是「连接件设计」。</span>这是最容易失手的地方。AI 生成的部件边缘是随机的，两个随机边缘拼一起必然有缝。解法是<span class="highlight">让部件在生成阶段就带上标准接口</span>：墙面部件边缘切割线对齐到网格，石块底面强制做平，梁的端面做成标准断面。Houdini 侧用 copy to points 加 orient 属性按这些接面对齐，精度就控制住了。</p>
+                    <p><span class="highlight">第四层，接缝处理。</span>对齐之后用 boolean 或 VDB 融合消除硬缝；但更自然的做法是<span class="highlight">故意留不完美</span>——错位几厘米、塞几块碎石、加几条裂缝。真实废墟本来就没有整齐的接缝，过度融合反而假。</p>
+                    <p><span class="highlight">第五层，物理合理性检查。</span>简单做法是检查每个碎块的支撑关系（下方是否有接触面），悬空的自动移除或下落；做得细一点可以跑一次 RBD 崩塌解算，再烘回静态。这一步不加，场景里会出现大量浮在半空的砖。</p>
+                    <div class="tip">
+                        <p>还有一个容易忽略的收益：AI 部件库要<span class="highlight">带版本 hash</span>，PCG 场景记录下来用的是哪一版部件。否则半年后重新生成场景，废墟长得完全不一样，无法复现。另外材质务必走<span class="highlight">统一 trim sheet 或 atlas</span>，不然几百种废墟拼出来 draw call 直接爆炸。验收看四个数：缝隙可见率、部件复用率、单场景生成耗时、内存与 draw call。</p>
+                    </div>
+                </div>
+
+                <h2 class="section-title">落地层深入：3DGS / NeRF 与 AI 动画的运行时工程</h2>
+                <div class="section-content">
+                    <p>前面讲的是「生成出来的资产怎么进项目」，这一节往更靠下游走一层：<span class="highlight">资产进了引擎、跑在运行时之后会碰到什么问题</span>。3DGS / NeRF 是连续或半连续的表示，物理、动画、移动端 GPU 这三套传统系统全是按「显式网格 + 顶点拓扑」设计的，两边对不上就会出碰撞体、流式加载、Overdraw、形变撕裂、脚滑、唇形卡顿这一系列问题。这 6 道题正好覆盖了这条运行时链路。</p>
+                    <table class="compare-table">
+                        <thead>
+                            <tr><th>问题</th><th>核心矛盾</th><th>首选解法</th><th>验收指标</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Q26 隐式碰撞体</td><td>辐射场没有表面，物理引擎只吃网格</td><td>表面重建 + 凸分解分级 LOD</td><td>穿插深度 / 与渲染深度 IoU</td></tr>
+                            <tr><td>Q27 超大场景流式</td><td>单卡显存装不下整场</td><td>空间分块 + 分层 LOD + 页池调度</td><td>显存峰值 / 上传带宽 / 卡顿次数</td></tr>
+                            <tr><td>Q28 移动端 3DGS</td><td>Alpha 混合 Overdraw 吃爆带宽</td><td>剪枝 + SH 降阶 + 2D splat + 限制层数</td><td>GPU 帧时间 / 带宽占用</td></tr>
+                            <tr><td>Q29 3DGS 形变</td><td>高斯无拓扑邻接，独立变换即撕裂</td><td>Cage Mesh 权重 + 雅可比协方差变换</td><td>相邻高斯位移连续性</td></tr>
+                            <tr><td>Q30 单目动捕</td><td>深度歧义 + 无接触约束</td><td>IK 锁脚 + 自碰撞胶囊 + 物理轨迹优化</td><td>脚滑位移 / 穿模帧数</td></tr>
+                            <tr><td>Q31 语音驱动表情</td><td>实时推理与 60fps 争主线程</td><td>旁路线程推理 + 预烘 + 插值</td><td>唇音同步误差 / 帧率</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 class="case-sub">Q26｜3DGS 场景怎么生成轻量又精准的隐式碰撞体</h3>
+                <div class="section-content">
+                    <p>矛盾的根源很直接：<span class="highlight">渲染表示和物理表示不是一回事</span>。3DGS 是一堆各向异性高斯椭球，NeRF 是辐射场，两者都没有「表面」这个概念，也没有顶点、边、面，物理引擎的 raycast 和刚体碰撞根本无从下手。所以「生成碰撞体」的本质是先想办法把连续的场<span class="highlight">重新变回一张面</span>。</p>
+                    <p><span class="highlight">第一条路线：表面重建。</span>从 3DGS 里取多视角深度图和不透明度场，做 TSDF 融合，再 marching cubes 出网格。也可以直接用 SuGaR、2DGS 这类方法，让训练时就把高斯压到表面上，导出网格干净得多。出来的网格一定带噪声，必须做平滑、去浮空块、简化、水密化。</p>
+                    <p><span class="highlight">第二条路线：凸分解，这是「轻量 + 精准」的平衡点。</span>整场景做一个凸包会严重失真，因为凸包会把凹形全部填平。正确做法是 V-HACD 或 CoACD 做近似凸分解，一个椅子拆成十几个凸多面体。物理引擎对凸多面体是原生支持的，效率高、稳定，还能做连续碰撞检测。这是工程上最推荐的默认方案。</p>
+                    <p><span class="highlight">第三条路线：SDF。</span>从点云重建 VDB SDF 或训神经 SDF，适合软体、连续碰撞、体积查询。但每像素或每步求解 SDF 开销大，实时通常要烘成 SDF volume texture，或者干脆再转回网格。</p>
+                    <p>落地时的几个关键判断：</p>
+                    <ul>
+                        <li><span class="highlight">必须分级，不能一视同仁。</span>小物件和远处物体用 AABB 或单个凸包就够，主要交互物才做凸分解，地面用 heightfield 或 trimesh。轻量来自「大部分东西都不精确」。</li>
+                        <li><span class="highlight">一定要留一层细网格兜底。</span>凸包在凹角处会浮空，raycast 打上去会和视觉错位。常见做法是凸包管物理，细网格只挂一层 low-cost 的 raycast 层。</li>
+                        <li><span class="highlight">动态物体和静态物体分开处理。</span>可移动道具用凸包方便跟随变换，静态场景用 trimesh + BVH 加速结构。</li>
+                        <li><span class="highlight">要防重建噪声变成碰撞体。</span>3DGS 常见的浮空高斯（floaters）、半透明的树叶玻璃、地面高光反射，都会被重建成实体几何。必须按不透明度和语义先过滤，透明物体不该生成实体碰撞。</li>
+                    </ul>
+                    <div class="tip">
+                        <p>完整流程：3DGS → 多视角深度 + 不透明度 → TSDF / 泊松重建 → 去噪简化 → V-HACD 凸分解 → 烘碰撞 LOD 链 → 运行时按距离和重要性切换。验收用两个数：一是穿插深度（角色能陷进几何多少），二是重建深度与渲染深度的 IoU，这两个数达标才算「精准」。</p>
+                    </div>
+                </div>
+
+                <h3 class="case-sub">Q27｜超大尺度 3DGS 场景的分块与流式调度怎么设计</h3>
+                <div class="section-content">
+                    <p>这题的正确类比是 <span class="highlight">Virtual Texture</span>，不是普通的资源加载。VT 的精髓是三件事：<span class="highlight">按页切分、用索引表解耦逻辑地址和物理页、按 mip 级别决定加载精度</span>。把这三件事搬到 3DGS 上，就是一套完整的调度系统。</p>
+                    <p><span class="highlight">第一，分块。</span>用四叉树或八叉树按空间切块，每块自己存一份高斯数据，并带元信息：AABB、中心、包围半径、高斯数量、字节大小。这里有个 3DGS 特有的坑——高斯椭球会跨块，跨边界的高斯要么复制到多个块（类似 VT 的 border padding），要么按中心归属但把 AABB 外扩。</p>
+                    <p><span class="highlight">第二，分层 LOD，这就是 3DGS 的 mip。</span>每块预先烘好几级：完整高斯 → 重要性剪枝 / 高斯合并（lightGaussian、Mini-Splatting 那类做法）→ 降 SH 阶（3 阶降到 0 阶）→ 更远处换成 impostor 布告板甚至代理网格。级数不必多，3 到 4 级就够用。</p>
+                    <p><span class="highlight">第三，索引与页池。</span>维护一张全局虚拟地址表，记录每块每级的数据在哪；GPU 上开固定大小的 page pool，运行时只把需要的页搬进来，LRU 淘汰。这一层完全是 VT 的 page table + cache 结构，可以直接照搬。</p>
+                    <p><span class="highlight">第四，剔除。</span>四级串起来做：块级视锥剔除（用 AABB）→ 按屏幕空间误差选 LOD → 遮挡剔除（用上一帧深度建 HZB，或用粗代理布告板先渲一遍深度）→ 高斯级不透明度剔除。3DGS 多出来的这一级很重要，因为前面高不透明度的 Gaussians 会挡住后面的，不做就白算。</p>
+                    <p><span class="highlight">第五，异步流。</span>IO 线程读盘解压 → staging buffer 分帧上传 → 双缓冲。关键是<span class="highlight">每帧给一个固定上传预算</span>（比如 8MB），按屏幕贡献排序做优先级队列，再加相机速度预测做预取。不设预算就会出现「转个头卡半秒」。</p>
+                    <div class="tip">
+                        <p>可以直接借 Cesium 3D Tiles 的层级结构和 LOD 规则，几何 streaming 这块它已经是很成熟的事实标准，把 tile 的 content 换成 3DGS chunk 就行。要盯的指标是：显存峰值、每帧上传带宽、块切换时的卡顿次数。</p>
+                    </div>
+                </div>
+
+                <h3 class="case-sub">Q28｜移动端 3DGS 的剔除与 Shader 降级策略</h3>
+                <div class="section-content">
+                    <p>根因要讲清楚：3DGS 每个高斯是一个<span class="highlight">半透明椭球贴片</span>，按深度排序后做 alpha 混合。这意味着大量像素会被反复混合，<span class="highlight">Overdraw 直接乘以带宽</span>。而移动端 Adreno 和 Apple Silicon 都是 TBDR 架构，带宽是硬瓶颈，全屏多层混合立刻爆掉。所以移动端不是「怎么优化」，而是「怎么把混合次数砍到能接受」。</p>
+                    <p><span class="highlight">数量层：先把高斯总数砍下来。</span>按不透明度、体积、尺度、对最终画面的贡献做重要性剪枝，通常能砍掉 60% 到 80% 而几乎看不出差别。再把参数从 fp32 降到 fp16，SH 系数用 int8 量化，或者直接降到 0 阶只保留基础色。</p>
+                    <p><span class="highlight">剔除层：</span>粗粒度块视锥剔除；累积 alpha 提前终止（前面的不透明度累加到接近 1 就不再算后面）；屏幕空间剔除，投影后小于 1 像素的高斯直接丢掉；HZB 遮挡剔除。</p>
+                    <p><span class="highlight">排序层：</span>移动端千万别每帧做全量 radix sort，那是 CPU/GPU 双杀。改用分块局部排序，块内预排序一次、每帧只排块序；或者用 tile-based binning，把高斯按屏幕 tile 分桶，每 tile 内单独排序，这就是 tile-based splatting 的思路。</p>
+                    <p><span class="highlight">渲染层，真正的降级点：</span></p>
+                    <ul>
+                        <li>把 3D 椭球的逐像素求交换成 <span class="highlight">2D 屏幕空间椭圆</span>，省掉每像素的协方差投影开销；</li>
+                        <li>用 quad 或 billboard 承载，片元里对高斯做低阶近似，别用完整 exp；</li>
+                        <li>限制每像素最大混合层数，比如只叠前 8 到 16 层，超了直接丢；</li>
+                        <li>关掉 MSAA（3DGS 不需要），全链路 half precision，避免片元里的分支；</li>
+                        <li>TBDR 上尽量用 framebuffer fetch 读片上内存，避免中途 resolve 造成一次完整带宽往返。</li>
+                    </ul>
+                    <div class="tip">
+                        <p>移动端 3DGS 的现实路线可以总结成一句话：<span class="highlight">大幅剪枝 + SH 降阶 + 2D 屏幕空间 + tile 排序 + 限制层数</span>。代价是牺牲一部分视角相关效果，但换来了带宽可控。另外建议挂一个动态质量开关，按 GPU 帧时间预算实时调整 LOD 和最大层数。</p>
+                    </div>
+                </div>
+
+                <h3 class="case-sub">Q29｜3DGS 怎么绑骨骼、做布料和破碎而不撕裂</h3>
+                <div class="section-content">
+                    <p>撕裂的原因很明确：<span class="highlight">3DGS 没有拓扑</span>。顶点动画之所以不撕裂，是因为相邻顶点共享边，形变是连续的。而高斯之间没有任何邻接关系，如果对每个高斯独立套一个变换矩阵，相邻两个高斯的变换一旦不同，中间就直接断开。</p>
+                    <p>所以思路只有一个：<span class="highlight">给高斯找一个共享的连续映射</span>，让所有高斯都从同一个形变场里取位移，而不是各算各的。</p>
+                    <p><span class="highlight">Cage Mesh 路线，这是最实用的。</span>先建一个包住物体的低模 cage（可以从 3DGS 表面重建后简化，也可以手动包裹）。然后算每个高斯中心相对 cage 的绑定权重，可以用最近面 barycentric 插值，也可以用调和坐标或 mean value coordinates，后两者更平滑。cage 顶点绑骨骼权重，走引擎现成的蒙皮。运行时流程是：cage 顶点蒙皮变形 → 用调和权重把每个高斯中心变换过去。</p>
+                    <p>这里有个容易漏的点：<span class="highlight">高斯的旋转和尺度也要跟着变，不能只挪位置</span>。正确做法是取形变场的雅可比矩阵 J，对协方差做 C' = J·C·Jᵀ 的变换，否则物体一拉伸，高斯椭球还是原来的形状，表面会看起来发糊或破洞。</p>
+                    <p><span class="highlight">四面体嵌入路线，用于软体和破碎。</span>用 TetGen 之类构建包住物体的四面体网格，对四面体跑 FEM 或 XPBD 弹簧解算，再对内部每个高斯按四面体 barycentric 插值位移和雅可比。这就是「嵌入」的含义——高斯被装进一个可物理求解的笼子里。布料用弹簧质点或 PBD 在表面网格上解，再驱动高斯。破碎则按空间分区把高斯绑到各碎片代理上，每个碎片一个刚体或凸包，碎裂瞬间切换绑定；边界处的高斯要复制到两侧或用 alpha 过渡，否则接缝会露。</p>
+                    <p><span class="highlight">纯隐式路线</span>适合人脸表情：学一个神经形变场或直接用 4D 3DGS，不适合硬性骨骼动画，因为骨骼要求精确的刚性变换，神经场做不到那么准。</p>
+                    <div class="tip">
+                        <p>实时游戏场景的推荐组合：<span class="highlight">Cage Mesh + 调和权重 + 雅可比协方差变换</span>。它兼容引擎现有蒙皮、布料和形变系统，稳定且好调。只有确实需要软体解算和破碎时才上四面体嵌入。检查撕裂就看一件事：相邻高斯的位移是否连续，权重在空间上有没有跳变。</p>
+                    </div>
+                </div>
+
+                <h3 class="case-sub">Q30｜单目视频动捕的脚滑、自相交、抖动怎么修</h3>
+                <div class="section-content">
+                    <p>三个现象的成因各不相同，要分开治，混在一起调必然越调越糟。</p>
+                    <p><span class="highlight">脚滑</span>的本质是「脚没有被约束在世界空间」。单目视频里 2D 关键点有噪声，单目深度有歧义，抬脚和落脚的瞬间检测不准，结果就是脚在地上蹭。<span class="highlight">自相交</span>是因为纯运动学解算没有任何碰撞约束，手可以穿进身体。<span class="highlight">抖动</span>是逐帧关键点噪声直接传导到骨骼旋转上。</p>
+                    <p>分层处理的顺序很重要：</p>
+                    <p><span class="highlight">第一层，输入平滑。</span>用 One-Euro filter 而不是简单 EMA。EMA 会把快速动作也一起拖慢，One-Euro 能按速度自适应，慢动作强平滑、快动作少平滑——这一点对动捕至关重要。</p>
+                    <p><span class="highlight">第二层，运动学约束。</span>用引擎的 Two-Bone IK 或 Full Body IK，加一个<span class="highlight">相等支撑相检测</span>：脚的高度低于阈值、速度也低于阈值，就判定为支撑脚，把它的 IK 目标冻结在世界空间，这就是 foot planting。抬起脚时要 blend 进 blend 出，硬切会跳帧。</p>
+                    <p><span class="highlight">第三层，物理约束。</span>自相交靠给角色挂 capsule 或 convex 碰撞体，用 PBD/XPBD 做自碰撞约束，或者用最小距离约束把穿进去的骨节推开。脚滑除了 foot locking，还可以在物理求解器里加摩擦约束，让支撑脚真的「抓地」。</p>
+                    <p><span class="highlight">第四层，物理轨迹优化，这才是「结合物理求解器」的正确用法。</span>物理不是运行时接管角色，而是<span class="highlight">把动捕当作软约束、物理当作硬约束，做一次离线 trajectory optimization</span>：以最小 jerk、最小能量、接触力合规为目标，迭代修正整条轨迹，把穿模和滑步一次性解掉。思路接近 PhysCap、DeepMimic 那一类工作。实时游戏不需要做到这一步，但离线处理一遍质量提升非常明显。</p>
+                    <div class="tip">
+                        <p>两个高频坑：一是<span class="highlight">不要先平滑再 IK</span>，顺序错了会加重脚滑，正确顺序是 IK 之后只滤根节点和髋部轨迹，不要滤关键姿态；二是<span class="highlight">一定要先对齐地面</span>，做法是平面拟合加估计重力方向，否则整段动画都是斜的，后面怎么调都不对。实时够用的组合是 IK + foot locking + capsule 自碰撞 + One-Euro。</p>
+                    </div>
+                </div>
+
+                <h3 class="case-sub">Q31｜任意音频实时驱动 BlendShape，还要 60fps 不卡</h3>
+                <div class="section-content">
+                    <p>先把管线讲清楚，再讲怎么保证 60fps。管线本身分三段：</p>
+                    <p><span class="highlight">音频前处理：</span>重采样到固定采样率，取 mel 频谱或 MFCC，也可以直接用 wav2vec2 / HuBERT 提取语音特征。用滑动窗口切，比如 200ms 一窗，步长对齐到视觉帧率。关键设计是<span class="highlight">多语言不能依赖 ASR</span>——一旦接入识别，中文、日文、小语种全都要单独适配。正确做法是直接用语音特征学 viseme，或者用统一的 IPA 音素集加语言条件 embedding。</p>
+                    <p><span class="highlight">网络：</span>轻量的 Audio2Face 模型，CNN 或小 Transformer，输出 FACS 动作单元或 viseme 权重，再叠一个情绪向量控制整体表情。参数量控制在几百万级别，能塞进移动端。</p>
+                    <p><span class="highlight">后处理：</span>权重曲线平滑、幅度归一化，再程序化叠加眨眼和呼吸，否则纯模型输出会显得很「木」。</p>
+                    <p><span class="highlight">60fps 的五个关键点：</span></p>
+                    <ul>
+                        <li><span class="highlight">推理放旁路线程。</span>音频只有 50 帧/秒的信息量，完全不需要按 60fps 推理。worker 线程或 GPU compute 收音频，主线程只做插值采样。</li>
+                        <li><span class="highlight">固定延迟管线。</span>音频天然有缓冲延迟，把整条管线设计成固定延迟（比如 100ms），权重曲线带时间戳，主线程用前后两帧插值，视觉上完全无感。</li>
+                        <li><span class="highlight">模型量化。</span>FP16 或 INT8，剪枝，配 ONNX Runtime、NCNN 或 TFLite 跑。</li>
+                        <li><span class="highlight">固定输入形状。</span>按固定窗口 batching，避免变长输入触发重编译或动态 shape 降速。</li>
+                        <li><span class="highlight">能预烘就预烘。</span>这是保证 60fps 最稳的一条。已知台词、过场动画，全部离线烘成动画 clip，运行时只做混合，零推理；只有玩家自由对话这种真正交互的场景才走实时推理。</li>
+                    </ul>
+                    <div class="tip">
+                        <p>验收看三个数：<span class="highlight">唇音同步误差控制在 40ms 以内</span>基本就看不出来；blendshape 曲线不能有高频抖动；每种目标语言都要有独立测试集，中文的声调和爆破音跟英文差别很大，只靠英文数据训出来会明显对不上口型。</p>
+                    </div>
+                </div>
+
                 <h2 class="section-title">常见问题速查</h2>
                 <div class="section-content">
                     <p>把四层里最常踩的坑按现象、原因、处理三步收敛，遇到问题先在这里对号。后面接情景题，给一个具体场景判断该怎么做。</p>
