@@ -2334,28 +2334,30 @@
             }
 
             // 公园配套：中央喷泉 + 环形步道 + 长椅 + 花坛
+            const PX = -2.5, PZ = 5.5;   // 公园中心（喷泉/环形步道），移到小河斜穿线之外
+
             (function parkProps() {
                 const GY = 0.15;   // 沙盘顶面（草地）高度
 
                 // —— 中央喷泉 ——
                 const fBase = cyl(1.30, 1.40, 0.20, M.sandTop, 28);
-                fBase.position.set(0, GY + 0.10, 0);
+                fBase.position.set(PX, GY + 0.10, PZ);
                 world.add(fBase);
                 const fWater = cyl(1.02, 1.02, 0.06, M.water, 28);
-                fWater.position.set(0, GY + 0.22, 0);
+                fWater.position.set(PX, GY + 0.22, PZ);
                 world.add(fWater);
                 const fPillar = cyl(0.16, 0.26, 0.62, M.wallDark, 12);
-                fPillar.position.set(0, GY + 0.41, 0);
+                fPillar.position.set(PX, GY + 0.41, PZ);
                 world.add(fPillar);
                 const fBowl = cyl(0.50, 0.18, 0.16, M.sandTop, 20);
-                fBowl.position.set(0, GY + 0.77, 0);
+                fBowl.position.set(PX, GY + 0.77, PZ);
                 world.add(fBowl);
 
                 // —— 环形步道：让散步的人真的走在一条路上 ——
-                const walkGeo = new THREE.RingGeometry(4.85, 5.62, 64);
+                const walkGeo = new THREE.RingGeometry(2.4, 3.1, 64);
                 walkGeo.rotateX(-Math.PI / 2);
                 const walkRing = new THREE.Mesh(walkGeo, M.walk);
-                walkRing.position.set(0, GY + 0.005, 0);
+                walkRing.position.set(PX, GY + 0.005, PZ);
                 walkRing.receiveShadow = false;
                 world.add(walkRing);
 
@@ -2388,6 +2390,7 @@
                     const a = (i / 14) * Math.PI * 2 + 0.22;
                     const x = Math.cos(a) * 12.6, z = Math.sin(a) * 8.9;
                     if (Math.abs(x) > 14.2 || Math.abs(z) > 10.2) continue;
+                    if (inRiver(x, z, 0.85)) continue;
                     if (!freeAt(x, z, 0.85)) continue;
                     bench(x, z, Math.atan2(-x, -z));
                 }
@@ -2398,6 +2401,7 @@
                     const a = (i / 10) * Math.PI * 2 + 0.6;
                     const x = Math.cos(a) * 13.6, z = Math.sin(a) * 9.4;
                     if (Math.abs(x) > 14.4 || Math.abs(z) > 10.4) continue;
+                    if (inRiver(x, z, 0.9)) continue;
                     if (!freeAt(x, z, 0.9)) continue;
                     const pot = cyl(0.42, 0.46, 0.34, M.wallDark, 14);
                     pot.position.set(x, GY + 0.17, z);
@@ -2415,19 +2419,346 @@
                 }
             })();
 
+            // 公园新增配套：健身器材区 / 儿童游玩区 / 宠物聚集地 / 冰淇淋摊 / 烧烤摊
+            const parkFacilities = (function () {
+                const GY = 0.15;
+                const dyn = [];   // 动画对象：swing / dog / smoke
+
+                // 塑胶软垫（作为各活动区的地面底色）
+                function pad(cx, cz, r, color) {
+                    const p = cyl(r, r * 1.03, 0.05, mat(color, { roughness: 0.95 }), 26);
+                    p.position.set(cx, GY + 0.03, cz);
+                    p.castShadow = false;
+                    world.add(p);
+                }
+
+                function makeDog(color) {
+                    const g = new THREE.Group();
+                    const body = cap(0.09, 0.18, color);
+                    body.rotation.z = Math.PI / 2;
+                    body.position.y = 0.14;
+                    g.add(body);
+                    const head = sph(0.08, color, 10);
+                    head.position.set(0.22, 0.2, 0);
+                    g.add(head);
+                    const nose = sph(0.028, M.ink, 8);
+                    nose.position.set(0.3, 0.19, 0);
+                    g.add(nose);
+                    const tail = cyl(0.018, 0.018, 0.16, color, 6);
+                    tail.position.set(-0.2, 0.22, 0);
+                    tail.rotation.z = -0.7;
+                    g.add(tail);
+                    [[0.1, 0.09], [0.1, -0.09], [-0.1, 0.09], [-0.1, -0.09]].forEach(function (p) {
+                        const leg = cyl(0.018, 0.018, 0.1, color, 5);
+                        leg.position.set(p[0], 0.05, p[1]);
+                        g.add(leg);
+                    });
+                    g.traverse(function (o) { o.castShadow = false; });
+                    return g;
+                }
+
+                // ============ 1. 健身器材区 ============
+                (function fitness() {
+                    const cx = -7, cz = 2.5, metal = M.bikeFrame;
+                    pad(cx, cz, 2.5, 0x6FA87A);
+
+                    // 单杠
+                    [-0.8, 0.8].forEach(function (dx) {
+                        const p = cyl(0.035, 0.045, 1.5, metal, 8);
+                        p.position.set(cx + dx, GY + 0.75, cz);
+                        world.add(p);
+                    });
+                    const bar = cyl(0.03, 0.03, 1.7, metal, 8);
+                    bar.rotation.z = Math.PI / 2;
+                    bar.position.set(cx, GY + 1.52, cz);
+                    world.add(bar);
+
+                    // 双杠
+                    [-0.5, 0.5].forEach(function (dx) {
+                        [-0.4, 0.4].forEach(function (dz) {
+                            const p = cyl(0.03, 0.04, 0.9, metal, 8);
+                            p.position.set(cx + dx, GY + 0.45, cz + dz);
+                            world.add(p);
+                        });
+                    });
+                    [-0.5, 0.5].forEach(function (dx) {
+                        const rail = cyl(0.028, 0.028, 0.95, metal, 8);
+                        rail.rotation.x = Math.PI / 2;
+                        rail.position.set(cx + dx, GY + 0.95, cz);
+                        world.add(rail);
+                    });
+
+                    // 太空漫步机（摆臂动画）
+                    const spCol = cyl(0.05, 0.06, 1.6, metal, 8);
+                    spCol.position.set(cx + 1.4, GY + 0.8, cz + 1.0);
+                    world.add(spCol);
+                    const swTop = cyl(0.05, 0.05, 0.7, metal, 8);
+                    swTop.rotation.z = Math.PI / 2;
+                    swTop.position.set(cx + 1.4, GY + 1.62, cz + 1.0);
+                    world.add(swTop);
+                    [-1, 1].forEach(function (dir) {
+                        const arm = new THREE.Group();
+                        const rod = cyl(0.025, 0.025, 1.35, metal, 8);
+                        rod.position.y = -0.65;
+                        arm.add(rod);
+                        const foot = box(0.16, 0.05, 0.34, mat(0xE8833A, { roughness: 0.7 }));
+                        foot.position.y = -1.33;
+                        arm.add(foot);
+                        arm.position.set(cx + 1.4, GY + 1.62, cz + 1.0);
+                        world.add(arm);
+                        dyn.push({ type: 'swing', obj: arm, axis: 'z', amp: 0.5 * dir, speed: 1.6, phase: 0 });
+                    });
+
+                    // 太极推手轮
+                    const twCol = cyl(0.04, 0.05, 1.1, metal, 8);
+                    twCol.position.set(cx - 1.4, GY + 0.55, cz + 1.0);
+                    world.add(twCol);
+                    const wheel = cyl(0.5, 0.5, 0.08, mat(0xC0392B, { roughness: 0.6 }), 20);
+                    wheel.rotation.x = Math.PI / 2;
+                    wheel.position.set(cx - 1.4, GY + 1.35, cz + 1.0);
+                    world.add(wheel);
+                })();
+
+                // ============ 2. 儿童游玩区 ============
+                (function kids() {
+                    const cx = 5, cz = -5.5;
+                    pad(cx, cz, 3.0, 0xE8B84A);
+                    const g = new THREE.Group();
+
+                    // 滑梯：平台 + 楼梯 + 滑道 + 立柱
+                    const plat = box(0.8, 0.1, 0.8, M.wood);
+                    plat.position.set(0, 0.85, 0);
+                    g.add(plat);
+                    for (let i = 0; i < 4; i++) {
+                        const step = box(0.8, 0.09, 0.22, M.wood);
+                        step.position.set(0, 0.05 + i * 0.2, 0.45 + i * 0.22);
+                        g.add(step);
+                    }
+                    const slide = box(0.55, 0.08, 1.6, mat(0xC0392B, { roughness: 0.4 }));
+                    slide.position.set(0, 0.55, -1.0);
+                    slide.rotation.x = -0.55;
+                    g.add(slide);
+                    [[-0.35, -0.35], [0.35, -0.35], [-0.35, 0.3], [0.35, 0.3]].forEach(function (p) {
+                        const col = cyl(0.04, 0.05, 0.85, M.woodD, 6);
+                        col.position.set(p[0], 0.42, p[1]);
+                        g.add(col);
+                    });
+
+                    // 秋千（动画摆动）
+                    const beam = cyl(0.04, 0.04, 1.4, M.woodD, 6);
+                    beam.rotation.z = Math.PI / 2;
+                    beam.position.set(1.5, 1.1, 0.6);
+                    g.add(beam);
+                    [-1.5, 1.5].forEach(function (x) {
+                        const col = cyl(0.04, 0.05, 1.1, M.woodD, 6);
+                        col.position.set(x, 0.55, 0.6);
+                        g.add(col);
+                    });
+                    const swing = new THREE.Group();
+                    [-0.28, 0.28].forEach(function (dx) {
+                        const rope = cyl(0.015, 0.015, 0.9, M.ink, 5);
+                        rope.position.set(dx, -0.45, 0);
+                        swing.add(rope);
+                    });
+                    const seat = box(0.6, 0.06, 0.2, M.wood);
+                    seat.position.set(0, -0.9, 0);
+                    swing.add(seat);
+                    swing.position.set(1.5, 1.1, 0.6);
+                    g.add(swing);
+                    dyn.push({ type: 'swing', obj: swing, axis: 'x', amp: 0.35, speed: 2.0, phase: 0 });
+
+                    // 跷跷板（动画摆动）
+                    const fulcrum = prism(0.35, 0.4, M.woodD);
+                    fulcrum.position.set(-1.4, 0.2, -0.5);
+                    g.add(fulcrum);
+                    const plank = box(2.0, 0.07, 0.3, M.roof);
+                    plank.position.set(-1.4, 0.42, -0.5);
+                    g.add(plank);
+                    dyn.push({ type: 'swing', obj: plank, axis: 'z', amp: 0.22, speed: 1.3, phase: 1 });
+
+                    // 沙坑
+                    const sand = box(1.0, 0.1, 0.8, M.sandTop);
+                    sand.position.set(-1.4, 0.05, 1.0);
+                    g.add(sand);
+
+                    g.traverse(function (o) { o.castShadow = false; });
+                    g.position.set(cx, GY, cz);
+                    world.add(g);
+
+                    person(cx + 1.6, cz + 0.8, M.pink);
+                    person(cx - 0.6, cz - 1.4, M.yellow);
+                })();
+
+                // ============ 3. 宠物聚集地 ============
+                (function pets() {
+                    const cx = -4, cz = -7;
+                    pad(cx, cz, 2.6, 0x9BCB89);
+
+                    // 围栏：一圈矮桩 + 两道横环
+                    for (let i = 0; i < 14; i++) {
+                        const a = i / 14 * Math.PI * 2;
+                        const x = cx + Math.cos(a) * 2.4, z = cz + Math.sin(a) * 2.4;
+                        if (inRiver(x, z, 0.4)) continue;
+                        const post = cyl(0.035, 0.05, 0.6, M.wood, 6);
+                        post.position.set(x, GY + 0.3, z);
+                        world.add(post);
+                    }
+                    [[0.5, 0.5], [0.3, 0.55]].forEach(function (h) {
+                        const ring = mesh(new THREE.TorusGeometry(2.4, 0.03, 8, 40), M.wood, false);
+                        ring.rotation.x = Math.PI / 2;
+                        ring.position.set(cx, GY + h[0], cz);
+                        world.add(ring);
+                    });
+
+                    // 两只狗来回跑（动画）
+                    [mat(0x8A6B4A), mat(0xE8D8B8)].forEach(function (col, i) {
+                        const dg = makeDog(col);
+                        dg.position.set(cx, GY, cz + (i ? 0.7 : -0.7));
+                        world.add(dg);
+                        dyn.push({ type: 'dog', obj: dg, cx: cx, cz: cz + (i ? 0.7 : -0.7), r: 0.9 + i * 0.4, speed: 1.1 + i * 0.5, phase: i * 2 });
+                    });
+
+                    person(cx + 1.1, cz + 1.0, M.purple);
+                    const ball = sph(0.1, M.roof, 10);
+                    ball.position.set(cx - 0.8, GY + 0.1, cz + 1.2);
+                    world.add(ball);
+                })();
+
+                // ============ 4. 冰淇淋摊 ============
+                (function iceCream() {
+                    const cx = 0.5, cz = 7.5;
+                    const g = new THREE.Group();
+                    const body = box(1.3, 0.7, 0.8, mat(0xF6E7D0));
+                    body.position.y = 0.55;
+                    g.add(body);
+                    const roof = box(1.5, 0.1, 1.0, M.pink);
+                    roof.position.y = 1.35;
+                    g.add(roof);
+                    for (let i = 0; i < 4; i++) {
+                        const stripe = box(0.1, 0.1, 1.02, M.white);
+                        stripe.position.set(-0.6 + i * 0.4, 1.35, 0);
+                        g.add(stripe);
+                    }
+                    [[-0.6, -0.4], [0.6, -0.4], [-0.6, 0.4], [0.6, 0.4]].forEach(function (p) {
+                        const col = cyl(0.03, 0.03, 1.2, M.woodD, 6);
+                        col.position.set(p[0], 0.85, p[1]);
+                        g.add(col);
+                    });
+                    [[-0.45, -0.5], [0.45, -0.5], [-0.45, 0.5], [0.45, 0.5]].forEach(function (p) {
+                        const w = cyl(0.14, 0.14, 0.08, M.ink, 12);
+                        w.rotation.z = Math.PI / 2;
+                        w.position.set(p[0], 0.14, p[1]);
+                        g.add(w);
+                    });
+                    const counter = box(1.35, 0.1, 0.55, M.sandTop);
+                    counter.position.set(0, 0.9, -0.5);
+                    g.add(counter);
+                    const signCone = cone(0.18, 0.4, M.sandSide, 12);
+                    signCone.position.set(0, 1.6, 0);
+                    g.add(signCone);
+                    const scoop1 = sph(0.12, M.pink, 10);
+                    scoop1.position.set(0, 1.75, 0);
+                    g.add(scoop1);
+                    const scoop2 = sph(0.1, M.yellow, 10);
+                    scoop2.position.set(0.1, 1.82, 0);
+                    g.add(scoop2);
+                    g.traverse(function (o) { o.castShadow = false; });
+                    g.position.set(cx, GY, cz);
+                    g.rotation.y = 0.5;
+                    world.add(g);
+
+                    person(cx - 0.9, cz - 0.2, M.screen);
+                })();
+
+                // ============ 5. 烧烤摊 ============
+                (function bbq() {
+                    const cx = 9, cz = -1;
+                    const g = new THREE.Group();
+                    const grill = box(1.0, 0.5, 0.6, mat(0x2B2F35, { roughness: 0.7, metalness: 0.3 }));
+                    grill.position.y = 0.45;
+                    g.add(grill);
+                    for (let i = 0; i < 5; i++) {
+                        const rod = cyl(0.02, 0.02, 0.6, M.ink, 6);
+                        rod.rotation.x = Math.PI / 2;
+                        rod.position.set(-0.35 + i * 0.175, 0.72, 0);
+                        g.add(rod);
+                    }
+                    const coals = box(0.8, 0.08, 0.45, new THREE.MeshStandardMaterial({ color: 0xE8442A, emissive: 0xFF5A30, emissiveIntensity: 1.6, roughness: 0.6 }));
+                    coals.position.y = 0.64;
+                    g.add(coals);
+                    [[-0.4, -0.25], [0.4, -0.25], [-0.4, 0.25], [0.4, 0.25]].forEach(function (p) {
+                        const leg = cyl(0.03, 0.04, 0.7, M.ink, 6);
+                        leg.position.set(p[0], 0.35, p[1]);
+                        g.add(leg);
+                    });
+                    g.traverse(function (o) { o.castShadow = false; });
+                    g.position.set(cx, GY, cz);
+                    g.rotation.y = -0.4;
+                    world.add(g);
+
+                    // 上升的烟（动画）
+                    for (let i = 0; i < 3; i++) {
+                        const smoke = cyl(0.1, 0.22, 0.5, new THREE.MeshBasicMaterial({ color: 0xB8B8B8, transparent: true, opacity: 0.32, depthWrite: false }), 8);
+                        smoke.position.set(cx + (i - 1) * 0.25, GY + 0.9, cz);
+                        smoke.castShadow = false;
+                        world.add(smoke);
+                        dyn.push({ type: 'smoke', obj: smoke, phase: i * 2.1, mat: smoke.material });
+                    }
+
+                    // 桌凳 + 摊主
+                    const table = cyl(0.5, 0.55, 0.06, M.wood, 12);
+                    table.position.set(cx + 1.4, GY + 0.55, cz + 0.8);
+                    world.add(table);
+                    const tleg = cyl(0.04, 0.05, 0.55, M.woodD, 6);
+                    tleg.position.set(cx + 1.4, GY + 0.27, cz + 0.8);
+                    world.add(tleg);
+                    [0, 1].forEach(function (i) {
+                        const stool = cyl(0.22, 0.26, 0.1, M.wood, 10);
+                        stool.position.set(cx + 1.0 + i * 0.8, GY + 0.4, cz + 1.5);
+                        world.add(stool);
+                        const sleg = cyl(0.035, 0.04, 0.4, M.woodD, 6);
+                        sleg.position.set(cx + 1.0 + i * 0.8, GY + 0.2, cz + 1.5);
+                        world.add(sleg);
+                    });
+                    person(cx - 0.8, cz + 0.5, M.roof);
+                })();
+
+                return {
+                    update: function (dt, t) {
+                        for (let i = 0; i < dyn.length; i++) {
+                            const d = dyn[i];
+                            if (d.type === 'swing') {
+                                d.obj.rotation[d.axis] = Math.sin(t * d.speed + d.phase) * d.amp;
+                            } else if (d.type === 'dog') {
+                                const v = Math.cos(t * d.speed + d.phase);
+                                d.obj.position.x = d.cx + Math.sin(t * d.speed + d.phase) * d.r;
+                                d.obj.rotation.y = v > 0 ? 0 : Math.PI;
+                            } else if (d.type === 'smoke') {
+                                const k = (Math.sin(t * 0.8 + d.phase) + 1) / 2;
+                                d.obj.position.y = GY + 0.9 + k * 1.3;
+                                const s = 0.7 + k * 1.6;
+                                d.obj.scale.set(s, s * 1.4, s);
+                                d.mat.opacity = 0.32 * (1 - k);
+                            }
+                        }
+                    }
+                };
+            })();
+
             const shirts = [M.pink, M.purple, M.yellow, M.grassB, M.roof, M.screen];
 
             // 公园里活动的人：行人沿中央环形步道走动，玩耍的人在空地小范围来回
             const people = [];
-            const walkR = 5.2; // 行人巡游半径（避开 r=8.7 的建筑地台）
+            const walkR = 2.75; // 行人巡游半径（围绕新喷泉中心，避开小河）
             for (let i = 0; i < 8; i++) {
                 const g = person(0, 0, shirts[i % shirts.length]);
                 people.push({ g: g, mode: 'walk', t: i / 8, speed: 0.016 + (i % 3) * 0.005, dir: 1 });
             }
             for (let i = 0; i < 9; i++) {
                 const a = rand() * Math.PI * 2;
-                const rad = 1.6 + rand() * 3.6;
-                const cx = Math.cos(a) * rad, cz = Math.sin(a) * rad;
+                const rad = 1.1 + rand() * 2.3;
+                const cx = PX + Math.cos(a) * rad, cz = PZ + Math.sin(a) * rad;
+                if (inRiver(cx, cz, 0.4)) continue;
                 const g = person(cx, cz, shirts[(i + 8) % shirts.length]);
                 people.push({
                     g: g, mode: 'play', cx: cx, cz: cz,
@@ -2438,7 +2769,7 @@
 
             // 公园路灯：中央空地四周对称分布，全部带真实点光源（夜里把公园照亮）
             const streetlights = [];
-            [[-4.6, -4.2, 1], [4.6, -4.2, 1], [4.6, 4.2, 1], [-4.6, 4.2, 1], [0, -6.4, 1], [0, 6.4, 1]]
+            [[-7.0, -6.5, 1], [4.6, -4.2, 1], [4.6, 4.2, 1], [-4.6, 4.2, 1], [0, -6.4, 1], [0, 6.4, 1]]
                 .forEach(function (s) { streetlights.push(streetlight(s[0], s[1], s[2])); });
 
             /* ══════════ 五个分区建筑 ══════════ */
@@ -3176,18 +3507,18 @@
                 for (let i = 0; i < people.length; i++) {
                     const p = people[i];
                     if (p.mode === 'walk') {
-                        const curX = Math.cos(p.t * Math.PI * 2) * walkR;
-                        const curZ = Math.sin(p.t * Math.PI * 2) * walkR;
+                        const curX = PX + Math.cos(p.t * Math.PI * 2) * walkR;
+                        const curZ = PZ + Math.sin(p.t * Math.PI * 2) * walkR;
                         const nt = (p.t + dt * p.speed * p.dir + 1) % 1;
-                        const nX = Math.cos(nt * Math.PI * 2) * walkR;
-                        const nZ = Math.sin(nt * Math.PI * 2) * walkR;
+                        const nX = PX + Math.cos(nt * Math.PI * 2) * walkR;
+                        const nZ = PZ + Math.sin(nt * Math.PI * 2) * walkR;
                         if (inRiver(nX, nZ, 0.35) && !inRiver(curX, curZ, 0.35)) {
                             p.dir = -p.dir; // 到河边掉头
                         } else {
                             p.t = nt;
                         }
                         const ang = p.t * Math.PI * 2;
-                        p.g.position.set(Math.cos(ang) * walkR, 0.15, Math.sin(ang) * walkR);
+                        p.g.position.set(PX + Math.cos(ang) * walkR, 0.15, PZ + Math.sin(ang) * walkR);
                         p.g.rotation.y = ang + Math.PI / 2 + (p.dir < 0 ? Math.PI : 0);
                     } else {
                         let ang = t * p.speed * p.dir + p.phase;
@@ -3228,6 +3559,9 @@
 
                 // 公交车：沿外围矩形绕行，到站停靠、乘客上下车
                 if (busSystem.update) busSystem.update(dt, t);
+
+                // 公园配套：健身器材/秋千/跷跷板摆动、宠物跑动、烧烤烟雾
+                if (parkFacilities.update) parkFacilities.update(dt, t);
 
                 // 车辆：沿棋盘格路网行驶，到路口自动转弯
                 const traffic = world.userData.traffic;
