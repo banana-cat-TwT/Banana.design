@@ -618,6 +618,9 @@
                 windowLight: new THREE.MeshStandardMaterial({ color: 0xFFF1D0, emissive: 0xFFC166, emissiveIntensity: 0, roughness: 0.6 }),
                 streetLamp: new THREE.MeshStandardMaterial({ color: 0xFFF2CE, emissive: 0xFFC26B, emissiveIntensity: 0, roughness: 0.4 }),
                 road: mat(0x4A4E55, { roughness: 0.95 }),
+                roadMark: mat(0xF0EFE6, { roughness: 0.75 }),
+                signalBody: mat(0x2B2F35, { roughness: 0.8 }),
+                bikeFrame: mat(0x3E4A5A, { roughness: 0.6, metalness: 0.25 }),
                 carHead: new THREE.MeshStandardMaterial({ color: 0xFFF6D8, emissive: 0xFFF2C0, emissiveIntensity: 0, roughness: 0.4 }),
                 carTail: new THREE.MeshStandardMaterial({ color: 0xB03028, emissive: 0xFF3B30, emissiveIntensity: 0, roughness: 0.4 })
             };
@@ -1057,8 +1060,10 @@
             (function roads() {
                 // —— 路网定义 ——
                 // 2 条横向（东西向）+ 2 条纵向（南北向），围出一个矩形，4 个角就是十字交叉口
-                const HZ = [-12, 12];                 // 横向马路的 z 坐标（北、南）
+                const HZ = [-13.4, 13.4];             // 横向马路的 z 坐标（北、南）
                 const VX = [-17, 17];                 // 纵向马路的 x 坐标（西、东）
+                const ROAD_W = 3.0;                   // 路面总宽（半宽 1.5：机动车道 + 非机动车道）
+                const CURB_W = 3.4;                   // 路缘总宽
                 const HSPAN = 31;                     // 横向马路 x 方向半跨度（一路延伸到远处，不截断）
                 const VSPAN = 23;                     // 纵向马路 z 方向半跨度
 
@@ -1072,13 +1077,13 @@
                 // 4 条马路：每条两层（深色路缘 + 灰色路面）
                 HZ.forEach(function (z) {
                     const c = straightSeg(-HSPAN, z, HSPAN, z);
-                    world.add(ribbon(c, { y: 0.01, w0: 1.6, w1: 1.6, mat: M.wallDark, segments: 60 }));
-                    world.add(ribbon(c, { y: 0.03, w0: 1.35, w1: 1.35, mat: M.road, segments: 60 }));
+                    world.add(ribbon(c, { y: 0.01, w0: CURB_W, w1: CURB_W, mat: M.wallDark, segments: 60 }));
+                    world.add(ribbon(c, { y: 0.03, w0: ROAD_W, w1: ROAD_W, mat: M.road, segments: 60 }));
                 });
                 VX.forEach(function (x) {
                     const c = straightSeg(x, -VSPAN, x, VSPAN);
-                    world.add(ribbon(c, { y: 0.01, w0: 1.6, w1: 1.6, mat: M.wallDark, segments: 60 }));
-                    world.add(ribbon(c, { y: 0.03, w0: 1.35, w1: 1.35, mat: M.road, segments: 60 }));
+                    world.add(ribbon(c, { y: 0.01, w0: CURB_W, w1: CURB_W, mat: M.wallDark, segments: 60 }));
+                    world.add(ribbon(c, { y: 0.03, w0: ROAD_W, w1: ROAD_W, mat: M.road, segments: 60 }));
                 });
 
                 // —— 路口节点图 ——
@@ -1123,6 +1128,158 @@
                     ADJ[EDGES[k].a].push(k);
                     ADJ[EDGES[k].b].push(k);
                 });
+
+                /* ── 斑马线：每个路口 4 条，条纹横跨路面 ── */
+                const CROSS_OFF = 2.9;                 // 斑马线中心离路口中心的距离
+                const ZEBRA_LEN = ROAD_W - 0.12;
+                const ZEBRA_GAP = 0.62;
+                const stripeGeoH = new THREE.BoxGeometry(ZEBRA_LEN, 0.02, 0.30);  // 横跨纵向路（沿 X 长）
+                const stripeGeoV = new THREE.BoxGeometry(0.30, 0.02, ZEBRA_LEN);  // 横跨横向路（沿 Z 长）
+
+                function zebraAcrossX(x, z) {
+                    for (let i = -2; i <= 2; i++) {
+                        const s = new THREE.Mesh(stripeGeoH, M.roadMark);
+                        s.position.set(x, 0.048, z + i * ZEBRA_GAP);
+                        s.castShadow = false;
+                        world.add(s);
+                    }
+                }
+                function zebraAcrossZ(x, z) {
+                    for (let i = -2; i <= 2; i++) {
+                        const s = new THREE.Mesh(stripeGeoV, M.roadMark);
+                        s.position.set(x + i * ZEBRA_GAP, 0.048, z);
+                        s.castShadow = false;
+                        world.add(s);
+                    }
+                }
+                VX.forEach(function (x) {
+                    HZ.forEach(function (z) {
+                        zebraAcrossX(x, z - CROSS_OFF);
+                        zebraAcrossX(x, z + CROSS_OFF);
+                        zebraAcrossZ(x - CROSS_OFF, z);
+                        zebraAcrossZ(x + CROSS_OFF, z);
+                    });
+                });
+
+                /* ── 马路路灯：灯杆立在路缘外，灯臂朝路面 ── */
+                const roadLamps = [];
+                function roadLamp(x, z, rotY, withLight) {
+                    const g = new THREE.Group();
+                    const pole = cyl(0.038, 0.058, 2.5, M.ink, 8);
+                    pole.position.y = 1.25;
+                    pole.castShadow = false;
+                    g.add(pole);
+                    const arm = cyl(0.028, 0.028, 0.62, M.ink, 6);
+                    arm.rotation.z = Math.PI / 2;
+                    arm.position.set(0.31, 2.48, 0);
+                    arm.castShadow = false;
+                    g.add(arm);
+                    const head = sph(0.16, M.streetLamp, 10);
+                    head.position.set(0.62, 2.48, 0);
+                    head.castShadow = false;
+                    g.add(head);
+                    g.rotation.y = rotY;
+                    g.position.set(x, -0.12, z);
+                    world.add(g);
+                    let light = null;
+                    if (withLight) {
+                        // 灯臂局部 +X 旋转 rotY 后指向 (cos, -sin)
+                        light = new THREE.PointLight(0xFFC26B, 0, 9.0, 2);
+                        light.position.set(x + Math.cos(rotY) * 0.62, 2.55, z - Math.sin(rotY) * 0.62);
+                        light.castShadow = false;
+                        world.add(light);
+                    }
+                    const rig = { g: g, head: head, light: light };
+                    roadLamps.push(rig);
+                    return rig;
+                }
+                // 横向马路：北侧灯杆在路外（灯臂朝 +Z），南侧朝 -Z
+                HZ.forEach(function (z, iz) {
+                    const rotY = iz === 0 ? -Math.PI / 2 : Math.PI / 2;
+                    const zSide = iz === 0 ? z - 1.95 : z + 1.95;
+                    [-27, -21, -9, 0, 9, 21, 27].forEach(function (x) {
+                        roadLamp(x, zSide, rotY, x === 0);
+                    });
+                });
+                // 纵向马路：西侧灯臂朝 +X，东侧朝 -X
+                VX.forEach(function (x, ix) {
+                    const rotY = ix === 0 ? 0 : Math.PI;
+                    const xSide = ix === 0 ? x - 1.95 : x + 1.95;
+                    [-20, -6.7, 0, 6.7, 20].forEach(function (z) {
+                        roadLamp(xSide, z, rotY, z === 0);
+                    });
+                });
+
+                /* ── 红绿灯：每个路口两组，分别管东西向 / 南北向 ── */
+                const SIGNAL_CYCLE = 16;
+                const SIGNAL_OFFSET = { NW: 0, NE: 8, SW: 8, SE: 0 };
+                const signals = [];
+
+                function trafficLight(x, z, rotY, axis, node) {
+                    const g = new THREE.Group();
+                    const pole = cyl(0.045, 0.06, 2.15, M.ink, 8);
+                    pole.position.y = 1.07;
+                    pole.castShadow = false;
+                    g.add(pole);
+                    const housing = box(0.3, 0.66, 0.22, M.signalBody);
+                    housing.position.set(0, 2.02, 0.08);
+                    housing.castShadow = false;
+                    g.add(housing);
+                    function lampMat(c) {
+                        return new THREE.MeshStandardMaterial({ color: c, emissive: c, emissiveIntensity: 0.06, roughness: 0.4 });
+                    }
+                    const redM = lampMat(0xFF3B30), yelM = lampMat(0xFFCC00), grnM = lampMat(0x34D07F);
+                    [[redM, 2.22], [yelM, 2.02], [grnM, 1.82]].forEach(function (p) {
+                        const b = sph(0.072, p[0], 8);
+                        b.position.set(0, p[1], 0.20);
+                        b.castShadow = false;
+                        g.add(b);
+                    });
+                    g.rotation.y = rotY;
+                    g.position.set(x, -0.12, z);
+                    world.add(g);
+                    signals.push({ red: redM, yellow: yelM, green: grnM, axis: axis, node: node });
+                }
+                ['NW', 'NE', 'SW', 'SE'].forEach(function (n) {
+                    const N = NODES[n];
+                    trafficLight(N.x + 2.15, N.z + 2.15, -Math.PI * 0.75, 'ew', n);
+                    trafficLight(N.x - 2.15, N.z - 2.15, Math.PI * 0.25, 'ns', n);
+                });
+
+                // 信号相位：16 秒一个循环，东西向 / 南北向互补
+                function sigState(nodeKey, axis, time) {
+                    const p = ((time + (SIGNAL_OFFSET[nodeKey] || 0)) % SIGNAL_CYCLE + SIGNAL_CYCLE) % SIGNAL_CYCLE;
+                    if (axis === 'ew') {
+                        if (p < 7) return 'green';
+                        if (p < 8.4) return 'yellow';
+                        return 'red';
+                    }
+                    if (p < 8) return 'red';
+                    if (p < 15) return 'green';
+                    return 'yellow';
+                }
+
+                /* ── 过街行人：只在对应方向红灯（车停住）时走斑马线 ── */
+                const crossers = [];
+                const crosserShirts = [0xE86A5C, 0x6E9BC7, 0xE9C46A, 0x8FBF7F, 0xC79BE0, 0xE39B6B];
+                let crosserIdx = 0;
+                function addCrosser(mode, along, fixed, node, axis) {
+                    const shirt = crosserShirts[crosserIdx++ % crosserShirts.length];
+                    const g = mode === 'x' ? person(along, fixed, shirt) : person(fixed, along, shirt);
+                    crossers.push({
+                        g: g, mode: mode, along: along, fixed: fixed,
+                        node: node, axis: axis,
+                        u: 0, dir: 1, wait: 0
+                    });
+                }
+                VX.forEach(function (x) {
+                    HZ.forEach(function (z) {
+                        const node = z < 0 ? (x < 0 ? 'NW' : 'NE') : (x < 0 ? 'SW' : 'SE');
+                        addCrosser('x', x, z + CROSS_OFF, node, 'ns');
+                    });
+                });
+                addCrosser('z', NODES.SW.z, VX[0] + CROSS_OFF, 'SW', 'ew');
+                addCrosser('z', NODES.NE.z, VX[1] + CROSS_OFF, 'NE', 'ew');
 
                 function car(color) {
                     const g = new THREE.Group();
