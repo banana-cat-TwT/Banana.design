@@ -103,96 +103,6 @@
         }
         .guide b { color: var(--ink); font-weight: 600; }
 
-        /* 左侧工具栏 */
-        .toolbar {
-            position: fixed;
-            left: 24px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 16;
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            padding: 10px 8px;
-            border-radius: 19px;
-            background: var(--glass);
-            backdrop-filter: blur(14px) saturate(1.1);
-            -webkit-backdrop-filter: blur(14px) saturate(1.1);
-            border: 1px solid var(--glass-line);
-            box-shadow: var(--shadow);
-        }
-        .tool {
-            position: relative;
-            width: 38px;
-            height: 38px;
-            border: none;
-            border-radius: 12px;
-            background: transparent;
-            color: var(--ink-soft);
-            display: grid;
-            place-items: center;
-            cursor: pointer;
-            transition: background .18s, color .18s, transform .18s;
-        }
-        .tool svg {
-            width: 19px; height: 19px;
-            fill: none; stroke: currentColor;
-            stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round;
-        }
-        .tool:hover { background: rgba(240, 176, 120, 0.2); color: var(--ink); }
-        .tool.active {
-            background: linear-gradient(135deg, #F3BB84, #E08B5A);
-            color: #fff;
-            box-shadow: 0 6px 15px rgba(224, 139, 90, 0.38);
-        }
-        .tool::after {
-            content: attr(data-tip);
-            position: absolute;
-            left: calc(100% + 12px);
-            top: 50%;
-            transform: translateY(-50%) translateX(-4px);
-            white-space: nowrap;
-            font-size: 0.7rem;
-            letter-spacing: 1px;
-            padding: 5px 9px;
-            border-radius: 8px;
-            background: rgba(74, 63, 51, 0.9);
-            color: #fff;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity .18s, transform .18s;
-        }
-        .tool:hover::after { opacity: 1; transform: translateY(-50%) translateX(0); }
-
-        .tool-hint {
-            position: fixed;
-            left: 84px;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 16;
-            padding: 8px 13px;
-            border-radius: 12px;
-            background: rgba(74, 63, 51, 0.88);
-            color: #fff;
-            font-size: 0.74rem;
-            letter-spacing: 1px;
-            white-space: nowrap;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity .5s;
-        }
-        .tool-hint.show { opacity: 1; }
-        .tool-hint::before {
-            content: '';
-            position: absolute;
-            left: -5px;
-            top: 50%;
-            margin-top: -5px;
-            width: 9px; height: 9px;
-            background: inherit;
-            transform: rotate(45deg);
-        }
-
         /* 中央密码卡 */
         .gate-wrap {
             position: fixed;
@@ -440,13 +350,12 @@
         .pencil svg { width: 100%; height: 100%; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 
         /* 入场动画 */
-        .gate-card, .brand, .guide, .toolbar {
+        .gate-card, .brand, .guide {
             opacity: 0;
             animation: fadeIn .9s ease forwards;
         }
         .brand { animation-delay: .1s; }
         .guide { animation-delay: .25s; }
-        .toolbar { animation-delay: .35s; }
         .gate-card { animation-delay: .3s; }
         @keyframes fadeIn { to { opacity: 1; } }
 
@@ -456,7 +365,7 @@
             opacity: 0;
             transform: scale(.9) translateY(-8px);
         }
-        .pill.hide, .brand.hide, .guide.hide, .toolbar.hide, .stepper.hide, .tool-hint.hide {
+        .pill.hide, .brand.hide, .guide.hide, .stepper.hide {
             animation: none; /* 同上：入场动画的 forwards 会盖住淡出 */
             transition: opacity .45s ease;
             opacity: 0;
@@ -467,11 +376,6 @@
             .brand { top: 16px; left: 18px; }
             .brand h1 { font-size: 0.95rem; }
             .guide { display: none; }
-            .toolbar { left: 12px; padding: 8px 6px; gap: 4px; }
-            .tool { width: 32px; height: 32px; border-radius: 10px; }
-            .tool svg { width: 16px; height: 16px; }
-            .tool::after { display: none; }
-            .tool-hint { display: none; }
             .gate-wrap { align-items: flex-end; padding-bottom: 80px; }
             .gate-card { width: min(304px, 84vw); }
             .pill { padding: 6px 10px 6px 7px; gap: 7px; border-radius: 12px; }
@@ -511,25 +415,6 @@
         <div><b>滚轮</b> 拉近拉远</div>
         <div><b>点标签</b> 聚焦分区</div>
     </div>
-
-    <div class="toolbar">
-        <button class="tool active" id="tool-orbit" type="button" data-tip="自由视角">
-            <svg viewBox="0 0 20 20"><path d="M16.5 10a6.5 6.5 0 1 1-2.2-4.9"/><path d="M16.8 3.2v4.2h-4.2"/></svg>
-        </button>
-        <button class="tool" id="tool-pan" type="button" data-tip="平移画面">
-            <svg viewBox="0 0 20 20"><path d="M10 2.6v14.8M2.6 10h14.8"/><path d="M10 2.6 7.6 5M10 2.6 12.4 5M10 17.4 7.6 15M10 17.4 12.4 15M2.6 10 5 7.6M2.6 10 5 12.4M17.4 10 15 7.6M17.4 10 15 12.4"/></svg>
-        </button>
-        <button class="tool active" id="tool-auto" type="button" data-tip="自动巡航">
-            <svg viewBox="0 0 20 20"><path d="M7 4.4 15.4 10 7 15.6z"/></svg>
-        </button>
-        <button class="tool" id="tool-reset" type="button" data-tip="复位视角">
-            <svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="4.6"/><path d="M10 1.8v3M10 15.2v3M1.8 10h3M15.2 10h3"/></svg>
-        </button>
-        <button class="tool" id="tool-full" type="button" data-tip="全屏">
-            <svg viewBox="0 0 20 20"><path d="M3 7.4V3h4.4M17 7.4V3h-4.4M3 12.6V17h4.4M17 12.6V17h-4.4"/></svg>
-        </button>
-    </div>
-    <div class="tool-hint" id="tool-hint">拖拽 · 自由视角</div>
 
     <div class="pill" data-i="0" role="button" tabindex="0"><span class="n">1</span><span class="t"><b>作品展示</b><span>PORTFOLIO</span></span></div>
     <div class="pill" data-i="1" role="button" tabindex="0"><span class="n">2</span><span class="t"><b>角色展示</b><span>CHARACTERS</span></span></div>
@@ -622,7 +507,7 @@
             function allow() {
                 try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch (e) {}
                 card.classList.add('leaving');
-                document.querySelectorAll('.pill, .brand, .guide, .toolbar, .stepper, .tool-hint').forEach(function (el) {
+                document.querySelectorAll('.pill, .brand, .guide, .stepper').forEach(function (el) {
                     el.classList.add('hide');
                 });
                 var st = document.getElementById('stepper-state');
@@ -651,7 +536,10 @@
     </script>
     <!-- 3D 沙盘场景（Three.js，独立模块，加载失败不影响认证） -->
     <script type="importmap">
-        { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }
+        { "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        } }
     </script>
     <script type="module">
         let THREE = null;
@@ -681,7 +569,8 @@
             const camera = new THREE.PerspectiveCamera(27, innerWidth / innerHeight, 1, 460);
 
             /* ══════════ 光照 ══════════ */
-            scene.add(new THREE.HemisphereLight(0xFFF8EA, 0xC6B096, 0.55));
+            const hemi = new THREE.HemisphereLight(0xFFF8EA, 0xC6B096, 0.55);
+            scene.add(hemi);
             const sun = new THREE.DirectionalLight(0xFFF1DC, 1.7);
             sun.position.set(17, 27, 13);
             sun.castShadow = true;
@@ -701,6 +590,13 @@
             fill.position.set(-19, 11, -15);
             scene.add(fill);
 
+            // 昼夜循环关键色与后处理 composer 引用
+            const daySky = new THREE.Color(0xFFF8EA), dayGround = new THREE.Color(0xC6B096);
+            const nightSky = new THREE.Color(0x2A3A5C), nightGround = new THREE.Color(0x1E2A3A);
+            const dawnSky = new THREE.Color(0xFF9A56);
+            const skyC = new THREE.Color();
+            let composer = null;
+
             /* ══════════ 材质 ══════════ */
             function mat(color, extra) {
                 return new THREE.MeshStandardMaterial(Object.assign({ color: color, roughness: 0.9, metalness: 0 }, extra || {}));
@@ -708,6 +604,7 @@
             const M = {
                 sandTop: mat(0xEDD8B2), sandSide: mat(0xDFC49C), sandEdge: mat(0xCBAC82),
                 grass: mat(0x93CB8B), grassB: mat(0x7CBB7B), grassC: mat(0xAED8A0),
+                ground: mat(0x9BCB89),
                 water: mat(0x6FC1E8, { roughness: 0.26, metalness: 0.02 }),
                 waterBank: mat(0xC6A67C),
                 cream: mat(0xFBF4E6), wall: mat(0xF8EBD8),
@@ -788,6 +685,13 @@
                 plane.position.y = -2.3;
                 world.add(plane);
             })();
+
+            /* ══════════ 无限地形：大地平面（填满视口并向外延伸） ══════════ */
+            const ground = mesh(new THREE.PlaneGeometry(160, 160), M.ground);
+            ground.rotation.x = -Math.PI / 2;
+            ground.position.y = -0.15;
+            ground.castShadow = false;
+            world.add(ground);
 
             /* ══════════ 草地斑块 ══════════ */
             const grassPads = [
@@ -945,6 +849,16 @@
                 [-14.6, -3.4, 0.9, 2], [15.0, -1.6, 0.95, 0], [-11.2, 0.6, 0.85, 1], [11.6, 0.4, 0.9, 2]
             ];
             treeSpots.forEach(function (t) { tree(t[0], t[1], t[2], t[3]); });
+
+            // 无限地形上的稀疏小树（随机分布，避开中央沙盘与分区建筑）
+            for (let i = 0; i < 42; i++) {
+                const a = rand() * Math.PI * 2;
+                const rad = 16.5 + rand() * 58;
+                const x = Math.cos(a) * rad, z = Math.sin(a) * rad;
+                if (Math.abs(x) < 15.5 && Math.abs(z) < 11.5) continue;
+                const g = tree(x, z, 0.7 + rand() * 0.9, Math.floor(rand() * 3));
+                g.traverse(function (o) { o.castShadow = false; });
+            }
 
             const bushSpots = [
                 [-10.8, -3.0, 1.1], [-4.4, 4.6, 1.0], [1.6, 5.4, 1.15], [7.2, -3.0, 1.0],
@@ -1207,7 +1121,6 @@
             let auto = true;
             let dragging = false;
             let idle = 0;
-            let mode = 'orbit';
             let active = 0;
             let celebrated = false;
 
@@ -1229,7 +1142,6 @@
                 dragging = true;
                 idle = 0;
                 canvas.classList.add('grabbing');
-                hideHint(true);
             });
 
             canvas.addEventListener('pointermove', function (e) {
@@ -1253,14 +1165,8 @@
                 }
                 if (!dragging) return;
 
-                if (mode === 'orbit') {
-                    view.tYaw -= dx * 0.006;
-                    view.tPitch = clamp(view.tPitch + dy * 0.004, 0.52, 1.3);
-                } else {
-                    const k = view.dist * 0.0016;
-                    view.tcx = clamp(view.tcx - dx * k * Math.cos(view.yaw) - dy * k * Math.sin(view.yaw), -9.5, 9.5);
-                    view.tcz = clamp(view.tcz + dx * k * Math.sin(view.yaw) - dy * k * Math.cos(view.yaw), -8.5, 8.5);
-                }
+                view.tYaw -= dx * 0.006;
+                view.tPitch = clamp(view.tPitch + dy * 0.004, 0.52, 1.3);
             });
 
             function endPointer(e) {
@@ -1450,46 +1356,6 @@
                 s.addEventListener('click', function () { focusZone(parseInt(s.dataset.i, 10)); });
             });
 
-            /* ══════════ 工具栏 ══════════ */
-            const toolOrbit = document.getElementById('tool-orbit');
-            const toolPan = document.getElementById('tool-pan');
-            const toolAuto = document.getElementById('tool-auto');
-            const toolReset = document.getElementById('tool-reset');
-            const toolFull = document.getElementById('tool-full');
-            const hintEl = document.getElementById('tool-hint');
-            let hintTimer = null;
-
-            function hideHint(forever) {
-                if (hintEl) hintEl.classList.remove('show');
-                if (forever && hintTimer) { clearTimeout(hintTimer); hintTimer = null; }
-            }
-            hintTimer = setTimeout(function () {
-                if (hintEl) hintEl.classList.add('show');
-                setTimeout(function () { hideHint(false); }, 4200);
-            }, 1400);
-
-            function setMode(nv) {
-                mode = nv;
-                toolOrbit.classList.toggle('active', nv === 'orbit');
-                toolPan.classList.toggle('active', nv === 'pan');
-                if (hintEl) hintEl.textContent = nv === 'orbit' ? '拖拽 · 自由视角' : '拖拽 · 平移画面';
-            }
-            toolOrbit.addEventListener('click', function () { setMode('orbit'); });
-            toolPan.addEventListener('click', function () { setMode('pan'); });
-            toolAuto.addEventListener('click', function () {
-                auto = !auto;
-                toolAuto.classList.toggle('active', auto);
-                idle = 0;
-            });
-            toolReset.addEventListener('click', resetView);
-            toolFull.addEventListener('click', function () {
-                if (!document.fullscreenElement) {
-                    if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen();
-                } else if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
-            });
-
             /* ══════════ 主循环 ══════════ */
             const clock = new THREE.Clock();
             let firstFrame = true;
@@ -1499,6 +1365,23 @@
                 if (!(dt > 0)) dt = 1 / 60; // 少数环境会给出 0，兜底避免补间停住
                 dt = Math.min(dt, 0.25);
                 const t = clock.elapsedTime;
+
+                // ═════ 昼夜循环（90 秒一个昼夜：光色/强度/天空色随时间平滑变化） ═════
+                const dayPhase = (t / 90) % 1;
+                const sunAng = dayPhase * Math.PI * 2;
+                const sunH = Math.sin(sunAng);
+                sun.position.set(Math.cos(sunAng) * 30, sunH * 30, 13);
+                const daylight = sunH > 0 ? Math.pow(sunH, 0.55) : 0;
+                const warm = Math.max(0, 1 - Math.abs(sunH) * 2.5);
+                skyC.copy(nightSky).lerp(daySky, daylight).lerp(dawnSky, warm * 0.55);
+                sun.color.copy(skyC);
+                sun.intensity = 0.08 + daylight * 1.62;
+                sun.castShadow = daylight > 0.06;
+                hemi.color.copy(nightSky).lerp(daySky, daylight);
+                hemi.groundColor.copy(nightGround).lerp(dayGround, daylight);
+                hemi.intensity = 0.18 + daylight * 0.37;
+                fill.intensity = 0.12 + daylight * 0.38;
+                renderer.toneMappingExposure = 0.55 + daylight * 0.45;
 
                 if (auto && !dragging && !celebrated) {
                     idle += dt;
@@ -1538,7 +1421,7 @@
                 for (let i = 0; i < 4; i++) floats[i].o.rotation.y += dt * 0.5;
 
                 updatePills();
-                renderer.render(scene, camera);
+                if (composer) composer.render(); else renderer.render(scene, camera);
 
                 if (firstFrame) {
                     firstFrame = false;
@@ -1549,11 +1432,30 @@
             }
             renderer.setAnimationLoop(frame);
 
+            /* ══════════ 后处理：bloom 朦胧光晕（异步加载，失败则降级普通渲染） ══════════ */
+            (async function () {
+                try {
+                    const [{ EffectComposer }, { RenderPass }, { UnrealBloomPass }] = await Promise.all([
+                        import('three/addons/postprocessing/EffectComposer.js'),
+                        import('three/addons/postprocessing/RenderPass.js'),
+                        import('three/addons/postprocessing/UnrealBloomPass.js')
+                    ]);
+                    composer = new EffectComposer(renderer);
+                    composer.addPass(new RenderPass(scene, camera));
+                    const bloom = new UnrealBloomPass(new THREE.Vector2(innerWidth, innerHeight), 0.4, 0.7, 0.85);
+                    composer.addPass(bloom);
+                    composer.setSize(innerWidth, innerHeight);
+                } catch (err) {
+                    console.warn('[gate3d] bloom 后处理加载失败，降级普通渲染', err);
+                }
+            })();
+
             /* ══════════ 尺寸变化 ══════════ */
             function onResize() {
                 camera.aspect = innerWidth / innerHeight;
                 camera.updateProjectionMatrix();
                 renderer.setSize(innerWidth, innerHeight);
+                if (composer) composer.setSize(innerWidth, innerHeight);
                 view.tDist = clamp(view.tDist, minDist(), maxDist());
                 view.dist = clamp(view.dist, minDist(), maxDist());
                 measureCard();
@@ -1585,7 +1487,6 @@
             const fp = parseInt(new URLSearchParams(location.search).get('focus'), 10);
             if (!isNaN(fp) && fp >= 0 && fp < ZONES.length) {
                 auto = false;
-                toolAuto.classList.remove('active');
                 setTimeout(function () {
                     focusZone(fp);
                     // 深链直接到位，不做补间
