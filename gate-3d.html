@@ -927,9 +927,11 @@
                     const rows = Math.max(3, Math.floor(h / 1.2));
                     const cols = Math.max(2, Math.floor(w / 0.7));
                     const winW = 0.28, winH = 0.38;
+                    // 远处的楼降低窗户密度，控制绘制批次
+                    const skipProb = Math.hypot(x, z) > 27 ? 0.62 : 0.38;
                     for (let r = 0; r < rows; r++) {
                         for (let c = 0; c < cols; c++) {
-                            if (crng() < 0.25) continue; // 随机留空，窗户不是满铺
+                            if (crng() < skipProb) continue; // 随机留空，窗户不是满铺
                             const wx = -w / 2 + 0.35 + c * (w - 0.7) / Math.max(1, cols - 1);
                             const wy = 0.6 + r * 1.2;
                             if (wy > h - 0.3) continue;
@@ -985,36 +987,100 @@
                     new THREE.MeshStandardMaterial({ color: 0x8FA0AD, roughness: 0.65 })
                 ];
 
-                // 12 栋楼，分布在沙盘外围四个方向，半径 18~30
-                const cityPlots = [
-                    // 北边（沙盘后方，z 负）
-                    { x: -23, z: -20, w: 2.8, d: 2.2, h: 7.5 },
-                    { x: -12, z: -22, w: 3.4, d: 2.6, h: 11.0 },
-                    { x: -5,  z: -21, w: 2.6, d: 2.4, h: 5.8 },
-                    { x: 3,   z: -23, w: 3.0, d: 2.2, h: 9.2 },
-                    { x: 10,  z: -21, w: 2.4, d: 2.0, h: 6.4 },
-                    { x: 23.5, z: -19, w: 3.6, d: 2.8, h: 12.5 },
-                    // 南边（沙盘前方，z 正）
-                    { x: -24, z: 19,  w: 2.8, d: 2.4, h: 8.0 },
-                    { x: -11, z: 22,  w: 3.2, d: 2.6, h: 10.0 },
-                    { x: 10,  z: 21,  w: 2.6, d: 2.2, h: 6.8 },
-                    { x: 23,  z: 18,  w: 3.0, d: 2.4, h: 9.5 },
-                    // 东边（x 正）
-                    { x: 22,  z: -8,  w: 2.4, d: 3.0, h: 7.0 },
-                    { x: 23,  z: 8,   w: 2.8, d: 2.6, h: 10.5 },
-                    // 西边（x 负）
-                    { x: -23, z: -7,  w: 2.6, d: 2.8, h: 8.5 },
-                    { x: -22, z: 9,   w: 3.2, d: 2.4, h: 6.2 }
+                // 外围楼群：按网格程序化布点，避让马路 / 湖面 / 小山，
+                // 由内向外占位，让沙盘四周形成成片的楼群而不是零星几栋
+                const hillAvoid = [
+                    { x: -38, z: -28, r: 9 }, { x: 35, z: 28, r: 7 },
+                    { x: -40, z: 30, r: 11 }, { x: 42, z: -5, r: 8 },
+                    { x: -28, z: -42, r: 6 }
                 ];
+                const placed = [];
+                const cells = [];
+                for (let gx = -34; gx <= 34; gx += 4.6) {
+                    for (let gz = -31; gz <= 31; gz += 4.6) {
+                        cells.push({ x: gx, z: gz });
+                    }
+                }
+                // 由内向外占位：靠近沙盘的格子优先放楼
+                cells.sort(function (a, b) {
+                    return Math.hypot(a.x, a.z) - Math.hypot(b.x, b.z);
+                });
 
-                cityPlots.forEach(function (p) {
+                cells.forEach(function (cell) {
+                    if (placed.length >= 38) return;
+                    const x = cell.x + cr(-1.1, 1.1);
+                    const z = cell.z + cr(-1.1, 1.1);
+                    // 沙盘本体：留出人行道与公园
+                    if (Math.hypot(x / 17.8, z / 13.8) < 1.02) return;
+                    // 马路（含路缘退让）
+                    if (Math.abs(z - 13.4) < 3.4 || Math.abs(z + 13.4) < 3.4) return;
+                    if (Math.abs(x - 17.5) < 3.4 || Math.abs(x + 17.5) < 3.4) return;
+                    // 湖面
+                    if (Math.abs(x) < 8.5 && Math.abs(z - 19.6) < 5.8) return;
+                    // 小山
+                    for (let i = 0; i < hillAvoid.length; i++) {
+                        const hv = hillAvoid[i];
+                        if (Math.hypot(x - hv.x, z - hv.z) < hv.r + 3) return;
+                    }
+                    const w = cr(2.2, 3.6);
+                    const d = cr(2.0, 3.2);
+                    // 与已放置的楼保持间距，避免楼体互相穿插
+                    for (let i = 0; i < placed.length; i++) {
+                        const p = placed[i];
+                        if (Math.abs(x - p.x) < (w + p.w) / 2 + 0.85 &&
+                            Math.abs(z - p.z) < (d + p.d) / 2 + 0.85) return;
+                    }
+                    let h = cr(4.5, 10.5);
+                    if (crng() < 0.22) h += cr(3.5, 6.5); // 少量高楼拉出天际线
                     const col = palette[Math.floor(crng() * palette.length)];
                     const roof = Math.floor(crng() * 3);
-                    cityBuilding(p.x, p.z, p.w, p.d, p.h, col, roof);
+                    placed.push({ x: x, z: z, w: w, d: d });
+                    cityBuilding(x, z, w, d, h, col, roof);
                 });
 
                 // 把窗户材质挂到 world 上，后面昼夜循环统一控制
                 world.userData.cityWindowMats = cityWindowMats;
+                // 楼体范围暴露出去，环湖种树时用来避让
+                world.userData.cityBuildings = placed;
+            })();
+
+            // 环湖树林：沿湖岸外沿成片种树，围出一小片林地
+            (function lakeForest() {
+                const LAKE = { x: 0, z: 19.6 };
+                const RX = 4.8, RZ = 2.2;   // 与湖面 geo 的基准半径保持一致
+                const buildings = world.userData.cityBuildings || [];
+                // 与湖面 geo 同一套多频扰动，保证树的落点贴着真实岸线
+                function outline(a, scale) {
+                    const amp = 0.10;
+                    return scale * (1
+                        + amp * Math.sin(a * 3 + 0.9)
+                        + amp * 0.55 * Math.sin(a * 5 + 2.4)
+                        + amp * 0.30 * Math.cos(a * 7 + 1.1));
+                }
+                function hitBuilding(x, z) {
+                    for (let i = 0; i < buildings.length; i++) {
+                        const b = buildings[i];
+                        if (Math.abs(x - b.x) < b.w / 2 + 1.0 &&
+                            Math.abs(z - b.z) < b.d / 2 + 1.0) return true;
+                    }
+                    return false;
+                }
+                const grng = rng(20261119);
+                let count = 0;
+                for (let i = 0; i < 320 && count < 52; i++) {
+                    const a = grng() * Math.PI * 2;
+                    const f = outline(a, 1.30);          // 湖岸走道的外沿
+                    const k = 1.10 + grng() * 0.78;      // 向外再推 10%~88%
+                    const x = LAKE.x + Math.cos(a) * f * k * RX;
+                    const z = LAKE.z + Math.sin(a) * f * k * RZ;
+                    // 马路（含人行道退让）：靠路一侧留空，不种到路面上
+                    if (Math.abs(z - 13.4) < 3.6) continue;
+                    if (Math.abs(Math.abs(x) - 17.5) < 3.6) continue;
+                    // 不压到楼体
+                    if (hitBuilding(x, z)) continue;
+                    tree(x, z, 0.78 + grng() * 0.8, Math.floor(grng() * 3));
+                    count++;
+                }
             })();
 
             // 外围远景：3 座小山 + 1 个湖
@@ -1168,22 +1234,16 @@
                     ADJ[EDGES[k].b].push(k);
                 });
 
-                /* ── 斑马线：每个路口 4 条，条纹横跨路面 ── */
+                /* ── 斑马线：每个路口 4 条；条纹长边与车流同向，沿行人过街方向排列 ── */
                 const CROSS_OFF = 2.9;                 // 斑马线中心离路口中心的距离
-                const ZEBRA_LEN = ROAD_W - 0.12;
+                const ZEBRA_LEN = 2.4;                 // 单条斑马线的长度（沿车流方向）
                 const ZEBRA_GAP = 0.62;
-                const stripeGeoH = new THREE.BoxGeometry(ZEBRA_LEN, 0.02, 0.30);  // 横跨纵向路（沿 X 长）
-                const stripeGeoV = new THREE.BoxGeometry(0.30, 0.02, ZEBRA_LEN);  // 横跨横向路（沿 Z 长）
+                // 跨纵向路（行人沿 X 过街）：条纹长边沿 Z，沿 X 排开
+                const stripeGeoV = new THREE.BoxGeometry(0.30, 0.02, ZEBRA_LEN);
+                // 跨横向路（行人沿 Z 过街）：条纹长边沿 X，沿 Z 排开
+                const stripeGeoH = new THREE.BoxGeometry(ZEBRA_LEN, 0.02, 0.30);
 
-                function zebraAcrossX(x, z) {
-                    for (let i = -2; i <= 2; i++) {
-                        const s = new THREE.Mesh(stripeGeoH, M.roadMark);
-                        s.position.set(x, 0.048, z + i * ZEBRA_GAP);
-                        s.castShadow = false;
-                        world.add(s);
-                    }
-                }
-                function zebraAcrossZ(x, z) {
+                function zebraAcrossV(x, z) {
                     for (let i = -2; i <= 2; i++) {
                         const s = new THREE.Mesh(stripeGeoV, M.roadMark);
                         s.position.set(x + i * ZEBRA_GAP, 0.048, z);
@@ -1191,12 +1251,20 @@
                         world.add(s);
                     }
                 }
+                function zebraAcrossH(x, z) {
+                    for (let i = -2; i <= 2; i++) {
+                        const s = new THREE.Mesh(stripeGeoH, M.roadMark);
+                        s.position.set(x, 0.048, z + i * ZEBRA_GAP);
+                        s.castShadow = false;
+                        world.add(s);
+                    }
+                }
                 VX.forEach(function (x) {
                     HZ.forEach(function (z) {
-                        zebraAcrossX(x, z - CROSS_OFF);
-                        zebraAcrossX(x, z + CROSS_OFF);
-                        zebraAcrossZ(x - CROSS_OFF, z);
-                        zebraAcrossZ(x + CROSS_OFF, z);
+                        zebraAcrossV(x, z - CROSS_OFF);
+                        zebraAcrossV(x, z + CROSS_OFF);
+                        zebraAcrossH(x - CROSS_OFF, z);
+                        zebraAcrossH(x + CROSS_OFF, z);
                     });
                 });
 
