@@ -607,7 +607,7 @@
                 ground: mat(0x9BCB89),
                 water: mat(0x6FC1E8, { roughness: 0.26, metalness: 0.02 }),
                 waterBank: mat(0xC6A67C),
-                cream: mat(0xFBF4E6), wall: mat(0xF8EBD8),
+                cream: mat(0xFBF4E6), wall: mat(0xF8EBD8), wallDark: mat(0x6B6B6B),
                 roof: mat(0xE9A87C), roofB: mat(0xD98E63), accent: mat(0xF3BC84),
                 wood: mat(0xBE9067), woodD: mat(0x9C7249),
                 leaf: mat(0x8CC787), leafB: mat(0x6FB173), leafC: mat(0xB7D99F),
@@ -615,7 +615,8 @@
                 ink: mat(0x6B5947), white: mat(0xFFFFFF),
                 screen: mat(0xAFD9EB, { emissive: 0x5E9DBC, emissiveIntensity: 0.45 }),
                 glow: new THREE.MeshStandardMaterial({ color: 0xFFE3B0, emissive: 0xFFB35E, emissiveIntensity: 1.5, roughness: 0.4 }),
-                windowLight: new THREE.MeshStandardMaterial({ color: 0xFFF1D0, emissive: 0xFFC166, emissiveIntensity: 0, roughness: 0.6 })
+                windowLight: new THREE.MeshStandardMaterial({ color: 0xFFF1D0, emissive: 0xFFC166, emissiveIntensity: 0, roughness: 0.6 }),
+                streetLamp: new THREE.MeshStandardMaterial({ color: 0xFFF2CE, emissive: 0xFFC26B, emissiveIntensity: 0, roughness: 0.4 })
             };
 
             /* ══════════ 几何小工具 ══════════ */
@@ -840,6 +841,35 @@
                 g.position.set(x, 0.15, z);
                 g.rotation.y = rand() * Math.PI * 2;
                 world.add(g);
+                return g;
+            }
+
+            // 公园路灯：灯杆 + 弯臂 + 发光灯球，配一个暖色点光源（白天熄灭、夜间亮起）
+            function streetlight(x, z, withLight) {
+                const g = new THREE.Group();
+                const pole = cyl(0.045, 0.06, 2.2, M.ink, 8);
+                pole.position.y = 1.1;
+                pole.castShadow = false;
+                g.add(pole);
+                const arm = cyl(0.035, 0.035, 0.55, M.ink, 6);
+                arm.rotation.z = Math.PI / 2;
+                arm.position.set(0.28, 2.28, 0);
+                arm.castShadow = false;
+                g.add(arm);
+                const head = sph(0.2, M.streetLamp, 12);
+                head.position.set(0.56, 2.3, 0);
+                head.castShadow = false;
+                g.add(head);
+                g.position.set(x, 0.15, z);
+                world.add(g);
+                if (withLight) {
+                    const light = new THREE.PointLight(0xFFC26B, 0, 7.5, 2);
+                    light.position.set(x, 2.4, z);
+                    light.castShadow = false;
+                    world.add(light);
+                    return { g: g, head: head, light: light };
+                }
+                return { g: g, head: head, light: null };
             }
 
             // 散落植被（避开分区中心）
@@ -861,6 +891,297 @@
                 g.traverse(function (o) { o.castShadow = false; });
             }
 
+            // 外围城市天际线：几栋高矮不一的楼围着沙盘当背景，带窗户夜间亮灯
+            (function citySkyline() {
+                // 固定种子，保证每次刷新位置一致
+                const crng = rng(20261117);
+                const cr = (a, b) => a + crng() * (b - a);
+                const cityWindowMats = []; // 收集所有窗户发光材质，后续统一控制亮灭
+
+                function cityBuilding(x, z, w, d, h, color, roofStyle) {
+                    const g = new THREE.Group();
+                    // 主楼体
+                    const body = box(w, h, d, color);
+                    body.position.y = h / 2;
+                    body.castShadow = false; body.receiveShadow = false;
+                    g.add(body);
+
+                    // 窗户网格：按高度铺行，每行 w/0.7 个左右
+                    const rows = Math.max(3, Math.floor(h / 1.2));
+                    const cols = Math.max(2, Math.floor(w / 0.7));
+                    const winW = 0.28, winH = 0.38;
+                    for (let r = 0; r < rows; r++) {
+                        for (let c = 0; c < cols; c++) {
+                            if (crng() < 0.25) continue; // 随机留空，窗户不是满铺
+                            const wx = -w / 2 + 0.35 + c * (w - 0.7) / Math.max(1, cols - 1);
+                            const wy = 0.6 + r * 1.2;
+                            if (wy > h - 0.3) continue;
+                            const front = box(winW, winH, 0.02, M.windowLight);
+                            front.position.set(wx, wy, d / 2 + 0.01);
+                            front.castShadow = false; front.receiveShadow = false;
+                            g.add(front);
+                            cityWindowMats.push(front.material);
+                            const back = box(winW, winH, 0.02, M.windowLight);
+                            back.position.set(wx, wy, -d / 2 - 0.01);
+                            back.castShadow = false; back.receiveShadow = false;
+                            g.add(back);
+                            cityWindowMats.push(back.material);
+                        }
+                    }
+
+                    // 屋顶样式
+                    if (roofStyle === 0) {
+                        // 平顶 + 小机房
+                        const top = box(w * 0.35, 0.5, d * 0.35, M.wallDark);
+                        top.position.y = h + 0.25;
+                        top.castShadow = false; top.receiveShadow = false;
+                        g.add(top);
+                    } else if (roofStyle === 1) {
+                        // 尖塔顶
+                        const tip = cone(0.18, 1.2, M.ink, 6);
+                        tip.position.y = h + 0.6;
+                        tip.castShadow = false; tip.receiveShadow = false;
+                        g.add(tip);
+                    } else {
+                        // 女儿墙
+                        const parapet = box(w + 0.08, 0.28, 0.18, M.wallDark);
+                        parapet.position.set(0, h + 0.14, d / 2);
+                        parapet.castShadow = false; parapet.receiveShadow = false;
+                        g.add(parapet);
+                        const parapet2 = box(w + 0.08, 0.28, 0.18, M.wallDark);
+                        parapet2.position.set(0, h + 0.14, -d / 2);
+                        parapet2.castShadow = false; parapet2.receiveShadow = false;
+                        g.add(parapet2);
+                    }
+
+                    g.position.set(x, -0.15, z); // 放在大地平面上（y=-0.15）
+                    world.add(g);
+                    return g;
+                }
+
+                // 城市配色：蓝灰、米灰、浅棕、砖红四种
+                const palette = [
+                    new THREE.MeshStandardMaterial({ color: 0xBCC4CE, roughness: 0.7 }),
+                    new THREE.MeshStandardMaterial({ color: 0xD4CDBE, roughness: 0.75 }),
+                    new THREE.MeshStandardMaterial({ color: 0xA89080, roughness: 0.7 }),
+                    new THREE.MeshStandardMaterial({ color: 0xC4756A, roughness: 0.8 }),
+                    new THREE.MeshStandardMaterial({ color: 0x8FA0AD, roughness: 0.65 })
+                ];
+
+                // 12 栋楼，分布在沙盘外围四个方向，半径 18~30
+                const cityPlots = [
+                    // 北边（沙盘后方，z 负）
+                    { x: -18, z: -20, w: 2.8, d: 2.2, h: 7.5 },
+                    { x: -12, z: -22, w: 3.4, d: 2.6, h: 11.0 },
+                    { x: -5,  z: -21, w: 2.6, d: 2.4, h: 5.8 },
+                    { x: 3,   z: -23, w: 3.0, d: 2.2, h: 9.2 },
+                    { x: 11,  z: -21, w: 2.4, d: 2.0, h: 6.4 },
+                    { x: 17,  z: -19, w: 3.6, d: 2.8, h: 12.5 },
+                    // 南边（沙盘前方，z 正）
+                    { x: -19, z: 19,  w: 2.8, d: 2.4, h: 8.0 },
+                    { x: -11, z: 22,  w: 3.2, d: 2.6, h: 10.0 },
+                    { x: 11,  z: 21,  w: 2.6, d: 2.2, h: 6.8 },
+                    { x: 18,  z: 18,  w: 3.0, d: 2.4, h: 9.5 },
+                    // 东边（x 正）
+                    { x: 22,  z: -8,  w: 2.4, d: 3.0, h: 7.0 },
+                    { x: 23,  z: 8,   w: 2.8, d: 2.6, h: 10.5 },
+                    // 西边（x 负）
+                    { x: -23, z: -7,  w: 2.6, d: 2.8, h: 8.5 },
+                    { x: -22, z: 9,   w: 3.2, d: 2.4, h: 6.2 }
+                ];
+
+                cityPlots.forEach(function (p) {
+                    const col = palette[Math.floor(crng() * palette.length)];
+                    const roof = Math.floor(crng() * 3);
+                    cityBuilding(p.x, p.z, p.w, p.d, p.h, col, roof);
+                });
+
+                // 把窗户材质挂到 world 上，后面昼夜循环统一控制
+                world.userData.cityWindowMats = cityWindowMats;
+            })();
+
+            // 外围远景：3 座小山 + 1 个湖
+            (function landscape() {
+                // 湖：东北角，椭圆（box 压扁 + 旋转），比大地低 0.05
+                const lake = box(11, 0.15, 6.5, M.water);
+                lake.position.set(30, -0.20, -22);
+                lake.rotation.y = 0.3;
+                lake.castShadow = false; lake.receiveShadow = false;
+                world.add(lake);
+                // 湖岸草地过渡（浅棕色一圈，比大地高一点）
+                const bank = box(12.5, 0.08, 8, M.waterBank);
+                bank.position.set(30, -0.16, -22);
+                bank.rotation.y = 0.3;
+                bank.castShadow = false; bank.receiveShadow = false;
+                world.add(bank);
+
+                // 小山：用压扁的 cone + sphere，放城市楼更远的地方
+                const hillSpecs = [
+                    { x: -38, z: -28, h: 4.5, r: 9,  s: 'cone' },
+                    { x: 35,  z: 28,  h: 3.2, r: 7,  s: 'sphere' },
+                    { x: -40, z: 30,  h: 5.2, r: 11, s: 'cone' },
+                    { x: 42,  z: -5,  h: 3.8, r: 8,  s: 'sphere' },
+                    { x: -28, z: -42, h: 2.8, r: 6,  s: 'cone' }
+                ];
+                const hillMat1 = mat(0x6FA86F);
+                const hillMat2 = mat(0x7FB77F);
+                hillSpecs.forEach(function (h) {
+                    const g = new THREE.Group();
+                    if (h.s === 'cone') {
+                        const body = cone(h.r, h.h, hillMat1, 12);
+                        body.position.y = h.h / 2;
+                        body.castShadow = false; body.receiveShadow = false;
+                        g.add(body);
+                        // 山顶留点草/树
+                        const cap = sph(h.r * 0.45, hillMat2);
+                        cap.position.y = h.h - 0.3;
+                        cap.scale.y = 0.5;
+                        cap.castShadow = false; cap.receiveShadow = false;
+                        g.add(cap);
+                    } else {
+                        const body = sph(h.r, hillMat1);
+                        body.scale.y = h.h / h.r * 0.6;
+                        body.position.y = h.h * 0.3;
+                        body.castShadow = false; body.receiveShadow = false;
+                        g.add(body);
+                    }
+                    g.position.set(h.x, -0.15, h.z);
+                    world.add(g);
+                });
+            })();
+
+            // 云朵：围在外圈上空缓慢绕行，白天纯白、夜里偏灰蓝
+            const cloudMat = new THREE.MeshStandardMaterial({
+                color: 0xFFFFFF, roughness: 1, metalness: 0,
+                transparent: true, opacity: 0.9, flatShading: true
+            });
+            const cloudNight = new THREE.Color(0x7C8AA5);
+            const cloudDay = new THREE.Color(0xFFFFFF);
+            const cloudRing = new THREE.Group();
+            world.add(cloudRing);
+            (function buildClouds() {
+                function puff(g, x, y, z, s) {
+                    const p = sph(1, cloudMat);
+                    const r = (0.9 + rand() * 0.7) * s;
+                    p.scale.set(r, r * 0.7, r * 0.92);
+                    p.position.set(x, y, z);
+                    p.castShadow = false; p.receiveShadow = false;
+                    g.add(p);
+                }
+                for (let i = 0; i < 9; i++) {
+                    const a = (i / 9) * Math.PI * 2 + rand() * 0.45;
+                    const rad = 46 + rand() * 24;
+                    const s = 1.7 + rand() * 1.3;
+                    const g = new THREE.Group();
+                    const n = 4 + Math.floor(rand() * 3);
+                    for (let k = 0; k < n; k++) {
+                        puff(g, (k - n / 2) * 0.8 * s + rand() * 0.3 * s,
+                            (rand() - 0.5) * 0.3 * s,
+                            (rand() - 0.5) * 0.45 * s, s * (0.85 + rand() * 0.35));
+                    }
+                    g.position.set(Math.cos(a) * rad, 9 + rand() * 8, Math.sin(a) * rad);
+                    cloudRing.add(g);
+                }
+            })();
+
+            // 飞鸟：偶尔一只低多边形海鸥从场地一侧掠过
+            const birds = [];
+            let birdTimer = 5;
+            const birdMat = new THREE.MeshStandardMaterial({ color: 0xFCFCF6, roughness: 0.95, metalness: 0, flatShading: true });
+            const birdTipMat = new THREE.MeshStandardMaterial({ color: 0xB9C2CC, roughness: 0.95, metalness: 0, flatShading: true });
+            function spawnBird() {
+                const g = new THREE.Group();
+                const body = sph(0.4, birdMat);
+                body.scale.set(1, 0.72, 2.0);
+                body.castShadow = false; body.receiveShadow = false;
+                g.add(body);
+                const head = sph(0.24, birdMat);
+                head.position.set(0, 0.12, 0.72);
+                head.castShadow = false; head.receiveShadow = false;
+                g.add(head);
+                const wings = [];
+                for (let s = -1; s <= 1; s += 2) {
+                    const pivot = new THREE.Group();
+                    const seg = box(1.45, 0.06, 0.5, birdMat);
+                    seg.position.x = s * 0.72;
+                    seg.castShadow = false; seg.receiveShadow = false;
+                    pivot.add(seg);
+                    const tip = box(0.62, 0.055, 0.34, birdTipMat);
+                    tip.position.set(s * 1.62, 0, 0.02);
+                    tip.castShadow = false; tip.receiveShadow = false;
+                    pivot.add(tip);
+                    pivot.position.set(s * 0.12, 0.08, 0.05);
+                    g.add(pivot);
+                    wings.push(pivot);
+                }
+                // 从外圈一侧随机起飞，斜穿场地飞向对面
+                const a = rand() * Math.PI * 2;
+                const d = 78;
+                g.position.set(Math.cos(a) * d, 10 + rand() * 7, Math.sin(a) * d);
+                const target = new THREE.Vector3(
+                    Math.cos(a + Math.PI + (rand() - 0.5) * 0.8) * d,
+                    g.position.y + (rand() - 0.5) * 2,
+                    Math.sin(a + Math.PI + (rand() - 0.5) * 0.8) * d
+                );
+                const dir = target.clone().sub(g.position).normalize();
+                g.rotation.y = Math.atan2(dir.x, dir.z);
+                g.userData = { dir: dir, speed: 7 + rand() * 5, phase: rand() * 6.28, wings: wings, age: 0 };
+                world.add(g);
+                birds.push(g);
+            }
+
+            /* ══════════ 天气系统：晴 / 暴晒 / 秋 / 春雨 / 雪 / 风 ══════════ */
+            const WEATHER = {
+                clear:  { label: '晴',   fog: 0.000, sun: 1.00, tint: 0xFFF6E6, rain: 0, snow: 0, wind: 1.0 },
+                sun:    { label: '暴晒', fog: 0.000, sun: 1.40, tint: 0xFFE7B0, rain: 0, snow: 0, wind: 0.5 },
+                autumn: { label: '秋',   fog: 0.0025, sun: 0.94, tint: 0xFFD2A0, rain: 0, snow: 0, wind: 1.6 },
+                rain:   { label: '春雨', fog: 0.009, sun: 0.30, tint: 0xA9BCC8, rain: 1, snow: 0, wind: 1.2 },
+                snow:   { label: '雪',   fog: 0.012, sun: 0.42, tint: 0xDCE7F0, rain: 0, snow: 1, wind: 1.9 },
+                wind:   { label: '风',   fog: 0.003, sun: 0.86, tint: 0xE9E3D2, rain: 0, snow: 0, wind: 2.8 }
+            };
+            const wKeys = Object.keys(WEATHER);
+            // 预生成颜色对象，避免每帧 new Color
+            wKeys.forEach(function (k) { WEATHER[k].tintC = new THREE.Color(WEATHER[k].tint); });
+            let wCur = WEATHER.clear;
+            let wTimer = 20;
+            const wNow = { fog: 0, sun: 1, rain: 0, snow: 0, wind: 1 };
+            const wTint = new THREE.Color(0xFFFFFF);
+            const fogC = new THREE.Color(0xEFF4F6);
+            scene.fog = new THREE.FogExp2(0xEFF4F6, 0); // 初始密度 0，等于没有雾
+
+            // 雨 / 雪粒子（THREE.Points，单个 draw call）
+            const WP = { x: 120, y: 52, z: 120 };
+            const RAIN_N = 4200, SNOW_N = 3000;
+            function makePoints(n, size, color) {
+                const pos = new Float32Array(n * 3);
+                for (let i = 0; i < n; i++) {
+                    pos[i * 3] = (rand() - 0.5) * WP.x;
+                    pos[i * 3 + 1] = rand() * WP.y;
+                    pos[i * 3 + 2] = (rand() - 0.5) * WP.z;
+                }
+                const geo = new THREE.BufferGeometry();
+                geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+                const mt = new THREE.PointsMaterial({
+                    color: color, size: size, transparent: true, opacity: 0,
+                    depthWrite: false, sizeAttenuation: true
+                });
+                const pts = new THREE.Points(geo, mt);
+                pts.frustumCulled = false;
+                pts.visible = false;
+                world.add(pts);
+                return pts;
+            }
+            const rainPts = makePoints(RAIN_N, 0.42, 0xC9DCE6);
+            const snowPts = makePoints(SNOW_N, 0.62, 0xFFFFFF);
+            const rainSpeed = new Float32Array(RAIN_N);
+            const snowSpeed = new Float32Array(SNOW_N);
+            const snowPhase = new Float32Array(SNOW_N);
+            for (let i = 0; i < RAIN_N; i++) rainSpeed[i] = 34 + rand() * 16;
+            for (let i = 0; i < SNOW_N; i++) {
+                snowSpeed[i] = 2.1 + rand() * 2.4;
+                snowPhase[i] = rand() * 6.28;
+            }
+
             const bushSpots = [
                 [-10.8, -3.0, 1.1], [-4.4, 4.6, 1.0], [1.6, 5.4, 1.15], [7.2, -3.0, 1.0],
                 [12.4, 2.6, 1.05], [-6.8, 7.2, 0.95], [5.8, 6.8, 1.0], [-12.8, 6.2, 0.9], [9.8, -6.6, 0.95]
@@ -879,13 +1200,30 @@
             }
 
             const shirts = [M.pink, M.purple, M.yellow, M.grassB, M.roof, M.screen];
-            for (let i = 0; i < 16; i++) {
-                const a = rand() * Math.PI * 2;
-                const rad = 2.6 + rand() * 11.4;
-                const x = Math.cos(a) * rad, z = Math.sin(a) * rad;
-                if (Math.abs(x) > 13.6 || Math.abs(z) > 9.6) continue;
-                person(x, z, shirts[i % shirts.length]);
+
+            // 公园里活动的人：行人沿中央环形步道走动，玩耍的人在空地小范围来回
+            const people = [];
+            const walkR = 5.2; // 行人巡游半径（避开 r=8.7 的建筑地台）
+            for (let i = 0; i < 8; i++) {
+                const g = person(0, 0, shirts[i % shirts.length]);
+                people.push({ g: g, mode: 'walk', t: i / 8, speed: 0.016 + (i % 3) * 0.005 });
             }
+            for (let i = 0; i < 9; i++) {
+                const a = rand() * Math.PI * 2;
+                const rad = 1.6 + rand() * 3.6;
+                const cx = Math.cos(a) * rad, cz = Math.sin(a) * rad;
+                const g = person(cx, cz, shirts[(i + 8) % shirts.length]);
+                people.push({
+                    g: g, mode: 'play', cx: cx, cz: cz,
+                    r: 0.35 + rand() * 0.75, speed: 0.25 + rand() * 0.45,
+                    phase: rand() * 6.283, dir: rand() > 0.5 ? 1 : -1
+                });
+            }
+
+            // 公园路灯：中央空地四周对称分布，间隔点亮（带真实点光源）
+            const streetlights = [];
+            [[-4.6, -4.2, 1], [4.6, -4.2, 0], [4.6, 4.2, 1], [-4.6, 4.2, 0], [0, -6.4, 1], [0, 6.4, 0]]
+                .forEach(function (s) { streetlights.push(streetlight(s[0], s[1], s[2])); });
 
             /* ══════════ 五个分区建筑 ══════════ */
             function buildPortfolio(g) {
@@ -1418,6 +1756,124 @@
                 const hourOfDay = (dayPhase * 24 + 6) % 24;
                 const lightsOn = hourOfDay >= 19 || hourOfDay < 6;
                 M.windowLight.emissiveIntensity = lightsOn ? 1.6 : 0;
+                // 外围城市楼窗户（独立材质数组，每个窗户材质相同但不是 M.windowLight 实例）
+                const cityWinMats = world.userData.cityWindowMats;
+                if (cityWinMats) {
+                    const ei = lightsOn ? 1.4 : 0;
+                    for (let i = 0; i < cityWinMats.length; i++) cityWinMats[i].emissiveIntensity = ei;
+                }
+                // 路灯：夜间点亮灯球 + 点光源（灯球发光驱动 bloom，点光源照亮地面）
+                M.streetLamp.emissiveIntensity = lightsOn ? 1.7 : 0;
+                for (let i = 0; i < streetlights.length; i++) {
+                    if (streetlights[i].light) streetlights[i].light.intensity = lightsOn ? 0.85 : 0;
+                }
+
+                // ═════ 天气：定时切换 + 参数平滑过渡 ═════
+                wTimer -= dt;
+                if (wTimer <= 0) {
+                    let k = wKeys[Math.floor(rand() * wKeys.length)];
+                    if (WEATHER[k] === wCur) k = wKeys[(wKeys.indexOf(k) + 1) % wKeys.length];
+                    wCur = WEATHER[k];
+                    wTimer = 26 + rand() * 22;
+                }
+                const wk = Math.min(1, dt * 0.62);
+                wNow.fog += (wCur.fog - wNow.fog) * wk;
+                wNow.sun += (wCur.sun - wNow.sun) * wk;
+                wNow.rain += (wCur.rain - wNow.rain) * wk;
+                wNow.snow += (wCur.snow - wNow.snow) * wk;
+                wNow.wind += (wCur.wind - wNow.wind) * wk;
+                wTint.lerp(wCur.tintC, wk);
+
+                // 光照叠加：阴雨天压暗发灰，暴晒提亮偏暖
+                sun.intensity *= wNow.sun;
+                sun.color.lerp(wTint, 0.25);
+                hemi.intensity *= 0.62 + wNow.sun * 0.38;
+                fill.intensity *= 0.70 + wNow.sun * 0.30;
+                renderer.toneMappingExposure *= 0.88 + wNow.sun * 0.12;
+
+                // 雾：雨雪天起雾，夜里减淡避免糊成一团
+                scene.fog.density = wNow.fog * (0.35 + daylight * 0.65);
+                fogC.copy(skyC).lerp(wTint, 0.55);
+                scene.fog.color.copy(fogC);
+
+                // 雨：竖向高速下落，被风吹出斜度
+                if (wNow.rain > 0.02) {
+                    rainPts.visible = true;
+                    rainPts.material.opacity = 0.52 * wNow.rain;
+                    const ra = rainPts.geometry.attributes.position.array;
+                    const rwx = 7 * wNow.wind;
+                    for (let i = 0; i < RAIN_N; i++) {
+                        const j = i * 3;
+                        ra[j] += rwx * dt;
+                        ra[j + 1] -= rainSpeed[i] * dt;
+                        ra[j + 2] += rwx * 0.45 * dt;
+                        if (ra[j + 1] < -0.5) {
+                            ra[j + 1] += WP.y;
+                            ra[j] = (rand() - 0.5) * WP.x;
+                            ra[j + 2] = (rand() - 0.5) * WP.z;
+                        } else {
+                            if (ra[j] > WP.x * 0.5) ra[j] -= WP.x;
+                            if (ra[j] < -WP.x * 0.5) ra[j] += WP.x;
+                            if (ra[j + 2] > WP.z * 0.5) ra[j + 2] -= WP.z;
+                            if (ra[j + 2] < -WP.z * 0.5) ra[j + 2] += WP.z;
+                        }
+                    }
+                    rainPts.geometry.attributes.position.needsUpdate = true;
+                } else if (rainPts.visible) {
+                    rainPts.visible = false;
+                }
+
+                // 雪：缓慢下落 + 左右飘摆
+                if (wNow.snow > 0.02) {
+                    snowPts.visible = true;
+                    snowPts.material.opacity = 0.85 * wNow.snow;
+                    const sa = snowPts.geometry.attributes.position.array;
+                    const swx = 4 * wNow.wind;
+                    for (let i = 0; i < SNOW_N; i++) {
+                        const j = i * 3;
+                        sa[j] += (Math.sin(t * 0.9 + snowPhase[i]) * 1.8 + swx) * dt;
+                        sa[j + 1] -= snowSpeed[i] * dt;
+                        sa[j + 2] += Math.cos(t * 0.7 + snowPhase[i]) * 1.2 * dt;
+                        if (sa[j + 1] < -0.3) {
+                            sa[j + 1] += WP.y;
+                            sa[j] = (rand() - 0.5) * WP.x;
+                            sa[j + 2] = (rand() - 0.5) * WP.z;
+                        } else {
+                            if (sa[j] > WP.x * 0.5) sa[j] -= WP.x;
+                            if (sa[j] < -WP.x * 0.5) sa[j] += WP.x;
+                            if (sa[j + 2] > WP.z * 0.5) sa[j + 2] -= WP.z;
+                            if (sa[j + 2] < -WP.z * 0.5) sa[j + 2] += WP.z;
+                        }
+                    }
+                    snowPts.geometry.attributes.position.needsUpdate = true;
+                } else if (snowPts.visible) {
+                    snowPts.visible = false;
+                }
+
+                // 云朵：颜色随昼夜变化，整圈缓慢绕行（不会飘到沙盘正上方挡视线）
+                cloudMat.color.copy(cloudNight).lerp(cloudDay, daylight);
+                cloudMat.opacity = 0.5 + daylight * 0.4;
+                cloudRing.rotation.y += dt * 0.012 * wNow.wind;
+
+                // 飞鸟：定时放飞，飞出场地后回收
+                birdTimer -= dt;
+                if (birdTimer <= 0 && birds.length < 3) {
+                    spawnBird();
+                    birdTimer = 7 + rand() * 11;
+                }
+                for (let i = birds.length - 1; i >= 0; i--) {
+                    const b = birds[i], u = b.userData;
+                    u.age += dt;
+                    b.position.addScaledVector(u.dir, u.speed * dt);
+                    b.position.y += Math.sin(u.age * 1.6 + u.phase) * dt * 0.6;
+                    const flap = Math.sin(t * 9 + u.phase) * 0.62;
+                    u.wings[0].rotation.z = flap;
+                    u.wings[1].rotation.z = -flap;
+                    if (b.position.length() > 96) {
+                        world.remove(b);
+                        birds.splice(i, 1);
+                    }
+                }
 
                 if (auto && !dragging && !celebrated) {
                     idle += dt;
@@ -1455,6 +1911,21 @@
                     f.o.position.y = f.base + Math.sin(t * f.speed + f.phase) * f.amp;
                 }
                 for (let i = 0; i < 4; i++) floats[i].o.rotation.y += dt * 0.5;
+
+                // 公园里的人：行人绕中央步道走，玩耍的人在空地小范围来回
+                for (let i = 0; i < people.length; i++) {
+                    const p = people[i];
+                    if (p.mode === 'walk') {
+                        p.t = (p.t + dt * p.speed) % 1;
+                        const ang = p.t * Math.PI * 2;
+                        p.g.position.set(Math.cos(ang) * walkR, 0.15, Math.sin(ang) * walkR);
+                        p.g.rotation.y = ang + Math.PI / 2;
+                    } else {
+                        const ang = t * p.speed * p.dir + p.phase;
+                        p.g.position.set(p.cx + Math.cos(ang) * p.r, 0.15, p.cz + Math.sin(ang) * p.r);
+                        p.g.rotation.y = ang + Math.PI / 2;
+                    }
+                }
 
                 updatePills();
                 if (composer) composer.render(); else renderer.render(scene, camera);

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<!--
+  SPDX-License-Identifier: MIT
+  SPDX-FileCopyrightText: 2026 巴拿拿猫 (BananaCat) · Banana.design (https://banana.design)
+
+  BANANA_DESIGN_BUILD_SIGNATURE :: Banana.design-personal-portfolio-website, ts:20261117
+  Three.js 3D 交互沙盘开发日志 · 密码门 + 内容索引 · 昼夜循环 · 灯光联动 · UI 平滑
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Three.js 3D 交互沙盘密码门开发日志 - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #FBF4E8, #F0E8DC, #E6DDD0);
+            cursor: none;
+        }
+
+        .blog-detail-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .blog-detail-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #8B6914;
+            text-shadow: 0 0 20px rgba(180, 150, 80, 0.25);
+        }
+
+        .blog-detail-subtitle {
+            font-size: 1rem;
+            color: #9A8A6A;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .blog-tag {
+            padding: 0.4rem 0.8rem;
+            background: rgba(218, 184, 120, 0.3);
+            color: #8B6914;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid rgba(180, 150, 80, 0.35);
+        }
+
+        .blog-detail-content {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(150, 120, 60, 0.12);
+            border: 1px solid rgba(200, 180, 130, 0.4);
+            color: #5A4A3A;
+            line-height: 1.8;
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #A07818;
+            border-bottom: 1px solid rgba(200, 170, 100, 0.4);
+            padding-bottom: 0.5rem;
+            margin-top: 2rem;
+        }
+
+        .section-title:first-of-type {
+            margin-top: 0;
+        }
+
+        .section-content {
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight-box {
+            background: rgba(230, 200, 140, 0.18);
+            border-left: 4px solid #C9A227;
+            padding: 1rem 1.2rem;
+            margin: 1.2rem 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.92rem;
+        }
+
+        .issue-box {
+            background: rgba(220, 140, 100, 0.15);
+            border-left: 4px solid #D4722E;
+            padding: 1rem 1.2rem;
+            margin: 1.2rem 0;
+            border-radius: 0 8px 8px 0;
+            font-size: 0.92rem;
+        }
+
+        .code-ref {
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: rgba(139, 105, 20, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.88em;
+            color: #8B6914;
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 1.2rem;
+            border-left: 2px solid rgba(200, 170, 100, 0.4);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -7px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #C9A227;
+            border: 2px solid #FFF;
+            box-shadow: 0 0 0 2px rgba(201, 162, 39, 0.4);
+        }
+
+        .timeline-item .date-tag {
+            font-size: 0.78rem;
+            color: #A08840;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .timeline-item .title {
+            font-weight: 700;
+            color: #6A4F10;
+            margin: 2px 0 4px;
+        }
+
+        .timeline-item .desc {
+            font-size: 0.92rem;
+            color: #7A6A5A;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 0.6rem 1.5rem;
+            background: linear-gradient(135deg, #C9A227, #A8861C);
+            color: #fff;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(201, 162, 39, 0.35);
+        }
+
+        .ref-link {
+            color: #A07818;
+            text-decoration: none;
+            border-bottom: 1px dashed rgba(160, 120, 24, 0.4);
+            transition: color 0.2s, border-color 0.2s;
+        }
+
+        .ref-link:hover {
+            color: #C9A227;
+            border-color: #C9A227;
+        }
+
+        ul.dot-list {
+            padding-left: 1.2rem;
+        }
+
+        ul.dot-list li {
+            margin-bottom: 0.35rem;
+        }
+
+        ul.dot-list li strong {
+            color: #6A4F10;
+        }
+    </style>
+</head>
+<body>
+    <div class="blog-detail-container">
+        <div class="blog-detail-header">
+            <h1 class="blog-detail-title">Three.js 3D 交互沙盘密码门开发日志</h1>
+            <p class="blog-detail-subtitle">等距沙盘 · 昼夜循环 · 灯光系统 · UI 平滑 · 后处理 · 2026.11 迭代</p>
+            <div class="blog-tags">
+                <span class="blog-tag">Three.js WebGL</span>
+                <span class="blog-tag">交互设计</span>
+                <span class="blog-tag">昼夜循环</span>
+                <span class="blog-tag">性能优化</span>
+                <span class="blog-tag">后处理</span>
+                <span class="blog-tag">AI 协作</span>
+            </div>
+        </div>
+
+        <div class="blog-detail-content">
+
+            <h2 class="section-title">为什么做这个</h2>
+            <div class="section-content">
+                个人作品集网站需要一个「软门」——不是传统登录页，而是一个能让访客在输入密码之前先浏览、产生兴趣的地方。3D 沙盘恰好能承载这个意图：<strong>既是密码门，也是网站内容的可视化索引</strong>。
+                访客可以拖拽旋转缩放沙盘，点击建筑下方的标签直接跳转对应栏目，整个过程在一个完整的 WebGL 场景中完成，不打断视觉体验。
+            </div>
+
+            <h2 class="section-title">核心设计</h2>
+            <div class="section-content">
+                <ul class="dot-list">
+                    <li><strong>等距视角</strong>：固定镜头角度，建筑按等距风格堆叠，降低美术需求、快速成型</li>
+                    <li><strong>自然交互</strong>：鼠标拖拽旋转、滚轮缩放，场景自己缓慢巡航，不依赖侧边栏按钮</li>
+                    <li><strong>昼夜循环</strong>：90 秒一圈，太阳绕场旋转驱动光色、强度、天空色、地面曝光平滑过渡</li>
+                    <li><strong>多系统灯光</strong>：建筑窗户 19:00~6:00 自动亮灯，公园路灯同步点亮（含暖光点光源），与 bloom 后处理叠加</li>
+                    <li><strong>UI 投影定位</strong>：3D 世界坐标实时投影到屏幕，带避让算法（躲密码卡、标签互斥、边界钳制）</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">完整迭代时间线</h2>
+            <div class="section-content">
+
+                <div class="timeline-item">
+                    <span class="date-tag">Phase 0 · 搭架子</span>
+                    <div class="title">基础渲染管线 + 等距相机</div>
+                    <div class="desc">WebGLRenderer 配置（antialias、alpha、PCFSoftShadowMap、ACESFilmicToneMapping），HemisphereLight + DirectionalLight 基础光照，相机固定等距角度，实现拖拽旋转缩放。</div>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="date-tag">Phase 1 · 搭场景</span>
+                    <div class="title">5 栋建筑 + 沙盘底 + 装饰</div>
+                    <div class="desc">Portfolio / Blog / About 三栋主建筑 + 小桥 + 内河 + 小菜园，石头、花茎、灌木等装饰物件（全部关闭阴影以保证性能）。</div>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="date-tag">Phase 2 · 删冗余 + 加昼夜</span>
+                    <div class="title">去掉 5 个侧边按钮 → 自动昼夜循环</div>
+                    <div class="desc">删除自由视角/平移/自动巡航/复位/全屏五个按钮——鼠标已能自由操控，场景本身也会缓慢巡航，按钮多余。改为 90 秒一圈的太阳旋转驱动光色/强度/天空色/曝光。</div>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="date-tag">Phase 3 · 无限地形</span>
+                    <div class="title">160×160 大地平面 + 42 棵随机小树</div>
+                    <div class="desc">沙盘下方放大地平面，最远缩放时边缘不入视口。外圈（半径 16.5~74.5）固定种子随机撒 42 棵小树，避开沙盘和 5 个分区，营造「看起来无限的地形」。</div>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="date-tag">Phase 4 · 夜间亮灯</span>
+                    <div class="title">窗户灯 + 路灯 + 点光源 + bloom</div>
+                    <div class="desc">夜晚全黑看不到 → 新增 M.windowLight 发光材质 + 建筑窗户几何体，19:00~6:00 自动亮灯。公园 6 盏路灯同步点亮，其中 3 盏挂暖光点光源照亮地面。后处理异步加载 UnrealBloomPass 实现朦胧光晕，失败自动降级。</div>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="date-tag">Phase 5 · 加人</span>
+                    <div class="title">行人绕圈 + 玩耍的人原地活动</div>
+                    <div class="desc">中央环形步道（半径 5.2，避开建筑地台）放 8 个行人慢慢绕圈走，朝向随切线。中央空地放 9 个玩耍的人各自小范围来回转圈，速度、半径、方向都随机。</div>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="date-tag">Phase 6 · 修卡顿</span>
+                    <div class="title">阴影贴图 1536 → 1024 + dt 钳制放宽</div>
+                    <div class="desc">点击 UI 框时视角转换卡顿 → 三层优化：阴影贴图降分辨率；dt 钳制从 0.06 放宽到 0.25（避免掉帧时补间步长一起被砍）；所有装饰物件关闭阴影。</div>
+                </div>
+
+                <div class="timeline-item">
+                    <span class="date-tag">Phase 7 · 修抖动（两轮迭代）</span>
+                    <div class="title">UI 标签旋转时高频抖动</div>
+                    <div class="desc">
+                        <div class="issue-box">
+                            <strong>根因：</strong>避让算法（pushOffCard / 标签互斥 / clampX）的目标位置本身在高频跳变，平滑层追着抖动目标跑。
+                        </div>
+                        <div class="highlight-box">
+                            <strong>第一轮（失败）：</strong>固定系数 lerp <span class="code-ref">s.x += (tx - s.x) * 0.18</span> → 仍然抖。
+                        </div>
+                        <div class="highlight-box">
+                            <strong>第二轮（当前方案）：</strong>死区 1.5px + 混合限速滑行 <span class="code-ref">Math.min(2.2, d * 0.22)</span>。近距离指数衰减、远距离限速滑行，杜绝跳变。
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <h2 class="section-title">技术要点速查</h2>
+            <div class="section-content">
+                <ul class="dot-list">
+                    <li><strong>昼夜循环分层驱动</strong>：<span class="code-ref">dayPhase</span>（0~1）→ 太阳位置 → 光色/强度/天空色/地面色/曝光；<span class="code-ref">hourOfDay = (dayPhase * 24 + 6) % 24</span> → 窗户灯/路灯 <span class="code-ref">emissiveIntensity</span> + PointLight 开关。新增灯具只需接 hourOfDay 判断</li>
+                    <li><strong>性能三原则</strong>：阴影贴图 1024、非必要物件不投影、dt 钳制 0.25</li>
+                    <li><strong>异步后处理降级</strong>：动态 import UnrealBloomPass，try 包 RenderPass，失败自动降级普通渲染</li>
+                    <li><strong>UI 平滑通用方案</strong>：悬浮标签/提示框防抖的标准解法——识别避让算法源头抖动，用死区 + 限速滑行替代固定 lerp</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">AI 协作记录</h2>
+            <div class="section-content">
+                开发过程中有另一个 AI（Workbuddy）在并行改同一个文件，期间有覆盖风险。以下是协作中形成的约束：
+                <ul class="dot-list">
+                    <li><strong>关键代码片段带唯一签名</strong>：昼夜循环参数、灯光联动逻辑、UI 平滑算法等核心段落加注释标识，被覆盖时能快速 diff 找回</li>
+                    <li><strong>功能块解耦</strong>：每块功能独立命名（streetlight / pedestrians / dayPhase / smoothPills），避免 AI 合并时误删</li>
+                    <li><strong>性能参数集中配置</strong>：阴影分辨率、dt 钳制、bloom 参数等放在一起，方便不同 AI 调整时不互相踩</li>
+                </ul>
+            </div>
+
+            <h2 class="section-title">可复用性</h2>
+            <div class="section-content">
+                这套 Three.js 沙盘搭建脚手架可以直接套用到其他项目：
+                <ul class="dot-list">
+                    <li>基础几何函数库（box / cyl / sph / cap / prism / rand）</li>
+                    <li>材质字典 M + 统一 shadowMapSize 配置</li>
+                    <li>昼夜循环参数体系（dayPhase / hourOfDay 分层驱动）</li>
+                    <li>UI 悬浮标签防抖通用方案（死区 + 限速滑行）</li>
+                    <li>异步后处理降级模板</li>
+                </ul>
+            </div>
+
+            <div style="text-align: center; margin-top: 2.5rem;">
+                <a href="index.html#blog" class="back-link">← 返回开发日志目录</a>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>
