@@ -616,7 +616,10 @@
                 screen: mat(0xAFD9EB, { emissive: 0x5E9DBC, emissiveIntensity: 0.45 }),
                 glow: new THREE.MeshStandardMaterial({ color: 0xFFE3B0, emissive: 0xFFB35E, emissiveIntensity: 1.5, roughness: 0.4 }),
                 windowLight: new THREE.MeshStandardMaterial({ color: 0xFFF1D0, emissive: 0xFFC166, emissiveIntensity: 0, roughness: 0.6 }),
-                streetLamp: new THREE.MeshStandardMaterial({ color: 0xFFF2CE, emissive: 0xFFC26B, emissiveIntensity: 0, roughness: 0.4 })
+                streetLamp: new THREE.MeshStandardMaterial({ color: 0xFFF2CE, emissive: 0xFFC26B, emissiveIntensity: 0, roughness: 0.4 }),
+                road: mat(0x4A4E55, { roughness: 0.95 }),
+                carHead: new THREE.MeshStandardMaterial({ color: 0xFFF6D8, emissive: 0xFFF2C0, emissiveIntensity: 0, roughness: 0.4 }),
+                carTail: new THREE.MeshStandardMaterial({ color: 0xB03028, emissive: 0xFF3B30, emissiveIntensity: 0, roughness: 0.4 })
             };
 
             /* ══════════ 几何小工具 ══════════ */
@@ -971,17 +974,17 @@
                 // 12 栋楼，分布在沙盘外围四个方向，半径 18~30
                 const cityPlots = [
                     // 北边（沙盘后方，z 负）
-                    { x: -18, z: -20, w: 2.8, d: 2.2, h: 7.5 },
+                    { x: -23, z: -20, w: 2.8, d: 2.2, h: 7.5 },
                     { x: -12, z: -22, w: 3.4, d: 2.6, h: 11.0 },
                     { x: -5,  z: -21, w: 2.6, d: 2.4, h: 5.8 },
                     { x: 3,   z: -23, w: 3.0, d: 2.2, h: 9.2 },
-                    { x: 11,  z: -21, w: 2.4, d: 2.0, h: 6.4 },
-                    { x: 17,  z: -19, w: 3.6, d: 2.8, h: 12.5 },
+                    { x: 10,  z: -21, w: 2.4, d: 2.0, h: 6.4 },
+                    { x: 23.5, z: -19, w: 3.6, d: 2.8, h: 12.5 },
                     // 南边（沙盘前方，z 正）
-                    { x: -19, z: 19,  w: 2.8, d: 2.4, h: 8.0 },
+                    { x: -24, z: 19,  w: 2.8, d: 2.4, h: 8.0 },
                     { x: -11, z: 22,  w: 3.2, d: 2.6, h: 10.0 },
-                    { x: 11,  z: 21,  w: 2.6, d: 2.2, h: 6.8 },
-                    { x: 18,  z: 18,  w: 3.0, d: 2.4, h: 9.5 },
+                    { x: 10,  z: 21,  w: 2.6, d: 2.2, h: 6.8 },
+                    { x: 23,  z: 18,  w: 3.0, d: 2.4, h: 9.5 },
                     // 东边（x 正）
                     { x: 22,  z: -8,  w: 2.4, d: 3.0, h: 7.0 },
                     { x: 23,  z: 8,   w: 2.8, d: 2.6, h: 10.5 },
@@ -1002,16 +1005,16 @@
 
             // 外围远景：3 座小山 + 1 个湖
             (function landscape() {
-                // 湖：东北角，椭圆（box 压扁 + 旋转），比大地低 0.05
-                const lake = box(11, 0.15, 6.5, M.water);
-                lake.position.set(30, -0.20, -22);
-                lake.rotation.y = 0.3;
+                // 湖：沙盘正南侧（镜头前方，最显眼），比大地平面略低
+                const lake = box(14, 0.15, 6, M.water);
+                lake.position.set(0, -0.18, 18);
+                lake.rotation.y = 0.10;
                 lake.castShadow = false; lake.receiveShadow = false;
                 world.add(lake);
-                // 湖岸草地过渡（浅棕色一圈，比大地高一点）
-                const bank = box(12.5, 0.08, 8, M.waterBank);
-                bank.position.set(30, -0.16, -22);
-                bank.rotation.y = 0.3;
+                // 湖岸草地过渡（浅棕色一圈，略大于水面）
+                const bank = box(15.5, 0.08, 7.5, M.waterBank);
+                bank.position.set(0, -0.15, 18);
+                bank.rotation.y = 0.10;
                 bank.castShadow = false; bank.receiveShadow = false;
                 world.add(bank);
 
@@ -1048,6 +1051,154 @@
                     g.position.set(h.x, -0.15, h.z);
                     world.add(g);
                 });
+            })();
+
+            // 棋盘格马路 + 车辆：绕沙盘外围一圈的井字路网，有交叉路口，车在路口转弯
+            (function roads() {
+                // —— 路网定义 ——
+                // 2 条横向（东西向）+ 2 条纵向（南北向），围出一个矩形，4 个角就是十字交叉口
+                const HZ = [-12, 12];                 // 横向马路的 z 坐标（北、南）
+                const VX = [-17, 17];                 // 纵向马路的 x 坐标（西、东）
+                const HSPAN = 31;                     // 横向马路 x 方向半跨度（一路延伸到远处，不截断）
+                const VSPAN = 23;                     // 纵向马路 z 方向半跨度
+
+                function straightSeg(x1, z1, x2, z2) {
+                    return new THREE.LineCurve3(
+                        new THREE.Vector3(x1, 0, z1),
+                        new THREE.Vector3(x2, 0, z2)
+                    );
+                }
+
+                // 4 条马路：每条两层（深色路缘 + 灰色路面）
+                HZ.forEach(function (z) {
+                    const c = straightSeg(-HSPAN, z, HSPAN, z);
+                    world.add(ribbon(c, { y: 0.01, w0: 1.6, w1: 1.6, mat: M.wallDark, segments: 60 }));
+                    world.add(ribbon(c, { y: 0.03, w0: 1.35, w1: 1.35, mat: M.road, segments: 60 }));
+                });
+                VX.forEach(function (x) {
+                    const c = straightSeg(x, -VSPAN, x, VSPAN);
+                    world.add(ribbon(c, { y: 0.01, w0: 1.6, w1: 1.6, mat: M.wallDark, segments: 60 }));
+                    world.add(ribbon(c, { y: 0.03, w0: 1.35, w1: 1.35, mat: M.road, segments: 60 }));
+                });
+
+                // —— 路口节点图 ——
+                const NODES = {
+                    // 4 个十字路口
+                    NW: { x: VX[0], z: HZ[0] },
+                    NE: { x: VX[1], z: HZ[0] },
+                    SW: { x: VX[0], z: HZ[1] },
+                    SE: { x: VX[1], z: HZ[1] },
+                    // 8 个路网末梢（车可以直行穿过路口继续开出去）
+                    WN: { x: -HSPAN, z: HZ[0] }, EN: { x: HSPAN, z: HZ[0] },
+                    WS: { x: -HSPAN, z: HZ[1] }, ES: { x: HSPAN, z: HZ[1] },
+                    NW2: { x: VX[0], z: -VSPAN }, SW2: { x: VX[0], z: VSPAN },
+                    NE2: { x: VX[1], z: -VSPAN }, SE2: { x: VX[1], z: VSPAN }
+                };
+                // 每条边连接两个节点，记录方向向量与长度（世界单位）
+                const EDGES = {
+                    top:    { a: 'NW',  b: 'NE' },
+                    bottom: { a: 'SW',  b: 'SE' },
+                    left:   { a: 'NW',  b: 'SW' },
+                    right:  { a: 'NE',  b: 'SE' },
+                    // 4 条直行延伸段
+                    topW:   { a: 'WN',  b: 'NW' },
+                    topE:   { a: 'NE',  b: 'EN' },
+                    botW:   { a: 'WS',  b: 'SW' },
+                    botE:   { a: 'SE',  b: 'ES' },
+                    leftN:  { a: 'NW2', b: 'NW' },
+                    leftS:  { a: 'SW',  b: 'SW2' },
+                    rightN: { a: 'NE2', b: 'NE' },
+                    rightS: { a: 'SE',  b: 'SE2' }
+                };
+                Object.keys(EDGES).forEach(function (k) {
+                    const e = EDGES[k], A = NODES[e.a], B = NODES[e.b];
+                    e.dx = B.x - A.x; e.dz = B.z - A.z;
+                    e.len = Math.hypot(e.dx, e.dz);
+                    e.heading = Math.atan2(e.dx, e.dz); // 车头朝向（车前为 +z 局部轴）
+                });
+                // 每个节点连接的边（自动生成）
+                const ADJ = {};
+                Object.keys(NODES).forEach(function (n) { ADJ[n] = []; });
+                Object.keys(EDGES).forEach(function (k) {
+                    ADJ[EDGES[k].a].push(k);
+                    ADJ[EDGES[k].b].push(k);
+                });
+
+                function car(color) {
+                    const g = new THREE.Group();
+                    // 车身：窄身长轴朝 +Z（车头方向），这样车头才对着前进方向
+                    const body = box(0.82, 0.44, 1.5, mat(color, { roughness: 0.5 }));
+                    body.position.y = 0.4;
+                    g.add(body);
+                    const cabin = box(0.7, 0.38, 0.76, M.screen);
+                    cabin.position.set(0, 0.78, -0.06);
+                    g.add(cabin);
+                    // 轮子：左右在 X（±0.42），前后在 Z（±0.5）
+                    [[-0.42, -0.5], [0.42, -0.5], [-0.42, 0.5], [0.42, 0.5]].forEach(function (w) {
+                        const wheel = cyl(0.17, 0.17, 0.14, M.ink, 8);
+                        wheel.rotation.x = Math.PI / 2;
+                        wheel.position.set(w[0], 0.17, w[1]);
+                        wheel.castShadow = false;
+                        g.add(wheel);
+                    });
+                    // 前灯在车头 +Z，尾灯在车尾 -Z
+                    const headL = box(0.16, 0.12, 0.05, M.carHead);
+                    headL.position.set(-0.26, 0.42, 0.76);
+                    headL.castShadow = false;
+                    g.add(headL);
+                    const headR = box(0.16, 0.12, 0.05, M.carHead);
+                    headR.position.set(0.26, 0.42, 0.76);
+                    headR.castShadow = false;
+                    g.add(headR);
+                    const tailL = box(0.16, 0.1, 0.05, M.carTail);
+                    tailL.position.set(-0.26, 0.42, -0.76);
+                    tailL.castShadow = false;
+                    g.add(tailL);
+                    const tailR = box(0.16, 0.1, 0.05, M.carTail);
+                    tailR.position.set(0.26, 0.42, -0.76);
+                    tailR.castShadow = false;
+                    g.add(tailR);
+                    g.traverse(function (o) { o.castShadow = false; });
+                    world.add(g);
+                    return g;
+                }
+
+                const carColors = [0xE74C3C, 0x3498DB, 0xF1C40F, 0xFFFFFF, 0x2ECC71, 0x9B59B6];
+                const edgeKeys = Object.keys(EDGES);
+                // 只有一条边的节点就是路网末梢
+                const TERMINALS = {};
+                Object.keys(NODES).forEach(function (n) {
+                    if (ADJ[n].length <= 1) TERMINALS[n] = true;
+                });
+                const cars = [];
+                for (let i = 0; i < 6; i++) {
+                    const g = car(carColors[i % carColors.length]);
+                    // 初始都放在中间那 4 条主路上，错开位置
+                    const ek = ['top', 'bottom', 'left', 'right'][i % 4];
+                    const dir = (i % 2 === 0) ? 1 : -1; // 一半顺向一半逆向
+                    cars.push({
+                        g: g,
+                        edge: ek,
+                        dir: dir,
+                        t: (i * 0.17) % 1,        // 错开初始位置
+                        speed: 3.6 + (i % 4) * 0.9, // 世界单位 / 秒，慢速巡游
+                        heading: 0,
+                        targetHeading: 0,
+                        scale: 1,
+                        state: 'drive'            // drive | shrink | grow
+                    });
+                    // heading：dir=1 用边朝向，dir=-1 用反向（加 PI，再规整到 [-PI,PI]）
+                    let h = EDGES[ek].heading + (dir === -1 ? Math.PI : 0);
+                    if (h > Math.PI) h -= Math.PI * 2;
+                    if (h < -Math.PI) h += Math.PI * 2;
+                    cars[i].heading = h;
+                    cars[i].targetHeading = h;
+                }
+                world.userData.traffic = {
+                    NODES: NODES, EDGES: EDGES, ADJ: ADJ,
+                    TERMINALS: TERMINALS, EDGE_KEYS: edgeKeys
+                };
+                world.userData.cars = cars;
             })();
 
             // 云朵：围在外圈上空缓慢绕行，白天纯白、夜里偏灰蓝
@@ -1767,6 +1918,8 @@
                 for (let i = 0; i < streetlights.length; i++) {
                     if (streetlights[i].light) streetlights[i].light.intensity = lightsOn ? 0.85 : 0;
                 }
+                M.carHead.emissiveIntensity = lightsOn ? 2.0 : 0;
+                M.carTail.emissiveIntensity = lightsOn ? 1.8 : 0;
 
                 // ═════ 天气：定时切换 + 参数平滑过渡 ═════
                 wTimer -= dt;
@@ -1924,6 +2077,106 @@
                         const ang = t * p.speed * p.dir + p.phase;
                         p.g.position.set(p.cx + Math.cos(ang) * p.r, 0.15, p.cz + Math.sin(ang) * p.r);
                         p.g.rotation.y = ang + Math.PI / 2;
+                    }
+                }
+
+                // 车辆：沿棋盘格路网行驶，到路口自动转弯
+                const traffic = world.userData.traffic;
+                const cars = world.userData.cars;
+                if (traffic && cars) {
+                    const NODES = traffic.NODES, EDGES = traffic.EDGES, ADJ = traffic.ADJ;
+                    for (let i = 0; i < cars.length; i++) {
+                        const c = cars[i];
+
+                        // 消失 / 出现：用缩放做淡出淡入
+                        if (c.state === 'shrink') {
+                            c.scale -= dt / 0.20;
+                            if (c.scale <= 0) {
+                                // 在任意一条路的任意位置重新生成一辆车
+                                const ek = traffic.EDGE_KEYS[Math.floor(Math.random() * traffic.EDGE_KEYS.length)];
+                                const ne = EDGES[ek];
+                                c.edge = ek;
+                                c.dir = Math.random() < 0.5 ? 1 : -1;
+                                c.t = 0.08 + Math.random() * 0.84;
+                                c.scale = 0;
+                                c.state = 'grow';
+                                let h = ne.heading + (c.dir === -1 ? Math.PI : 0);
+                                if (h > Math.PI) h -= Math.PI * 2;
+                                if (h < -Math.PI) h += Math.PI * 2;
+                                c.heading = h;
+                                c.targetHeading = h;
+                            }
+                        } else if (c.state === 'grow') {
+                            c.scale = Math.min(1, c.scale + dt / 0.28);
+                            if (c.scale >= 1) { c.scale = 1; c.state = 'drive'; }
+                        }
+
+                        const e = EDGES[c.edge];
+
+                        // 行驶推进（淡出过程中停在原地）
+                        if (c.state !== 'shrink') {
+                            c.t += (dt * c.speed) / e.len;
+                            if (c.t >= 1) {
+                                const arrived = (c.dir === 1) ? e.b : e.a;
+                                if (traffic.TERMINALS[arrived]) {
+                                    // 开到路尽头：停在末端淡出，稍后在别处重新出现
+                                    c.t = 1;
+                                    c.state = 'shrink';
+                                } else {
+                                    // 路口：60% 直行，其余随机转弯
+                                    c.t = 0;
+                                    const opts = ADJ[arrived].filter(function (ek) { return ek !== c.edge; });
+                                    let nextEdge;
+                                    if (opts.length > 0 && Math.random() < 0.6) {
+                                        let best = opts[0], bestDiff = Infinity;
+                                        opts.forEach(function (ek) {
+                                            const cand = EDGES[ek];
+                                            const d = (arrived === cand.a) ? 1 : -1;
+                                            let hh = cand.heading + (d === -1 ? Math.PI : 0);
+                                            if (hh > Math.PI) hh -= Math.PI * 2;
+                                            if (hh < -Math.PI) hh += Math.PI * 2;
+                                            let diff = Math.abs(hh - c.heading);
+                                            if (diff > Math.PI) diff = Math.PI * 2 - diff;
+                                            if (diff < bestDiff) { bestDiff = diff; best = ek; }
+                                        });
+                                        nextEdge = best;
+                                    } else if (opts.length > 0) {
+                                        nextEdge = opts[Math.floor(Math.random() * opts.length)];
+                                    } else {
+                                        nextEdge = c.edge;
+                                    }
+                                    const ne = EDGES[nextEdge];
+                                    const newDir = (arrived === ne.a) ? 1 : -1;
+                                    c.edge = nextEdge;
+                                    c.dir = newDir;
+                                    // 更新目标朝向（车头平滑过渡到新方向）
+                                    let th = ne.heading + (newDir === -1 ? Math.PI : 0);
+                                    if (th > Math.PI) th -= Math.PI * 2;
+                                    if (th < -Math.PI) th += Math.PI * 2;
+                                    c.targetHeading = th;
+                                }
+                            }
+                        }
+
+                        // 计算当前位置：在边的 a、b 之间插值
+                        const A = NODES[e.a], B = NODES[e.b];
+                        const tt = (c.dir === 1) ? c.t : (1 - c.t);
+                        let px = A.x + e.dx * tt;
+                        let pz = A.z + e.dz * tt;
+                        // 靠右行驶：按行进方向取右法线，偏移半个车道，避免对向车重叠
+                        const tx = (e.dx / e.len) * c.dir;
+                        const tz = (e.dz / e.len) * c.dir;
+                        const LANE = 0.62;
+                        px += tz * LANE;
+                        pz += -tx * LANE;
+                        c.g.position.set(px, 0.05, pz);
+                        // 车头朝向平滑插值（避免瞬间旋转）
+                        let dh = c.targetHeading - c.heading;
+                        while (dh > Math.PI) dh -= Math.PI * 2;
+                        while (dh < -Math.PI) dh += Math.PI * 2;
+                        c.heading += dh * Math.min(1, dt * 12);
+                        c.g.rotation.y = c.heading;
+                        c.g.scale.setScalar(Math.max(0.001, c.scale));
                     }
                 }
 
