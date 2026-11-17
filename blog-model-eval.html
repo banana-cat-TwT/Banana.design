@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<!--
+  SPDX-License-Identifier: MIT
+  SPDX-FileCopyrightText: 2026 巴拿拿猫 (BananaCat) · Banana.design (https://banana.design)
+
+  第二层·防删保护标识
+    BANANA_DESIGN_BUILD_SIGNATURE :: Banana.design-personal-portfolio-website, ts:20261117
+  评测方法论页 · 判据四层 · 三级分档 · 可复测描述 · 对照实验
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="巴拿拿猫 BananaCat · Banana.design">
+    <meta name="copyright" content="© 2026 巴拿拿猫 (BananaCat) · Banana.design">
+    <title>AI 生成结果的评测方法（判据 · 分级 · 可复测描述） - 巴拿拿猫的个人网站</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: #F4F9FC;
+            color: #33454F;
+        }
+
+        .blog-detail-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .blog-detail-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .blog-detail-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: #1E4F73;
+        }
+
+        .blog-detail-subtitle {
+            font-size: 1rem;
+            color: #7C8F9C;
+            margin-bottom: 1.5rem;
+        }
+
+        .blog-tags {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .blog-tag {
+            padding: 0.4rem 0.85rem;
+            background: #E4F0F9;
+            color: #2B6C9C;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            border: 1px solid #C9DFF0;
+        }
+
+        .blog-detail-content {
+            background: #FFFFFF;
+            border-radius: 14px;
+            padding: 2rem;
+            border: 1px solid #DCE8F3;
+            box-shadow: 0 4px 18px rgba(43, 108, 156, 0.06);
+            color: #445159;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        .section-title {
+            font-size: 1.35rem;
+            margin-bottom: 1rem;
+            color: #1E4F73;
+            border-bottom: 1px solid #DCE8F3;
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .section-title:first-of-type { margin-top: 0; }
+
+        .section-content {
+            margin-bottom: 1.5rem;
+            line-height: 1.85;
+        }
+
+        .section-content p { margin-bottom: 0.9rem; }
+
+        .section-content ul, .section-content ol {
+            margin: 0.6rem 0 1rem 1.4rem;
+            padding: 0;
+        }
+
+        .section-content li { margin-bottom: 0.5rem; }
+
+        .section-content code {
+            background: #EAF3FA;
+            color: #1F5C87;
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+
+        .highlight { color: #2B6C9C; font-weight: 600; }
+
+        .compare-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0 1.5rem;
+            font-size: 0.92rem;
+        }
+
+        .compare-table th,
+        .compare-table td {
+            border: 1px solid #DCE8F3;
+            padding: 0.6rem 0.75rem;
+            text-align: left;
+            vertical-align: top;
+            line-height: 1.65;
+        }
+
+        .compare-table th {
+            background: #EAF3FA;
+            color: #1E4F73;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .compare-table tbody tr:nth-child(even) { background: #FAFCFE; }
+
+        .highlight-box {
+            background: #F0F7FD;
+            border-left: 4px solid #2B6C9C;
+            border-radius: 6px;
+            padding: 1rem 1.15rem;
+            margin: 1rem 0 1.5rem;
+            line-height: 1.8;
+            color: #3C5666;
+        }
+
+        .highlight-box strong { color: #1E4F73; }
+
+        .grade {
+            display: inline-block;
+            padding: 0.1rem 0.55rem;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .grade-a { background: #E3F5E9; color: #1E7A46; }
+        .grade-b { background: #FCF0DC; color: #9A6419; }
+        .grade-c { background: #FCE7E4; color: #A63A2A; }
+
+        .todo-flag {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            background: #FCF0DC;
+            color: #9A6419;
+            border: 1px solid #F0DCB8;
+        }
+
+        .case-sub {
+            font-size: 1.05rem;
+            color: #2B6C9C;
+            margin: 1.6rem 0 0.6rem;
+        }
+
+        .entry-list {
+            list-style: none;
+            margin: 0.8rem 0 0;
+            padding: 0;
+        }
+        .entry-list li {
+            padding: 0.85rem 1rem;
+            border: 1px solid #DCE8F3;
+            border-radius: 8px;
+            margin-bottom: 0.6rem;
+            background: #FAFCFE;
+        }
+        .entry-list a { color: #2B6C9C; font-weight: 600; text-decoration: none; }
+        .entry-list a:hover { text-decoration: underline; }
+        .entry-list span { display: block; font-size: 0.88rem; color: #7C8F9C; margin-top: 0.25rem; }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 2.5rem;
+            padding: 0.7rem 1.5rem;
+            background: #2B6C9C;
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 0.95rem;
+        }
+        .btn-back:hover { background: #1E4F73; }
+
+        @media (max-width: 768px) {
+            .blog-detail-container { padding: 1rem; }
+            .blog-detail-title { font-size: 1.5rem; }
+            .blog-detail-content { padding: 1.15rem; }
+            .compare-table { font-size: 0.85rem; }
+            .compare-table th, .compare-table td { padding: 0.45rem 0.5rem; }
+        }
+    </style>
+
+    <!-- 51.la 访客统计 V6 -->
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"3Qu6OIFKMWrFWPyF",ck:"3Qu6OIFKMWrFWPyF"})</script>
+</head>
+<body>
+    <script src="gate.js"></script>
+    <!-- Watermark Canvas -->
+    <canvas id="watermark-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; opacity: 0.05;"></canvas>
+
+    <header>
+        <h1>巴拿拿猫的个人网站</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html#works">作品展示</a></li>
+                <li><a href="index.html#characters">角色展示</a></li>
+                <li><a href="index.html#games">小游戏</a></li>
+                <li><a href="index.html#blog">开发日志</a></li>
+                <li><a href="index.html#about">关于我</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="blog-detail-container">
+            <div class="blog-detail-header">
+                <h1 class="blog-detail-title">AI 生成结果的评测方法</h1>
+                <p class="blog-detail-subtitle">2026年11月 · 方法论整理 · 从四篇实测日志里抽出判据、分档与验收口径</p>
+                <div class="blog-tags">
+                    <span class="blog-tag">判据四层</span>
+                    <span class="blog-tag">三级分档</span>
+                    <span class="blog-tag">可复测描述</span>
+                    <span class="blog-tag">跨平台对照</span>
+                    <span class="blog-tag">版本回归</span>
+                    <span class="blog-tag">拓扑与 UV</span>
+                </div>
+            </div>
+
+            <div class="blog-detail-content">
+
+                <h2 class="section-title">这一页解决什么问题</h2>
+                <div class="section-content">
+                    <p>前面几篇是<span class="highlight">逐个工具、逐次生成的实测记录</span>：Tripo 的步枪拓扑、Meshy 的智能 topo 面数、混元的节点管线、AI 三维模型的使用日志。每一篇都在判断好坏，但判据散在段落中间，读者要读完四篇才能拼出「我到底按什么标准判」。</p>
+                    <p>这一页不再测新工具，而是把那些判断<span class="highlight">抽成一套可以交给别人复用的口径</span>：看哪几层、怎么分档、问题怎么写才算说清楚、做什么样的实验才能把问题暴露出来。</p>
+                    <p>落到一句话上，我判一个生成结果只问四个问题：</p>
+                    <ul>
+                        <li><span class="highlight">数据干不干净</span>——拓扑、UV、法线、水密性、尺度，能不能直接进引擎；</li>
+                        <li><span class="highlight">形体对不对</span>——比例、结构、部件边界、有没有穿模和黏连；</li>
+                        <li><span class="highlight">表现像不像</span>——材质、贴图投影、光照关系、风格是否统一；</li>
+                        <li><span class="highlight">要花多少工</span>——从生成结果到可用资产，中间还要投入多少人工。</li>
+                    </ul>
+                </div>
+
+                <h2 class="section-title">判据四层：从数据到任务</h2>
+                <div class="section-content">
+                    <p>同一个模型，站在不同岗位上看到的毛病是不一样的。纯美术看形体，纯算法看指标，而<span class="highlight">能同时说清「这里不对」和「为什么不对、该怎么修」的人最少</span>。所以我把判据按「离数据的距离」分成四层，每层的检出手段也不同。</p>
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>层</th>
+                                <th>看什么</th>
+                                <th>典型症状</th>
+                                <th>检出手段</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>L1 数据层</strong></td>
+                                <td>拓扑、UV、法线、水密性、尺度轴向</td>
+                                <td>非流形边、零面积面、n-gon、UV 接缝重叠、texel density 不均、缩放朝向不统一</td>
+                                <td>脚本批量查 + 抽检</td>
+                            </tr>
+                            <tr>
+                                <td><strong>L2 形体层</strong></td>
+                                <td>比例、结构、部件边界、遮挡关系</td>
+                                <td>比例失调、几何变形、部件黏连、多余结构、穿模</td>
+                                <td>对照参考图人工判</td>
+                            </tr>
+                            <tr>
+                                <td><strong>L3 表现层</strong></td>
+                                <td>材质、贴图投影、光照一致性、风格一致性</td>
+                                <td>贴图拉伸、投影错位、风格跑偏、光照关系混乱</td>
+                                <td>与参考图并排比对</td>
+                            </tr>
+                            <tr>
+                                <td><strong>L4 任务层</strong></td>
+                                <td>可用度、返工成本、进管线路径</td>
+                                <td>能看不能用、修的成本高于重做</td>
+                                <td>按档位判定</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>分层的好处是：<span class="highlight">L1 的问题可以量化、可以写脚本兜住，L2 和 L3 才需要人眼，L4 是给项目做决策用的</span>。把这三类混在一起谈，就变成了「感觉不太行」——没法验收，也没法复测。</p>
+                </div>
+
+                <h2 class="section-title">三级分档：可用 / 可修复 / 不可用</h2>
+                <div class="section-content">
+                    <p>我在使用日志里一直是按可用度分档的，原话是「整体按可用度分档，这套工具生成的多是<span class="highlight">可修复</span>档，圆滑、封口、UV 都要走一遍后期」。把这条口径固定下来，就是三档：</p>
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>档位</th>
+                                <th>判定标准</th>
+                                <th>典型表现</th>
+                                <th>处置</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="grade grade-a">A 可用</span></td>
+                                <td>数据层零缺陷，形体与风格达标</td>
+                                <td>四边面均匀、水密、UV 无重叠、尺度归一</td>
+                                <td>直接进管线</td>
+                            </tr>
+                            <tr>
+                                <td><span class="grade grade-b">B 可修复</span></td>
+                                <td>形体正确，问题集中在数据层且可批量或局部修</td>
+                                <td>角落破面、n-gon、UV 接缝重叠、圆形物体带棱角、底面未封口</td>
+                                <td>脚本清破面 + 手工重拓扑 / 重展 UV</td>
+                            </tr>
+                            <tr>
+                                <td><span class="grade grade-c">C 不可用</span></td>
+                                <td>形体或结构错，修的成本高于重做</td>
+                                <td>部件黏连无法拆分、比例崩坏、体素化、关键部位（如枪口）严重变形</td>
+                                <td>弃用，换输入或换工具</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="highlight-box">
+                        <strong>为什么要分档而不是打分：</strong>百分制会让人纠结 72 分和 75 分的差别，而实际决策只有三种——直接用、修一修用、别用。分档逼着回答「修哪几步、修完能不能用」，这比一个分数有用得多。
+                    </div>
+                </div>
+
+                <h2 class="section-title">验收口径：「改到……才算完」</h2>
+                <div class="section-content">
+                    <p>这是我从步枪拓扑那次测试里固定下来的句式。<span class="highlight">描述问题的同时，把「什么状态算修完」一起写进去</span>，一句话就把主观判断变成了可验收的完成条件。以下七条来自 Tripo 步枪低模案例（6000 面设置）的真实记录：</p>
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>问题</th>
+                                <th>成因判断</th>
+                                <th>验收条件</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>冗余布线</td>
+                                <td>面片密度分配不均，跟着图像明暗和高频细节走线，平坦处也乱加线</td>
+                                <td>改到能均匀布四边面、顺着形体方向走线、去掉无用边缘循环才算完</td>
+                            </tr>
+                            <tr>
+                                <td>角落隐藏破面</td>
+                                <td>非流形边（开放边），转角处没焊死</td>
+                                <td>改到破面全部封口、法线烘焙不再出黑边黑痕才算完</td>
+                            </tr>
+                            <tr>
+                                <td>平面误判加面</td>
+                                <td>曲面细分误判，把贴图明暗变化当成几何起伏</td>
+                                <td>改到平面回归最小面数、只按真实凹凸加线才算完</td>
+                            </tr>
+                            <tr>
+                                <td>布线不直</td>
+                                <td>没顺着形体主方向和轴向布线</td>
+                                <td>改到主方向线拉直、环形线顺形、UV 展开与烘焙不再出问题才算完</td>
+                            </tr>
+                            <tr>
+                                <td>五边面及以上</td>
+                                <td>补洞与三角化留下的不规则多边形</td>
+                                <td>改到模型里不存在任何大于四边的面才算完</td>
+                            </tr>
+                            <tr>
+                                <td>面数超限且分布不合理</td>
+                                <td>面数预算没按重要性分配，面堆在次要部位，关键部位反而欠采样</td>
+                                <td>改到关键部位保留足够细节、次要部位压面、整体不再超预算才算完</td>
+                            </tr>
+                            <tr>
+                                <td>多组件拆分极差</td>
+                                <td>部件拆分能力缺失，只生成一整块表面，没有部件边界与内部结构的概念</td>
+                                <td>改到各部件能按材质和结构干净分开、单独选中、不再黏连才算完</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p>这个句式的价值在最后半句。<span class="highlight">「角色不像」是感受，「部件按材质分开、单独选中、不再黏连」是可以当场验证的</span>——两者之间的差距，就是评测能不能落地。</p>
+                </div>
+
+                <h2 class="section-title">可复测描述：位置 + 现象 + 量级 + 归因</h2>
+                <div class="section-content">
+                    <p>一条能被工程师直接拿去修的描述，至少要带四样东西：哪里出的问题、看到什么现象、偏差多大、可能是什么原因，最后附上复测方式。三个真实例子：</p>
+
+                    <h3 class="case-sub">例一：超面与预算错配</h3>
+                    <p>设置 10000 四边面，实际生成 11355 个，<span class="highlight">超出约 13.55%</span>；更严重的是多出来的面分配在枪托等不需要高细节的位置，而枪口等关键部位反而比 6000 面版本变形更严重。<br>
+                    <strong>复测方式：</strong>固定同一输入图与同一面数设置重复生成，统计实际面数与关键部位形变量。</p>
+
+                    <h3 class="case-sub">例二：版本退化</h3>
+                    <p>同一张卡通单图，8 月生成的版本细节更多但属于「添油加醋」式的过度生成——原图没有的纹理与装饰被强行加上，并出现明显拉伸变形，形状严重偏离原图；4 月 7 日版本虽然棱角分明、细节粗糙，但基本形状与比例是对的。<span class="highlight">结论是生成逻辑在这段时间里出现退化，新版本倾向于添加无关细节，却丢失了最基础的形状还原能力。</span><br>
+                    <strong>复测方式：</strong>固定输入图，跨月份重跑同一条用例，按「形状还原」与「细节增益」两个维度分别判。</p>
+
+                    <h3 class="case-sub">例三：连续生成劣化</h3>
+                    <p>同一套渲染提示词，Tripo 生图连续生成时只有第一次效果最好，<span class="highlight">第三次之后画面明显油腻、锐化过度、细节繁琐到不适</span>；同时四张输出全是拼接大头照，无法理解渲染类提示词应当产出怎样的整体效果。<br>
+                    <strong>复测方式：</strong>同一提示词连续生成 N 次，记录从第几次开始出现劣化，并标注劣化的具体表征。</p>
+
+                    <div class="highlight-box">
+                        <strong>反例对照：</strong>「这个角色不像」——没有位置、没有量级、没有成因、没法复测，只能得到一句「好的我们再看看」。同样的问题写成「第 3 秒左肩塌陷、锁骨与肩胛连接处贴图拉伸，推测骨骼权重溢出，换 3 个随机种子验证是否稳定复现」，才进入可修的状态。
+                    </div>
+                </div>
+
+                <h2 class="section-title">四类对照实验：让问题自己暴露</h2>
+                <div class="section-content">
+                    <p>单次生成只能说明「这次行不行」，<span class="highlight">对照实验才能说明「稳定不行在哪」</span>。我实际做过四类：</p>
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>类型</th>
+                                <th>做法</th>
+                                <th>暴露了什么</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>跨平台对照</strong></td>
+                                <td>同参考图分别喂 Meshy 与 Tripo，比写实人物单图生成</td>
+                                <td>高模上限差约 40 倍（Meshy 约 50 万三角面，Tripo 约 1985 万）；Meshy 约 1 分钟出图，Tripo 需 300～400 秒；多部件拆分 Meshy 明显更干净，Tripo 与混元经常拆崩</td>
+                            </tr>
+                            <tr>
+                                <td><strong>版本回归</strong></td>
+                                <td>同一张图隔月重跑，比 8 月与 4 月 7 日两个版本</td>
+                                <td>识别出退化：新版过度生成、形状还原变差，而不是一味认为「新的一定更好」</td>
+                            </tr>
+                            <tr>
+                                <td><strong>输入条件对照</strong></td>
+                                <td>单视图与多视图对比；简洁节点流程与复杂流程对比</td>
+                                <td>混元的单视图生成比多视图更稳定；简洁的节点流程效果更好</td>
+                            </tr>
+                            <tr>
+                                <td><strong>参数扫描</strong></td>
+                                <td>同一模型分别设 4000 / 8000 / 10000 面，另测标准模式</td>
+                                <td>超面是系统性偏差而非随机误差（见下一节）；标准模式不走智能拓扑，会直接保留高模坑洞与棱角，卡通规范不符</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 class="section-title">一个可量化的系统性偏差：超面率</h2>
+                <div class="section-content">
+                    <p>把五次不同设置的结果放在一起，会看到一个很稳定的规律：</p>
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>平台</th>
+                                <th>设定面数</th>
+                                <th>实际生成</th>
+                                <th>超出比例</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Meshy（智能 topo）</td><td>8000</td><td>8807</td><td>约 10.09%</td></tr>
+                            <tr><td>Meshy（智能 topo）</td><td>10000</td><td>11081</td><td>约 10.81%</td></tr>
+                            <tr><td>Meshy（智能 topo）</td><td>4000</td><td>4408</td><td>约 10.2%</td></tr>
+                            <tr><td>Tripo（四边面）</td><td>10000</td><td>11355</td><td>约 13.55%</td></tr>
+                            <tr><td>Tripo（四边面）</td><td>5000</td><td>5539</td><td>约 10.78%</td></tr>
+                        </tbody>
+                    </table>
+                    <p>五个样本、两个平台，超出比例稳定落在 <span class="highlight">10%～14%</span> 区间，与设定值本身几乎无关。原始记录里的判断是「不管设置多少面，最后都会超出几百面。</p>
+                    <p>这个结论对验收有直接意义：<span class="highlight">核面数时必须按实测面数，而不是按设定值签收</span>。同时它也是个跨平台的系统性问题，不是某一家没做好——所以不能当成个案反馈，应当作为通用约束写进验收流程。</p>
+                </div>
+
+                <h2 class="section-title">向视频生成延伸：哪些判据能迁移</h2>
+                <div class="section-content">
+                    <p>上面四层是为三维网格建的，但其中大部分判据并不依赖「输出是不是网格」。角色比例、结构漂移、材质光照、风格一致性、资产还原这几项，注释对象从模型换成视频帧，判断逻辑基本不变。</p>
+                    <p>真正新增的是<span class="highlight">时间维度</span>：</p>
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>新增维度</th>
+                                <th>现象</th>
+                                <th>与三维问题的对应关系</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>时序一致性</td>
+                                <td>动作衔接断裂、肢体在相邻帧间跳变</td>
+                                <td>相当于拓扑在时间上崩坏</td>
+                            </tr>
+                            <tr>
+                                <td>镜头连续性</td>
+                                <td>运镜跳切、机位无理由变化</td>
+                                <td>相当于空间关系在镜头间不守恒</td>
+                            </tr>
+                            <tr>
+                                <td>遮挡与交互</td>
+                                <td>穿模、遮挡关系错乱、角色与环境互不作用</td>
+                                <td>相当于部件边界与装配结构丢失</td>
+                            </tr>
+                            <tr>
+                                <td>长时身份保持</td>
+                                <td>同一个人物在中后段逐渐变形、服饰漂移</td>
+                                <td>相当于跨部件的一致性失效</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="highlight-box">
+                        <strong><span class="todo-flag">待实测</span> 这一节目前是框架，不是结论。</strong>我在三维网格上做过的对照实验、量化统计和分档判定，在视频生成上还没有对应的实测数据。把它写在这里是为了说明判据的迁移路径是通的，而不是宣称已经测过。补上实测之后，这一节会换成和上面同规格的案例与数据。
+                    </div>
+                </div>
+
+                <h2 class="section-title">一句话总结</h2>
+                <div class="section-content">
+                    <p>评测不是「我觉得不行」，而是<span class="highlight">把「不行」拆成可以被别人复现、被工程师执行、被流程签收的东西</span>：按层找问题（数据 / 形体 / 表现 / 任务），按档给结论（可用 / 可修复 / 不可用），按四要素写描述（位置 / 现象 / 量级 / 归因），用对照实验证明它是稳定偏差而不是偶发。</p>
+                    <p>这套口径最初是为三维资产生成的验收写的，但它的骨架与具体模型无关——换一个生成模态，只需要换掉判据清单，判定流程不用重建。</p>
+                </div>
+
+                <h2 class="section-title">系列入口</h2>
+                <div class="section-content">
+                    <p>这一页的判据全部来自下面几篇的实测记录，原始数据、截图与视频都在各自页面里：</p>
+                    <ul class="entry-list">
+                        <li>
+                            <a href="blog-ai3d-foundation.html">AI 3D 大模型研究日志</a>
+                            <span>总览：生成路径、可用度分档、局限性与进管线注意事项</span>
+                        </li>
+                        <li>
+                            <a href="blog-tripo3d-ai.html">Tripo3D 实测日志</a>
+                            <span>角色与道具生成、步枪低模拓扑七类问题、同提示词跨平台对比</span>
+                        </li>
+                        <li>
+                            <a href="blog-meshy-ai.html">Meshy AI 实测日志</a>
+                            <span>智能 topo 面数扫描、跨期版本回归、多部件拆分、高模上限对比</span>
+                        </li>
+                        <li>
+                            <a href="blog-hunyuan-3d.html">混元 3D 管线测试</a>
+                            <span>节点流程、单视图与多视图稳定性、体素化结果判定</span>
+                        </li>
+                        <li>
+                            <a href="blog-ai-3d-model.html">AI 生成三维模型使用日志</a>
+                            <span>四组试验案例、UV 与破面问题、尺度轴向归一化</span>
+                        </li>
+                        <li>
+                            <a href="blog-rendering-pipeline.html">实时渲染管线研究日志</a>
+                            <span>资产进引擎之后的另一套评判标准：画面结果与每帧预算</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <a href="index.html#blog" class="btn-back">返回博客列表</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>BananaCatOnl1</h3>
+                <p>探索技术与创作的边界</p>
+                <p>记录开发者的成长历程</p>
+            </div>
+            <div class="footer-section">
+                <h3>联系方式</h3>
+                <p>邮箱: <span class="js-banana-email"></span></p>
+            </div>
+            <div class="footer-section">
+                <h3>社交媒体</h3>
+                <div class="social-links">
+                    <a href="#" class="social-icon icon-wechat"></a>
+                    <a href="#" class="social-icon icon-weibo"></a>
+                    <a href="#" class="social-icon icon-github"></a>
+                </div>
+            </div>
+        </div>
+        <p class="footer-bottom">&copy; 2026 巴拿拿猫的个人网站</p>
+    </footer>
+
+    <script>
+        // 联系方式混淆渲染：只对真人显示，爬虫抓源码拿不到
+        (function () {
+            var PHONE = '198' + '5925' + '6157';
+            var EMAIL = PHONE + '@' + '163' + '.com';
+            var n = document.querySelector('.js-banana-email');
+            if (n) n.textContent = EMAIL;
+        })();
+    </script>
+
+    <script>
+        // ===== 水印 =====
+        function generateWatermark() {
+            const canvas = document.getElementById('watermark-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            const text = 'BananaCat Portfolio | ' + new Date().toLocaleDateString();
+            ctx.font = '24px Arial';
+            ctx.fillStyle = '#2B6C9C';
+            ctx.globalAlpha = 0.5;
+            const spacing = 120;
+            const rotation = -Math.PI / 8;
+            for (let x = -200; x < canvas.width + 200; x += spacing) {
+                for (let y = -200; y < canvas.height + 200; y += spacing) {
+                    ctx.save();
+                    ctx.translate(x, y);
+                    ctx.rotate(rotation);
+                    ctx.fillText(text, 0, 0);
+                    ctx.restore();
+                }
+            }
+        }
+        generateWatermark();
+        setInterval(generateWatermark, 30000);
+        window.addEventListener('resize', generateWatermark);
+    </script>
+</body>
+</html>

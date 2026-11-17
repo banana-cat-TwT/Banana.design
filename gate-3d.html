@@ -614,7 +614,8 @@
                 pink: mat(0xF2B3AC), purple: mat(0xC3B0DE), yellow: mat(0xF7D882),
                 ink: mat(0x6B5947), white: mat(0xFFFFFF),
                 screen: mat(0xAFD9EB, { emissive: 0x5E9DBC, emissiveIntensity: 0.45 }),
-                glow: new THREE.MeshStandardMaterial({ color: 0xFFE3B0, emissive: 0xFFB35E, emissiveIntensity: 1.5, roughness: 0.4 })
+                glow: new THREE.MeshStandardMaterial({ color: 0xFFE3B0, emissive: 0xFFB35E, emissiveIntensity: 1.5, roughness: 0.4 }),
+                windowLight: new THREE.MeshStandardMaterial({ color: 0xFFF1D0, emissive: 0xFFC166, emissiveIntensity: 0, roughness: 0.6 })
             };
 
             /* ══════════ 几何小工具 ══════════ */
@@ -895,6 +896,12 @@
                 const art = box(0.88, 0.6, 0.06, M.accent); art.position.set(0, 0.86, 1.09); g.add(art);
                 const pole = cyl(0.04, 0.04, 1.5, M.woodD, 6); pole.position.set(-1.55, 2.2, -0.7); g.add(pole);
                 const flag = box(0.62, 0.36, 0.04, M.pink); flag.position.set(-1.22, 2.65, -0.7); g.add(flag);
+                [-0.85, 0.85].forEach(function (x) {
+                    const w = box(0.5, 0.42, 0.08, M.windowLight);
+                    w.position.set(x, 0.86, 1.05);
+                    w.castShadow = false;
+                    g.add(w);
+                });
             }
 
             function buildCharacter(g) {
@@ -943,6 +950,12 @@
                 const capTop = cone(0.62, 0.56, M.roofB, 18); capTop.position.y = 3.98; g.add(capTop);
                 const door = box(0.5, 0.82, 0.08, M.woodD); door.position.set(0, 0.42, 0.94); g.add(door);
                 const step = box(0.9, 0.1, 0.4, M.sandSide); step.position.set(0, 0.06, 1.06); g.add(step);
+                [1.25, 2.0].forEach(function (y) {
+                    const w = box(0.28, 0.4, 0.1, M.windowLight);
+                    w.position.set(0, y, 0.9);
+                    w.castShadow = false;
+                    g.add(w);
+                });
             }
 
             function buildAbout(g) {
@@ -950,6 +963,7 @@
                 const roof = prism(2.15, 0.85, M.roofB); roof.position.set(-0.25, 1.4, 0); g.add(roof);
                 const door = box(0.44, 0.7, 0.08, M.wood); door.position.set(-0.25, 0.36, 0.92); g.add(door);
                 const win = box(0.4, 0.36, 0.08, M.glow); win.position.set(0.52, 0.78, 0.92); g.add(win);
+                const win2 = box(0.4, 0.36, 0.08, M.windowLight); win2.position.set(-0.85, 0.78, 0.92); win2.castShadow = false; g.add(win2);
                 const trunk = cyl(0.16, 0.23, 1.6, M.woodD, 9); trunk.position.set(1.55, 0.82, 0.1); g.add(trunk);
                 const c1 = sph(0.92, M.leafB); c1.position.set(1.55, 2.05, 0.1); g.add(c1);
                 const c2 = sph(0.62, M.leaf); c2.position.set(2.1, 1.8, 0.4); g.add(c2);
@@ -1208,6 +1222,7 @@
                 });
             }
             pillEls.forEach(function (p) { p.style.opacity = '0'; });
+            const smooth = pillEls.map(function () { return { x: 0, y: 0, ok: false }; });
 
             function updatePills() {
                 const W = innerWidth, H = innerHeight;
@@ -1308,10 +1323,26 @@
                 live.forEach(pushOffCard);
                 live.forEach(clampX);
 
-                for (let i = 0; i < live.length; i++) {
-                    const p = live[i];
-                    p.el.style.transform = 'translate3d(' + p.x.toFixed(1) + 'px,' + (p.cy + p.hh).toFixed(1) + 'px,0) translate(-50%,-100%)';
-                    p.el.style.opacity = '';
+                for (let i = 0; i < pillEls.length; i++) {
+                    const p = list[i];
+                    const s = smooth[i];
+                    if (!p) { s.ok = false; pillEls[i].style.opacity = '0'; continue; }
+                    const tx = p.x, ty = p.cy + p.hh;
+                    if (!s.ok) { s.x = tx; s.y = ty; s.ok = true; }
+                    else {
+                        let dx = tx - s.x, dy = ty - s.y;
+                        const d = Math.sqrt(dx * dx + dy * dy);
+                        if (d < 1.5) {
+                            // 死区：1.5px 内视为已到位，忽略避让算法在边界处的高频抖动
+                        } else {
+                            // 混合平滑：近距离指数衰减，远距离限速滑行，杜绝跳变
+                            const step = Math.min(2.2, d * 0.22);
+                            s.x += dx / d * step;
+                            s.y += dy / d * step;
+                        }
+                    }
+                    pillEls[i].style.transform = 'translate3d(' + s.x.toFixed(2) + 'px,' + s.y.toFixed(2) + 'px,0) translate(-50%,-100%)';
+                    pillEls[i].style.opacity = '';
                 }
             }
 
@@ -1382,6 +1413,11 @@
                 hemi.intensity = 0.18 + daylight * 0.37;
                 fill.intensity = 0.12 + daylight * 0.38;
                 renderer.toneMappingExposure = 0.55 + daylight * 0.45;
+
+                // ═════ 夜间亮灯：19:00 亮起，次日 6:00 熄灭 ═════
+                const hourOfDay = (dayPhase * 24 + 6) % 24;
+                const lightsOn = hourOfDay >= 19 || hourOfDay < 6;
+                M.windowLight.emissiveIntensity = lightsOn ? 1.6 : 0;
 
                 if (auto && !dragging && !celebrated) {
                     idle += dt;
