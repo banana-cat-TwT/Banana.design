@@ -4018,6 +4018,312 @@
                 return { update: update, flyPlane: flyPlane, clickPlane: clickPlane };
             })();
 
+            /* ══════════ 城市生活：建筑工地 / 医院 / 警察局 / 无障碍人行道 / 交警执勤 ══════════ */
+            const civicLife = (function () {
+                const GY = -0.15;
+                const skin = mat(0xE8C39D, { roughness: 0.9 });
+                const safetyYellow = mat(0xF6C84C, { roughness: 0.72 });
+                const safetyOrange = mat(0xE8893D, { roughness: 0.78 });
+                const concrete = mat(0xB8B7AF, { roughness: 0.96 });
+                const steel = mat(0x67727B, { roughness: 0.55, metalness: 0.32 });
+                const policeBlue = mat(0x355E91, { roughness: 0.72 });
+                const navy = mat(0x263C57, { roughness: 0.82 });
+                const tactileMat = mat(0xE8C44F, { roughness: 0.9 });
+                const put = function (o, x, y, z) {
+                    o.position.set(x, y, z);
+                    o.castShadow = false;
+                    o.receiveShadow = false;
+                    return o;
+                };
+                function label(text, w, h, bg, fg) {
+                    const cv = document.createElement('canvas');
+                    cv.width = 384;
+                    cv.height = Math.max(48, Math.round(384 * h / w));
+                    const c = cv.getContext('2d');
+                    c.fillStyle = bg; c.fillRect(0, 0, cv.width, cv.height);
+                    c.fillStyle = fg; c.textAlign = 'center'; c.textBaseline = 'middle';
+                    c.font = 'bold ' + Math.round(cv.height * 0.52) + 'px "PingFang SC","Microsoft YaHei",sans-serif';
+                    c.fillText(text, cv.width / 2, cv.height / 2 + 2);
+                    const tex = new THREE.CanvasTexture(cv);
+                    if ('colorSpace' in tex) tex.colorSpace = THREE.SRGBColorSpace;
+                    return put(new THREE.Mesh(
+                        new THREE.PlaneGeometry(w, h),
+                        new THREE.MeshBasicMaterial({ map: tex, side: THREE.DoubleSide })
+                    ), 0, 0, 0);
+                }
+                function beam(parent, a, b, radius, material) {
+                    const dir = b.clone().sub(a);
+                    const o = cyl(radius, radius, dir.length(), material, 6);
+                    o.position.copy(a).add(b).multiplyScalar(0.5);
+                    o.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir.normalize());
+                    o.castShadow = false; o.receiveShadow = false;
+                    parent.add(o);
+                    return o;
+                }
+                function districtRoot(x, z) {
+                    const g = new THREE.Group();
+                    g.position.set(x, GY, z);
+                    world.add(g);
+                    return g;
+                }
+
+                /* —— 建筑工地：实体围挡、未完工楼板、塔吊和施工人员 —— */
+                const site = districtRoot(-25, -19);
+                site.add(put(box(9.0, 0.08, 6.8, mat(0xB99B73, { roughness: 1 })), 0, 0.04, 0));
+                function fenceRun(x1, z1, x2, z2) {
+                    const len = Math.hypot(x2 - x1, z2 - z1);
+                    const n = Math.max(1, Math.round(len / 0.85));
+                    const ang = Math.atan2(-(z2 - z1), x2 - x1);
+                    for (let i = 0; i < n; i++) {
+                        const u = (i + 0.5) / n;
+                        const panel = box(len / n * 0.88, 0.56, 0.055, i % 2 ? M.cream : safetyOrange);
+                        panel.position.set(x1 + (x2 - x1) * u, 0.43, z1 + (z2 - z1) * u);
+                        panel.rotation.y = ang;
+                        panel.castShadow = false;
+                        site.add(panel);
+                    }
+                    for (let i = 0; i <= n; i++) {
+                        const u = i / n;
+                        site.add(put(box(0.065, 0.9, 0.065, steel), x1 + (x2 - x1) * u, 0.45, z1 + (z2 - z1) * u));
+                    }
+                    const rail = box(len, 0.07, 0.08, steel);
+                    rail.position.set((x1 + x2) / 2, 0.77, (z1 + z2) / 2);
+                    rail.rotation.y = ang; rail.castShadow = false;
+                    site.add(rail);
+                }
+                fenceRun(-4.5, -3.4, 4.5, -3.4);
+                fenceRun(-4.5, -3.4, -4.5, 3.4);
+                fenceRun(4.5, -3.4, 4.5, 3.4);
+                fenceRun(-4.5, 3.4, -1.0, 3.4);
+                fenceRun(1.0, 3.4, 4.5, 3.4);
+                const siteSign = label('建筑工地  注意安全', 2.7, 0.48, '#E8893D', '#FFFFFF');
+                siteSign.position.set(-2.5, 0.48, 3.45); site.add(siteSign);
+
+                // 三层裸露楼板与柱网，顶部留有钢筋头
+                const frameX = 1.25, frameZ = -0.25;
+                [0.25, 1.45, 2.65].forEach(function (y) {
+                    site.add(put(box(3.7, 0.16, 3.0, concrete), frameX, y, frameZ));
+                });
+                [-1, 1].forEach(function (sx) {
+                    [-1, 1].forEach(function (sz) {
+                        const cx = frameX + sx * 1.45, cz = frameZ + sz * 1.12;
+                        site.add(put(box(0.18, 3.25, 0.18, concrete), cx, 1.63, cz));
+                        site.add(put(cyl(0.025, 0.025, 0.65, steel, 5), cx, 3.22, cz));
+                    });
+                });
+                site.add(put(box(1.1, 0.72, 0.9, M.wood), 3.25, 0.44, -2.15));
+                site.add(put(box(1.4, 0.28, 0.75, safetyOrange), -2.8, 0.22, 2.15));
+
+                // 塔吊：四腿格构塔身 + 回转吊臂 + 配重 + 可升降吊钩
+                const craneX = -2.75, craneZ = -0.65;
+                [-1, 1].forEach(function (sx) {
+                    [-1, 1].forEach(function (sz) {
+                        site.add(put(box(0.10, 5.55, 0.10, safetyYellow), craneX + sx * 0.25, 2.78, craneZ + sz * 0.25));
+                    });
+                });
+                for (let y = 0.35; y < 5.25; y += 0.95) {
+                    [-1, 1].forEach(function (s) {
+                        beam(site, new THREE.Vector3(craneX - 0.25, y, craneZ + s * 0.25), new THREE.Vector3(craneX + 0.25, y + 0.82, craneZ + s * 0.25), 0.027, safetyYellow);
+                        beam(site, new THREE.Vector3(craneX + s * 0.25, y, craneZ - 0.25), new THREE.Vector3(craneX + s * 0.25, y + 0.82, craneZ + 0.25), 0.027, safetyYellow);
+                    });
+                }
+                const slewing = new THREE.Group();
+                slewing.position.set(craneX, 5.62, craneZ); site.add(slewing);
+                slewing.add(put(box(8.1, 0.16, 0.22, safetyYellow), 2.05, 0, 0));
+                slewing.add(put(box(0.72, 0.62, 0.72, concrete), -1.62, -0.31, 0));
+                slewing.add(put(box(0.62, 0.52, 0.58, safetyYellow), 0.48, -0.33, 0));
+                slewing.add(put(box(0.42, 0.28, 0.035, M.screen), 0.48, -0.29, 0.31));
+                slewing.add(put(box(0.10, 1.35, 0.10, safetyYellow), 0, 0.68, 0));
+                beam(slewing, new THREE.Vector3(0, 1.3, 0), new THREE.Vector3(5.8, 0.08, 0), 0.018, steel);
+                beam(slewing, new THREE.Vector3(0, 1.3, 0), new THREE.Vector3(-1.75, 0.08, 0), 0.018, steel);
+                const cable = cyl(0.018, 0.018, 1, M.ink, 5);
+                cable.castShadow = false; slewing.add(cable);
+                const hook = new THREE.Group(); hook.position.x = 4.75; slewing.add(hook);
+                hook.add(put(box(0.18, 0.22, 0.18, steel), 0, 0, 0));
+                hook.add(put(box(0.62, 0.42, 0.58, M.wood), 0, -0.36, 0));
+
+                const workers = [];
+                function worker(x, z, phase) {
+                    const g = new THREE.Group();
+                    g.add(put(box(0.09, 0.32, 0.11, navy), -0.07, 0.16, 0));
+                    g.add(put(box(0.09, 0.32, 0.11, navy), 0.07, 0.16, 0));
+                    g.add(put(cap(0.12, 0.24, safetyOrange), 0, 0.53, 0));
+                    g.add(put(sph(0.105, skin, 10), 0, 0.84, 0));
+                    const hat = sph(0.135, safetyYellow, 10); hat.scale.y = 0.56;
+                    g.add(put(hat, 0, 0.94, 0));
+                    g.add(put(cyl(0.15, 0.15, 0.035, safetyYellow, 12), 0, 0.90, 0));
+                    const arms = [];
+                    [-1, 1].forEach(function (s) {
+                        const pivot = new THREE.Group(); pivot.position.set(s * 0.16, 0.67, 0);
+                        pivot.add(put(box(0.07, 0.35, 0.08, skin), 0, -0.16, 0));
+                        g.add(pivot); arms.push(pivot);
+                    });
+                    const tool = box(0.045, 0.42, 0.045, steel);
+                    tool.position.set(0, -0.38, 0); arms[1].add(tool);
+                    g.position.set(x, 0.08, z); site.add(g);
+                    workers.push({ g: g, arms: arms, phase: phase, baseY: 0.08 });
+                }
+                worker(-0.6, 2.15, 0.2);
+                worker(3.25, 1.9, 2.1);
+                worker(-2.65, -2.35, 4.0);
+
+                /* —— 医院：急诊入口、蓝色窗带和醒目的红十字 —— */
+                const hospital = districtRoot(26, 19);
+                hospital.add(put(box(9.0, 0.07, 7.0, M.walk), 0, 0.035, 0));
+                hospital.add(put(box(6.8, 3.4, 4.4, M.white), 0, 1.7, -0.25));
+                hospital.add(put(box(2.0, 2.1, 3.5, mat(0xE7EEF2)), 4.0, 1.05, -0.25));
+                hospital.add(put(box(7.05, 0.18, 4.65, policeBlue), 0, 3.48, -0.25));
+                for (let floor = 0; floor < 2; floor++) {
+                    for (let i = 0; i < 5; i++) {
+                        hospital.add(put(box(0.72, 0.62, 0.045, M.screen), -2.5 + i * 1.25, 1.25 + floor * 1.25, 1.98));
+                    }
+                }
+                hospital.add(put(box(1.35, 1.45, 0.07, M.screen), 0.55, 0.74, 2.01));
+                hospital.add(put(box(2.1, 0.12, 0.85, policeBlue), 0.55, 1.52, 2.35));
+                hospital.add(put(box(0.28, 1.0, 0.08, M.carTail), -2.35, 2.55, 2.03));
+                hospital.add(put(box(0.95, 0.28, 0.08, M.carTail), -2.35, 2.55, 2.04));
+                const hospitalSign = label('医院  HOSPITAL', 3.3, 0.56, '#355E91', '#FFFFFF');
+                hospitalSign.position.set(0.7, 3.02, 2.04); hospital.add(hospitalSign);
+
+                /* —— 警察局：蓝白楼体、警徽与门楣标识 —— */
+                const police = districtRoot(-25, 29);
+                police.add(put(box(9.0, 0.07, 7.0, M.walk), 0, 0.035, 0));
+                police.add(put(box(6.6, 2.8, 4.4, mat(0xEDF2F5)), 0, 1.4, -0.2));
+                police.add(put(box(6.85, 0.24, 4.65, policeBlue), 0, 2.91, -0.2));
+                police.add(put(box(6.65, 0.34, 0.06, policeBlue), 0, 0.42, 2.03));
+                [-2.25, -0.85, 0.85, 2.25].forEach(function (x) {
+                    police.add(put(box(0.78, 0.78, 0.05, M.screen), x, 1.65, 2.03));
+                });
+                police.add(put(box(1.15, 1.45, 0.08, navy), 0, 0.73, 2.05));
+                const badge = cyl(0.39, 0.39, 0.07, safetyYellow, 5);
+                badge.rotation.x = Math.PI / 2; badge.position.set(-2.35, 2.35, 2.08); police.add(badge);
+                const policeSign = label('警察局  POLICE', 3.35, 0.56, '#263C57', '#FFFFFF');
+                policeSign.position.set(0.65, 2.38, 2.08); police.add(policeSign);
+
+                /* —— 盲道：连续黄色导向条，路口端点加提示圆点 —— */
+                function tactileX(x1, x2, z) {
+                    world.add(put(box(x2 - x1, 0.025, 0.34, tactileMat), (x1 + x2) / 2, 0.024, z));
+                    [-0.105, 0, 0.105].forEach(function (dz) {
+                        world.add(put(box(x2 - x1, 0.018, 0.025, M.yellow), (x1 + x2) / 2, 0.046, z + dz));
+                    });
+                    [x1, x2].forEach(function (x) {
+                        for (let ix = -1; ix <= 1; ix++) {
+                            for (let iz = -1; iz <= 1; iz++) {
+                                const dot = sph(0.035, M.yellow, 6); dot.scale.y = 0.35;
+                                world.add(put(dot, x + ix * 0.085, 0.059, z + iz * 0.085));
+                            }
+                        }
+                    });
+                }
+                tactileX(-7, -4, -11.35);
+                tactileX(-12, -8, 11.35);
+
+                // 盲人沿南侧盲道缓慢行走，白色盲杖左右探路
+                const blind = person(-10, 11.35, M.purple);
+                blind.position.y = 0.06;
+                blind.add(put(box(0.125, 0.026, 0.018, M.ink), 0, 0.39, 0.069));
+                const cane = new THREE.Group(); cane.position.set(0.11, 0.27, 0.03);
+                beam(cane, new THREE.Vector3(0, 0, 0), new THREE.Vector3(0.18, -0.26, 0.48), 0.012, M.white);
+                cane.add(put(sph(0.025, M.carTail, 6), 0.18, -0.26, 0.48));
+                blind.add(cane);
+
+                // 轮椅使用者：大后轮、小前轮、脚踏和坐姿人物，沿北侧盲道前行
+                const chair = new THREE.Group(); world.add(chair);
+                const chairMat = mat(0x537E9E, { roughness: 0.6, metalness: 0.18 });
+                [-1, 1].forEach(function (s) {
+                    const wheel = new THREE.Mesh(new THREE.TorusGeometry(0.22, 0.032, 7, 18), M.ink);
+                    wheel.rotation.y = Math.PI / 2; wheel.position.set(s * 0.25, 0.23, -0.07);
+                    wheel.castShadow = false; chair.add(wheel);
+                    const caster = new THREE.Mesh(new THREE.TorusGeometry(0.075, 0.022, 6, 12), M.ink);
+                    caster.rotation.y = Math.PI / 2; caster.position.set(s * 0.20, 0.085, 0.29);
+                    caster.castShadow = false; chair.add(caster);
+                    beam(chair, new THREE.Vector3(s * 0.22, 0.12, 0.29), new THREE.Vector3(s * 0.22, 0.45, -0.15), 0.022, chairMat);
+                });
+                chair.add(put(box(0.42, 0.09, 0.40, chairMat), 0, 0.35, 0));
+                chair.add(put(box(0.42, 0.40, 0.075, chairMat), 0, 0.55, -0.20));
+                chair.add(put(box(0.35, 0.045, 0.20, steel), 0, 0.12, 0.40));
+                chair.add(put(cap(0.11, 0.20, M.screen), 0, 0.64, -0.02));
+                chair.add(put(sph(0.105, skin, 10), 0, 0.91, -0.02));
+                chair.add(put(box(0.10, 0.10, 0.34, navy), -0.09, 0.38, 0.19));
+                chair.add(put(box(0.10, 0.10, 0.34, navy), 0.09, 0.38, 0.19));
+
+                /* —— 交警拦停电动车：靠边、举手示意、停车检查、随后放行 —— */
+                const officer = new THREE.Group(); officer.position.set(8.15, 0.035, 15.35); officer.rotation.y = Math.PI; world.add(officer);
+                officer.add(put(box(0.09, 0.34, 0.11, navy), -0.07, 0.17, 0));
+                officer.add(put(box(0.09, 0.34, 0.11, navy), 0.07, 0.17, 0));
+                officer.add(put(box(0.28, 0.43, 0.20, policeBlue), 0, 0.56, 0));
+                officer.add(put(box(0.29, 0.18, 0.025, safetyYellow), 0, 0.61, 0.112));
+                officer.add(put(sph(0.11, skin, 10), 0, 0.88, 0));
+                officer.add(put(cyl(0.135, 0.135, 0.075, M.white, 12), 0, 1.0, 0));
+                officer.add(put(box(0.25, 0.025, 0.16, M.white), 0, 0.965, 0.06));
+                const stopArm = new THREE.Group(); stopArm.position.set(0.19, 0.73, 0); officer.add(stopArm);
+                stopArm.add(put(box(0.075, 0.38, 0.085, policeBlue), 0, -0.17, 0));
+                stopArm.add(put(sph(0.065, M.white, 8), 0, -0.39, 0));
+                const checkArm = new THREE.Group(); checkArm.position.set(-0.19, 0.73, 0); officer.add(checkArm);
+                checkArm.add(put(box(0.075, 0.38, 0.085, policeBlue), 0, -0.17, 0));
+                checkArm.add(put(box(0.17, 0.22, 0.025, M.cream), 0, -0.39, 0.06));
+                const stopPaddle = label('停', 0.34, 0.34, '#C94E42', '#FFFFFF');
+                stopPaddle.position.set(0.19, 1.15, 0.40); stopPaddle.visible = false; officer.add(stopPaddle);
+
+                const ebike = new THREE.Group(); world.add(ebike);
+                [-0.36, 0.36].forEach(function (z) {
+                    const wheel = new THREE.Mesh(new THREE.TorusGeometry(0.18, 0.035, 7, 16), M.ink);
+                    wheel.rotation.y = Math.PI / 2; wheel.position.set(0, 0.18, z); wheel.castShadow = false; ebike.add(wheel);
+                });
+                ebike.add(put(box(0.18, 0.14, 0.68, mat(0xD8674F)), 0, 0.34, 0));
+                ebike.add(put(box(0.23, 0.27, 0.30, policeBlue), 0, 0.40, -0.06));
+                ebike.add(put(box(0.34, 0.045, 0.045, M.ink), 0, 0.61, 0.30));
+                ebike.add(put(box(0.22, 0.36, 0.22, M.yellow), 0, 0.73, -0.06));
+                ebike.add(put(sph(0.105, skin, 10), 0, 0.99, -0.04));
+                const helmet = sph(0.125, safetyOrange, 10); helmet.scale.y = 0.60;
+                ebike.add(put(helmet, 0, 1.075, -0.04));
+
+                function update(dt, t) {
+                    // 塔吊缓慢回转，吊钩和建材一起升降并轻摆
+                    slewing.rotation.y = Math.sin(t * 0.24) * 0.34;
+                    const cableLen = 2.15 + Math.sin(t * 0.72) * 0.42;
+                    cable.scale.y = cableLen; cable.position.set(4.75, -cableLen / 2, 0);
+                    hook.position.y = -cableLen; hook.rotation.z = Math.sin(t * 1.25) * 0.075;
+                    for (let i = 0; i < workers.length; i++) {
+                        const w = workers[i], a = t * 3.0 + w.phase;
+                        w.arms[0].rotation.x = Math.sin(a) * 0.65;
+                        w.arms[1].rotation.x = -0.55 - Math.abs(Math.sin(a)) * 1.15;
+                        w.g.position.y = w.baseY + Math.abs(Math.sin(a)) * 0.025;
+                    }
+
+                    const blindX = -10 + Math.sin(t * 0.20) * 1.3;
+                    blind.position.x = blindX;
+                    blind.rotation.y = Math.cos(t * 0.20) >= 0 ? Math.PI / 2 : -Math.PI / 2;
+                    cane.rotation.y = Math.sin(t * 2.4) * 0.38;
+
+                    const chairPhase = t * 0.17;
+                    chair.position.set(-5.5 + Math.sin(chairPhase) * 1.0, 0.06, -11.35);
+                    chair.rotation.y = Math.cos(chairPhase) >= 0 ? Math.PI / 2 : -Math.PI / 2;
+
+                    // 18 秒一个执勤小循环；交警先示意，电动车减速停下，检查后放行
+                    const phase = t % 18;
+                    const stopped = phase >= 4 && phase < 10;
+                    let bikeX;
+                    if (phase < 4) {
+                        const u = phase / 4;
+                        bikeX = 1.0 + (8.35 - 1.0) * (1 - Math.pow(1 - u, 2));
+                    } else if (phase < 10) {
+                        bikeX = 8.35;
+                    } else {
+                        bikeX = 8.35 + (phase - 10) * 1.85;
+                    }
+                    ebike.position.set(bikeX, 0.05, 14.58);
+                    ebike.rotation.y = Math.PI / 2;
+                    ebike.rotation.z += ((stopped ? 0.07 : 0) - ebike.rotation.z) * Math.min(1, dt * 6);
+                    const signalling = phase >= 2.8 && phase < 10;
+                    stopArm.rotation.x += ((signalling ? -Math.PI / 2 : 0) - stopArm.rotation.x) * Math.min(1, dt * 9);
+                    stopPaddle.visible = signalling;
+                    checkArm.rotation.x = stopped && phase > 6 ? -0.85 + Math.sin(t * 5) * 0.15 : 0;
+                }
+
+                return { update: update };
+            })();
+
             /* ══════════ 点击物体交互：沙盘彩蛋 ══════════ */
             const _ray = new THREE.Raycaster();
             const _ptr = new THREE.Vector2();
@@ -4591,6 +4897,9 @@
 
                 // 交通设施：高铁往返 + 巡航飞机盘旋
                 if (transportFacilities.update) transportFacilities.update(dt, t);
+
+                // 城市生活：塔吊施工、无障碍通行、交警拦停与放行电动车
+                if (civicLife.update) civicLife.update(dt, t);
 
                 // 车辆：沿棋盘格路网行驶，到路口自动转弯
                 const traffic = world.userData.traffic;
