@@ -422,6 +422,7 @@
     <!-- 51.la 访客统计 V6 -->
     <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
     <script>LA.init({id:"3Qu6OIFKMWrFWPyF",ck:"3Qu6OIFKMWrFWPyF"})</script>
+<script src="anti-bot.js" defer></script>
 </head>
 <body>
     <canvas id="scene-canvas"></canvas>
@@ -3537,6 +3538,29 @@
             canvas.addEventListener('dblclick', resetView);
             canvas.addEventListener('contextmenu', function (e) { e.preventDefault(); });
 
+            /* —— 点击物体：位移 < 6px 且时长 < 350ms 才算点击，否则视为拖拽相机 —— */
+            let _dnX = 0, _dnY = 0, _dnT = 0;
+            canvas.addEventListener('pointerdown', function (e) {
+                _dnX = e.clientX; _dnY = e.clientY; _dnT = performance.now();
+            });
+            canvas.addEventListener('pointerup', function (e) {
+                if (performance.now() - _dnT > 350) return;
+                if (Math.hypot(e.clientX - _dnX, e.clientY - _dnY) > 6) return;
+                handleClick(e);
+            });
+            function handleClick(e) {
+                const rect = canvas.getBoundingClientRect();
+                _ptr.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                _ptr.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+                _ray.setFromCamera(_ptr, camera);
+                const hits = _ray.intersectObjects(scene.children, true);
+                for (let i = 0; i < hits.length; i++) {
+                    let o = hits[i].object;
+                    while (o && !o.userData.clickable) o = o.parent;
+                    if (o && o.userData.clickable) { triggerInteract(o.userData.clickable); break; }
+                }
+            }
+
             /* ══════════ 标签投影 ══════════ */
             const pillEls = Array.from(document.querySelectorAll('.pill'));
             const stepEls = Array.from(document.querySelectorAll('.step'));
@@ -3948,6 +3972,8 @@
                 /* —— 巡航飞机 —— */
                 const flyPlane = airplane(0xE8ECF0);
                 const fpState = { g: flyPlane, ang: 0, speed: 0.16, R: 27, alt: 13 };
+                let flipT = -1;   // 点击翻转进度：<0 未触发，0~0.7 秒桶滚
+                function clickPlane() { if (flipT < 0) flipT = 0.0001; }
 
                 function update(dt, t) {
                     const tr = hsrState;
@@ -3963,11 +3989,138 @@
                     const pz = Math.sin(fp.ang) * fp.R;
                     fp.g.position.set(px, fp.alt + Math.sin(t * 0.4) * 0.7, pz);
                     fp.g.rotation.y = Math.atan2(-Math.sin(fp.ang), Math.cos(fp.ang));
-                    fp.g.rotation.z = 0.22;
+                    // 点击触发：0.7 秒完成一个帅气桶滚（绕机身轴）+ 爬升 + 俯仰
+                    if (flipT >= 0) {
+                        flipT += dt;
+                        const p = Math.min(1, flipT / 0.7);
+                        const roll = Math.sin(p * Math.PI * 2) * 1.45;   // 0 → 1.45 → 0 完整一圈
+                        fp.g.rotation.z = 0.22 + roll;
+                        fp.g.rotation.x = Math.sin(p * Math.PI) * 0.55;  // 带俯仰更灵动
+                        fp.g.position.y += Math.sin(p * Math.PI) * 1.4;  // 翻转时拉起高度
+                        if (p >= 1) flipT = -1;
+                    } else {
+                        fp.g.rotation.z = 0.22;
+                        fp.g.rotation.x = 0;
+                    }
                 }
 
-                return { update: update };
+                return { update: update, flyPlane: flyPlane, clickPlane: clickPlane };
             })();
+
+            /* ══════════ 点击物体交互：飞机翻转 / 车停下变道闪灯 / 人四散逃跑 ══════════ */
+            const _ray = new THREE.Raycaster();
+            const _ptr = new THREE.Vector2();
+            const clickState = {
+                cars: new Map(),      // agent -> { t, blink, laneFrom, laneTo }
+                people: new Map()     // 人的 group -> { t, fx, fz }
+            };
+
+            // 收集所有可点击对象并打标签；给车克隆独立车灯材质，才能单独控制闪灯
+            (function registerClickables() {
+                const carMats = [M.carHead, M.carTail];
+                function tagCar(a) {
+                    a.g.userData.clickable = { type: 'car', ref: a };
+                    const lights = [];
+                    a.g.traverse(function (o) {
+                        if (o.isMesh && carMats.indexOf(o.material) > -1) {
+                            const isHead = o.material === M.carHead;   // 克隆前先记下是前灯还是尾灯
+                            const m = o.material.clone();
+                            o.material = m;
+                            lights.push({ mat: m, kind: isHead ? 'head' : 'tail' });
+                        }
+                    });
+                    a._lights = lights;
+                }
+                const agents = world.userData.agents || [];
+                for (let i = 0; i < agents.length; i++) tagCar(agents[i]);
+                // 注：公交车由独立的 busSystem 驱动，位置/停靠逻辑复杂，暂不纳入点击交互
+
+                function tagPerson(g) { g.userData.clickable = { type: 'person', ref: g }; }
+                for (let i = 0; i < people.length; i++) tagPerson(people[i].g);
+                for (let i = 0; i < swWalkers.length; i++) tagPerson(swWalkers[i].g);
+                for (let i = 0; i < swChatters.length; i++) tagPerson(swChatters[i].g);
+                for (let i = 0; i < crowd.length; i++) tagPerson(crowd[i].g);
+                const tr = world.userData.traffic;
+                if (tr && tr.CROSSERS) for (let i = 0; i < tr.CROSSERS.length; i++) tagPerson(tr.CROSSERS[i].g);
+
+                if (transportFacilities.flyPlane) {
+                    transportFacilities.flyPlane.userData.clickable = { type: 'plane' };
+                }
+            })();
+
+            function triggerInteract(c) {
+                if (c.type === 'plane') {
+                    transportFacilities.clickPlane();
+                } else if (c.type === 'car') {
+                    const a = c.ref;
+                    if (!clickState.cars.has(a)) {
+                        clickState.cars.set(a, { t: 2.4, blink: 0, laneFrom: a.lane, laneTo: -a.lane });
+                    }
+                } else if (c.type === 'person') {
+                    // 点一个人 → 附近所有人受惊，朝远离点击点的方向四散逃跑
+                    const groups = [people, swWalkers, swChatters, crowd];
+                    const trf = world.userData.traffic;
+                    if (trf && trf.CROSSERS) groups.push(trf.CROSSERS);   // 过街行人也一起受惊逃跑
+                    const origin = c.ref.position;
+                    for (let gi = 0; gi < groups.length; gi++) {
+                        const arr = groups[gi];
+                        for (let i = 0; i < arr.length; i++) {
+                            const g = arr[i].g;
+                            let dx = g.position.x - origin.x;
+                            let dz = g.position.z - origin.z;
+                            const d = Math.hypot(dx, dz) || 1;
+                            const dist = 3 + Math.random() * 4;
+                            // 远离点击点 + 随机扰动，形成四散效果
+                            clickState.people.set(g, {
+                                t: 1.8 + Math.random() * 1.2,
+                                by: g.position.y,   // 记录基准高度，逃跑时保持
+                                fx: g.position.x + (dx / d) * dist + (Math.random() - 0.5) * 2.5,
+                                fz: g.position.z + (dz / d) * dist + (Math.random() - 0.5) * 2.5
+                            });
+                        }
+                    }
+                }
+            }
+
+            function interactUpdate(dt, t) {
+                // 被点击的车：车灯快速双闪脉冲；其余车：车灯跟随昼夜亮度同步
+                const ags = world.userData.agents || [];
+                for (let i = 0; i < ags.length; i++) {
+                    const a = ags[i];
+                    if (!a._lights) continue;
+                    const cs = clickState.cars.get(a);
+                    if (cs) {
+                        cs.blink += dt;
+                        const pulse = 0.5 + 0.5 * Math.sin(cs.blink * 16);
+                        const on = 2.8 * pulse;
+                        for (let li = 0; li < a._lights.length; li++) a._lights[li].mat.emissiveIntensity = on;
+                    } else {
+                        for (let li = 0; li < a._lights.length; li++) {
+                            const ref = a._lights[li].kind === 'head' ? M.carHead : M.carTail;
+                            a._lights[li].mat.emissiveIntensity = ref.emissiveIntensity;
+                        }
+                    }
+                }
+            }
+
+            // 逃跑移动：朝目标点狂奔，到达或超时结束；返回 true 表示正在逃跑（调用方跳过原逻辑）
+            function fleeStep(g, dt) {
+                const cs = clickState.people.get(g);
+                if (!cs) return false;
+                cs.t -= dt;
+                const dx = cs.fx - g.position.x;
+                const dz = cs.fz - g.position.z;
+                const d = Math.hypot(dx, dz);
+                if (d > 0.05) {
+                    const mv = Math.min(d, 4.2 * dt);
+                    g.position.x += (dx / d) * mv;
+                    g.position.z += (dz / d) * mv;
+                    g.rotation.y = Math.atan2(dx, dz);   // 人物正面朝 +z，面朝跑动方向
+                }
+                g.position.y = cs.by + Math.abs(Math.sin(performance.now() * 0.018)) * 0.06;  // 跑动小颠
+                if (cs.t <= 0 || d < 0.1) clickState.people.delete(g);
+                return true;
+            }
 
             function frame() {
                 let dt = clock.getDelta();
@@ -4156,7 +4309,9 @@
 
                 // 小吃街人流：沿街来回走动
                 for (let i = 0; i < crowd.length; i++) {
-                    const p = crowd[i], a = t * p.sp + p.ph;
+                    const p = crowd[i];
+                    if (fleeStep(p.g, dt)) continue;
+                    const a = t * p.sp + p.ph;
                     p.g.position.x = p.x + Math.sin(a) * p.amp;
                     p.g.rotation.y = Math.cos(a) > 0 ? Math.PI / 2 : -Math.PI / 2;
                 }
@@ -4223,6 +4378,7 @@
                 // 河面是障碍：走到岸边就掉头，不会踩着水穿过去
                 for (let i = 0; i < people.length; i++) {
                     const p = people[i];
+                    if (fleeStep(p.g, dt)) continue;
                     if (p.mode === 'walk') {
                         const curX = PX + Math.cos(p.t * Math.PI * 2) * walkR;
                         const curZ = PZ + Math.sin(p.t * Math.PI * 2) * walkR;
@@ -4251,6 +4407,7 @@
                 // 人行道上的行人：来回散步、遛狗，站着聊天的人轻微起伏
                 for (let i = 0; i < swWalkers.length; i++) {
                     const w = swWalkers[i];
+                    if (fleeStep(w.g, dt)) continue;
                     w.pos += w.dir * w.speed * dt;
                     if (w.pos > w.max) { w.pos = w.max; w.dir = -1; }
                     else if (w.pos < w.min) { w.pos = w.min; w.dir = 1; }
@@ -4271,6 +4428,7 @@
                 }
                 for (let i = 0; i < swChatters.length; i++) {
                     const c = swChatters[i];
+                    if (fleeStep(c.g, dt)) continue;
                     c.g.position.y = SWY + Math.sin(t * 1.7 + c.phase) * 0.012;
                 }
 
@@ -4361,6 +4519,16 @@
                                 if (sigState(arrivedKey, axis, t) === 'red') stopT = 1 - 4.3 / e.len;
                             }
 
+                            // ── 点击交互：被点中的车立刻停下 + 往对向变道，双闪由 interactUpdate 驱动 ──
+                            const ccs = clickState.cars.get(c);
+                            if (ccs) {
+                                ccs.t -= dt;
+                                factor = 0;   // 停下
+                                if (ccs.t > 1.0) c.lane += (ccs.laneTo - c.lane) * Math.min(1, dt * 3.5);    // 前段：变到对向车道
+                                else c.lane += (ccs.laneFrom - c.lane) * Math.min(1, dt * 3.5);              // 后段：平滑驶回原车道
+                                if (ccs.t <= 0) { c.lane = ccs.laneFrom; clickState.cars.delete(c); }       // 时间到归位，车灯交回 interactUpdate
+                            }
+
                             let nt = c.t + (dt * c.speed * factor) / e.len;
                             if (nt > stopT && c.t <= stopT) nt = stopT;
                             c.t = nt;
@@ -4433,6 +4601,7 @@
                 if (crossers) {
                     for (let i = 0; i < crossers.length; i++) {
                         const cr = crossers[i];
+                        if (fleeStep(cr.g, dt)) continue;
                         // 自己要横穿的那条路必须处于红灯（车已停）
                         const canWalk = !traffic.sigState || traffic.sigState(cr.node, cr.axis, t) === 'red';
                         if (canWalk) {
@@ -4450,6 +4619,9 @@
                         }
                     }
                 }
+
+                // 点击交互：被点车辆的车灯双闪脉冲（位置/变道/逃跑已在各循环内处理）
+                interactUpdate(dt, t);
 
                 updatePills();
                 if (composer) composer.render(); else renderer.render(scene, camera);

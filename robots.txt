@@ -139,25 +139,41 @@ Disallow: /
 User-agent: DataForSeoBot
 Disallow: /
 
-# 允许主流搜索引擎索引（仅索引，不训练）
+# 内容平台采集爬虫（今日头条 / 小红书 / 资讯聚合）—— 禁止抓取转载
+User-agent: ToutiaoSpider
+Disallow: /
+
+User-agent: XiguaSpider
+Disallow: /
+
+User-agent: Xiaohongshu
+Disallow: /
+
+User-agent: RedNote
+Disallow: /
+
+User-agent: NewsArticleAgent
+Disallow: /
+
+# 本站为私域作品集：不希望被任何搜索引擎收录 / 缓存 / 转载
 User-agent: Googlebot
-Allow: /
+Disallow: /
 
 User-agent: Bingbot
-Allow: /
+Disallow: /
 
 User-agent: Baiduspider
-Allow: /
+Disallow: /
 
 User-agent: DuckDuckBot
-Allow: /
+Disallow: /
 
 User-agent: Slurp
-Allow: /
+Disallow: /
 
+# 兜底：任何未单独声明的爬虫一律禁止抓取
 User-agent: *
-Disallow: /assets/raw/
-Disallow: /private/
+Disallow: /
 
 # Sitemap
 Sitemap: https://banana.design/sitemap.xml
