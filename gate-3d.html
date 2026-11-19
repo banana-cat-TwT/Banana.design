@@ -854,6 +854,7 @@
                     const a = sph(0.48 * s, M.leafC); a.position.y = h + 0.28 * s; g.add(a);
                 }
                 g.position.set(x, 0.15, z);
+                g.userData.clickable = { type: 'tree', ref: g };
                 world.add(g);
                 return g;
             }
@@ -916,14 +917,16 @@
                 g.add(head);
                 g.position.set(x, 0.15, z);
                 world.add(g);
+                let light = null;
                 if (withLight) {
-                    const light = new THREE.PointLight(0xFFC26B, 0, 10.5, 2);
+                    light = new THREE.PointLight(0xFFC26B, 0, 10.5, 2);
                     light.position.set(x, 2.4, z);
                     light.castShadow = false;
                     world.add(light);
-                    return { g: g, head: head, light: light };
                 }
-                return { g: g, head: head, light: null };
+                const rig = { g: g, head: head, light: light };
+                head.userData.clickable = { type: 'lamp', ref: rig };
+                return rig;
             }
 
             // 散落植被（避开分区中心）
@@ -1081,6 +1084,7 @@
                     }
 
                     g.position.set(x, -0.15, z); // 放在大地平面上（y=-0.15）
+                    g.userData.clickable = { type: 'city' };
                     cityRoot.add(g);
                     return g;
                 }
@@ -1204,6 +1208,7 @@
                             olds.push(o.geometry);
                         });
                         const merged = new THREE.Group();
+                        merged.userData.clickable = { type: 'city' };
                         buckets.forEach(function (b) {
                             const geo = mergeGeometries(b.gs, false);
                             b.gs.forEach(function (g) { g.dispose(); });
@@ -1298,6 +1303,7 @@
                 const lakeWater = mesh(lakeGeo(4.8, 2.2, 0.10, 1.0, 0), M.water, false);
                 lakeWater.position.set(LAKE.x, LY - 0.006, LAKE.z);
                 lakeWater.receiveShadow = false;
+                lakeWater.userData.clickable = { type: 'lake', ref: lakeWater };
                 world.add(lakeWater);
 
                 // 小山：用压扁的 cone + sphere，放城市楼更远的地方
@@ -1588,6 +1594,7 @@
                         world.add(light);
                     }
                     const rig = { g: g, head: head, light: light };
+                    head.userData.clickable = { type: 'lamp', ref: rig };
                     roadLamps.push(rig);
                     return rig;
                 }
@@ -2125,6 +2132,7 @@
                     const hl = box(0.2, 0.14, 0.06, M.carHead); hl.position.set(-0.3, 0.55, 1.56); g.add(hl);
                     const hr = box(0.2, 0.14, 0.06, M.carHead); hr.position.set(0.3, 0.55, 1.56); g.add(hr);
                     g.traverse(function (o) { o.castShadow = false; });
+                    g.userData.clickable = { type: 'tram', ref: g };
                     world.add(g);
                     return g;
                 }
@@ -2786,6 +2794,8 @@
                 const fBowl = cyl(0.50, 0.18, 0.16, M.sandTop, 20);
                 fBowl.position.set(PX, GY + 0.77, PZ);
                 world.add(fBowl);
+                // 点击喷泉 → 喷发脉冲
+                fPillar.userData.clickable = { type: 'fountain', ref: { pillar: fPillar, bowl: fBowl } };
 
                 // —— 环形步道：让散步的人真的走在一条路上 ——
                 const walkGeo = new THREE.RingGeometry(2.4, 3.1, 64);
@@ -3557,7 +3567,7 @@
                 for (let i = 0; i < hits.length; i++) {
                     let o = hits[i].object;
                     while (o && !o.userData.clickable) o = o.parent;
-                    if (o && o.userData.clickable) { triggerInteract(o.userData.clickable); break; }
+                    if (o && o.userData.clickable) { triggerInteract(o.userData.clickable, hits[i].point); break; }
                 }
             }
 
@@ -4007,12 +4017,17 @@
                 return { update: update, flyPlane: flyPlane, clickPlane: clickPlane };
             })();
 
-            /* ══════════ 点击物体交互：飞机翻转 / 车停下变道闪灯 / 人四散逃跑 ══════════ */
+            /* ══════════ 点击物体交互：沙盘彩蛋 ══════════ */
             const _ray = new THREE.Raycaster();
             const _ptr = new THREE.Vector2();
             const clickState = {
                 cars: new Map(),      // agent -> { t, blink, laneFrom, laneTo }
-                people: new Map()     // 人的 group -> { t, fx, fz }
+                people: new Map(),    // 人的 group -> { t, fx, fz }
+                trees: new Map(),     // 树的 group -> { t }
+                fountains: new Map(), // 喷泉 ref -> { t }
+                cityGlow: null,       // { t } 全城窗户闪烁
+                ripples: [],          // 湖面圆环 -> 扩散、淡出后销毁
+                lamps: new Map()      // 路灯 rig -> { t, duration, mat }
             };
 
             // 收集所有可点击对象并打标签；给车克隆独立车灯材质，才能单独控制闪灯
@@ -4048,7 +4063,42 @@
                 }
             })();
 
-            function triggerInteract(c) {
+            // 有轨电车铃声：首次点击时懒创建 AudioContext，现场合成两声短促“叮叮”
+            let tramAudioCtx = null;
+            function ringTramBell() {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                if (!AudioCtx) return;
+                if (!tramAudioCtx) tramAudioCtx = new AudioCtx();
+                const ctx = tramAudioCtx;
+                if (ctx.state === 'suspended') ctx.resume().catch(function () {});
+                const start = ctx.currentTime + 0.02;
+                [0, 0.23].forEach(function (offset) {
+                    const at = start + offset;
+                    const envelope = ctx.createGain();
+                    envelope.gain.setValueAtTime(0.0001, at);
+                    envelope.gain.exponentialRampToValueAtTime(0.14, at + 0.008);
+                    envelope.gain.exponentialRampToValueAtTime(0.0001, at + 0.34);
+                    envelope.connect(ctx.destination);
+                    [1, 2.01].forEach(function (harmonic, index) {
+                        const osc = ctx.createOscillator();
+                        const level = ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(1568 * harmonic, at);
+                        level.gain.value = index === 0 ? 1 : 0.24;
+                        osc.connect(level);
+                        level.connect(envelope);
+                        osc.start(at);
+                        osc.stop(at + 0.36);
+                        osc.onended = function () {
+                            osc.disconnect();
+                            level.disconnect();
+                            if (index === 1) envelope.disconnect();
+                        };
+                    });
+                });
+            }
+
+            function triggerInteract(c, point) {
                 if (c.type === 'plane') {
                     transportFacilities.clickPlane();
                 } else if (c.type === 'car') {
@@ -4079,6 +4129,44 @@
                             });
                         }
                     }
+                } else if (c.type === 'tree') {
+                    if (!clickState.trees.has(c.ref)) clickState.trees.set(c.ref, { t: 1.6 });
+                } else if (c.type === 'fountain') {
+                    if (!clickState.fountains.has(c.ref)) clickState.fountains.set(c.ref, { t: 2.0 });
+                } else if (c.type === 'city') {
+                    clickState.cityGlow = { t: 2.8 };
+                } else if (c.type === 'lake') {
+                    // 三道错时扩散的水环，只出现在实际点击的湖面位置
+                    for (let i = 0; i < 3; i++) {
+                        const ringMat = new THREE.MeshBasicMaterial({
+                            color: 0xE8FAFF, transparent: true, opacity: 0.68,
+                            depthWrite: false, side: THREE.DoubleSide, toneMapped: false
+                        });
+                        const ring = new THREE.Mesh(new THREE.RingGeometry(0.42, 0.49, 48), ringMat);
+                        ring.rotation.x = -Math.PI / 2;
+                        ring.position.copy(point);
+                        ring.position.y += 0.025;
+                        ring.scale.setScalar(0.35);
+                        ring.visible = i === 0;
+                        ring.castShadow = false;
+                        ring.receiveShadow = false;
+                        ring.renderOrder = 4;
+                        world.add(ring);
+                        clickState.ripples.push({ mesh: ring, t: -i * 0.18, duration: 1.25 });
+                    }
+                } else if (c.type === 'tram') {
+                    ringTramBell();
+                } else if (c.type === 'lamp') {
+                    const rig = c.ref;
+                    const active = clickState.lamps.get(rig);
+                    if (active) {
+                        active.t = active.duration;
+                    } else {
+                        // 共享材质先克隆，确保只点亮这一盏，不影响其他路灯
+                        const lampMat = rig.head.material === M.streetLamp ? M.streetLamp.clone() : rig.head.material;
+                        rig.head.material = lampMat;
+                        clickState.lamps.set(rig, { t: 1.25, duration: 1.25, mat: lampMat });
+                    }
                 }
             }
 
@@ -4101,6 +4189,68 @@
                         }
                     }
                 }
+
+                // 被点击的树：来回摇摆（像被逗乐了），结束后复位
+                clickState.trees.forEach(function (cs, g) {
+                    cs.t -= dt;
+                    const env = Math.min(1, cs.t * 4);
+                    g.rotation.z = Math.sin(cs.t * 15) * 0.22 * env;
+                    g.rotation.x = Math.sin(cs.t * 11 + 1.3) * 0.12 * env;
+                    if (cs.t <= 0) { g.rotation.z = 0; g.rotation.x = 0; clickState.trees.delete(g); }
+                });
+
+                // 被点击的喷泉：水柱/碗上下喷发脉冲，结束后复位
+                clickState.fountains.forEach(function (cs, ref) {
+                    cs.t -= dt;
+                    const p = Math.max(0, Math.sin(cs.t * 6));
+                    ref.pillar.scale.y = 1 + p * 0.9;
+                    ref.bowl.scale.setScalar(1 + p * 0.45);
+                    if (cs.t <= 0) { ref.pillar.scale.y = 1; ref.bowl.scale.setScalar(1); clickState.fountains.delete(ref); }
+                });
+
+                // 被点击的楼：全城窗户快速闪烁亮灯，结束后交还昼夜循环
+                if (clickState.cityGlow) {
+                    const cg = clickState.cityGlow;
+                    cg.t -= dt;
+                    const wave = Math.sin(t * 24) > 0 ? 2.7 : 0.12;
+                    M.windowLight.emissiveIntensity = wave;
+                    const cwm = world.userData.cityWindowMats;
+                    if (cwm) for (let i = 0; i < cwm.length; i++) cwm[i].emissiveIntensity = wave * 0.9;
+                    if (cg.t <= 0) clickState.cityGlow = null;
+                }
+
+                // 湖面涟漪：错时出现、扩散并淡出，结束后释放几何体和材质
+                for (let i = clickState.ripples.length - 1; i >= 0; i--) {
+                    const r = clickState.ripples[i];
+                    r.t += dt;
+                    if (r.t < 0) continue;
+                    const p = r.t / r.duration;
+                    if (p >= 1) {
+                        world.remove(r.mesh);
+                        r.mesh.geometry.dispose();
+                        r.mesh.material.dispose();
+                        clickState.ripples.splice(i, 1);
+                        continue;
+                    }
+                    r.mesh.visible = true;
+                    r.mesh.scale.setScalar(0.35 + p * 3.1);
+                    r.mesh.material.opacity = (1 - p) * 0.68;
+                }
+
+                // 单盏路灯：柔和亮起再熄灭，结束后恢复共享材质与昼夜控制
+                clickState.lamps.forEach(function (cs, rig) {
+                    cs.t -= dt;
+                    if (cs.t <= 0) {
+                        rig.head.material = M.streetLamp;
+                        cs.mat.dispose();
+                        clickState.lamps.delete(rig);
+                        return;
+                    }
+                    const p = 1 - cs.t / cs.duration;
+                    const pulse = Math.sin(p * Math.PI);
+                    cs.mat.emissiveIntensity = M.streetLamp.emissiveIntensity + pulse * 3.4;
+                    if (rig.light) rig.light.intensity += pulse * 3.2;
+                });
             }
 
             // 逃跑移动：朝目标点狂奔，到达或超时结束；返回 true 表示正在逃跑（调用方跳过原逻辑）
