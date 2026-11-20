@@ -3,7 +3,7 @@
   SPDX-License-Identifier: MIT
   SPDX-FileCopyrightText: 2026 巴拿拿猫 (BananaCat) · Banana.design (https://banana.design)
 
-  Paw&Trail（爪与迹）· itch.io 网页试玩版（游玩页）
+  Paw&Trail（爪与迹）· itch.io 网页试玩版（游玩页，配色与游戏详情页一致）
   说明：此页面用于内嵌 WebGL 试玩构建。目前为占位，等 WebGL 构建提供后：
    1. 把构建产物（index.html + Build/ + TemplateData/）放到 pawtrail-web/ 目录；
    2. 将下方 iframe 的 src 改成 "pawtrail-web/index.html"（或你提供的可内嵌地址）即可。
@@ -17,18 +17,20 @@
     <title>Paw&Trail（爪与迹）· 在线试玩</title>
     <style>
         :root {
-            --pink: #fa5c5c;
-            --pink-hover: #ff7373;
-            --bg: #141414;
-            --panel: #1f1f1f;
-            --line: #2e2e2e;
-            --text: #ececec;
-            --text-dim: #9a9a9a;
-            --text-faint: #6f6f6f;
+            --bg: #FBF1DC;
+            --panel: #FFFBF1;
+            --line: #EAD3A2;
+            --soft: #F6E2B3;
+            --accent: #E3A54E;
+            --accent-hover: #D68A30;
+            --text: #7A5A38;
+            --text-dim: #8A6A3A;
+            --text-faint: #B88650;
+            --em: #A85F1C;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body { height: 100%; background: var(--bg); color: var(--text); font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif; -webkit-font-smoothing: antialiased; }
-        a { color: var(--pink); text-decoration: none; }
+        a { color: var(--em); text-decoration: none; }
         a:hover { text-decoration: underline; }
 
         .shell { display: flex; flex-direction: column; height: 100vh; }
@@ -36,28 +38,28 @@
         /* 顶栏 */
         .topbar {
             height: 56px;
-            background: #171717;
-            border-bottom: 1px solid #262626;
+            background: var(--panel);
+            border-bottom: 1px solid var(--line);
             display: flex;
             align-items: center;
             gap: 16px;
             padding: 0 18px;
             flex: 0 0 auto;
         }
-        .topbar .logo { font-size: 1.3rem; font-weight: 700; color: var(--pink); letter-spacing: -0.5px; white-space: nowrap; }
-        .topbar .logo em { font-style: normal; color: #fff; }
+        .topbar .logo { font-size: 1.3rem; font-weight: 700; color: var(--em); letter-spacing: -0.5px; white-space: nowrap; }
+        .topbar .logo em { font-style: normal; color: var(--text); }
         .topbar .title { font-size: 1rem; color: var(--text); font-weight: 600; }
         .topbar .spacer { flex: 1; }
         .topbar .back {
             font-size: 0.85rem;
-            color: var(--text-dim);
-            border: 1px solid #333;
+            color: var(--em);
+            border: 1px solid var(--line);
             border-radius: 6px;
             padding: 7px 14px;
-            background: #222;
+            background: var(--soft);
             transition: background .15s ease;
         }
-        .topbar .back:hover { background: #2c2c2c; text-decoration: none; color: #fff; }
+        .topbar .back:hover { background: #F0D8A2; text-decoration: none; color: var(--em); }
 
         /* 游戏区 */
         .stage { flex: 1 1 auto; position: relative; min-height: 0; }
@@ -75,27 +77,27 @@
             text-align: center;
             padding: 24px;
             background:
-                radial-gradient(120% 90% at 50% 20%, #241d18 0%, #141414 70%);
+                radial-gradient(120% 90% at 50% 20%, #FAEFD2 0%, #FBF1DC 70%);
         }
         .placeholder .paw {
             width: 84px; height: 84px;
             display: flex; align-items: center; justify-content: center;
             font-size: 2.6rem;
-            background: linear-gradient(135deg, #3a2a1e, #2a1e14);
-            border: 1px solid #4a3726;
+            background: var(--soft);
+            border: 1px solid var(--line);
             border-radius: 24px;
             animation: float 2.6s ease-in-out infinite;
         }
         @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
-        .placeholder h1 { font-size: 1.6rem; font-weight: 700; }
+        .placeholder h1 { font-size: 1.6rem; font-weight: 700; color: var(--em); }
         .placeholder p { color: var(--text-dim); font-size: 0.95rem; max-width: 460px; line-height: 1.7; }
         .placeholder .hint { color: var(--text-faint); font-size: 0.82rem; }
 
         /* 底部操作条 */
         .foot {
             flex: 0 0 auto;
-            background: #171717;
-            border-top: 1px solid #262626;
+            background: var(--panel);
+            border-top: 1px solid var(--line);
             padding: 12px 18px;
             display: flex;
             align-items: center;
@@ -104,9 +106,9 @@
             font-size: 0.8rem;
             color: var(--text-dim);
         }
-        .foot .key { display: inline-block; padding: 2px 8px; border: 1px solid #3a3a3a; border-radius: 5px; background: #222; color: #ddd; font-size: 0.76rem; }
-        .foot .dl { margin-left: auto; color: #fff; background: var(--pink); border-radius: 6px; padding: 8px 16px; font-weight: 600; font-size: 0.85rem; transition: background .15s ease; }
-        .foot .dl:hover { background: var(--pink-hover); text-decoration: none; }
+        .foot .key { display: inline-block; padding: 2px 8px; border: 1px solid var(--line); border-radius: 5px; background: var(--soft); color: var(--text); font-size: 0.76rem; }
+        .foot .dl { margin-left: auto; color: #fff; background: var(--accent); border: 2px solid var(--accent-hover); border-radius: 6px; padding: 8px 16px; font-weight: 600; font-size: 0.85rem; box-shadow: 0 8px 22px rgba(227, 165, 78, 0.30); transition: background .15s ease; }
+        .foot .dl:hover { background: var(--accent-hover); text-decoration: none; }
     </style>
 </head>
 <body>
