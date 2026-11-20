@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<!--
+  SPDX-License-Identifier: MIT
+  SPDX-FileCopyrightText: 2026 巴拿拿猫 (BananaCat) · Banana.design (https://banana.design)
+
+  Paw&Trail（爪与迹）· itch.io 风格平替下载页
+  用途：给没有梯子的 HR 提供可访问的下载入口（模仿 itch.io 游戏详情页外观）
+  下载按钮占位路径：downloads/PawTrail-Windows.zip（把安装包放到该路径即生效）
+-->
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="巴拿拿猫 BananaCat · Banana.design">
+    <meta name="copyright" content="© 2026 巴拿拿猫 (BananaCat) · Banana.design">
+    <title>Paw&Trail（爪与迹） by BananaCatOnl1 - itch.io 风格下载页</title>
+    <style>
+        :root {
+            --pink: #fa5c5c;
+            --pink-hover: #ff7373;
+            --bg: #1b1b1b;
+            --bg-2: #202020;
+            --card: #2b2b2b;
+            --card-2: #333;
+            --line: #3a3a3a;
+            --text: #ececec;
+            --text-dim: #9a9a9a;
+            --text-faint: #777;
+            --gold: #f5c96b;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { background: var(--bg); color: var(--text); font-family: 'Helvetica Neue', Helvetica, Arial, 'PingFang SC', 'Microsoft YaHei', sans-serif; -webkit-font-smoothing: antialiased; }
+        a { color: var(--pink); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        /* 顶部导航（仿 itch.io） */
+        .topbar {
+            background: #171717;
+            border-bottom: 1px solid #262626;
+            padding: 0 16px;
+            height: 54px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+        .topbar .logo {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--pink);
+            letter-spacing: -0.5px;
+            white-space: nowrap;
+        }
+        .topbar .logo em { font-style: normal; color: #fff; }
+        .topbar .search {
+            flex: 1;
+            max-width: 480px;
+            height: 34px;
+            border-radius: 6px;
+            border: 1px solid #2e2e2e;
+            background: #262626;
+            color: var(--text);
+            padding: 0 12px;
+            font-size: 0.9rem;
+            outline: none;
+        }
+        .topbar .search::placeholder { color: #666; }
+        .topbar .auth { margin-left: auto; display: flex; gap: 10px; align-items: center; font-size: 0.85rem; color: var(--text-dim); }
+        .topbar .auth .btn {
+            border: 1px solid #3a3a3a;
+            border-radius: 6px;
+            padding: 6px 14px;
+            color: var(--text);
+            background: #262626;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+        .topbar .auth .btn.pink { background: var(--pink); border-color: var(--pink); color: #fff; font-weight: 600; }
+
+        .wrap { max-width: 1180px; margin: 0 auto; padding: 22px 16px 60px; }
+
+        /* 面包屑 */
+        .crumb { font-size: 0.82rem; color: var(--text-faint); margin-bottom: 14px; }
+        .crumb a { color: var(--text-dim); }
+
+        /* 主体两栏 */
+        .layout { display: grid; grid-template-columns: 1fr 320px; gap: 26px; align-items: start; }
+        @media (max-width: 860px) { .layout { grid-template-columns: 1fr; } }
+
+        /* 左栏 */
+        .title-row { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+        .title-row h1 { font-size: 2.1rem; font-weight: 800; letter-spacing: -0.5px; }
+        .title-row .by { color: var(--text-dim); font-size: 1rem; }
+        .title-row .by a { color: var(--text); font-weight: 600; }
+        .tags { margin: 10px 0 16px; display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag { font-size: 0.76rem; padding: 3px 10px; border-radius: 999px; background: var(--card); border: 1px solid var(--line); color: var(--text-dim); }
+
+        .cover { width: 100%; border-radius: 8px; border: 1px solid var(--line); display: block; background: #000; }
+        .cover img { width: 100%; height: auto; display: block; border-radius: 8px; }
+
+        .section { margin-top: 24px; }
+        .section h2 { font-size: 1.25rem; margin-bottom: 12px; font-weight: 700; }
+        .section p { color: #c9c9c9; line-height: 1.75; font-size: 0.95rem; }
+
+        /* 截图画廊 */
+        .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        @media (max-width: 640px) { .shots { grid-template-columns: repeat(2, 1fr); } }
+        .shots a { display: block; border-radius: 6px; overflow: hidden; border: 1px solid var(--line); background: #000; }
+        .shots img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 16/10; display: block; transition: transform .2s ease, opacity .2s ease; }
+        .shots a:hover img { transform: scale(1.03); opacity: .85; }
+
+        /* 右栏 */
+        .side { position: sticky; top: 74px; display: flex; flex-direction: column; gap: 14px; }
+        .panel { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 16px; }
+
+        .dl-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 14px 16px;
+            border-radius: 8px;
+            background: var(--pink);
+            color: #fff;
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            border: none;
+            cursor: pointer;
+            transition: background .15s ease, transform .05s ease;
+        }
+        .dl-btn:hover { background: var(--pink-hover); text-decoration: none; }
+        .dl-btn:active { transform: translateY(1px); }
+        .dl-btn .sub { display: block; font-size: 0.76rem; font-weight: 500; opacity: .85; margin-top: 3px; }
+        .play-btn {
+            display: block;
+            width: 100%;
+            text-align: center;
+            padding: 12px 16px;
+            border-radius: 8px;
+            background: #333;
+            color: #fff;
+            font-size: 0.98rem;
+            font-weight: 600;
+            border: 1px solid #444;
+            cursor: pointer;
+            transition: background .15s ease;
+        }
+        .play-btn:hover { background: #3d3d3d; text-decoration: none; }
+
+        .meta { font-size: 0.86rem; }
+        .meta .row { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px solid #222; }
+        .meta .row:last-child { border-bottom: none; }
+        .meta .k { color: var(--text-faint); }
+        .meta .v { color: var(--text); text-align: right; }
+
+        .author { display: flex; gap: 12px; align-items: center; }
+        .author .avatar {
+            width: 52px; height: 52px; border-radius: 8px; flex: 0 0 auto;
+            background: linear-gradient(135deg, #fa5c5c, #c73c3c);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800; font-size: 1.4rem; color: #fff;
+        }
+        .author .aname { font-weight: 700; color: var(--text); }
+        .author .arole { font-size: 0.78rem; color: var(--text-faint); margin-top: 2px; }
+
+        .note { font-size: 0.76rem; color: var(--text-faint); line-height: 1.6; }
+        .note b { color: var(--text-dim); }
+
+        footer { text-align: center; color: var(--text-faint); font-size: 0.78rem; padding: 24px 16px 40px; border-top: 1px solid #222; margin-top: 30px; }
+    </style>
+</head>
+<body>
+    <div class="topbar">
+        <div class="logo">itch<em>.io</em></div>
+        <input class="search" type="text" placeholder="搜索游戏..." aria-label="搜索游戏">
+        <div class="auth">
+            <span>登录</span>
+            <button class="btn">注册</button>
+            <button class="btn pink">下载 itch.io App</button>
+        </div>
+    </div>
+
+    <div class="wrap">
+        <div class="crumb"><a href="#">itch.io</a> › <a href="#">游戏</a> › <a href="#">休闲</a> › Paw&amp;Trail</div>
+
+        <div class="layout">
+            <!-- 左栏：主视觉 + 截图 + 描述 -->
+            <div>
+                <div class="title-row">
+                    <h1>Paw&amp;Trail</h1>
+                    <span class="by">by <a href="#">BananaCatOnl1</a></span>
+                </div>
+                <div class="tags">
+                    <span class="tag">治愈</span>
+                    <span class="tag">休闲</span>
+                    <span class="tag">养成</span>
+                    <span class="tag">3D</span>
+                    <span class="tag">Low Poly</span>
+                    <span class="tag">单人</span>
+                    <span class="tag">剧情</span>
+                </div>
+
+                <div class="cover">
+                    <img src="image/Trip/Paw&amp;Trail游戏demo封面.png" alt="Paw&Trail 游戏封面">
+                </div>
+
+                <div class="section">
+                    <h2>游戏截图</h2>
+                    <div class="shots">
+                        <a href="image/Trip/20261108demo实机截图1.png" target="_blank"><img src="image/Trip/20261108demo实机截图1.png" alt="实机截图"></a>
+                        <a href="image/Trip/20261108demo引擎内部截图1.png" target="_blank"><img src="image/Trip/20261108demo引擎内部截图1.png" alt="引擎内部截图"></a>
+                        <a href="image/Trip/望向大海实机截图1.png" target="_blank"><img src="image/Trip/望向大海实机截图1.png" alt="望向大海"></a>
+                        <a href="image/Trip/手账实机截图1.png" target="_blank"><img src="image/Trip/手账实机截图1.png" alt="手账系统"></a>
+                        <a href="image/Trip/20261102B结局最终截图.png" target="_blank"><img src="image/Trip/20261102B结局最终截图.png" alt="结局B"></a>
+                        <a href="image/Trip/20261102实机树洞支线故事截图.png" target="_blank"><img src="image/Trip/20261102实机树洞支线故事截图.png" alt="树洞支线"></a>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>关于这款游戏</h2>
+                    <p>《Paw&amp;Trail（爪与迹）》是一款 3D 风格化卡通休闲治愈养成游戏，也是 2026 ThatGameJam 的参赛作品。玩家带着一只小狗，在自然环境中旅行：观察环境、发现想去的地方，沿途采集食物、取水、拾柴、做饭、搭营休息。随着对路线和资源越来越熟悉，生活从手忙脚乱逐渐变得从容，再收营前往更远的地方。</p>
+                    <p style="margin-top:12px;">这段旅行对应一个人逐渐成长、开始独立生活，或走出低谷、迎接新生活的过程。主人公出发时并不知道最终目的地，随着旅途继续，才逐渐找到真正想停留的地方；小狗则是一路的陪伴者，路由玩家自己选择、自己走过。</p>
+                </div>
+            </div>
+
+            <!-- 右栏：下载 + 信息 -->
+            <div class="side">
+                <div class="panel">
+                    <!-- 下载按钮：占位路径 downloads/PawTrail-Windows.zip，把安装包放进去即可生效 -->
+                    <a class="dl-btn" href="downloads/PawTrail-Windows.zip" download>
+                        立即下载
+                        <span class="sub">Windows 版 · exe + 数据包</span>
+                    </a>
+                    <a class="play-btn" href="game-pawtrail-play.html" style="margin-top:10px;">▶ 在浏览器中试玩</a>
+                </div>
+
+                <div class="panel meta">
+                    <div class="row"><span class="k">状态</span><span class="v">Demo 已结项</span></div>
+                    <div class="row"><span class="k">平台</span><span class="v">Windows</span></div>
+                    <div class="row"><span class="k">引擎</span><span class="v">Unity (URP)</span></div>
+                    <div class="row"><span class="k">类型</span><span class="v">休闲 / 养成 / 剧情</span></div>
+                    <div class="row"><span class="k">发布</span><span class="v">2026年11月10日</span></div>
+                    <div class="row"><span class="k">语言</span><span class="v">中文 / English</span></div>
+                </div>
+
+                <div class="panel">
+                    <div class="author">
+                        <div class="avatar">B</div>
+                        <div>
+                            <div class="aname">BananaCatOnl1</div>
+                            <div class="arole">全栈 / 主负责人</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="note">
+                    <b>下载说明：</b>本页为 itch.io 的平替下载入口，方便无梯子环境访问。点击「立即下载」即可获取 Windows 版安装包；也可点「在浏览器中试玩」直接在线体验。
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        © 2026 巴拿拿猫 (BananaCat) · Banana.design · Paw&amp;Trail 下载页
+    </footer>
+</body>
+</html>
