@@ -1342,6 +1342,97 @@
                 });
             })();
 
+            // 湖中鱼群：贴着水面游动，错峰跃起并在入水处荡开小水环
+            const lakeFish = (function () {
+                const WATER_Y = -0.106;
+                const fishes = [];
+                const eyeWhite = mat(0xFFFFFF, { roughness: 0.5 });
+                const specs = [
+                    { x: -1.65, z: 19.15, color: 0xF2A65A, period: 6.4, phase: 0.0, speed: 0.55, height: 0.95, rx: 0.46, rz: 0.24 },
+                    { x: 0.10, z: 18.85, color: 0xF7E7C8, period: 7.1, phase: 2.2, speed: 0.45, height: 0.75, rx: 0.52, rz: 0.25 },
+                    { x: 1.75, z: 19.65, color: 0xE98C91, period: 7.8, phase: 4.1, speed: 0.50, height: 1.10, rx: 0.44, rz: 0.28 },
+                    { x: -0.80, z: 20.35, color: 0x70B7C9, period: 8.3, phase: 1.2, speed: 0.40, height: 0.85, rx: 0.48, rz: 0.24 },
+                    { x: 1.00, z: 20.55, color: 0xE8C85C, period: 6.9, phase: 5.0, speed: 0.52, height: 0.72, rx: 0.42, rz: 0.22 }
+                ];
+
+                specs.forEach(function (s) {
+                    const g = new THREE.Group();
+                    const fishMat = mat(s.color, { roughness: 0.55 });
+                    const body = sph(0.25, fishMat, 12);
+                    body.scale.set(1.45, 0.62, 0.58);
+                    g.add(body);
+
+                    const tailPivot = new THREE.Group();
+                    tailPivot.position.x = -0.30;
+                    const tail = cone(0.17, 0.27, fishMat, 3);
+                    tail.position.x = -0.10;
+                    tail.rotation.z = -Math.PI / 2;
+                    tailPivot.add(tail);
+                    g.add(tailPivot);
+
+                    const fin = cone(0.075, 0.16, fishMat, 3);
+                    fin.position.set(-0.04, 0.15, 0);
+                    g.add(fin);
+                    [-1, 1].forEach(function (side) {
+                        g.add(putFishPart(sph(0.035, eyeWhite, 8), 0.22, 0.055, side * 0.105));
+                        g.add(putFishPart(sph(0.017, M.ink, 8), 0.242, 0.060, side * 0.125));
+                    });
+                    g.traverse(function (o) {
+                        if (o.isMesh) { o.castShadow = false; o.receiveShadow = false; }
+                    });
+                    world.add(g);
+
+                    const splashMat = new THREE.MeshBasicMaterial({
+                        color: 0xE8FAFF, transparent: true, opacity: 0.12,
+                        depthWrite: false, side: THREE.DoubleSide
+                    });
+                    const splash = mesh(new THREE.RingGeometry(0.13, 0.18, 24), splashMat, false);
+                    splash.rotation.x = -Math.PI / 2;
+                    splash.position.set(s.x, WATER_Y + 0.012, s.z);
+                    splash.renderOrder = 4;
+                    world.add(splash);
+                    fishes.push(Object.assign({ g: g, tailPivot: tailPivot, splash: splash, duration: 1.35 }, s));
+                });
+
+                function putFishPart(o, x, y, z) {
+                    o.position.set(x, y, z);
+                    return o;
+                }
+
+                function update(dt, t) {
+                    fishes.forEach(function (f) {
+                        const swim = t * f.speed + f.phase;
+                        const x = f.x + Math.cos(swim) * f.rx;
+                        const z = f.z + Math.sin(swim) * f.rz;
+                        const dx = -Math.sin(swim) * f.rx * f.speed;
+                        const dz = Math.cos(swim) * f.rz * f.speed;
+                        const phase = (t + f.phase) % f.period;
+                        const jumping = phase < f.duration;
+                        let y = WATER_Y - 0.045;
+                        let pitch = 0;
+                        let splashStrength = 0;
+
+                        if (jumping) {
+                            const u = phase / f.duration;
+                            y += Math.sin(u * Math.PI) * f.height;
+                            pitch = Math.cos(u * Math.PI) * 0.68;
+                            splashStrength = Math.max(0, 1 - Math.min(u, 1 - u) * 5);
+                        }
+                        f.g.position.set(x, y, z);
+                        f.g.rotation.y = Math.atan2(-dz, dx);
+                        f.g.rotation.z = pitch;
+                        f.tailPivot.rotation.y = Math.sin(t * 10 + f.phase) * 0.42;
+
+                        f.splash.position.x = x;
+                        f.splash.position.z = z;
+                        f.splash.material.opacity = jumping ? splashStrength * 0.62 : 0.12;
+                        const ringScale = jumping ? 1 + (1 - splashStrength) * 1.8 : 0.85 + Math.sin(t * 2 + f.phase) * 0.12;
+                        f.splash.scale.set(ringScale, ringScale, ringScale);
+                    });
+                }
+                return { update: update, fishes: fishes };
+            })();
+
             /* ══════════ 学校 + 操场：城市东侧预留地块 ══════════ */
             (function schoolCampus() {
                 const CX = 27.2, CZ = -0.1;        // 操场中心
@@ -4900,6 +4991,9 @@
 
                 // 城市生活：塔吊施工、无障碍通行、交警拦停与放行电动车
                 if (civicLife.update) civicLife.update(dt, t);
+
+                // 湖中鱼群：缓慢游动、摆尾，错峰跃出水面
+                if (lakeFish.update) lakeFish.update(dt, t);
 
                 // 车辆：沿棋盘格路网行驶，到路口自动转弯
                 const traffic = world.userData.traffic;
