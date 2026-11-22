@@ -2533,6 +2533,14 @@
 
                 function update(dt, t) {
                     const EDGES = traffic.EDGES, NODES = traffic.NODES, sigState = traffic.sigState;
+                    function rf(edge, dir, t) {
+                        const e = EDGES[edge];
+                        const horiz = Math.abs(e.dx) > Math.abs(e.dz);
+                        const a = NODES[e.a];
+                        const tt = (dir === 1) ? t : (1 - t);
+                        return { horiz: horiz, road: horiz ? a.z : a.x, sign: (dir === 1) ? 1 : -1,
+                            fwd: horiz ? (a.x + e.dx * tt) : (a.z + e.dz * tt) };
+                    }
 
                     buses.forEach(function (b) {
                         const seg = route[b.seg];
@@ -2565,13 +2573,16 @@
                             let stopLine = 1;
                             if (sigState(arrivedKey, axis, t) === 'red') stopLine = 1 - 5.0 / e.len;
 
-                            // 前方同车道有小车太近：公交跟着减速，不再从车身里碾过去
+                            // 前方同车道有小车太近：公交跟着减速，不再从车身里碾过去（跨共线边也生效）
                             let bf = 1;
                             const ags = world.userData.agents;
+                            const bk = rf(seg.edge, seg.dir, b.t);
                             for (let k = 0; k < ags.length; k++) {
                                 const o = ags[k];
-                                if (o.type !== 'car' || o.state === 'shrink' || o.edge !== seg.edge || o.dir !== seg.dir) continue;
-                                const gap = (o.t - b.t) * e.len;
+                                if (o.type !== 'car' || o.state === 'shrink') continue;
+                                const ok = rf(o.edge, o.dir, o.t);
+                                if (ok.horiz !== bk.horiz || ok.road !== bk.road || ok.sign !== bk.sign) continue;
+                                const gap = (ok.fwd - bk.fwd) * bk.sign;
                                 if (gap > 0 && gap < 3.2) bf = Math.min(bf, Math.max(0, (gap - 1.7) / 1.5));
                             }
                             let targetT = b.t + (dt * b.speed * bf) / e.len;
@@ -5303,6 +5314,16 @@
                     const sigState = traffic.sigState, agentPos = traffic.agentPos;
                     const probe = { x: 0, z: 0 };
 
+                    // 马路身份（水平路用 z、竖直路用 x）+ 前进坐标 + 前进方向符号，用于跨共线边的跟车判断
+                    function rf(edge, dir, t) {
+                        const e = EDGES[edge];
+                        const horiz = Math.abs(e.dx) > Math.abs(e.dz);
+                        const a = NODES[e.a];
+                        const tt = (dir === 1) ? t : (1 - t);
+                        return { horiz: horiz, road: horiz ? a.z : a.x, sign: (dir === 1) ? 1 : -1,
+                            fwd: horiz ? (a.x + e.dx * tt) : (a.z + e.dz * tt) };
+                    }
+
                     for (let i = 0; i < agents.length; i++) {
                         const c = agents[i];
                         let e = EDGES[c.edge];
@@ -5340,27 +5361,30 @@
 
                         // 行驶推进（淡出过程中停在原地）
                         if (c.state !== 'shrink') {
-                            // ── 跟车：同车道同方向的前车太近就减速，避免叠在一起 ──
+                            // ── 跟车：同马路同方向同车道的前车太近就减速（跨共线边也生效）──
                             let factor = 1;
                             const need = c.type === 'bike' ? 1.25 : 2.0;
+                            const ck = rf(c.edge, c.dir, c.t);
                             for (let k = 0; k < agents.length; k++) {
                                 if (k === i) continue;
                                 const o = agents[k];
-                                if (o.edge !== c.edge || o.dir !== c.dir) continue;
-                                if (Math.abs(o.lane - c.lane) > 0.3) continue;   // 不同车道互不影响
-                                const ahead = o.t - c.t;
-                                if (ahead <= 0) continue;
-                                const gap = ahead * e.len;
+                                const ok = rf(o.edge, o.dir, o.t);
+                                if (ok.horiz !== ck.horiz || ok.road !== ck.road) continue;   // 不同马路
+                                if (ok.sign !== ck.sign) continue;                           // 对向车不影响
+                                if (Math.abs(o.lane - c.lane) > 0.3) continue;               // 不同车道互不影响
+                                const gap = (ok.fwd - ck.fwd) * ck.sign;
+                                if (gap <= 0) continue;
                                 if (gap < need) factor = Math.min(factor, Math.max(0, (gap - need * 0.45) / (need * 0.55)));
                             }
 
-                            // ── 公交车是大目标：小车在它身后同样要减速等待 ──
+                            // ── 公交车是大目标：小车在它身后同样要减速等待（跨共线边也生效）──
                             const bl = world.userData.busList;
                             if (bl && c.type === 'car') {
                                 for (let k = 0; k < bl.buses.length; k++) {
                                     const bb = bl.buses[k], sg = bl.route[bb.seg];
-                                    if (sg.edge !== c.edge || sg.dir !== c.dir) continue;
-                                    const gap = (bb.t - c.t) * e.len;
+                                    const bk = rf(sg.edge, sg.dir, bb.t);
+                                    if (bk.horiz !== ck.horiz || bk.road !== ck.road || bk.sign !== ck.sign) continue;
+                                    const gap = (bk.fwd - ck.fwd) * ck.sign;
                                     if (gap > 0 && gap < 3.4) factor = Math.min(factor, Math.max(0, (gap - 1.8) / 1.6));
                                 }
                             }
