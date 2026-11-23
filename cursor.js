@@ -17,7 +17,7 @@
 
     var style = document.createElement('style');
     style.textContent =
-        'body, a, button, input, textarea, select, label, summary, [role="button"] { cursor: none; }' +
+        '* { cursor: none !important; }' +
         '.custom-cursor{position:fixed;left:0;top:0;width:20px;height:20px;' +
         'background:radial-gradient(circle,rgba(' + rgb + ',0.95) 0%,rgba(' + rgb + ',0.7) 50%,transparent 70%);' +
         'border-radius:50%;pointer-events:none;z-index:999999;transform:translate(-50%,-50%);' +
@@ -28,7 +28,7 @@
         'border-radius:50%;pointer-events:none;z-index:999998;animation:trailFade 1s ease-out forwards;}' +
         '@keyframes trailFade{0%{opacity:1;transform:translate(-50%,-50%) scale(1)}' +
         '100%{opacity:0;transform:translate(-50%,-50%) scale(.2)}}' +
-        '@media (hover:none),(pointer:coarse){body,a,button,input,textarea,select,label,summary,[role="button"]{cursor:auto;}' +
+        '@media (hover:none),(pointer:coarse){*{cursor:auto !important;}' +
         '.custom-cursor,.cursor-trail{display:none;}}';
     document.head.appendChild(style);
 
