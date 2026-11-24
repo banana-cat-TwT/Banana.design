@@ -5447,6 +5447,46 @@ nav ul li a:hover::after {
     border: 3px solid #6C5B7B !important;
 }
 
+/* HandTop 3D自走棋对战 游戏卡片样式 - 机甲科幻配色 */
+.game-item.game-item-handtop {
+    background: linear-gradient(160deg, #080D12 0%, #101A24 45%, #16242F 100%) !important;
+    border: 3px solid #3FB8E8 !important;
+    box-shadow: 0 8px 25px rgba(63, 184, 232, 0.28) !important;
+}
+
+.game-item.game-item-handtop:hover {
+    box-shadow: 0 15px 35px rgba(240, 98, 146, 0.5), 0 0 0 3px #F06292 !important;
+    border-color: #F06292 !important;
+    transform: translateY(-5px) !important;
+}
+
+.game-item.game-item-handtop h3 {
+    color: #EAF7FF !important;
+    text-shadow: 0 0 12px rgba(79, 195, 247, 0.65) !important;
+    font-size: 1.3rem !important;
+    font-weight: bold !important;
+}
+
+.game-item.game-item-handtop p {
+    color: #A9C6D8 !important;
+    font-weight: 500 !important;
+    text-shadow: 0 0 5px rgba(0, 0, 0, 0.3) !important;
+}
+
+.game-item.game-item-handtop .game-img {
+    width: 100% !important;
+    height: 200px !important;
+    object-fit: cover !important;
+    border-radius: 8px !important;
+    margin-bottom: 1rem !important;
+    border: 2px solid #3FB8E8 !important;
+    box-shadow: 0 5px 15px rgba(63, 184, 232, 0.25) !important;
+}
+
+.game-item.game-item-handtop .game-character {
+    border: 2px solid #3FB8E8 !important;
+}
+
 /* 古风冒险游戏卡片样式 - 中国古风水墨配色 */
 .game-item.game-item-gufeng {
     background: linear-gradient(135deg, #1F2A2A, #24332D, #222120) !important;
