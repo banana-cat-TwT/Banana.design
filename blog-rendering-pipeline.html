@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>实时渲染管线研究日志（图形学 · 面试题库） - 巴拿拿猫的个人网站</title>
+    <title>实时渲染管线研究日志（图形学 · 工程取舍） - 巴拿拿猫的个人网站</title>
     <link rel="stylesheet" href="style.css">
     <style>
         body {
@@ -381,7 +381,7 @@
         </nav>
         <div class="blog-detail-container">
             <div class="blog-detail-header">
-                <h1 class="blog-detail-title">实时渲染管线研究日志（图形学 · 面试题库）</h1>
+                <h1 class="blog-detail-title">实时渲染管线研究日志（图形学 · 工程取舍）</h1>
                 <p class="blog-detail-subtitle">2026年11月 · 技术整理 · 从 BRDF 到光追的工程取舍</p>
                 <div class="blog-tags">
                     <span class="blog-tag">微表面 BRDF</span>
@@ -398,14 +398,14 @@
                 <h2 class="section-title">先交代这一篇的位置</h2>
                 <div class="section-content">
                     <p>前面那篇 <a href="blog-ai3d-foundation.html" class="highlight">AI 3D 大模型研究日志</a> 解决的是「资产怎么被生成出来、生成得对不对」；这一篇解决的是另一个问题——<span class="highlight">资产进引擎之后，怎么被正确地、划算地画到屏幕上</span>。两件事的评判标准完全不同：前者看几何和材质数据本身干不干净，后者看画面结果和每帧预算。</p>
-                    <p>这一套题集中在实时渲染管线，是技术美术、渲染向客户端、引擎工具这几个岗位的公共底座。我按同一个口径来答每一题：</p>
+                    <p>这部分内容集中在实时渲染管线，是技术美术、渲染向客户端、引擎工具这几个方向的公共底座。我按同一个口径来梳理每一个主题：</p>
                     <ul>
                         <li><span class="highlight">一句话定义</span>：先能用一句话说清它是什么，证明概念没糊；</li>
-                        <li><span class="highlight">物理 / 数学意义</span>：公式里每一项到底在补偿什么现实，而不是背符号；</li>
+                        <li><span class="highlight">物理 / 数学意义</span>：公式里每一项到底在补偿什么现实，而不是死记符号；</li>
                         <li><span class="highlight">工程取舍</span>：什么条件下用它、什么条件下换成别的；</li>
                         <li><span class="highlight">踩坑点</span>：真做项目时会在哪里翻车。</li>
                     </ul>
-                    <p>之所以要「取舍」这一层，是因为渲染没有标准答案，只有预算分配。同一个画面，PC 上可以硬追光线，手机上只能预烘焙 + 探针；说得出为什么，才算真懂。</p>
+                    <p>之所以要「取舍」这一层，是因为渲染没有唯一解法，只有预算分配。同一个画面，PC 上可以硬追光线，手机上只能预烘焙 + 探针；说得出为什么，才算真正理解。</p>
                 </div>
 
                 <h2 class="section-title">微表面模型：GGX、几何遮蔽与菲涅尔</h2>
@@ -446,9 +446,9 @@ f_r = k_d · (c / π)  +  k_s · [ D(h) · G(l,v,h) · F(v,h) ] / [ 4 · (n·l) 
                         </tbody>
                     </table>
 
-                    <h3 class="case-sub">三个最容易答错的点</h3>
-                    <p><span class="highlight">第一，roughness 不等于 α。</span>业界普遍做了一次 remap：<code>α = roughness²</code>（Unity、UE 及多数 PBR 管线都这么干）。如果直接把美术给的 roughness 当 α 用，中间粗糙度区间的高光会异常宽、看着像被磨砂糊住。这一题如果能主动说出这层 remap，基本就区分出「背过公式」和「真调过材质」。</p>
-                    <p><span class="highlight">第二，分母 4(n·l)(n·v) 不是归一化系数。</span>它是从微表面分布到宏观 BRDF 的立体角变换雅可比。写成「除以 4 是为了归一化」是常见错误答案。</p>
+                    <h3 class="case-sub">三个最容易出错的地方</h3>
+                    <p><span class="highlight">第一，roughness 不等于 α。</span>业界普遍做了一次 remap：<code>α = roughness²</code>（Unity、UE 及多数 PBR 管线都这么干）。如果直接把美术给的 roughness 当 α 用，中间粗糙度区间的高光会异常宽、看着像被磨砂糊住。如果能主动意识到这层 remap，基本就区分出了「只记公式」和「实际调过材质」。</p>
+                    <p><span class="highlight">第二，分母 4(n·l)(n·v) 不是归一化系数。</span>它是从微表面分布到宏观 BRDF 的立体角变换雅可比。写成「除以 4 是为了归一化」是常见误区。</p>
                     <p><span class="highlight">第三，F0 不是 0。</span>非金属的 F0 约 0.04（常见近似），金属的 F0 直接用基色 albedo。而 <code>k_s = F</code>、<code>k_d = (1−F)(1−metallic)</code> 才是能量守恒写法——金属没有漫反射正是这条式子推出来的，不是单独规定。GGX 的 D 有一条很长的尾巴，这既是真实高光的来源（金属反光有拖尾），也是画面出现 fireflies 亮点的来源，所以它和后面要讲的降噪、TAA 是连着的问题。</p>
 
                     <div class="tip">
@@ -518,7 +518,7 @@ f_r = k_d · (c / π)  +  k_s · [ D(h) · G(l,v,h) · F(v,h) ] / [ 4 · (n·l) 
                     <p>代价是：光源列表要每帧重建；光源大量重叠、或单个光源影响范围极大的场景下收益会掉；复杂反射/多层透明依旧不如 deferred 好用。</p>
 
                     <div class="tip">
-                        <p>面试时说选型的正确姿势不是「Deferred 更先进」，而是<span class="highlight">先说平台约束、再说光源规模、再说是否需要 MSAA 和透明、最后才落到方案</span>。真实工程几乎都是混合：UE 默认 deferred，但透明和特殊材质走 forward 通道；移动端 forward+，靠 depth prepass 压 overdraw。</p>
+                        <p>工程上选型的正确思路不是「Deferred 更先进」，而是<span class="highlight">先说平台约束、再说光源规模、再说是否需要 MSAA 和透明、最后才落到方案</span>。真实工程几乎都是混合：UE 默认 deferred，但透明和特殊材质走 forward 通道；移动端 forward+，靠 depth prepass 压 overdraw。</p>
                     </div>
                 </div>
 
@@ -685,7 +685,7 @@ L_o(x, ω_o) = L_e(x) + ∫_Ω f_r(x, ω_i, ω_o) · L_i(x, ω_i) · (n·ω_i) d
                     </table>
 
                     <div class="tip">
-                        <p>这题想拿高分，关键是把<span class="highlight">「bias 只能治 acne，治不了走样」</span>说清楚。很多人一遇到阴影问题就调 bias，结果斑纹没了、影子飞了，边缘锯齿一个没少。走样的根因是采样率不匹配，只有分辨率、级联、滤波这些手段能动它。</p>
+                        <p>这里的关键，是把<span class="highlight">「bias 只能治 acne，治不了走样」</span>说清楚。很多人一遇到阴影问题就调 bias，结果斑纹没了、影子飞了，边缘锯齿一个没少。走样的根因是采样率不匹配，只有分辨率、级联、滤波这些手段能动它。</p>
                     </div>
                 </div>
 
@@ -697,9 +697,9 @@ L_o(x, ω_o) = L_e(x) + ∫_Ω f_r(x, ω_i, ω_o) · L_i(x, ω_i) · (n·ω_i) d
                     <div class="formula">
 场景（HDR 线性） → SSAO / SSR → Bloom → 自动曝光 → Tone Mapping → 色彩分级（LUT） → 抗锯齿 / 锐化 → 景深、运动模糊、暗角、颗粒 → 输出编码（Linear → sRGB）
                     </div>
-                    <p>顺序本身就是知识点：<span class="highlight">Bloom 必须在 Tone Mapping 之前</span>（要在 HDR 里取亮部，否则亮部已经被压成 1，全图一起发光）；<span class="highlight">曝光必须在 Tone Mapping 之前</span>（曝光是调整 HDR 输入，色调映射是压缩到 LDR）；<span class="highlight">色彩分级在 Tone Mapping 之后</span>（针对显示范围做创作性调整）。顺序错了，症状很典型，一测就能看出来。</p>
+                    <p>顺序本身就是关键：<span class="highlight">Bloom 必须在 Tone Mapping 之前</span>（要在 HDR 里取亮部，否则亮部已经被压成 1，全图一起发光）；<span class="highlight">曝光必须在 Tone Mapping 之前</span>（曝光是调整 HDR 输入，色调映射是压缩到 LDR）；<span class="highlight">色彩分级在 Tone Mapping 之后</span>（针对显示范围做创作性调整）。顺序错了，症状很典型，一测就能看出来。</p>
 
-                    <h3 class="case-sub">四个必答特效的原理</h3>
+                    <h3 class="case-sub">四个核心特效的原理</h3>
                     <table class="compare-table">
                         <thead>
                             <tr><th>特效</th><th>原理</th><th>关键约束</th></tr>
@@ -728,7 +728,7 @@ L_o(x, ω_o) = L_e(x) + ∫_Ω f_r(x, ω_i, ω_o) · L_i(x, ω_i) · (n·ω_i) d
                         </tbody>
                     </table>
 
-                    <p>顺带能把工程细节说出来会加分：<span class="highlight">中间 RT 应该是 float16 的 HDR 格式</span>（LDR 格式存不下超过 1 的亮度，Bloom 直接失效）；<span class="highlight">全屏 pass 的采样要用双线性 + 尽量合并 pass</span>（移动端每次全屏读写都是带宽）；<span class="highlight">低分辨率做 AO / Bloom / 光追</span>，最后再合成。</p>
+                    <p>顺带把工程细节记清楚会更有用：<span class="highlight">中间 RT 应该是 float16 的 HDR 格式</span>（LDR 格式存不下超过 1 的亮度，Bloom 直接失效）；<span class="highlight">全屏 pass 的采样要用双线性 + 尽量合并 pass</span>（移动端每次全屏读写都是带宽）；<span class="highlight">低分辨率做 AO / Bloom / 光追</span>，最后再合成。</p>
                 </div>
 
                 <h2 class="section-title">光线追踪：降噪与混合渲染</h2>
@@ -800,13 +800,13 @@ L_o(x, ω_o) = L_e(x) + ∫_Ω f_r(x, ω_i, ω_o) · L_i(x, ω_i) · (n·ω_i) d
                     <p>Lumen 就是这套思路的典型工程实现：<span class="highlight">屏幕空间 trace 拿近距离高频信息，表面缓存 + 距离场负责屏幕外和多次弹射，硬件光追作为可选加速</span>。DDGI（动态漫反射 GI）也是同一逻辑——探针负责稀疏采样、光线负责更新探针、时域负责收敛。</p>
 
                     <div class="tip">
-                        <p>这一题最容易被问的追问是「既然光追更准，为什么不全部用光追」。答案是<span class="highlight">预算和方差</span>：全路径追踪要达到可用画质需要的样本数，远超当前实时预算；而光栅化在「确定的、大面积的、单次弹射」这件事上几乎没有浪费。混合渲染本质是把有限的 trace 预算花在观感收益最高的地方——反射、间接光、接触阴影。</p>
+                        <p>一个自然会延伸的问题就是「既然光追更准，为什么不全部用光追」。关键在于<span class="highlight">预算和方差</span>：全路径追踪要达到可用画质需要的样本数，远超当前实时预算；而光栅化在「确定的、大面积的、单次弹射」这件事上几乎没有浪费。混合渲染本质是把有限的 trace 预算花在观感收益最高的地方——反射、间接光、接触阴影。</p>
                     </div>
                 </div>
 
-                <h2 class="section-title">面试口述速查</h2>
+                <h2 class="section-title">核心要点速查</h2>
                 <div class="section-content">
-                    <p>上面是完整版，这里是压缩到 3–5 句的口述版，面试被追问时按这个结构讲：</p>
+                    <p>上面是完整版，这里是压缩到 3–5 句的要点版，需要快速回顾时按这个结构梳理：</p>
 
                     <div class="faq-item">
                         <div class="faq-q">什么是微表面模型？D、G、F 分别管什么？</div>
@@ -841,8 +841,8 @@ L_o(x, ω_o) = L_e(x) + ∫_Ω f_r(x, ω_i, ω_o) · L_i(x, ω_i) · (n·ω_i) d
 
                 <h2 class="section-title">小结</h2>
                 <div class="section-content">
-                    <p>这六题串起来其实是一条完整的画面生成链：<span class="highlight">微表面模型决定一个像素的表面长什么样</span>，<span class="highlight">渲染路径决定这些像素用什么方式组织计算</span>，<span class="highlight">GI 和阴影决定光照关系对不对</span>，<span class="highlight">后处理决定最后能不能正确地显示出来</span>，<span class="highlight">光追与混合渲染则是把前四步里最难的部分用另一种算法补上</span>。</p>
-                    <p>回头看，所有答案的落点都不是「哪个技术更先进」，而是<span class="highlight">同一笔预算怎么分</span>：分给分辨率还是分给光源数，分给烘焙还是分给实时，分给滤波还是分给采样。能把取舍讲清楚，比记住公式有用得多。</p>
+                    <p>这六个主题串起来其实是一条完整的画面生成链：<span class="highlight">微表面模型决定一个像素的表面长什么样</span>，<span class="highlight">渲染路径决定这些像素用什么方式组织计算</span>，<span class="highlight">GI 和阴影决定光照关系对不对</span>，<span class="highlight">后处理决定最后能不能正确地显示出来</span>，<span class="highlight">光追与混合渲染则是把前四步里最难的部分用另一种算法补上</span>。</p>
+                    <p>回头看，这些内容的落点都不是「哪个技术更先进」，而是<span class="highlight">同一笔预算怎么分</span>：分给分辨率还是分给光源数，分给烘焙还是分给实时，分给滤波还是分给采样。能把取舍讲清楚，比记住公式有用得多。</p>
                 </div>
 
                 <a href="index.html#blog" class="btn-back">返回博客列表</a>

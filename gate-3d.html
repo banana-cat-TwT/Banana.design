@@ -489,7 +489,8 @@
     <!-- 认证逻辑：与 gate.js 保持一致（djb2 哈希 + 4 小时 / 每日失效） -->
     <script>
         (function () {
-            var GATE_HASH = '7c7c2e23'; // 密码 7896 的 djb2 哈希
+            var GATE_HASH = '7c7c2e23';
+            var AUTH_SALT = 'bc_site_2026';
             var STORAGE_KEY = 'bc_site_pass';
             var MAX_AGE = 4 * 60 * 60 * 1000;
 
@@ -506,11 +507,24 @@
                     d1.getMonth() === d2.getMonth() &&
                     d1.getDate() === d2.getDate();
             }
+            function dayKey(t) {
+                var d = new Date(t);
+                return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+            }
+            function authSig(t) {
+                return hashPin(AUTH_SALT + ':' + GATE_HASH + ':' + dayKey(t));
+            }
             function isGranted() {
                 try {
-                    var t = parseInt(localStorage.getItem(STORAGE_KEY), 10);
+                    var v = localStorage.getItem(STORAGE_KEY);
+                    if (!v) return false;
+                    var sep = v.indexOf(':');
+                    if (sep < 0) return false;
+                    var t = parseInt(v.slice(0, sep), 10);
                     if (!t) return false;
-                    return (Date.now() - t < MAX_AGE) && isSameDay(t, Date.now());
+                    if (!(Date.now() - t < MAX_AGE)) return false;
+                    if (!isSameDay(t, Date.now())) return false;
+                    return v === t + ':' + authSig(t);
                 } catch (e) { return false; }
             }
             function getNext() {
@@ -535,7 +549,10 @@
             }
 
             function allow() {
-                try { localStorage.setItem(STORAGE_KEY, String(Date.now())); } catch (e) {}
+                try {
+                    var t = Date.now();
+                    localStorage.setItem(STORAGE_KEY, t + ':' + authSig(t));
+                } catch (e) {}
                 card.classList.add('leaving');
                 document.querySelectorAll('.pill, .brand, .guide, .stepper').forEach(function (el) {
                     el.classList.add('hide');
